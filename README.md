@@ -7,7 +7,7 @@ Step 1: Initial packages to be installed:
 - npm install @react-navigation/native-stack
 - npm install @react-navigation/stack
 - npm install @react-native-firebase/app
-- npm install @react-native-firebase/databse
+- npm install @react-native-firebase/database
 - npm install @react-native-firebase/firestore
 
 Step 2: For ios:
