@@ -11,11 +11,11 @@ Step 1: Initial packages to be installed:
 - npm install @react-native-firebase/firestore
 
 Step 2: For ios:
-- cd ios
+- cd IndependantCoffeeShops/ios
 - pod install
 
 Step 3: For android:
-- cd android
+- cd IndependantCoffeeShops/android
 - ./gradlew clean
 
 Step 4: Run the project:
