@@ -8,6 +8,7 @@ import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import SignUpPage from "./components/SignUpPage";
+import LoginPage from "./components/LoginPage";
 
 
 
@@ -42,7 +43,8 @@ export default function App(){
     //     onPress={registerUser}
     //   />
     // </View>
-      <SignUpPage></SignUpPage>
+    //   <SignUpPage></SignUpPage>
+      <LoginPage></LoginPage>
   );
 }
 

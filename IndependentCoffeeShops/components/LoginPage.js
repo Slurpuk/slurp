@@ -12,15 +12,15 @@ import {
     View,
     Text,
 } from 'react-native';
-import SignUpForm from "./SignUpForm";
+import LoginForm from "./LoginForm"
 
 
 const App = () => {
     return(
         <View style={styles.page}>
             <View style={styles.body}>
-                <Text style={[styles.title, styles.text]}>Sign Up</Text>
-                <SignUpForm style={styles.form}></SignUpForm>
+                <Text style={[styles.title, styles.text]}>Log In</Text>
+                <LoginForm style={styles.form}></LoginForm>
             </View>
         </View>
     );
