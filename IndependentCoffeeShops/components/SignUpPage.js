@@ -10,9 +10,23 @@ import React, {useState} from 'react'
 import {
     StyleSheet,
     View,
-    Text,
+    Text, Alert,
 } from 'react-native';
 import SignUpForm from "./SignUpForm";
+
+
+// Redirect the user to the Log In Portal
+const switchToLogIn = () => {
+    Alert.alert(
+        "FUTURE NAVIGATION FEATURE",
+        "One day, clicking this will take you to the log in portal",
+        [
+            {
+                text: ":)",
+            }
+        ]
+    )
+}
 
 
 const App = () => {
@@ -21,7 +35,7 @@ const App = () => {
             <View style={styles.body}>
                 <Text style={[styles.title, styles.text]}>Sign Up</Text>
                 <SignUpForm style={styles.form}></SignUpForm>
-                <Text style={styles.text, styles.footer}>Already have an account? Log in here</Text>
+                <Text style={styles.text, styles.footer} onPress={switchToLogIn}>Already have an account? Log in here</Text>
             </View>
         </View>
     );
@@ -55,6 +69,7 @@ const styles = StyleSheet.create({
     footer: {
         textAlign: 'center',
         marginTop: '10%',
+        textDecorationLine: 'underline',
     }
 });
 
