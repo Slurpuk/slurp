@@ -64,9 +64,6 @@ const App = () => {
                 </View>
             </View>
             <View style={styles.buttons}>
-                <Pressable style={[styles.button, styles.preferences_button]}>
-                    <Text style={[styles.text, styles.buttons]}>Set Coffee Preferences</Text>
-                </Pressable>
                 <Pressable
                     style={[styles.button, styles.account_button]}
                     onPress={loginUser}>
