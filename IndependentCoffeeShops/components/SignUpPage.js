@@ -20,7 +20,7 @@ const App = () => {
         <View style={styles.page}>
             <View style={styles.body}>
                 <Text style={[styles.title, styles.text]}>Sign Up</Text>
-                <SignUpForm></SignUpForm>
+                <SignUpForm style={styles.form}></SignUpForm>
             </View>
         </View>
     );
@@ -29,21 +29,22 @@ const App = () => {
 const styles = StyleSheet.create({
     page:{
         backgroundColor: '#EDEBE7',
-        height: '100%',
-        width: '100%',
-        padding: 17,
+        flex: 1,
+        padding: '5%',
     },
     body: {
         backgroundColor: '#EDEBE7',
-        height: '100%',
-        width: '100%',
-        marginTop: 48,
-        marginBottom: 48,
+        flex: 1,
+        marginTop: '15%',
+        marginBottom: '15%',
     },
     title: {
         fontSize: 35,
         lineHeight: 35,
-        marginBottom: '20%',
+        flex: 1,
+    },
+    form: {
+        flex: 4,
     },
     text: {
         fontFamily: 'Josefin Sans',

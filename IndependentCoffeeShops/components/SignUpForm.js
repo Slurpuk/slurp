@@ -55,27 +55,29 @@ const App = () => {
 
     return(
         <View>
-            <View style={styles.name}>
-                <View style={styles.element, styles.sub_name}>
-                    <Text style={styles.text}>First name</Text>
-                    <TextInput style={styles.input} placeholder="John" onChangeText={text => setFirstName(text)}/>
+            <View style={styles.form}>
+                <View style={styles.name}>
+                    <View style={styles.element, styles.sub_name}>
+                        <Text style={styles.text}>First name</Text>
+                        <TextInput style={styles.input} placeholder="John" onChangeText={text => setFirstName(text)}/>
+                    </View>
+                    <View style={styles.element, styles.sub_name}>
+                        <Text style={styles.text}>Last name</Text>
+                        <TextInput style={styles.input} placeholder="Smith" onChangeText={text => setLastName(text)}/>
+                    </View>
                 </View>
-                <View style={styles.element, styles.sub_name}>
-                    <Text style={styles.text}>Last name</Text>
-                    <TextInput style={styles.input} placeholder="Smith" onChangeText={text => setLastName(text)}/>
+                <View style={styles.element}>
+                    <Text style={styles.text}>Email</Text>
+                    <TextInput style={styles.input} placeholder="johnsmith@gmail.com" onChangeText={text => setEmail(text)}/>
                 </View>
-            </View>
-            <View style={styles.element}>
-                <Text style={styles.text}>Email</Text>
-                <TextInput style={styles.input} placeholder="johnsmith@gmail.com" onChangeText={text => setEmail(text)}/>
-            </View>
-            <View style={styles.element}>
-                <Text style={styles.text}>Password</Text>
-                <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
-            </View>
-            <View style={styles.element}>
-                <Text style={styles.text}>Password confirmation</Text>
-                <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPasswordConfirmation(text)}/>
+                <View style={styles.element}>
+                    <Text style={styles.text}>Password</Text>
+                    <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
+                </View>
+                <View style={styles.element}>
+                    <Text style={styles.text}>Password confirmation</Text>
+                    <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPasswordConfirmation(text)}/>
+                </View>
             </View>
             <View style={styles.buttons}>
                 <Pressable style={[styles.button, styles.preferences_button]}>
@@ -99,29 +101,29 @@ const styles = StyleSheet.create({
     },
     name: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     preferences_button: {
         backgroundColor: '#2D466B',
     },
     element: {
-        marginTop: 10,
+        marginTop: '2%',
         fontSize: 16,
     },
     input: {
-        marginTop: 10,
+        marginTop: '2%',
         backgroundColor: '#F9F9F9',
         width: '100%',
         height: 37,
         borderRadius: 5,
     },
     sub_name: {
-        width: 180,
+        width: '48%',
     },
     button: {
         borderRadius: 13,
         height: 41,
-        marginTop: 20,
+        marginTop: '10%',
     },
     account_button: {
         backgroundColor: '#087562',
@@ -129,12 +131,13 @@ const styles = StyleSheet.create({
     buttons: {
         color: '#EFEFEF',
         textAlign: 'center',
-        flexDirection: 'column',
-
     },
     preferences_button: {
         backgroundColor: '#2D466B',
     },
+    form: {
+        marginBottom: '20%',
+    }
 });
 
 export default App;
