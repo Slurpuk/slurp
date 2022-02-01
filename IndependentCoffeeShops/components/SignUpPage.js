@@ -11,34 +11,16 @@ import {
     StyleSheet,
     View,
     Text,
-    Pressable,
-    TextInput,
 } from 'react-native';
-import { create } from 'react-test-renderer';
 import SignUpForm from "./SignUpForm";
 
 
 const App = () => {
-
-    const createAccount = () => {
-
-    }
-
     return(
         <View style={styles.page}>
             <View style={styles.body}>
                 <Text style={[styles.title, styles.text]}>Sign Up</Text>
                 <SignUpForm></SignUpForm>
-                <View style={styles.buttons}>
-                    <Pressable style={[styles.button, styles.preferences_button]}>
-                        <Text style={[styles.text, styles.buttons]}>Set Coffee Preferences</Text>
-                    </Pressable>
-                    <Pressable
-                        style={[styles.button, styles.account_button]}
-                        onPress={createAccount}>
-                        <Text style={[styles.text, styles.buttons]}>Create Account</Text>
-                    </Pressable>
-                </View>
             </View>
         </View>
     );
@@ -67,27 +49,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Josefin Sans',
         fontWeight:'700',
         color: '#173C4F',
-    },
-    name: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    button: {
-        borderRadius: 13,
-        height: 41,
-        marginTop: 20,
-    },
-    account_button: {
-        backgroundColor: '#087562',
-    },
-    buttons: {
-        color: '#EFEFEF',
-        textAlign: 'center',
-        flexDirection: 'column',
-
-    },
-    preferences_button: {
-        backgroundColor: '#2D466B',
     },
 });
 

@@ -13,43 +13,79 @@ import {
     Text,
     Pressable,
     TextInput,
+    Alert,
 } from 'react-native';
-import { create } from 'react-test-renderer';
+// import auth from '@react-native-firebase/auth';
+// import firestore from '@react-native-firebase/firestore';
 
 
 const App = () => {
+    // const usersCollection = firestore().collection('Users');
     const[first_name, setFirstName] = useState()
     const[last_name, setLastName] = useState()
     const[email, setEmail] = useState()
     const[password, setPassword] = useState()
+    const[password_confirmation, setPasswordConfirmation] = useState()
 
-    const createAccount = () => {
+    // Register the user to the database after checking their credentials
+    const registerUser = () =>{
+    //     auth().createUserWithEmailAndPassword(email,password)
+    //         .then((re)=>{
+    //             console.log(re);
+    //             console.log(x);
+    //         })
+    //         .catch((re)=>{
+    //             console.log(re);
+    //         })
+        registeredMessage()
+    }
 
+    // Display a confirmation message to the user
+    const registeredMessage = () => {
+        Alert.alert(
+            "Congratulations",
+            "Registered Successfully",
+            [
+                {
+                    text: "OK",
+                }
+            ]
+        )
     }
 
     return(
-        <View style={styles.form}>
+        <View>
             <View style={styles.name}>
                 <View style={styles.element, styles.sub_name}>
                     <Text style={styles.text}>First name</Text>
-                    <TextInput style={styles.input}></TextInput>
+                    <TextInput style={styles.input} placeholder="John" onChangeText={text => setFirstName(text)}/>
                 </View>
                 <View style={styles.element, styles.sub_name}>
                     <Text style={styles.text}>Last name</Text>
-                    <TextInput style={styles.input}></TextInput>
+                    <TextInput style={styles.input} placeholder="Smith" onChangeText={text => setLastName(text)}/>
                 </View>
             </View>
             <View style={styles.element}>
                 <Text style={styles.text}>Email</Text>
-                <TextInput style={styles.input}></TextInput>
+                <TextInput style={styles.input} placeholder="johnsmith@gmail.com" onChangeText={text => setEmail(text)}/>
             </View>
             <View style={styles.element}>
                 <Text style={styles.text}>Password</Text>
-                <TextInput style={styles.input} secureTextEntry={true}></TextInput>
+                <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
             </View>
             <View style={styles.element}>
                 <Text style={styles.text}>Password confirmation</Text>
-                <TextInput style={styles.input} secureTextEntry={true}></TextInput>
+                <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPasswordConfirmation(text)}/>
+            </View>
+            <View style={styles.buttons}>
+                <Pressable style={[styles.button, styles.preferences_button]}>
+                    <Text style={[styles.text, styles.buttons]}>Set Coffee Preferences</Text>
+                </Pressable>
+                <Pressable
+                    style={[styles.button, styles.account_button]}
+                    onPress={registerUser}>
+                    <Text style={[styles.text, styles.buttons]}>Create Account</Text>
+                </Pressable>
             </View>
         </View>
     );
@@ -64,9 +100,6 @@ const styles = StyleSheet.create({
     name: {
         flexDirection: 'row',
         justifyContent: 'space-between'
-    },
-    form: {
-        flexDirection: 'column',
     },
     preferences_button: {
         backgroundColor: '#2D466B',
@@ -84,7 +117,24 @@ const styles = StyleSheet.create({
     },
     sub_name: {
         width: 180,
-    }
+    },
+    button: {
+        borderRadius: 13,
+        height: 41,
+        marginTop: 20,
+    },
+    account_button: {
+        backgroundColor: '#087562',
+    },
+    buttons: {
+        color: '#EFEFEF',
+        textAlign: 'center',
+        flexDirection: 'column',
+
+    },
+    preferences_button: {
+        backgroundColor: '#2D466B',
+    },
 });
 
 export default App;
