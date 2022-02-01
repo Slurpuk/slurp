@@ -1,76 +1,53 @@
-/**
- * Sample React Native App
- * Welcome to the App.js this is the brain of our application!
- *
- * @format
- * @flow strict-local
- */
+import React, {useState} from 'react';
+import {BottomSheet} from 'react-native-bottomsheet-reanimated';
+import type {Node} from 'react';
+//import Inputs from 'DesignMap/src/screens/inputs.js'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet,Button } from 'react-native'
+import {authentication} from './firestore/firebase-config'
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
- import * as React from 'react';
- import { View, Text,StyleSheet,Button,Alert } from 'react-native';
- import { NavigationContainer } from '@react-navigation/native';
- import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
- function HomeScreen() {
 
-   const  handleSubmit = () => {
-       Alert.alert('Welcome to our application!');
-     };
 
-   return (
-     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-       <Text style = {styles.sectionTitle}>Home Screen</Text>
-       <Button
-        style = {styles.button}
-        title="Welcome!"
-        onPress={handleSubmit}
-       />
-     </View>
-   );
- }
+export default function App(){
+  const usersCollection = firestore().collection('Users');
+  const[isSignedIn, setIsSignedIn] = useState(false);
+  const[email, setEmail] = useState('');
+  const[password, setPassword] = useState('');
+  const[x, setX] = useState(usersCollection);
 
- const Stack = createNativeStackNavigator();
 
- function App() {
-   return (
-     <NavigationContainer>
-       <Stack.Navigator>
-         <Stack.Screen name="Home" component={HomeScreen} />
-       </Stack.Navigator>
-     </NavigationContainer>
-   );
- }
 
-//List of style components
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  button: {
-    height: 45,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
-    marginTop: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
+  const registerUser = () =>{
+    auth().createUserWithEmailAndPassword(email,password)
+      .then((re)=>{
+        console.log(re);
+        console.log(x);
+      })
+      .catch((re)=>{
+        console.log(re);
+      })
   }
-});
 
-export default App;
+
+  return(
+    <View style = {styles.mainContainer}>
+      <TextInput placeholder="email" value={email} onChangeText={text => setEmail(text)}/>
+      <TextInput placeholder="password" value={password} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
+      <Button
+        title='Registerlol'
+        onPress={registerUser}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    marginTop: 55,
+    flex: 1,
+    padding: 10
+  },
+})
