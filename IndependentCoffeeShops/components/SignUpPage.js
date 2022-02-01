@@ -21,6 +21,7 @@ const App = () => {
             <View style={styles.body}>
                 <Text style={[styles.title, styles.text]}>Sign Up</Text>
                 <SignUpForm style={styles.form}></SignUpForm>
+                <Text style={styles.text, styles.footer}>Already have an account? Log in here</Text>
             </View>
         </View>
     );
@@ -36,7 +37,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#EDEBE7',
         flex: 1,
         marginTop: '15%',
-        marginBottom: '15%',
     },
     title: {
         fontSize: 35,
@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
         fontWeight:'700',
         color: '#173C4F',
     },
+    footer: {
+        textAlign: 'center',
+        marginTop: '10%',
+    }
 });
 
 export default App;

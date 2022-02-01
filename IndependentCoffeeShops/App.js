@@ -43,8 +43,8 @@ export default function App(){
     //     onPress={registerUser}
     //   />
     // </View>
-    //   <SignUpPage></SignUpPage>
-      <LoginPage></LoginPage>
+      <SignUpPage></SignUpPage>
+    //   <LoginPage></LoginPage>
   );
 }
 
