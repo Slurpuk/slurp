@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {
     StyleSheet,
     View,
-    Text,
+    Text, Image,
 } from 'react-native';
 
 const BasketContents = () => {
@@ -21,8 +21,9 @@ const BasketContents = () => {
                         </View>
                     </View>
 
-                    <View>
-
+                    <View style={styles.amount_selection_container}>
+                        <Text style={styles.amount}>2</Text>
+                        <Image source={require('../static/downArrow.png')} style={styles.change_amount_button}/>
                     </View>
 
                     <Text style={styles.price}>£6.40</Text>
@@ -39,8 +40,9 @@ const BasketContents = () => {
                         </View>
                     </View>
 
-                    <View>
-
+                    <View style={styles.amount_selection_container}>
+                        <Text style={styles.amount}>1</Text>
+                        <Image source={require('../static/downArrow.png')} style={styles.change_amount_button}/>
                     </View>
 
                     <Text style={styles.price}>£3.40</Text>
@@ -86,12 +88,14 @@ const styles = StyleSheet.create({
     },
     item_information: {
         alignSelf: 'flex-start',
+        flex: 1,
     },
     item_name: {
         color: '#173C4F',
         fontSize: 21,
         fontWeight: '600',
-        paddingVertical: '2%',
+        paddingBottom: '2%',
+        alignSelf: 'flex-start',
     },
     item_specification_list: {
 
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
     price: {
         fontWeight: '600',
         fontSize: 17,
-        alignSelf: 'center',
+        alignSelf: 'flex-start',
         color: '#434343',
     },
     order_summary: {
@@ -124,6 +128,28 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#173C4F',
         fontWeight: '700'
+    },
+    amount_selection_container: {
+        display: 'flex',
+        alignSelf: 'flex-start',
+        flexDirection: 'row',
+        backgroundColor: '#1B947E',
+        borderRadius: 3,
+        paddingVertical: '2%',
+        paddingHorizontal: '3%',
+        flex: 0.15,
+        marginEnd: '5%'
+    },
+    amount: {
+        color: '#F1F1F1',
+        fontWeight: '600',
+        fontSize: 13,
+        flex: 1,
+    },
+    change_amount_button: {
+        resizeMode: 'contain',
+        height: 'auto',
+        width: 20,
     }
 });
 
