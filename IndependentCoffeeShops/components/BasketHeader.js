@@ -15,7 +15,7 @@ const BasketHeader = () => {
             <Pressable>
                 <Image source={require("../static/BackArrow.jpg")} style={styles.back_button}></Image>
             </Pressable>
-            <Text>coffeeShopName</Text>
+            <Text style={styles.shop_name}>ETEN & DRIKEN</Text>
         </View>
     );
 };
@@ -25,12 +25,27 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#046D66',
         display: 'flex',
-        height: 50,
+        paddingVertical: '12%',
+        paddingHorizontal: '5%',
+        alignItems: 'flex-start',
     },
     back_button: {
         resizeMode: 'contain',
         borderRadius: 100,
         flex: 1,
+        height: 'auto',
+        width: 50,
+        alignSelf: 'flex-start',
+    },
+    shop_name: {
+        flex: 1,
+        color: '#EDEBE7',
+        fontFamily: 'Josephin Sans',
+        fontWeight: '700',
+        fontStyle: 'normal',
+        textAlign: 'center',
+        alignSelf: 'center',
+        fontSize: 26,
     }
 });
 

@@ -44,7 +44,9 @@ export default function App(){
     //     onPress={registerUser}
     //   />
     // </View>
-      <BasketPage></BasketPage>
+
+        <BasketPage></BasketPage>
+
       // <SignUpPage></SignUpPage>
       //  <LoginPage></LoginPage>
   );
