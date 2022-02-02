@@ -7,6 +7,8 @@ import {authentication} from './firestore/firebase-config'
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import SignUpPage from "./components/SignUpPage";
+import LoginPage from "./components/LoginPage";
 
 
 
@@ -33,14 +35,16 @@ export default function App(){
 
 
   return(
-    <View style = {styles.mainContainer}>
-      <TextInput placeholder="email" value={email} onChangeText={text => setEmail(text)}/>
-      <TextInput placeholder="password" value={password} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
-      <Button
-        title='Registerlol'
-        onPress={registerUser}
-      />
-    </View>
+    // <View style = {styles.mainContainer}>
+    //   <TextInput placeholder="email" value={email} onChangeText={text => setEmail(text)}/>
+    //   <TextInput placeholder="password" value={password} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
+    //   <Button
+    //     title='Registerlol'
+    //     onPress={registerUser}
+    //   />
+    // </View>
+      <SignUpPage></SignUpPage>
+      //  <LoginPage></LoginPage>
   );
 }
 
