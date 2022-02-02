@@ -50,8 +50,6 @@ export default function App() {
         secureTextEntry={true}
         onChangeText={text => setPassword(text)}
       />
-      {/*<PrimaryButton title="Registerlol" onPress={registerUser} />*/}
-      <Text style={styles.textStyle}>Most recent text</Text>
     </View>
   );
 }
@@ -61,19 +59,5 @@ const styles = StyleSheet.create({
     marginTop: 55,
     flex: 1,
     padding: 10,
-  },
-  primaryButton: {
-    backgroundColor: 'teal',
-    borderColor: 'white',
-    borderWidth: 3,
-    borderStyle: 'solid',
-    color: '#388888',
-    borderRadius: 20,
-  },
-  textStyle: {
-    color: 'grey',
-    borderStyle: 'dotted',
-    borderWidth: 2,
-    borderColor: 'white',
   },
 });
