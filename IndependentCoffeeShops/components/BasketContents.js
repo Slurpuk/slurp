@@ -8,62 +8,75 @@ import {
 const BasketContents = () => {
 
     return(
-        <View style={styles.basket_content}>
-            <Text style={styles.my_order}>My Order</Text>
-            <View style={styles.items_list}>
+        <View style={styles.main_container}>
+            <View style={styles.basket_content}>
+                <Text style={styles.my_order}>My Order</Text>
+                <View style={styles.items_list}>
 
-                <View style={styles.item_container}>
+                    <View style={styles.item_container}>
 
-                    <View style={styles.item_information}>
-                        <Text style={styles.item_name}>Latte</Text>
-                        <View style={styles.item_specification_list}>
-                            <Text style={styles.item_specification}>Oat Milk</Text>
+                        <View style={styles.item_information}>
+                            <Text style={styles.item_name}>Latte</Text>
+                            <View style={styles.item_specification_list}>
+                                <Text style={styles.item_specification}>Oat Milk</Text>
+                            </View>
                         </View>
+
+                        <View style={styles.amount_selection_container}>
+                            <Text style={styles.amount}>2</Text>
+                            <Image source={require('../static/downArrow.png')} style={styles.change_amount_button}/>
+                        </View>
+
+                        <Text style={styles.price}>£6.40</Text>
+
                     </View>
 
-                    <View style={styles.amount_selection_container}>
-                        <Text style={styles.amount}>2</Text>
-                        <Image source={require('../static/downArrow.png')} style={styles.change_amount_button}/>
-                    </View>
+                    <View style={styles.item_container}>
 
-                    <Text style={styles.price}>£6.40</Text>
+                        <View style={styles.item_information}>
+                            <Text style={styles.item_name}>Cappuccino</Text>
+                            <View style={styles.item_specification_list}>
+                                <Text style={styles.item_specification}>Dairy Milk</Text>
+                                <Text style={styles.item_specification}>Caramel Syrup</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.amount_selection_container}>
+                            <Text style={styles.amount}>1</Text>
+                            <Image source={require('../static/downArrow.png')} style={styles.change_amount_button}/>
+                        </View>
+
+                        <Text style={styles.price}>£3.40</Text>
+
+                    </View>
 
                 </View>
-
-                <View style={styles.item_container}>
-
-                    <View style={styles.item_information}>
-                        <Text style={styles.item_name}>Cappuccino</Text>
-                        <View style={styles.item_specification_list}>
-                            <Text style={styles.item_specification}>Dairy Milk</Text>
-                            <Text style={styles.item_specification}>Caramel Syrup</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.amount_selection_container}>
-                        <Text style={styles.amount}>1</Text>
-                        <Image source={require('../static/downArrow.png')} style={styles.change_amount_button}/>
-                    </View>
-
-                    <Text style={styles.price}>£3.40</Text>
-
+                <View style={styles.order_summary}>
+                    <Text style={styles.total_text}>TOTAL</Text>
+                    <Text style={styles.total_amount}>£9.80</Text>
                 </View>
 
-            </View>
-            <View style={styles.order_summary}>
-                <Text style={styles.total_text}>TOTAL</Text>
-                <Text style={styles.total_amount}>£9.80</Text>
+
+                <View style={styles.buttons}>
+                    <Text style={styles.button}>FIRST BEAUTIFUL BUTTON HERE</Text>
+                    <Text style={styles.button}>SECOND BEAUTIFUL BUTTON HERE</Text>
+                </View>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    basket_content: {
-      backgroundColor: '#E5E5E5',
+    main_container:{
+        backgroundColor: '#E5E5E5',
         display: 'flex',
         height: '100%',
         padding: '5%',
+    },
+    basket_content: {
+        flex: 1,
+        display: 'flex',
+        height: '100%',
     },
     my_order: {
         fontWeight: '700',
@@ -150,6 +163,14 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         height: 'auto',
         width: 20,
+    },
+    buttons: {
+        flex: 0.5,
+        alignItems: 'center',
+        justifyContent: 'flex-end'
+    },
+    button: {
+
     }
 });
 
