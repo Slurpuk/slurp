@@ -11,6 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import PrimaryButton from './PrimaryButton';
+import textStyles from './stylesheets/textStyles';
 import {authentication} from './firestore/firebase-config';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
@@ -38,7 +39,6 @@ export default function App() {
 
   return (
     <View style={styles.mainContainer}>
-      <PrimaryButton text="Create Account" />
       <TextInput
         placeholder="email"
         value={email}
