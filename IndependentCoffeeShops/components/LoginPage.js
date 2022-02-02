@@ -15,7 +15,7 @@ import {
 import LoginForm from "./LoginForm"
 
 
-const App = () => {
+const LogInPage = () => {
     return(
         <View style={styles.page}>
             <View style={styles.body}>
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default LogInPage;
