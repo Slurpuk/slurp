@@ -31,45 +31,34 @@ const switchToLogIn = () => {
 
 const App = () => {
     return(
-        <View style={styles.page}>
-            <View style={styles.body}>
-                <Text style={[styles.title, styles.text]}>Sign Up</Text>
-                <SignUpForm style={styles.form}></SignUpForm>
-                <Text style={styles.text, styles.footer} onPress={switchToLogIn}>Already have an account? Log in here</Text>
-            </View>
+        <View style={styles.body}>
+            <Text style={[styles.title, styles.text]}>Sign Up</Text>
+            <SignUpForm style={styles.form}></SignUpForm>
+            <Text style={styles.text, styles.footer} onPress={switchToLogIn}>Already have an account? Log in here</Text>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    page:{
-        backgroundColor: '#EDEBE7',
-        flex: 1,
-        padding: '5%',
-    },
     body: {
         backgroundColor: '#EDEBE7',
+        padding: '5%',
         flex: 1,
-        marginTop: '15%',
     },
     title: {
         fontSize: 35,
         lineHeight: 35,
-        flex: 0.5,
-        marginBottom: '10%',
+        flex: 0.2,
+        textAlignVertical: 'center',
     },
     form: {
-        flex: 4,
-    },
-    text: {
-        fontFamily: 'Josefin Sans',
-        fontWeight:'700',
-        color: '#173C4F',
+        flex: 3,
     },
     footer: {
         textAlign: 'center',
-        marginTop: '10%',
         textDecorationLine: 'underline',
+        flex: 0.2,
+        textAlignVertical: "bottom",
     }
 });
 

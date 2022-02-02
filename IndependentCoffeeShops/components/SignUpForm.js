@@ -61,7 +61,7 @@ const App = () => {
                         <Text style={styles.text}>First name</Text>
                         <TextInput style={styles.input} placeholder="John" onChangeText={text => setFirstName(text)}/>
                     </View>
-                    <View style={styles.element, styles.sub_name}>
+                    <View style={styles.element, styles.sub_name_container}>
                         <Text style={styles.text}>Last name</Text>
                         <TextInput style={styles.input} placeholder="Smith" onChangeText={text => setLastName(text)}/>
                     </View>
@@ -79,65 +79,80 @@ const App = () => {
                     <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPasswordConfirmation(text)}/>
                 </View>
             </View>
-            <View style={styles.buttons}>
-                <Pressable style={[styles.button, styles.preferences_button]}>
-                    <Text style={[styles.text, styles.buttons]}>Set Coffee Preferences</Text>
-                </Pressable>
-                <Pressable
-                    style={[styles.button, styles.account_button]}
-                    onPress={registerUser}>
-                    <Text style={[styles.text, styles.buttons]}>Create Account</Text>
-                </Pressable>
+            <View style={styles.buttons_container}>
+                <View style={styles.button_container}>
+                    <Pressable style={[styles.button, styles.preferences_button]}>
+                        <Text style={[styles.text, styles.button_text]}>Set Coffee Preferences</Text>
+                    </Pressable>
+                </View>
+                <View style={styles.button_container}>
+                    <Pressable
+                        style={[styles.button, styles.account_button]}
+                        onPress={registerUser}>
+                        <Text style={[styles.text, styles.button_text]}>Create Account</Text>
+                    </Pressable>
+                </View>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+
     text: {
         fontFamily: 'Josefin Sans',
         fontWeight:'700',
         color: '#173C4F',
     },
-    name: {
+
+    form: {
+        paddingVertical: '5%',
+    },
+    name_container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingVertical: '1%',
     },
-    preferences_button: {
-        backgroundColor: '#2D466B',
+    sub_name_container: {
+        width: '48%',
     },
     element: {
-        marginTop: '2%',
         fontSize: 16,
+        paddingVertical: '1%',
     },
+
     input: {
-        marginTop: '2%',
         backgroundColor: '#F9F9F9',
         width: '100%',
         height: 37,
         borderRadius: 5,
     },
-    sub_name: {
-        width: '48%',
+    
+    // will be replaced by Sean's beautiful buttons
+    buttons_container: {
+        alignContent: "flex-end",
+    },
+    button_container: {
+        paddingVertical: '2%',
     },
     button: {
         borderRadius: 13,
         height: 41,
-        marginTop: '10%',
-    },
-    account_button: {
-        backgroundColor: '#087562',
-    },
-    buttons: {
-        color: '#EFEFEF',
-        textAlign: 'center',
     },
     preferences_button: {
         backgroundColor: '#2D466B',
     },
-    form: {
-        marginBottom: '30%',
+    account_button: {
+        backgroundColor: '#087562',
+    },
+    button_text: {
+        color: '#EFEFEF',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        height: '100%',
     }
+    // -------------------------------------------
+
 });
 
 export default App;

@@ -44,7 +44,7 @@ export default function App(){
     //   />
     // </View>
       <SignUpPage></SignUpPage>
-    //   <LoginPage></LoginPage>
+      //  <LoginPage></LoginPage>
   );
 }
 
