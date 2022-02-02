@@ -63,13 +63,11 @@ const App = () => {
                     <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
                 </View>
             </View>
-            <View style={styles.buttons}>
-                <Pressable
-                    style={[styles.button, styles.account_button]}
-                    onPress={loginUser}>
-                    <Text style={[styles.text, styles.buttons]}>Log In</Text>
-                </Pressable>
-            </View>
+            <Pressable
+                style={[styles.button, styles.account_button]}
+                onPress={loginUser}>
+                <Text style={[styles.text, styles.button_text]}>Log In</Text>
+            </Pressable>
         </View>
     );
 };
@@ -80,38 +78,41 @@ const styles = StyleSheet.create({
         fontWeight:'700',
         color: '#173C4F',
     },
-    preferences_button: {
-        backgroundColor: '#2D466B',
+
+    form: {
+        paddingVertical: '5%',
     },
+
     element: {
-        marginTop: '2%',
         fontSize: 16,
+        paddingVertical: '1%',
     },
+
     input: {
-        marginTop: '2%',
         backgroundColor: '#F9F9F9',
         width: '100%',
         height: 37,
         borderRadius: 5,
     },
+
+    // will be replaced by Sean's beautiful buttons
+    button_container: {
+        paddingVertical: '2%',
+    },
     button: {
         borderRadius: 13,
         height: 41,
-        marginTop: '10%',
     },
     account_button: {
         backgroundColor: '#087562',
     },
-    buttons: {
+    button_text: {
         color: '#EFEFEF',
         textAlign: 'center',
-    },
-    preferences_button: {
-        backgroundColor: '#2D466B',
-    },
-    form: {
-        marginBottom: '30%',
+        textAlignVertical: 'center',
+        height: '100%',
     }
+    // -------------------------------------------
 });
 
 export default App;

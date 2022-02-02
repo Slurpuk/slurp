@@ -51,6 +51,11 @@ const styles = StyleSheet.create({
         flex: 0.2,
         textAlignVertical: 'center',
     },
+    text: {
+        fontFamily: 'Josefin Sans',
+        fontWeight:'700',
+        color: '#173C4F',
+    },
     form: {
         flex: 3,
     },

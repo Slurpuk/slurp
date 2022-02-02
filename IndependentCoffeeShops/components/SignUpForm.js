@@ -56,8 +56,8 @@ const App = () => {
     return(
         <View>
             <View style={styles.form}>
-                <View style={styles.name}>
-                    <View style={styles.element, styles.sub_name}>
+                <View style={styles.name_container}>
+                    <View style={styles.element, styles.sub_name_container}>
                         <Text style={styles.text}>First name</Text>
                         <TextInput style={styles.input} placeholder="John" onChangeText={text => setFirstName(text)}/>
                     </View>

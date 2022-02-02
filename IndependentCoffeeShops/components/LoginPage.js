@@ -35,8 +35,12 @@ const styles = StyleSheet.create({
     body: {
         backgroundColor: '#EDEBE7',
         flex: 1,
-        marginTop: '15%',
-        marginBottom: '15%',
+        padding: '5%',
+    },
+    text: {
+        fontFamily: 'Josefin Sans',
+        fontWeight:'700',
+        color: '#173C4F',
     },
     title: {
         fontSize: 35,
@@ -46,11 +50,6 @@ const styles = StyleSheet.create({
     },
     form: {
         flex: 4,
-    },
-    text: {
-        fontFamily: 'Josefin Sans',
-        fontWeight:'700',
-        color: '#173C4F',
     },
 });
 
