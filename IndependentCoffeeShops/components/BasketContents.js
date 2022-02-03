@@ -10,12 +10,8 @@ const BasketContents = () => {
   ]);
 
   const changeAmount = (item, amount) => {
-    // setItems(prev => {
-    //   console.log(prev[item.key]);
-    // });
-    console.log(item.key);
     item.amount += amount;
-    setTotal(total + item.price * (item.amount + amount));
+    setTotal(total + item.price * item.amount);
   };
 
   return (
@@ -34,7 +30,7 @@ const BasketContents = () => {
               </View>
               <View style={styles.amount_selection_container}>
                 <Text style={styles.amount}>{item.amount}</Text>
-                <Pressable onPress={() => changeAmount(item, 2)}>
+                <Pressable onPress={() => changeAmount(item, 1)}>
                   <Image
                     source={require('../static/downArrow.png')}
                     style={styles.change_amount_button}
