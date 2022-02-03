@@ -4,6 +4,7 @@ Some Download Instructions:
 For downloading dependencies(packages) use "npm install @....." for both Windows and Macos.
 
 Step 1: Initial packages to be installed:
+- cd IndependantCoffeeShops
 - npm install
 
 Step 2: For ios:
