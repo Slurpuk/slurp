@@ -5,13 +5,48 @@ const BasketContents = () => {
   const [total, setTotal] = useState(0);
 
   const [Items, setItems] = useState([
-    {key: 1, name: 'hi', amount: 0, price: '2.40'},
-    {key: 2, name: 'bye', amount: 0, price: '2.30'},
+    {
+      key: 1,
+      name: 'Latte',
+      amount: 0,
+      price: '2.40',
+      specifications: ['Oat Milk'],
+    },
+    {
+      key: 2,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+    {
+      key: 3,
+      name: 'Americano',
+      amount: 0,
+      price: '2.10',
+      specifications: [],
+    },
+    {
+      key: 4,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+    {
+      key: 5,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
   ]);
 
   const changeAmount = (item, amount) => {
     item.amount += amount;
-    setTotal(total + item.price * item.amount);
+    let add_value = Math.round(item.price * amount * 100) / 100;
+    console.log(add_value);
+    setTotal(total + add_value);
   };
 
   return (
@@ -31,13 +66,14 @@ const BasketContents = () => {
               <View style={styles.amount_selection_container}>
                 <Text style={styles.amount}>{item.amount}</Text>
                 <Pressable onPress={() => changeAmount(item, 1)}>
-                  <Image
-                    source={require('../static/downArrow.png')}
-                    style={styles.change_amount_button}
-                  />
+                  {/*<Image*/}
+                  {/*  source={require('../static/downArrow.png')}*/}
+                  {/*  style={styles.change_amount_button}*/}
+                  {/*/>*/}
+                  <Text style={styles.change_amount_button}>+</Text>
                 </Pressable>
               </View>
-              <Text style={styles.price}>£{item.price * item.amount}</Text>
+              <Text style={styles.price}>£{(item.price * item.amount).toFixed(2)}</Text>
             </View>
           )}
           style={styles.items_list}
@@ -45,7 +81,7 @@ const BasketContents = () => {
 
         <View style={styles.order_summary}>
           <Text style={styles.total_text}>TOTAL</Text>
-          <Text style={styles.total_amount}>£{total}</Text>
+          <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
         </View>
 
         <View style={styles.buttons}>
@@ -151,9 +187,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   change_amount_button: {
-    resizeMode: 'contain',
+    // resizeMode: 'contain',
     height: 'auto',
     width: 20,
+    color: '#FFFFFF',
   },
   buttons: {
     flex: 1,
