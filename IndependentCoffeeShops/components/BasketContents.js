@@ -43,10 +43,11 @@ const BasketContents = () => {
   ]);
 
   const changeAmount = (item, amount) => {
-    item.amount += amount;
-    let add_value = Math.round(item.price * amount * 100) / 100;
-    console.log(add_value);
-    setTotal(total + add_value);
+    if (!(item.amount < 1 && amount < 0)) {
+      item.amount += amount;
+      let add_value = Math.round(item.price * amount * 100) / 100;
+      setTotal(total + add_value);
+    }
   };
 
   return (
@@ -64,16 +65,17 @@ const BasketContents = () => {
                 </View>
               </View>
               <View style={styles.amount_selection_container}>
+                <Pressable onPress={() => changeAmount(item, -1)}>
+                  <Text style={styles.change_amount_button}>-</Text>
+                </Pressable>
                 <Text style={styles.amount}>{item.amount}</Text>
                 <Pressable onPress={() => changeAmount(item, 1)}>
-                  {/*<Image*/}
-                  {/*  source={require('../static/downArrow.png')}*/}
-                  {/*  style={styles.change_amount_button}*/}
-                  {/*/>*/}
                   <Text style={styles.change_amount_button}>+</Text>
                 </Pressable>
               </View>
-              <Text style={styles.price}>£{(item.price * item.amount).toFixed(2)}</Text>
+              <Text style={styles.price}>
+                £{(item.price * item.amount).toFixed(2)}
+              </Text>
             </View>
           )}
           style={styles.items_list}
@@ -179,17 +181,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: '3%',
     flex: 0.15,
     marginEnd: '5%',
+    justifyContent: 'space-between',
   },
   amount: {
     color: '#F1F1F1',
     fontWeight: '600',
     fontSize: 13,
-    flex: 1,
   },
   change_amount_button: {
     // resizeMode: 'contain',
-    height: 'auto',
-    width: 20,
     color: '#FFFFFF',
   },
   buttons: {
