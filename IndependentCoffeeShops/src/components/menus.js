@@ -16,6 +16,7 @@ import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAre
 import SectionList from 'react-native-tabs-section-list';
 import textStyles from "../../stylesheets/textStyles";
 
+// data
 const DATA = [
   {
     title: 'Coffees',
