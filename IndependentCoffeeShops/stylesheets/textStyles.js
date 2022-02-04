@@ -34,6 +34,7 @@ const textStyles = StyleSheet.create({
   poppinsTitle: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
+    textAlign: 'center',
   },
 
   poppinsIconText: {
@@ -47,6 +48,14 @@ const textStyles = StyleSheet.create({
     fontFamily: 'Poppins-Light',
     fontSize: 13,
     color: '#717171',
+  },
+
+  iconText: {
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: 'white',
+    letterSpacing: 0.8,
+    marginLeft: 7,
   },
 });
 
