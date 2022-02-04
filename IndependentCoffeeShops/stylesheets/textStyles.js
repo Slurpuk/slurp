@@ -27,14 +27,14 @@ const textStyles = StyleSheet.create({
   coffeePrice: {
     fontFamily: 'JosefinSans-Regular',
     fontSize: 16,
-    color: 'F4F4F4',
+    color: '#F4F4F4',
     letterSpacing: 0.4,
   },
 
   poppinsTitle: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: 'left',
   },
 
   poppinsIconText: {
