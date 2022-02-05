@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, View, Pressable, Image, Text, Alert} from 'react-native';
 
-const BasketHeader = () => {
+const BasketHeader = props => {
   const onBackButtonClicked = () => {
     Alert.alert('FUTURE NAVIGATION FEATURE', 'Go back to previous page', [
       {
         text: 'OK',
       },
     ]);
-  }
+  };
 
   return (
     <View style={styles.header}>
@@ -16,9 +16,9 @@ const BasketHeader = () => {
         <Image
           source={require('../static/BackArrow.jpg')}
           style={styles.back_button}
-        ></Image>
+        />
       </Pressable>
-      <Text style={styles.shop_name}>ETEN & DRIKEN</Text>
+      <Text style={styles.shop_name}>{props.coffeShopName}</Text>
     </View>
   );
 };
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
   shop_name: {
     flex: 1,
     color: '#EDEBE7',
-    fontFamily: 'Josephin Sans',
     fontWeight: '700',
     fontStyle: 'normal',
     textAlign: 'center',

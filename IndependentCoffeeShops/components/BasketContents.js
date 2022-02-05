@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Image, Pressable, FlatList} from 'react-native';
+import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
 
 const BasketContents = () => {
   const [total, setTotal] = useState(0);
 
-  const [Items, setItems] = useState([
+  const [Items] = useState([
     {
       key: 1,
       name: 'Latte',
@@ -51,63 +51,50 @@ const BasketContents = () => {
   };
 
   return (
-    <View style={styles.main_container}>
-      <View style={styles.basket_content}>
-        <Text style={styles.my_order}>My Order</Text>
-        <FlatList
-          data={Items}
-          renderItem={({item}) => (
-            <View style={styles.item_container}>
-              <View style={styles.item_information}>
-                <Text style={styles.item_name}>{item.name}</Text>
-                <FlatList
-                  data={item.specifications}
-                  renderItem={specification => (
-                    <Text style={styles.item_specification}>
-                      {specification.item}
-                    </Text>
-                  )}
-                  style={styles.item_specification_list}
-                />
-              </View>
-              <View style={styles.amount_selection_container}>
-                <Pressable onPress={() => changeAmount(item, -1)}>
-                  <Text style={styles.change_amount_button}>-</Text>
-                </Pressable>
-                <Text style={styles.amount}>{item.amount}</Text>
-                <Pressable onPress={() => changeAmount(item, 1)}>
-                  <Text style={styles.change_amount_button}>+</Text>
-                </Pressable>
-              </View>
-              <Text style={styles.price}>
-                £{(item.price * item.amount).toFixed(2)}
-              </Text>
+    <View style={styles.basket_content}>
+      <Text style={styles.my_order}>My Order</Text>
+      <FlatList
+        data={Items}
+        renderItem={({item}) => (
+          <View style={styles.item_container}>
+            <View style={styles.item_information}>
+              <Text style={styles.item_name}>{item.name}</Text>
+              <FlatList
+                data={item.specifications}
+                renderItem={specification => (
+                  <Text style={styles.item_specification}>
+                    {specification.item}
+                  </Text>
+                )}
+                style={styles.item_specification_list}
+              />
             </View>
-          )}
-          style={styles.items_list}
-        />
+            <View style={styles.amount_selection_container}>
+              <Pressable onPress={() => changeAmount(item, -1)}>
+                <Text style={styles.change_amount_button}>-</Text>
+              </Pressable>
+              <Text style={styles.amount}>{item.amount}</Text>
+              <Pressable onPress={() => changeAmount(item, 1)}>
+                <Text style={styles.change_amount_button}>+</Text>
+              </Pressable>
+            </View>
+            <Text style={styles.price}>
+              £{(item.price * item.amount).toFixed(2)}
+            </Text>
+          </View>
+        )}
+        style={styles.items_list}
+      />
 
-        <View style={styles.order_summary}>
-          <Text style={styles.total_text}>TOTAL</Text>
-          <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
-        </View>
-
-        <View style={styles.buttons}>
-          <Text style={styles.button}>FIRST BEAUTIFUL BUTTON HERE</Text>
-          <Text style={styles.button}>SECOND BEAUTIFUL BUTTON HERE</Text>
-        </View>
+      <View style={styles.order_summary}>
+        <Text style={styles.total_text}>TOTAL</Text>
+        <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main_container: {
-    backgroundColor: '#E5E5E5',
-    display: 'flex',
-    height: '100%',
-    padding: '5%',
-  },
   basket_content: {
     flex: 1,
     display: 'flex',
@@ -125,6 +112,7 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   item_container: {
+    flex: 1,
     borderColor: '#C0C0C0',
     borderStyle: 'solid',
     borderLeftWidth: 0,
@@ -154,6 +142,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   price: {
+    paddingVertical: '2%',
+    paddingHorizontal: '3%',
+    flex: 0.25,
+    display: 'flex',
     fontWeight: '600',
     fontSize: 17,
     alignSelf: 'flex-start',
@@ -163,7 +155,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: '5%',
-    flex: 1,
+    flex: 0.5,
+    alignItems: 'flex-end',
     width: '100%',
     justifyContent: 'space-between',
   },
@@ -195,16 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   change_amount_button: {
-    // resizeMode: 'contain',
     color: '#FFFFFF',
-  },
-  buttons: {
-    flex: 1,
-    alignItems: 'center',
-    display: 'flex',
-  },
-  button: {
-    flex: 1,
   },
 });
 
