@@ -48,6 +48,16 @@ const textStyles = StyleSheet.create({
     fontSize: 13,
     color: '#717171',
   },
+
+  sectionHeader: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginHorizontal: '2%',
+    marginTop: '8%',
+    marginBottom: '2%',
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 20,
+  },
 });
 
 export default textStyles;

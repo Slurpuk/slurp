@@ -50,7 +50,7 @@ const buttonStyles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 13,
     marginHorizontal: 10,
-    height: 50,
+    height: 41,
   },
 
   primaryText: {

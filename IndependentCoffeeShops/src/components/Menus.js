@@ -10,11 +10,10 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import MenuList from './MenuList';
 import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
 // import { createStackNavigator, createAppContainer } from 'react-navigation';
 import SectionList from 'react-native-tabs-section-list';
-import textStyles from "../../stylesheets/textStyles";
+import textStyles from '../../stylesheets/textStyles';
 
 const DATA = [
   {
@@ -125,9 +124,7 @@ const DATA = [
 ];
 
 const Item = ({name}) => (
-  <TouchableOpacity
-    style={styles.item}
-  >
+  <TouchableOpacity style={styles.item}>
     <Text style={styles.title}>{name}</Text>
   </TouchableOpacity>
 );
@@ -135,11 +132,10 @@ const renderItem = ({item}) => <Item name={item.name} />;
 
 const renderSection = ({item}) => {
   return (
-    <View style={styles.sectionContainer}>
+    <View style={[styles.sectionContainer]}>
       <FlatList data={item.list} numColumns={2} renderItem={renderItem} />
     </View>
-
-  )
+  );
 };
 
 const Menus = () => (
@@ -151,19 +147,18 @@ const Menus = () => (
       tabBarStyle={styles.tabBar}
       renderItem={({item}) => renderSection({item})}
       renderSectionHeader={({section: {title}}) => (
-        <View style={styles.sectionHeader}>
+        <View style={[textStyles.sectionHeader, styles.sectionHeader]}>
           <Text style={textStyles.poppinsTitle}>{title}</Text>
         </View>
       )}
       renderTab={({title, isActive}) => (
         <View
-          style={[styles.tabContainer, {borderBottomWidth: isActive ? 1 : 0}]}
-        >
+          style={[styles.tabContainer, {borderBottomWidth: isActive ? 1 : 0}]}>
           <Text
             style={[
               [textStyles.poppinsTitle],
-              { color: isActive ? '#090909' : '#9e9e9e' }]
-            }>
+              {color: isActive ? '#090909' : '#9e9e9e'},
+            ]}>
             {title}
           </Text>
         </View>
@@ -187,13 +182,8 @@ const styles = StyleSheet.create({
   },
 
   sectionHeader: {
-    display: 'flex',
-    justifyContent: 'center',
     marginHorizontal: '5%',
-    marginTop: '8%',
-    marginBottom: '2%'
   },
-
 
   coffeeTitle: {
     fontSize: 20,
@@ -205,7 +195,7 @@ const styles = StyleSheet.create({
   item: {
     width: screenWidth * 0.43,
     // backgroundColor: 'white',
-    height: (screenWidth * 0.43) * 0.74,
+    height: screenWidth * 0.43 * 0.74,
     borderRadius: 10,
     shadowOpacity: 0.2,
     marginVertical: '2%',
@@ -226,7 +216,7 @@ const styles = StyleSheet.create({
   tabBar: {
     borderBottomColor: '#f4f4f4',
     borderBottomWidth: 1,
-    display: "flex",
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',
@@ -234,14 +224,13 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     borderBottomColor: '#090909',
-    display: "flex",
-    justifyContent: "center",
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
-    flexDirection:'row',
-    minWidth: screenWidth/3,
+    flexDirection: 'row',
+    minWidth: screenWidth / 3,
     paddingVertical: 6,
   },
-
 });
 
 export default Menus;
