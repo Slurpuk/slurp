@@ -60,9 +60,15 @@ const BasketContents = () => {
             <View style={styles.item_container}>
               <View style={styles.item_information}>
                 <Text style={styles.item_name}>{item.name}</Text>
-                <View style={styles.item_specification_list}>
-                  <Text style={styles.item_specification}>Oat Milk</Text>
-                </View>
+                <FlatList
+                  data={item.specifications}
+                  renderItem={specification => (
+                    <Text style={styles.item_specification}>
+                      {specification.item}
+                    </Text>
+                  )}
+                  style={styles.item_specification_list}
+                />
               </View>
               <View style={styles.amount_selection_container}>
                 <Pressable onPress={() => changeAmount(item, -1)}>
@@ -157,6 +163,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: '5%',
+    flex: 1,
     width: '100%',
     justifyContent: 'space-between',
   },
@@ -166,7 +173,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   total_amount: {
-    alignSelf: 'flex-end',
     fontSize: 20,
     color: '#173C4F',
     fontWeight: '700',
@@ -195,9 +201,11 @@ const styles = StyleSheet.create({
   buttons: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    display: 'flex',
   },
-  button: {},
+  button: {
+    flex: 1,
+  },
 });
 
 export default BasketContents;
