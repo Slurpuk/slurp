@@ -4,11 +4,8 @@ Some Download Instructions:
 For downloading dependencies(packages) use "npm install @....." for both Windows and Macos.
 
 Step 1: Initial packages to be installed:
-- npm install @react-navigation/native-stack
-- npm install @react-navigation/stack
-- npm install @react-native-firebase/app
-- npm install @react-native-firebase/database
-- npm install @react-native-firebase/firestore
+- cd IndependantCoffeeShops
+- npm install
 
 Step 2: For ios:
 - cd IndependantCoffeeShops/ios
