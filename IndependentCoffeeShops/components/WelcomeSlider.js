@@ -10,8 +10,9 @@ import {
     View,
     Pressable, Alert
 } from "react-native";
-import Svg, { Circle } from 'react-native-svg';
-import Coffee from '../src/assets/svgs/coffee.svg';
+import Cafe from '../src/assets/svgs/cafe.svg';
+import CoffeeBean from '../src/assets/svgs/coffee-bean.svg';
+import CoffeeCup from '../src/assets/svgs/coffee-cup.svg';
 
 const App = () => {
     const [sliderState, setSliderState] = useState({ currentPage: 0 });
@@ -64,27 +65,23 @@ const App = () => {
                 >
                     <View style={{ width, height }}>
                         <View style={styles.container}>
-                            <Text style={styles.title}>This is the first page</Text>
-
-                            <Text style={styles.title}>Why our service is awesome part 1</Text>
+                            <Text style={styles.title}>Welcome to the app!</Text>
+                            <CoffeeCup stroke={'#333'} height={200} width={200}  />
+                            <Text style={styles.text}>Why our service is awesome part 1</Text>
                         </View>
                     </View>
                     <View style={{ width, height }}>
                         <View style={styles.container}>
-                            <Text style={styles.title}>This is the second page</Text>
-                            <Svg height="50%" width="50%" viewBox="0 0 100 100" >
-                                <Circle cx="50" cy="50" r="50" fill="#C4C4C4" />
-                            </Svg>
-                            <Text style={styles.title}>Why our service is awesome part 2</Text>
+                            <Text style={styles.title}>Welcome Part 2!</Text>
+                            <CoffeeBean stroke={'#333'} height={200} width={200} />
+                            <Text style={styles.text}>Why our service is awesome part 2</Text>
                         </View>
                     </View>
                     <View style={{ width, height }}>
                         <View style={styles.container}>
-                            <Text style={styles.title}>This is the third page</Text>
-                            <Svg height="50%" width="50%" viewBox="0 0 100 100" >
-                                <Circle cx="50" cy="50" r="50" fill="#C4C4C4" />
-                            </Svg>
-                            <Text style={styles.title}>Why you should create an account </Text>
+                            <Text style={styles.title}>Welcome Part 3!</Text>
+                            <Cafe stroke={'#333'} height={200} width={200} />
+                            <Text style={styles.text}>Why you should create an account </Text>
                             <Pressable
                                 style={[styles.button, styles.account_button]}
                                 onPress={createAccount}>
@@ -104,42 +101,25 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-    page:{
-        backgroundColor: '#E5E5E5',
-        flex: 1,
-        padding: '5%',
-    },
     container: {
-        flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
-    },
-    body: {
-        backgroundColor: '#EDEBE7',
+        alignItems: 'center',
+        marginTop: 150,
         flex: 1,
-        padding: '5%',
+        padding: 5,
     },
     text: {
         fontFamily: 'Josefin Sans',
-        fontWeight:'700',
+        fontSize: 20,
         color: '#173C4F',
+        flex: 1,
     },
     title: {
         fontFamily: 'Josefin Sans',
-        fontWeight:'300',
+        fontWeight:'bold',
         color: '#173C4F',
-        fontSize: 35,
-        lineHeight: 35,
-        flex: 0.5,
-        marginBottom: '10%',
-    },
-    form: {
-        flex: 4,
-    },
-    wrapper: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginVertical: 30,
+        fontSize: 30,
+        flex: 1,
     },
     paginationWrapper: {
         position: 'absolute',
@@ -165,6 +145,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#087562',
     },
     button_text: {
+        fontFamily: 'Josefin Sans',
+        fontWeight:'bold',
         color: '#EFEFEF',
         textAlign: 'center',
         textAlignVertical: 'center',
