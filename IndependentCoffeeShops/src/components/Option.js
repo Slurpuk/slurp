@@ -1,16 +1,32 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import React, {useState} from 'react';
 
-const Option = ({name, price, currency}) => {
+const Option = ({name, price, currency, updateOptions}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
+  const update = newValue => {
+    setToggleCheckBox(newValue);
+    updateOptions(name, price, !toggleCheckBox);
+  };
+
   return (
     <View style={styles.container}>
-      <CheckBox
-        disabled={false}
-        value={toggleCheckBox}
-        onValueChange={newValue => setToggleCheckBox(newValue)}
-      />
+      <View
+        style={[
+          toggleCheckBox ? styles.checkedCheckBoxView : styles.checkBoxView,
+        ]}>
+        <CheckBox
+          hideBox
+          style={styles.checkBox}
+          disabled={false}
+          value={toggleCheckBox}
+          onValueChange={newValue => update(newValue)}
+          boxType="square"
+          onCheckColor="white"
+          animationDuration={0.2}
+        />
+      </View>
       <View style={[styles.container]}>
         <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
           {name}
@@ -18,7 +34,7 @@ const Option = ({name, price, currency}) => {
         {price !== 0 && (
           <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
             {' '}
-            +{price}
+            +{currency === 'p' ? price : price / 100}
             {currency}
           </Text>
         )}
@@ -43,12 +59,51 @@ const styles = StyleSheet.create({
   },
 
   bold: {
-    fontWeight: 'bold',
     alignSelf: 'center',
     textAlign: 'center',
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: 13,
-    color: '#717171',
+    color: 'black',
+  },
+
+  checkBoxView: {
+    ...Platform.select({
+      ios: {
+        borderColor: '#717171',
+        borderRadius: 2,
+        borderWidth: 2,
+        height: 18,
+        width: 18,
+        marginVertical: '1.5%',
+        marginHorizontal: '2%',
+      },
+      android: {},
+    }),
+  },
+
+  checkedCheckBoxView: {
+    ...Platform.select({
+      ios: {
+        borderColor: '#087562',
+        backgroundColor: '#087562',
+        borderRadius: 2,
+        borderWidth: 2,
+        height: 18,
+        width: 18,
+        marginVertical: '1.5%',
+        marginHorizontal: '2%',
+      },
+      android: {},
+    }),
+  },
+
+  checkBox: {
+    ...Platform.select({
+      ios: {
+        height: 14,
+      },
+      android: {},
+    }),
   },
 });
 

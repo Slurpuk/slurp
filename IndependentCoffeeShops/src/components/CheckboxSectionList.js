@@ -1,15 +1,16 @@
-import React, {useState} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Text, StyleSheet, View, Platform} from 'react-native';
 import SectionList from 'react-native/Libraries/Lists/SectionList';
 import textStyles from '../../stylesheets/textStyles';
 
-const CheckboxSectionList = ({DATA, renderItem}) => {
+const CheckboxSectionList = ({DATA, renderItem, updateOptions}) => {
   return (
     <View style={styles.container}>
       <SectionList
         sections={DATA}
         keyExtractor={item => item.key}
-        renderItem={({item}) => renderItem({item})}
+        renderItem={({item}) => renderItem({item, updateOptions})}
+        stickySectionHeadersEnabled={false}
         renderSectionHeader={({section: {title}}) => (
           <Text style={[textStyles.sectionHeader, styles.sectionHeader]}>
             {title}
@@ -38,6 +39,15 @@ const styles = StyleSheet.create({
   sectionHeader: {
     marginTop: '3%',
     marginBottom: '0%',
+    ...Platform.select({
+      ios: {
+        marginBottom: '2%',
+        marginTop: '5%',
+      },
+      android: {
+        color: 'black',
+      },
+    }),
   },
 });
 
