@@ -1,5 +1,4 @@
-import React from 'react';
-import {Text, View, StyleSheet, Pressable} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const textStyles = StyleSheet.create({
   headingOne: {
@@ -34,6 +33,7 @@ const textStyles = StyleSheet.create({
   poppinsTitle: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
+    color: 'black',
   },
 
   poppinsIconText: {

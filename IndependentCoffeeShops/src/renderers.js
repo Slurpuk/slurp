@@ -1,5 +1,7 @@
 import React from 'react';
 import Option from './components/Option';
+import MenuSection from './components/MenuSection';
+import ItemCard from './components/ItemCard';
 
 const renderOption = ({item, updateOptions}) => (
   <Option
@@ -10,4 +12,10 @@ const renderOption = ({item, updateOptions}) => (
   />
 );
 
-export default renderOption;
+const renderMenuSection = ({item, renderItem}) => (
+  <MenuSection section={item} renderItem={renderItem} />
+);
+
+const renderItemCard = ({item}) => <ItemCard name={item.name} />;
+
+export default {renderOption, renderMenuSection, renderItemCard};
