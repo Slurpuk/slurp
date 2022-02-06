@@ -1,6 +1,17 @@
 import React, {useState} from 'react'
-import {Dimensions,StyleSheet , PixelRatio, SafeAreaView, ScrollView, StatusBar, Text, View} from "react-native";
-
+import {
+    Dimensions,
+    StyleSheet,
+    PixelRatio,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    Text,
+    View,
+    Pressable, Alert
+} from "react-native";
+import Svg, { Circle } from 'react-native-svg';
+import Coffee from '../src/assets/svgs/coffee.svg';
 
 const App = () => {
     const [sliderState, setSliderState] = useState({ currentPage: 0 });
@@ -17,6 +28,23 @@ const App = () => {
             });
         }
     };
+
+    const createAccount = () =>{
+        registeredMessage()
+    }
+
+    // Display a confirmation message to the user
+    const registeredMessage = () => {
+        Alert.alert(
+            "Hey man",
+            "Why dont you go and create an account",
+            [
+                {
+                    text: "OK",
+                }
+            ]
+        )
+    }
 
     const { currentPage: pageIndex } = sliderState;
 
@@ -35,13 +63,34 @@ const App = () => {
                     }}
                 >
                     <View style={{ width, height }}>
-                        <Text style={styles.title}>This is the first page</Text>
+                        <View style={styles.container}>
+                            <Text style={styles.title}>This is the first page</Text>
+
+                            <Text style={styles.title}>Why our service is awesome part 1</Text>
+                        </View>
                     </View>
                     <View style={{ width, height }}>
-                        <Text style={styles.title}>This is the second page</Text>
+                        <View style={styles.container}>
+                            <Text style={styles.title}>This is the second page</Text>
+                            <Svg height="50%" width="50%" viewBox="0 0 100 100" >
+                                <Circle cx="50" cy="50" r="50" fill="#C4C4C4" />
+                            </Svg>
+                            <Text style={styles.title}>Why our service is awesome part 2</Text>
+                        </View>
                     </View>
                     <View style={{ width, height }}>
-                        <Text style={styles.title}>This is the third page</Text>
+                        <View style={styles.container}>
+                            <Text style={styles.title}>This is the third page</Text>
+                            <Svg height="50%" width="50%" viewBox="0 0 100 100" >
+                                <Circle cx="50" cy="50" r="50" fill="#C4C4C4" />
+                            </Svg>
+                            <Text style={styles.title}>Why you should create an account </Text>
+                            <Pressable
+                                style={[styles.button, styles.account_button]}
+                                onPress={createAccount}>
+                                <Text style={[styles.text, styles.button_text]}>Create an Account</Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </ScrollView>
                 <View style={styles.paginationWrapper}>
@@ -56,9 +105,14 @@ const App = () => {
 
 const styles = StyleSheet.create({
     page:{
-        backgroundColor: '#EDEBE7',
+        backgroundColor: '#E5E5E5',
         flex: 1,
         padding: '5%',
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     body: {
         backgroundColor: '#EDEBE7',
@@ -100,8 +154,21 @@ const styles = StyleSheet.create({
         height: 10,
         width: 10,
         borderRadius: 10 / 2,
-        backgroundColor: '#173C4F',
+        backgroundColor: '#C38C22',
         marginLeft: 10,
     },
+    button: {
+        borderRadius: 13,
+        height: 41,
+    },
+    account_button: {
+        backgroundColor: '#087562',
+    },
+    button_text: {
+        color: '#EFEFEF',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        height: '100%',
+    }
 });
 export default App;
