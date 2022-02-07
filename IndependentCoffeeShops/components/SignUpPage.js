@@ -23,7 +23,7 @@ const switchToLogIn = () => {
   );
 };
 
-const App = () => {
+const SignUpPage = () => {
   return (
     <View style={styles.body}>
       <Text style={[styles.title, styles.text]}>Sign Up</Text>
@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default SignUpPage;

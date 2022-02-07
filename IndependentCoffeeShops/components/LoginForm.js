@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
 
 import React, {useState} from 'react';
 import {
@@ -18,7 +11,7 @@ import {
 // import auth from '@react-native-firebase/auth';
 // import firestore from '@react-native-firebase/firestore';
 
-const App = () => {
+const LogInForm = () => {
   // const usersCollection = firestore().collection('Users');
 
   const [email, setEmail] = useState();
@@ -119,4 +112,4 @@ const styles = StyleSheet.create({
   // -------------------------------------------
 });
 
-export default App;
+export default LogInForm;

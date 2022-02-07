@@ -18,7 +18,7 @@ import {
 // import auth from '@react-native-firebase/auth';
 // import firestore from '@react-native-firebase/firestore';
 
-const SignUp = () => {
+const SignUpForm = () => {
   // const usersCollection = firestore().collection('Users');
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
@@ -173,4 +173,4 @@ const styles = StyleSheet.create({
   // -------------------------------------------
 });
 
-export default SignUp;
+export default SignUpForm;
