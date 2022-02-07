@@ -1,16 +1,15 @@
-import React, { Component } from "react";
-import { View, FlatList, StyleSheet, Text, Dimensions } from "react-native";
-
+import React, {Component} from 'react';
+import {View, FlatList, StyleSheet, Text, Dimensions} from 'react-native';
 
 const items = [
-  { id: 1, title: 'Eten Driken' },
-  { id: 2, title: 'Pret' },
-  { id: 3, title: 'StarBux' },
+  {id: 1, title: 'Eten Driken'},
+  {id: 2, title: 'Pret'},
+  {id: 3, title: 'StarBux'},
 ];
 const screenWidth = Dimensions.get('window').width;
 
 export default class ShopList extends Component {
-  renderItems = ({ item }) => (
+  renderItems = ({item}) => (
     <View style={styles.item}>
       <Text style={styles.title}>{item.title}</Text>
     </View>
@@ -34,12 +33,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: 'center',
   },
   item: {
-    width: (screenWidth - 48),
-    backgroundColor: "white",
+    width: screenWidth - 48,
+    backgroundColor: 'white',
     height: 180,
     borderRadius: 16,
     shadowOpacity: 0.2,

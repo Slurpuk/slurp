@@ -17,7 +17,8 @@ export default function PrimaryButton(props) {
         <TouchableOpacity
           activeOpacity={1}
           onPressIn={onPressIn}
-          onPressOut={onPressOut}>
+          onPressOut={onPressOut}
+        >
           <Text style={buttonStyles.primaryText}>{text}</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -50,7 +51,7 @@ const buttonStyles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 13,
     marginHorizontal: 10,
-    height: 50,
+    height: 41,
   },
 
   primaryText: {

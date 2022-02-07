@@ -1,6 +1,6 @@
 //to do
 import React, {Component} from 'react';
-import textStyles from '../../stylesheets/textStyles';
+import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
   FlatList,
@@ -22,7 +22,7 @@ const MenuItem = ({name}) => (
     {/*/>*/}
 
     <ImageBackground
-      source={require('../assets/images/coffeeUnsplash1.jpg')}
+      source={require('../../assets/images/coffeeUnsplash1.jpg')}
       imageStyle={{borderRadius: 10, overflow: 'hidden'}}
       style={{width: '100%', height: '100%'}}>
       <LinearGradient

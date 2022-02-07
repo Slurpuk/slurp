@@ -50,6 +50,16 @@ const textStyles = StyleSheet.create({
     color: '#717171',
   },
 
+  sectionHeader: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginHorizontal: '2%',
+    marginTop: '8%',
+    marginBottom: '2%',
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 20,
+  },
+
   iconText: {
     fontSize: 16,
     fontFamily: 'Poppins-SemiBold',

@@ -10,14 +10,11 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import MenuList from './MenuList';
 import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
 // import { createStackNavigator, createAppContainer } from 'react-navigation';
 import SectionList from 'react-native-tabs-section-list';
 import textStyles from '../../stylesheets/textStyles';
-import MenuItem from './MenuItem';
-import LinearGradient from 'react-native-linear-gradient';
-import {Shadow} from 'react-native-shadow-2';
+import MenuItem from './ShopMenu/MenuItem';
 
 // data
 const DATA = [
