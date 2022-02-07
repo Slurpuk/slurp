@@ -158,7 +158,9 @@ const Menus = () => (
       renderItem={({item}) => renderSection({item})}
       renderSectionHeader={({section: {title}}) => (
         <View style={styles.sectionHeader}>
-          <Text style={textStyles.poppinsTitle}>{title}</Text>
+          <Text style={[textStyles.poppinsTitle, {color: 'black'}]}>
+            {title}
+          </Text>
         </View>
       )}
       renderTab={({title, isActive}) => (
@@ -206,6 +208,7 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     marginTop: '8%',
     marginBottom: '2%',
+    // color: red
   },
 
   coffeeTitle: {
