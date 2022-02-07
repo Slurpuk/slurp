@@ -17,7 +17,8 @@ export default function PrimaryButton(props) {
         <TouchableOpacity
           activeOpacity={1}
           onPressIn={onPressIn}
-          onPressOut={onPressOut}>
+          onPressOut={onPressOut}
+        >
           <Text style={buttonStyles.primaryText}>{text}</Text>
         </TouchableOpacity>
       </Animated.View>

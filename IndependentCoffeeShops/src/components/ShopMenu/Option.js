@@ -15,7 +15,8 @@ const Option = ({name, price, currency, updateOptions}) => {
       <View
         style={[
           toggleCheckBox ? styles.checkedCheckBoxView : styles.checkBoxView,
-        ]}>
+        ]}
+      >
         <CheckBox
           hideBox
           style={styles.checkBox}

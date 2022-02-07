@@ -2,25 +2,23 @@ import React from 'react';
 import {StyleSheet, Text, View, Fragment, SafeAreaView} from 'react-native';
 import BasketHeader from '../components/Basket/BasketHeader';
 import BasketContents from '../components/Basket/BasketContents';
-import PrimaryButton from "../SubComponents/PrimaryButton";
+import PrimaryButton from '../SubComponents/PrimaryButton';
 
 const BasketPage = () => {
   return (
     <>
-      <SafeAreaView style={styles.safe_header}>
-
-      </SafeAreaView>
+      <SafeAreaView style={styles.safe_header}></SafeAreaView>
       <SafeAreaView style={styles.basket}>
         <BasketHeader style={styles.header} coffeShopName={'ETEN & DRIKEN'} />
         <View style={styles.main_container}>
-          <BasketContents/>
+          <BasketContents />
         </View>
         <View style={styles.buttons}>
           <Text style={styles.button}>APPLE/GOOGLE PAY HERE</Text>
-          <PrimaryButton text={'Checkout with card'}/>
+          <PrimaryButton text={'Checkout with card'} />
         </View>
       </SafeAreaView>
-  </>
+    </>
   );
 };
 
