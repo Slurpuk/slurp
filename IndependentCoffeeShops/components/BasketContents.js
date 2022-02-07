@@ -85,7 +85,6 @@ const BasketContents = () => {
         )}
         style={styles.items_list}
       />
-
       <View style={styles.order_summary}>
         <Text style={styles.total_text}>TOTAL</Text>
         <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
@@ -96,7 +95,6 @@ const BasketContents = () => {
 
 const styles = StyleSheet.create({
   basket_content: {
-    flex: 1,
     display: 'flex',
     height: '100%',
   },
@@ -105,11 +103,15 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: '#212121',
     paddingBottom: '5%',
-    flex: 0.2,
   },
   items_list: {
     display: 'flex',
     flex: 2,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#C0C0C0',
   },
   item_container: {
     flex: 1,
@@ -117,6 +119,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderLeftWidth: 0,
     borderRightWidth: 0,
+    borderBottomWidth: 0,
     borderWidth: 1,
     display: 'flex',
     flexDirection: 'row',
@@ -144,18 +147,19 @@ const styles = StyleSheet.create({
   price: {
     paddingVertical: '2%',
     paddingHorizontal: '3%',
+    minWidth: 30,
     flex: 0.25,
     display: 'flex',
     fontWeight: '600',
     fontSize: 17,
+    textAlign: "right",
     alignSelf: 'flex-start',
     color: '#434343',
   },
   order_summary: {
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: '5%',
-    flex: 0.5,
+    paddingTop: '5%',
     alignItems: 'flex-end',
     width: '100%',
     justifyContent: 'space-between',
@@ -163,12 +167,12 @@ const styles = StyleSheet.create({
   total_text: {
     fontSize: 21,
     color: '#173C4F',
-    fontWeight: '700',
+    fontWeight: '900',
   },
   total_amount: {
     fontSize: 20,
     color: '#173C4F',
-    fontWeight: '700',
+    fontWeight: '900',
   },
   amount_selection_container: {
     display: 'flex',

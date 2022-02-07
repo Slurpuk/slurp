@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Fragment, SafeAreaView} from 'react-native';
 import BasketHeader from './BasketHeader';
 import BasketContents from './BasketContents';
 
@@ -24,25 +24,26 @@ const BasketPage = () => {
 };
 
 const styles = StyleSheet.create({
-  main_container: {
-    backgroundColor: '#E5E5E5',
-    display: 'flex',
-    height: '100%',
-    padding: '5%',
-  },
   basket: {
-    display: 'flex',
+    flex: 1,
+    backgroundColor: '#E5E5E5',
+  },
+  safe_header: {
+    flex: 0,
+    backgroundColor: '#046D66',
   },
   header: {
     flex: 1,
   },
-  content: {
-    flex: 3,
+  main_container: {
+    flex: 11,
+    padding: '5%',
   },
   buttons: {
     flex: 1,
     display: 'flex',
     alignSelf: 'center',
+    paddingVertical: '10%',
   },
 });
 
