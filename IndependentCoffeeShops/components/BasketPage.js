@@ -5,16 +5,21 @@ import BasketContents from './BasketContents';
 
 const BasketPage = () => {
   return (
-    <View style={styles.basket}>
-      <BasketHeader style={styles.header} coffeShopName={'ETEN & DRIKEN'} />
-      <View style={styles.main_container}>
-        <BasketContents style={styles.contents} />
+    <>
+      <SafeAreaView style={styles.safe_header}>
+
+      </SafeAreaView>
+      <SafeAreaView style={styles.basket}>
+        <BasketHeader style={styles.header} coffeShopName={'ETEN & DRIKEN'} />
+        <View style={styles.main_container}>
+          <BasketContents/>
+        </View>
         <View style={styles.buttons}>
           <Text style={styles.button}>FIRST BEAUTIFUL BUTTON HERE</Text>
           <Text style={styles.button}>SECOND BEAUTIFUL BUTTON HERE</Text>
         </View>
-      </View>
-    </View>
+      </SafeAreaView>
+  </>
   );
 };
 
