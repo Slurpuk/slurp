@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
 import SectionList from 'react-native-tabs-section-list';
-import textStyles from '../../stylesheets/textStyles';
+import textStyles from '../../../stylesheets/textStyles';
 
 const Menu = ({DATA, renderSection, renderItem}) => (
   <SafeAreaView style={styles.container}>
@@ -19,12 +19,14 @@ const Menu = ({DATA, renderSection, renderItem}) => (
       )}
       renderTab={({title, isActive}) => (
         <View
-          style={[styles.tabContainer, isActive ? styles.activeTabBar : null]}>
+          style={[styles.tabContainer, isActive ? styles.activeTabBar : null]}
+        >
           <Text
             style={[
               [textStyles.poppinsTitle],
               isActive ? styles.activeText : styles.sleepText,
-            ]}>
+            ]}
+          >
             {title}
           </Text>
         </View>

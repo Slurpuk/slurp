@@ -2,9 +2,9 @@ import CoffeeOptionsData from './fake-data/CoffeeOptionsData';
 import ItemsData from './fake-data/ItemsData';
 import renderers from './renderers';
 import React from 'react';
-import OptionsPopUp from './components/OptionsPopUp';
+import OptionsPopUp from './components/ShopMenu/OptionsPopUp';
 import {StyleSheet, View} from 'react-native';
-import Menu from './components/Menu';
+import Menu from './components/ShopMenu/Menu';
 
 const OptionPopUpTester = () => {
   return (

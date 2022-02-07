@@ -1,7 +1,7 @@
 import React from 'react';
-import Option from './components/Option';
-import MenuSection from './components/MenuSection';
-import ItemCard from './components/ItemCard';
+import Option from './components/ShopMenu/Option';
+import MenuSection from './components/ShopMenu/MenuSection';
+import ItemCard from './components/ShopMenu/ItemCard';
 
 const renderOption = ({item, updateOptions}) => (
   <Option
