@@ -10,14 +10,14 @@ import {
   TextInput,
   StyleSheet,
 } from 'react-native';
-import PrimaryButton from './PrimaryButton';
+import PrimaryButton from './src/SubComponents/PrimaryButton';
 import textStyles from './stylesheets/textStyles';
 import {authentication} from './firestore/firebase-config';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {rgbaColor} from 'react-native-reanimated/src/reanimated2/Colors';
-import SignUpPage from "./components/SignUpPage";
+import SignUpPage from "./src/screens/SignUpPage";
 
 export default function App(){
   const usersCollection = firestore().collection('Users');
@@ -41,7 +41,7 @@ export default function App(){
 
 
   return(
-      <SignUpPage></SignUpPage>
+      // <SignUpPage></SignUpPage>
   );
 }
 
