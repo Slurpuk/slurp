@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View, Fragment, SafeAreaView} from 'react-native';
-import BasketHeader from './BasketHeader';
-import BasketContents from './BasketContents';
+import BasketHeader from '../components/Basket/BasketHeader';
+import BasketContents from '../components/Basket/BasketContents';
+import PrimaryButton from "../SubComponents/PrimaryButton";
 
 const BasketPage = () => {
   return (
@@ -15,8 +16,8 @@ const BasketPage = () => {
           <BasketContents/>
         </View>
         <View style={styles.buttons}>
-          <Text style={styles.button}>FIRST BEAUTIFUL BUTTON HERE</Text>
-          <Text style={styles.button}>SECOND BEAUTIFUL BUTTON HERE</Text>
+          <Text style={styles.button}>APPLE/GOOGLE PAY HERE</Text>
+          <PrimaryButton text={'Checkout with card'}/>
         </View>
       </SafeAreaView>
   </>

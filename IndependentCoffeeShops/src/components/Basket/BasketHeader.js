@@ -14,7 +14,7 @@ const BasketHeader = props => {
     <View style={styles.header}>
       <Pressable onPress={onBackButtonClicked}>
         <Image
-          source={require('../static/BackArrow.jpg')}
+          source={require('../../../static/BackArrow.jpg')}
           style={styles.back_button}
         />
       </Pressable>

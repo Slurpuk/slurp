@@ -8,7 +8,7 @@
 
 import React, {useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import LoginForm from './LoginForm';
+import LoginForm from '../components/UserManagement/LoginForm';
 
 const LogInPage = () => {
   return (

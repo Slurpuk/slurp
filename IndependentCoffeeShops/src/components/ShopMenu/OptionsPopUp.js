@@ -1,8 +1,8 @@
 import CheckboxSectionList from './CheckboxSectionList';
 import React, {useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import textStyles from '../../stylesheets/textStyles';
-import PrimaryButton from '../../PrimaryButton';
+import textStyles from '../../../stylesheets/textStyles';
+import PrimaryButton from '../../SubComponents/PrimaryButton';
 
 const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
   const [totalPrice, setTotalPrice] = useState(curr_price); // Current total price in pennies

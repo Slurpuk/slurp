@@ -8,7 +8,7 @@
 
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Alert} from 'react-native';
-import SignUpForm from './SignUpForm';
+import SignUpForm from '../components/UserManagement/SignUpForm';
 
 // Redirect the user to the Log In Portal
 const switchToLogIn = () => {
