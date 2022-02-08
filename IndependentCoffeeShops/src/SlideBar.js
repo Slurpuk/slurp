@@ -37,16 +37,57 @@ function CustomDrawerContent(props) {
         size={25}
         style={styles.close_button}
       />
-      <DrawerItem
-        label="Heledvfevp"
-        onPress={() => props.navigation.navigate("View order history")}
-        activeTintColor="#2196f3"
-        activeBackgroundColor="rgba(0, 0, 0, .04)"
-        inactiveTintColor="rgba(0, 0, 0, .87)"
-        inactiveBackgroundColor="transparent"
-        style={{backgroundColor: 'green'}}
-        labelStyle={{fontFamily: 'Josefin Sans'}}
-      />
+        <DrawerItem
+            label="View order history"
+            onPress={() => props.navigation.navigate('View order history')}
+            activeTintColor="#2196f3"
+            activeBackgroundColor="rgba(0, 0, 0, .04)"
+            inactiveTintColor="rgba(0, 0, 0, .87)"
+            inactiveBackgroundColor="transparent"
+            style={styles.drawer_item}
+            labelStyle={{fontFamily: 'Josefin Sans'}}
+        />
+        <DrawerItem
+            label="Payment accounts"
+            onPress={() => props.navigation.navigate('Payment accounts')}
+            activeTintColor="#2196f3"
+            activeBackgroundColor="rgba(0, 0, 0, .04)"
+            inactiveTintColor="rgba(0, 0, 0, .87)"
+            inactiveBackgroundColor="transparent"
+            style={styles.drawer_item}
+            labelStyle={{fontFamily: 'Josefin Sans'}}
+        />
+        <DrawerItem
+            label="Change name"
+            onPress={() => props.navigation.navigate('Change name')}
+            activeTintColor="#2196f3"
+            activeBackgroundColor="rgba(0, 0, 0, .04)"
+            inactiveTintColor="rgba(0, 0, 0, .87)"
+            inactiveBackgroundColor="transparent"
+            style={styles.drawer_item}
+            labelStyle={{fontFamily: 'Josefin Sans'}}
+        />
+        <DrawerItem
+            label="Change password"
+            onPress={() => props.navigation.navigate('Change password')}
+            activeTintColor="#2196f3"
+            activeBackgroundColor="rgba(0, 0, 0, .04)"
+            inactiveTintColor="rgba(0, 0, 0, .87)"
+            inactiveBackgroundColor="transparent"
+            style={styles.drawer_item}
+            labelStyle={{fontFamily: 'Josefin Sans'}}
+        />
+        <DrawerItem
+            label="Logout the device"
+            onPress={() => props.navigation.navigate('Logout the device')}
+            activeTintColor="#2196f3"
+            activeBackgroundColor="rgba(0, 0, 0, .04)"
+            inactiveTintColor="rgba(0, 0, 0, .87)"
+            inactiveBackgroundColor="transparent"
+            style={styles.drawer_item}
+            labelStyle={{fontFamily: 'Josefin Sans'}}
+        />
+
     </DrawerContentScrollView>
   );
 }
@@ -108,8 +149,8 @@ const styles = StyleSheet.create({
   },
   drawer_item: {
     borderStyle: 'solid',
-    borderBottomWidth: 2,
-    borderColor: '#000000',
+    borderBottomWidth: 1,
+    borderColor: '#CECECE',
   },
 });
 
