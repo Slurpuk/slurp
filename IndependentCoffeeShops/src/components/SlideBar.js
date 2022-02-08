@@ -85,7 +85,6 @@ function CustomDrawerContent(props) {
 function MyDrawer() {
   return (
     <Drawer.Navigator
-        style={styles.navigator}
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={({navigation}) => ({
         drawerPosition: 'right',
@@ -148,9 +147,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Poppins',
   },
-    navigator: {
-      borderRadius: 20,
-    }
 });
 
 export default function SlideBar() {
