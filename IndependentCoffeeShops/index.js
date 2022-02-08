@@ -3,7 +3,7 @@
  */
 
 import {AppRegistry} from 'react-native';
-import BottomAnimated from './components/BottomSheet';
+import Example from './components/BottomSheetV2';
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => BottomAnimated);
+AppRegistry.registerComponent(appName, () => Example);
