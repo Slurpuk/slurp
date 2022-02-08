@@ -2,9 +2,7 @@ import * as React from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
-  Pressable,
   TouchableHighlight,
 } from 'react-native';
 import {LogBox} from 'react-native';
@@ -151,6 +149,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#CECECE',
   },
+    close_button:{
+      alignSelf: 'flex-end'
+    }
 });
 
 export default function SlideBar() {
