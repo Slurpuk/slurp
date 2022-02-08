@@ -36,6 +36,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
+	<String>Location access is required to run the app</String>
 	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
