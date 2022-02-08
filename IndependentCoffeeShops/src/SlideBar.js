@@ -43,7 +43,7 @@ function CustomDrawerContent(props) {
             inactiveTintColor="rgba(0, 0, 0, .87)"
             inactiveBackgroundColor="transparent"
             style={styles.drawer_item}
-            labelStyle={{fontFamily: 'Josefin Sans'}}
+            labelStyle={styles.drawer_item_label}
         />
         <DrawerItem
             label="Payment accounts"
@@ -53,7 +53,7 @@ function CustomDrawerContent(props) {
             inactiveTintColor="rgba(0, 0, 0, .87)"
             inactiveBackgroundColor="transparent"
             style={styles.drawer_item}
-            labelStyle={{fontFamily: 'Josefin Sans'}}
+            labelStyle={styles.drawer_item_label}
         />
         <DrawerItem
             label="Change name"
@@ -63,7 +63,7 @@ function CustomDrawerContent(props) {
             inactiveTintColor="rgba(0, 0, 0, .87)"
             inactiveBackgroundColor="transparent"
             style={styles.drawer_item}
-            labelStyle={{fontFamily: 'Josefin Sans'}}
+            labelStyle={styles.drawer_item_label}
         />
         <DrawerItem
             label="Change password"
@@ -73,7 +73,7 @@ function CustomDrawerContent(props) {
             inactiveTintColor="rgba(0, 0, 0, .87)"
             inactiveBackgroundColor="transparent"
             style={styles.drawer_item}
-            labelStyle={{fontFamily: 'Josefin Sans'}}
+            labelStyle={styles.drawer_item_label}
         />
         <DrawerItem
             label="Logout the device"
@@ -83,7 +83,7 @@ function CustomDrawerContent(props) {
             inactiveTintColor="rgba(0, 0, 0, .87)"
             inactiveBackgroundColor="transparent"
             style={styles.drawer_item}
-            labelStyle={{fontFamily: 'Josefin Sans'}}
+            labelStyle={styles.drawer_item_label}
         />
 
     </DrawerContentScrollView>
@@ -151,6 +151,12 @@ const styles = StyleSheet.create({
   },
     close_button:{
       alignSelf: 'flex-end'
+    },
+    drawer_item_label:{
+        color: '#173C4F',
+        fontSize: 17,
+        fontWeight: '700',
+        fontFamily: 'Poppins',
     }
 });
 
