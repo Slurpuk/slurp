@@ -168,12 +168,14 @@ const Menus = () => (
               borderBottomWidth: isActive ? 3 : 0,
               borderBottomColor: '#046D66',
             },
-          ]}>
+          ]}
+        >
           <Text
             style={[
               [textStyles.poppinsTitle],
               {color: isActive ? '#090909' : '#9e9e9e'},
-            ]}>
+            ]}
+          >
             {title}
           </Text>
         </View>

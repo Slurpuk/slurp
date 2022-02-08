@@ -18,10 +18,12 @@ const ShopIntro = props => {
     <View style={intro.wrapper}>
       <ImageBackground
         source={require('../assets/images/ShopExterior.png')}
-        style={{width: '100%', height: '100%'}}>
+        style={{width: '100%', height: '100%'}}
+      >
         <LinearGradient
           colors={['transparent', 'black']}
-          style={intro.linearGradient}>
+          style={intro.linearGradient}
+        >
           <View style={intro.content}>
             <Text style={[textStyles.headingOne, intro.heading]}>
               Eten & Driken
