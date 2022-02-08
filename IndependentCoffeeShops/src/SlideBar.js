@@ -137,15 +137,14 @@ const styles = StyleSheet.create({
   header: {
     display: 'flex',
     alignItems: 'flex-end',
-    padding: '5%',
+    padding: '4%',
   },
   floating_button: {
     backgroundColor: '#ffffff',
-    padding: '2%',
+    paddingVertical: '1.8%',
     borderRadius: 11,
-  },
-  close_button: {
-    alignSelf: 'flex-end',
+    alignContent: 'center',
+    paddingLeft: '2.5%',
   },
   drawer_item: {
     borderStyle: 'solid',
