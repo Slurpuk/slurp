@@ -12,8 +12,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
+  DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer';
+import Menu from './components/Menu.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Close from 'react-native-vector-icons/AntDesign';
 
@@ -35,7 +37,16 @@ function CustomDrawerContent(props) {
         size={25}
         style={styles.close_button}
       />
-      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Heledvfevp"
+        onPress={() => props.navigation.navigate("View order history")}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={{backgroundColor: 'green'}}
+        labelStyle={{fontFamily: 'Josefin Sans'}}
+      />
     </DrawerContentScrollView>
   );
 }
@@ -60,30 +71,18 @@ function MyDrawer() {
             </TouchableHighlight>
           </View>
         ),
-      })}>
-      <Drawer.Screen
-        name="View order history"
-        component={thisScreen}
-      />
-      <Drawer.Screen
-        name="Payment accounts"
-        component={thisScreen}
-      />
-      <Drawer.Screen
-        name="Change name"
-        component={thisScreen}
-      />
-      <Drawer.Screen
-        name="Change password"
-        component={thisScreen}
-      />
-      <Drawer.Screen
-        name="Logout the device"
-        component={thisScreen}
-      />
+      })}
+    >
+      <Drawer.Screen name="View order history" component={thisScreen} />
+      <Drawer.Screen name="Payment accounts" component={thisScreen} />
+      <Drawer.Screen name="Change name" component={thisScreen} />
+      <Drawer.Screen name="Change password" component={thisScreen} />
+      <Drawer.Screen name="Logout the device" component={thisScreen} />
     </Drawer.Navigator>
   );
 }
+
+
 
 function thisScreen() {
   return (

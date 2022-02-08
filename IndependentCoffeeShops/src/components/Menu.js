@@ -19,12 +19,14 @@ const Menu = ({DATA, renderSection, renderItem}) => (
       )}
       renderTab={({title, isActive}) => (
         <View
-          style={[styles.tabContainer, isActive ? styles.activeTabBar : null]}>
+          style={[styles.tabContainer, isActive ? styles.activeTabBar : null]}
+        >
           <Text
             style={[
               [textStyles.poppinsTitle],
               isActive ? styles.activeText : styles.sleepText,
-            ]}>
+            ]}
+          >
             {title}
           </Text>
         </View>
