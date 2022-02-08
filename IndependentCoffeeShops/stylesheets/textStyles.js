@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native';
+import React from 'react';
+import {Text, View, StyleSheet, Pressable} from 'react-native';
 
 const textStyles = StyleSheet.create({
   headingOne: {
@@ -26,14 +27,14 @@ const textStyles = StyleSheet.create({
   coffeePrice: {
     fontFamily: 'JosefinSans-Regular',
     fontSize: 16,
-    color: 'F4F4F4',
+    color: '#F4F4F4',
     letterSpacing: 0.4,
   },
 
   poppinsTitle: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
-    color: 'black',
+    textAlign: 'left',
   },
 
   poppinsIconText: {
@@ -57,6 +58,14 @@ const textStyles = StyleSheet.create({
     marginBottom: '2%',
     fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
+  },
+
+  iconText: {
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: 'white',
+    letterSpacing: 0.8,
+    marginLeft: 7,
   },
 });
 

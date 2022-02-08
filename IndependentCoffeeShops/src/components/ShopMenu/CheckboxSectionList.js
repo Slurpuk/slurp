@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, View, Platform} from 'react-native';
 import SectionList from 'react-native/Libraries/Lists/SectionList';
-import textStyles from '../../stylesheets/textStyles';
+import textStyles from '../../../stylesheets/textStyles';
 
 const CheckboxSectionList = ({DATA, renderItem, updateOptions}) => {
   return (

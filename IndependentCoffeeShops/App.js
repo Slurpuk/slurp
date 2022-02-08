@@ -31,13 +31,13 @@ export default function App(){
 
   const registerUser = () =>{
     auth().createUserWithEmailAndPassword(email,password)
-      .then((re)=>{
-        console.log(re);
-        console.log(x);
-      })
-      .catch((re)=>{
-        console.log(re);
-      })
+        .then((re)=>{
+          console.log(re);
+          console.log(x);
+        })
+        .catch((re)=>{
+          console.log(re);
+        })
   }
 
 
