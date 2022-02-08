@@ -10,7 +10,7 @@ export default function App(){
   const usersCollection = firestore().collection('Users');
   const[isSignedIn, setIsSignedIn] = useState(false);
   const[email, setEmail] = useState('');
-  const[password, setPassword] = useState('');
+  const[password] = useState('');
   const[x, setX] = useState(usersCollection);
 
 
