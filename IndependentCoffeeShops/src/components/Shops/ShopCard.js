@@ -9,25 +9,25 @@ import {
   TouchableOpacity,
   Pressable,
   ImageBackground,
+  Platform,
 } from 'react-native';
 
 const ShopCard = ({name, likeness, queue, image}) => {
   return (
     <TouchableOpacity style={styles.item}>
-      <Pressable>
-        <ImageBackground
-          source={image}
-          style={{
-            width: '100%',
-            height: '100%',
-            // opacity: 0.85,  applies opacity onto text for some reason
-          }}>
-          <View style={styles.details}>
-            <Text style={[textStyles.headingOne]}>{name}</Text>
-            <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
-          </View>
-        </ImageBackground>
-      </Pressable>
+      <ImageBackground
+        source={image}
+        // imageStyle={{backgroundColor:'#000',  opacity: .6,}}
+        style={{
+          width: '100%',
+          height: '100%',
+          // opacity: 0.85,  applies opacity onto text for some reason
+        }}>
+        <View style={styles.details}>
+          <Text style={[textStyles.headingOne]}>{name}</Text>
+          <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -43,6 +43,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     position: 'relative',
+    ...Platform.select({
+      ios: {
+        shadowOpacity: 0.2,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
   },
 
   title: {
