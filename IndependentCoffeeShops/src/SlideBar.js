@@ -1,19 +1,12 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableHighlight,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableHighlight} from 'react-native';
 import {LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList,
 } from '@react-navigation/drawer';
-import Menu from './components/Menu.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Close from 'react-native-vector-icons/AntDesign';
 
@@ -35,57 +28,56 @@ function CustomDrawerContent(props) {
         size={25}
         style={styles.close_button}
       />
-        <DrawerItem
-            label="View order history"
-            onPress={() => props.navigation.navigate('View order history')}
-            activeTintColor="#2196f3"
-            activeBackgroundColor="rgba(0, 0, 0, .04)"
-            inactiveTintColor="rgba(0, 0, 0, .87)"
-            inactiveBackgroundColor="transparent"
-            style={styles.drawer_item}
-            labelStyle={styles.drawer_item_label}
-        />
-        <DrawerItem
-            label="Payment accounts"
-            onPress={() => props.navigation.navigate('Payment accounts')}
-            activeTintColor="#2196f3"
-            activeBackgroundColor="rgba(0, 0, 0, .04)"
-            inactiveTintColor="rgba(0, 0, 0, .87)"
-            inactiveBackgroundColor="transparent"
-            style={styles.drawer_item}
-            labelStyle={styles.drawer_item_label}
-        />
-        <DrawerItem
-            label="Change name"
-            onPress={() => props.navigation.navigate('Change name')}
-            activeTintColor="#2196f3"
-            activeBackgroundColor="rgba(0, 0, 0, .04)"
-            inactiveTintColor="rgba(0, 0, 0, .87)"
-            inactiveBackgroundColor="transparent"
-            style={styles.drawer_item}
-            labelStyle={styles.drawer_item_label}
-        />
-        <DrawerItem
-            label="Change password"
-            onPress={() => props.navigation.navigate('Change password')}
-            activeTintColor="#2196f3"
-            activeBackgroundColor="rgba(0, 0, 0, .04)"
-            inactiveTintColor="rgba(0, 0, 0, .87)"
-            inactiveBackgroundColor="transparent"
-            style={styles.drawer_item}
-            labelStyle={styles.drawer_item_label}
-        />
-        <DrawerItem
-            label="Logout the device"
-            onPress={() => props.navigation.navigate('Logout the device')}
-            activeTintColor="#2196f3"
-            activeBackgroundColor="rgba(0, 0, 0, .04)"
-            inactiveTintColor="rgba(0, 0, 0, .87)"
-            inactiveBackgroundColor="transparent"
-            style={styles.drawer_item}
-            labelStyle={styles.drawer_item_label}
-        />
-
+      <DrawerItem
+        label="View order history"
+        onPress={() => props.navigation.navigate('View order history')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
+      <DrawerItem
+        label="Payment accounts"
+        onPress={() => props.navigation.navigate('Payment accounts')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
+      <DrawerItem
+        label="Change name"
+        onPress={() => props.navigation.navigate('Change name')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
+      <DrawerItem
+        label="Change password"
+        onPress={() => props.navigation.navigate('Change password')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
+      <DrawerItem
+        label="Logout the device"
+        onPress={() => props.navigation.navigate('Logout the device')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
     </DrawerContentScrollView>
   );
 }
@@ -110,8 +102,7 @@ function MyDrawer() {
             </TouchableHighlight>
           </View>
         ),
-      })}
-    >
+      })}>
       <Drawer.Screen name="View order history" component={thisScreen} />
       <Drawer.Screen name="Payment accounts" component={thisScreen} />
       <Drawer.Screen name="Change name" component={thisScreen} />
@@ -120,8 +111,6 @@ function MyDrawer() {
     </Drawer.Navigator>
   );
 }
-
-
 
 function thisScreen() {
   return (
@@ -149,15 +138,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#CECECE',
   },
-    close_button:{
-      alignSelf: 'flex-end'
-    },
-    drawer_item_label:{
-        color: '#173C4F',
-        fontSize: 17,
-        fontWeight: '700',
-        fontFamily: 'Poppins',
-    }
+  close_button: {
+    alignSelf: 'flex-end',
+  },
+  drawer_item_label: {
+    color: '#173C4F',
+    fontSize: 17,
+    fontWeight: '700',
+    fontFamily: 'Poppins',
+  },
 });
 
 export default function SlideBar() {
