@@ -5,6 +5,8 @@ import React from 'react';
 import OptionsPopUp from './components/ShopMenu/OptionsPopUp';
 import {StyleSheet, View} from 'react-native';
 import Menu from './components/ShopMenu/Menu';
+import ShopList from './components/Shops/ShopList';
+import ShopsData from './fake-data/ShopsData';
 
 const OptionPopUpTester = () => {
   return (
@@ -29,6 +31,14 @@ const MenuTester = () => {
   );
 };
 
+const ShopListTester = () => {
+  return (
+    <ShopList
+      DATA={ShopsData}
+      renderItem={renderers.renderShopCard}
+    />
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -38,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default {MenuTester, OptionPopUpTester};
+export default {MenuTester, OptionPopUpTester, ShopListTester};

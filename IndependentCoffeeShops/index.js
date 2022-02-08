@@ -7,6 +7,6 @@ import {name as appName} from './app.json';
 import App from './App';
 
 import testers from './src/testers';
-import ShopPage from './src/components/shopPage';
+import ShopCard from './src/components/Shops/ShopCard';
 
-AppRegistry.registerComponent(appName, () => ShopPage);
+AppRegistry.registerComponent(appName, () => testers.ShopListTester);
