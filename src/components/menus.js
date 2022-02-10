@@ -1,17 +1,6 @@
-import React, {Component} from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  Dimensions,
-  Animated,
-  TouchableOpacity,
-  ScrollView,
-  StatusBar,
-} from 'react-native';
+import React from 'react';
+import {View, FlatList, StyleSheet, Text, Dimensions} from 'react-native';
 import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
-// import { createStackNavigator, createAppContainer } from 'react-navigation';
 import SectionList from 'react-native-tabs-section-list';
 import textStyles from '../../stylesheets/textStyles';
 import MenuItem from './ShopMenu/MenuItem';
