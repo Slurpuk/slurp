@@ -24,10 +24,12 @@ const MenuItem = ({name}) => (
     <ImageBackground
       source={require('../../assets/images/coffeeUnsplash1.jpg')}
       imageStyle={{borderRadius: 10, overflow: 'hidden'}}
-      style={{width: '100%', height: '100%'}}>
+      style={{width: '100%', height: '100%'}}
+    >
       <LinearGradient
         colors={['transparent', 'black']}
-        style={styles.linearGradient}>
+        style={styles.linearGradient}
+      >
         <View style={styles.menuCardTextWrapper}>
           <Text style={[textStyles.headingOne, styles.title]}>{name}</Text>
           <Text style={textStyles.coffeePrice}>£3.10</Text>
