@@ -3,19 +3,9 @@ Some Download Instructions:
 
 For downloading dependencies(packages) use "npm install @....." for both Windows and Macos.
 
-Step 1: Initial packages to be installed:
-- cd IndependentCoffeeShops
-- npm ci
+Step 1: npm run refresh
 
-Step 2: For ios:
-- cd IndependentCoffeeShops/ios
-- pod install
-
-Step 3: For android:
-- cd IndependentCoffeeShops/android
-- ./gradlew clean
-
-Step 4: Run the project:
+Step 2: Run the project:
 - react-native run-ios
 - react-native run-android
 
