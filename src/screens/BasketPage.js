@@ -9,7 +9,7 @@ const BasketPage = () => {
     <>
       <SafeAreaView style={styles.safe_header}></SafeAreaView>
       <SafeAreaView style={styles.basket}>
-        <BasketHeader style={styles.header} coffeShopName={'ETEN & DRIKEN'} />
+        <BasketHeader style={styles.header} title={'ETEN & DRIKEN'} />
         <View style={styles.main_container}>
           <BasketContents />
         </View>

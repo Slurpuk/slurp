@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Pressable, Image, Text, Alert} from 'react-native';
 
-const BasketHeader = props => {
+const BasketHeader = {title} => {
   const onBackButtonClicked = () => {
     Alert.alert('FUTURE NAVIGATION FEATURE', 'Go back to previous page', [
       {
@@ -18,7 +18,7 @@ const BasketHeader = props => {
           style={styles.back_button}
         />
       </Pressable>
-      <Text style={styles.shop_name}>{props.coffeShopName}</Text>
+      <Text style={styles.title}>{props.title}</Text>
     </View>
   );
 };
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     width: 50,
     alignSelf: 'flex-start',
   },
-  shop_name: {
+  title: {
     flex: 1,
     color: '#EDEBE7',
     fontWeight: '700',
