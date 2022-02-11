@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import ShopIntro from './shopIntro';
 import Menus from './menus';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import PrimaryButton from '../SubComponents/PrimaryButton';
+import CustomButton from '../SubComponents/CustomButton';
 
 const ShopPage = () => {
   return (
@@ -15,4 +17,13 @@ const ShopPage = () => {
   );
 };
 
+const shopPageCustom = StyleSheet.create({
+  absoluteArea: {
+    height: 60,
+    backgroundColor: '',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+});
 export default ShopPage;

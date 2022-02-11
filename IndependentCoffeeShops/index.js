@@ -8,5 +8,6 @@ import {name as appName} from './app.json';
 
 import testers from './src/testers';
 import ShopPage from './src/components/shopPage';
+import BottomSheetV2 from './components/BottomSheetV2';
 
-AppRegistry.registerComponent(appName, () => ShopPage);
+AppRegistry.registerComponent(appName, () => BottomSheetV2);
