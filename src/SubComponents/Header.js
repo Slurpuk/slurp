@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Pressable, Image, Text, Alert} from 'react-native';
 
-const BasketHeader = {title} => {
+const Header = {title} => {
   const onBackButtonClicked = () => {
     Alert.alert('FUTURE NAVIGATION FEATURE', 'Go back to previous page', [
       {
@@ -14,7 +14,7 @@ const BasketHeader = {title} => {
     <View style={styles.header}>
       <Pressable onPress={onBackButtonClicked}>
         <Image
-          source={require('../../../static/BackArrow.jpg')}
+          source={require('../../static/BackArrow.jpg')}
           style={styles.back_button}
         />
       </Pressable>
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BasketHeader;
+export default Header;

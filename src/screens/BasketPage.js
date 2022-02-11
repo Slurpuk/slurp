@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View, Fragment, SafeAreaView} from 'react-native';
-import BasketHeader from '../components/Basket/BasketHeader';
+import BasketHeader from '../SubComponents/BasketHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import PrimaryButton from '../SubComponents/PrimaryButton';
 
