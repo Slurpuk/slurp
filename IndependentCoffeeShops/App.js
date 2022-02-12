@@ -7,6 +7,8 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import SignUpPage from './src/screens/SignUpPage';
 import LoginPage from './src/screens/LoginPage';
+import MapView from 'react-native-maps';
+
 
 export default function App() {
   const usersCollection = firestore().collection('Users');
