@@ -50,8 +50,6 @@ const FormField = ({
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'Poppins',
-    color: '#173C4F',
     marginBottom: '2.5%',
   },
 
