@@ -11,12 +11,15 @@ import {
   StyleSheet,
   View,
   SafeAreaView,
+  KeyboardAvoidingView,
   Text,
   Alert,
+  Linking,
 } from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import PrimaryButton from '../SubComponents/PrimaryButton';
 import FormField from '../components/UserManagement/FormField';
+import linkingContext from '@react-navigation/native/src/LinkingContext';
 
 // Redirect the user to the Log In Portal
 const switchToLogIn = () => {
@@ -62,76 +65,78 @@ const SignUpPage = () => {
   const [password_confirmation, setPasswordConfirmation] = useState();
 
   return (
-    <>
-      <SafeAreaView style={styles.body}>
-        <View style={styles.body}>
-          <Text style={[textStyles.headingOne, styles.section]}>Sign Up</Text>
+    <SafeAreaView style={styles.safeSpace}>
+      <View style={styles.body}>
+        <Text style={[textStyles.josefinBlueHeading]}>Sign Up</Text>
 
-          <View style={styles.form}>
-            <View style={styles.name_container}>
-              <FormField
-                style={styles.sub_name_container}
-                title={'First Name'}
-                placeholder={'Joe'}
-                setField={setFirstName}
-                isPassword={false}
-              />
-              <FormField
-                style={styles.sub_name_container}
-                title={'Last Name'}
-                placeholder={'Doe'}
-                setField={setLastName}
-                isPassword={false}
-              />
-            </View>
+        <View style={styles.form}>
+          <View style={styles.name_container}>
             <FormField
-              style={styles.element}
-              title={'Email'}
-              placeholder={'johnsmith@gmail.com'}
-              setField={setEmail}
-              isPassword={false}
+              style={[
+                styles.sub_name_container,
+                styles.sub_name_container_left,
+              ]}
+              title={'First Name'}
+              placeholder={'John'}
+              setField={setFirstName}
+              type={'name'}
             />
             <FormField
-              style={styles.element}
-              title={'Password'}
-              placeholder={''}
-              setField={setPassword}
-              isPassword={true}
-            />
-            <FormField
-              style={styles.element}
-              title={'Confirm Password'}
-              placeholder={''}
-              setField={setPasswordConfirmation}
-              isPassword={true}
+              style={[styles.sub_name_container]}
+              title={'Last Name'}
+              placeholder={'Doe'}
+              setField={setLastName}
+              type={'name'}
             />
           </View>
+          <FormField
+            style={styles.element}
+            title={'Email'}
+            placeholder={'johndoe@gmail.com'}
+            setField={setEmail}
+            type={'email'}
+          />
+          <FormField
+            style={styles.element}
+            title={'Password'}
+            setField={setPassword}
+            type={'password'}
+          />
+          <FormField
+            style={styles.element}
+            title={'Confirm Password'}
+            setField={setPasswordConfirmation}
+            type={'password'}
+          />
+        </View>
 
-          <View style={styles.buttons_container}>
-            <View style={styles.button_container}>
-              <PrimaryButton text={'Set Coffee Preferences'} onPress={null} />
-            </View>
-            <View style={styles.button_container}>
-              <PrimaryButton text={'Create Account'} onPress={registerUser} />
-            </View>
-
-            <Text style={(styles.text, styles.footer)} onPress={switchToLogIn}>
+        <View style={styles.buttons_container}>
+          <View style={styles.button_container}>
+            <PrimaryButton text={'Set Coffee Preferences'} onPress={null} />
+          </View>
+          <View style={styles.button_container}>
+            <PrimaryButton text={'Create Account'} onPress={registerUser} />
+          </View>
+          <View>
+            <Text
+              style={[textStyles.bluePoppinsBody, styles.footer]}
+              onPress={switchToLogIn}
+            >
               Already have an account? Log in here
             </Text>
           </View>
         </View>
-      </SafeAreaView>
-    </>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  safe_header: {
-    flex: 0,
+  safeSpace: {
+    flex: 1,
     backgroundColor: '#EDEBE7',
   },
   body: {
-    backgroundColor: '#EDEBE7',
     flex: 1,
     padding: '5%',
   },
@@ -139,7 +144,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     lineHeight: 35,
     flex: 0.2,
-    textAlignVertical: 'center',
   },
   text: {
     fontFamily: 'Josefin Sans',
@@ -153,7 +157,6 @@ const styles = StyleSheet.create({
   footer: {
     textAlign: 'center',
     textDecorationLine: 'underline',
-    flex: 0.2,
     textAlignVertical: 'bottom',
   },
 
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
     alignContent: 'flex-end',
   },
   button_container: {
-    paddingVertical: '2%',
+    paddingVertical: '3%',
   },
 
   name_container: {
@@ -172,6 +175,9 @@ const styles = StyleSheet.create({
   },
   sub_name_container: {
     flex: 1,
+  },
+  sub_name_container_left: {
+    marginRight: '5%',
   },
   element: {
     fontSize: 16,
