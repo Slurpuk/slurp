@@ -16,6 +16,27 @@ const textStyles = StyleSheet.create({
     letterSpacing: 0.3,
     color: '#EDEBE7',
   },
+  bluePoppinsBody: {
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    letterSpacing: 0.3,
+    color: '#173C4F',
+  },
+
+  bluePoppinsSubHeading: {
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
+    fontWeight: '600',
+    letterSpacing: 0.3,
+    color: '#173C4F',
+  },
+  josefinBlueHeading: {
+    fontSize: 35,
+    fontFamily: 'Josefin Sans',
+    fontWeight: '700',
+    letterSpacing: 0.3,
+    color: '#173C4F',
+  },
 
   coffeeSubheading: {
     color: 'White',
