@@ -1,18 +1,22 @@
 import React, {Component} from 'react';
 import ShopIntro from './shopIntro';
-import Menus from './menus';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import PrimaryButton from '../SubComponents/PrimaryButton';
 import CustomButton from '../SubComponents/CustomButton';
+import Menu from './ShopMenu/Menu';
 
-const ShopPage = () => {
+const ShopPage = ({
+  shopName,
+  shopIntroText,
+  DATA,
+  renderItem,
+  renderSection,
+}) => {
   return (
     <>
-      <ShopIntro
-        shopName="Eten & Driken"
-        shopIntroText="This shop is very good and sells many different coffee things"
-      />
-      <Menus />
+      <ShopIntro shopName={shopName} shopIntroText={shopIntroText} />
+      <Menu DATA={DATA} renderItem={renderItem} renderSection={renderSection} />
+      <View />
     </>
   );
 };

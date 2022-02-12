@@ -10,4 +10,4 @@ import testers from './src/testers';
 import ShopPage from './src/components/shopPage';
 import BottomSheetV2 from './components/BottomSheetV2';
 
-AppRegistry.registerComponent(appName, () => BottomSheetV2);
+AppRegistry.registerComponent(appName, () => testers.ShopPageTester);

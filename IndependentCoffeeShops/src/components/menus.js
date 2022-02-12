@@ -19,6 +19,9 @@ import CustomButton from '../SubComponents/CustomButton';
 import LinearGradient from 'react-native-linear-gradient';
 
 // data
+
+const NumItemsContext = React.createContext(0);
+
 const DATA = [
   {
     title: 'Coffees',
@@ -126,12 +129,6 @@ const DATA = [
     key: 3,
   },
 ];
-
-// const Item = ({name}) => (
-//   <TouchableOpacity style={styles.item}>
-//     <Text style={styles.title}>{name}</Text>
-//   </TouchableOpacity>
-// );
 const renderItem = ({item}) => <MenuItem name={item.name} />;
 
 const renderSection = ({item}) => {
@@ -142,65 +139,67 @@ const renderSection = ({item}) => {
   );
 };
 
-const Menus = () => (
-  // <Shadow>
-  //   distance={5}
-  //   startColor={'#00000010'}
-  //   containerViewStyle={{marginVertical: 10}}
-  //   radius={8}>
+const Menus = () => {
+  return (
+    <>
+      <NumItemsContext.Provider value="0">
+        <SafeAreaView style={styles.container}>
+          <SectionList
+            sections={DATA}
+            stickySectionHeadersEnabled={false}
+            scrollToLocationOffset={-20}
+            tabBarStyle={styles.tabBar}
+            renderItem={({item}) => renderSection({item})}
+            renderSectionHeader={({section: {title}}) => (
+              <View style={styles.sectionHeader}>
+                <Text style={[textStyles.poppinsTitle, {color: 'black'}]}>
+                  {title}
+                </Text>
+              </View>
+            )}
+            renderSectionFooter={() => <View style={styles.footerSpacing} />}
+            renderTab={({title, isActive}) => (
+              <View
+                style={[
+                  styles.tabContainer,
+                  {
+                    borderBottomWidth: isActive ? 3 : 0,
+                    borderBottomColor: '#046D66',
+                  },
+                ]}>
+                <Text
+                  style={[
+                    [textStyles.poppinsTitle],
+                    {color: isActive ? '#090909' : '#9e9e9e'},
+                  ]}>
+                  {title}
+                </Text>
+              </View>
+            )}
+          />
+        </SafeAreaView>
 
-  <>
-    <SafeAreaView style={styles.container}>
-      <SectionList
-        sections={DATA}
-        stickySectionHeadersEnabled={false}
-        scrollToLocationOffset={-20}
-        tabBarStyle={styles.tabBar}
-        renderItem={({item}) => renderSection({item})}
-        renderSectionHeader={({section: {title}}) => (
-          <View style={styles.sectionHeader}>
-            <Text style={[textStyles.poppinsTitle, {color: 'black'}]}>
-              {title}
-            </Text>
-          </View>
-        )}
-        renderSectionFooter={() => <View style={styles.footerSpacing} />}
-        renderTab={({title, isActive}) => (
-          <View
-            style={[
-              styles.tabContainer,
-              {
-                borderBottomWidth: isActive ? 3 : 0,
-                borderBottomColor: '#046D66',
-              },
-            ]}>
-            <Text
-              style={[
-                [textStyles.poppinsTitle],
-                {color: isActive ? '#090909' : '#9e9e9e'},
-              ]}>
-              {title}
-            </Text>
-          </View>
-        )}
-      />
-    </SafeAreaView>
-
-    <View style={styles.absoluteArea}>
-      <LinearGradient
-        colors={['transparent', '#EDEBE7', '#EDEBE7']}
-        style={styles.linearGradient}>
-        <CustomButton
-          text="View Basket"
-          priority="primary"
-          optionalNumber="0"
-        />
-      </LinearGradient>
-    </View>
-  </>
-
-  // </Shadow>
-);
+        <View style={styles.absoluteArea}>
+          <LinearGradient
+            colors={['transparent', '#EDEBE7', '#EDEBE7']}
+            style={styles.linearGradient}>
+            <NumItemsContext.Consumer>
+              {value => {
+                return (
+                  <CustomButton
+                    text="View Basket"
+                    priority="primary"
+                    optionalNumber={value}
+                  />
+                );
+              }}
+            </NumItemsContext.Consumer>
+          </LinearGradient>
+        </View>
+      </NumItemsContext.Provider>
+    </>
+  );
+};
 
 const screenWidth = Dimensions.get('window').width;
 const dataLen = DATA.length;
