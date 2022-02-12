@@ -12,67 +12,97 @@ import {
   View,
   Text,
   SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native';
+  KeyboardAvoidingView, Alert,
+} from "react-native";
 import FormField from '../components/UserManagement/FormField';
+import PrimaryButton from "../SubComponents/PrimaryButton";
+import textStyles from "../../stylesheets/textStyles";
 
+const switchToLogIn = () => {
+  Alert.alert(
+    'FUTURE NAVIGATION FEATURE',
+    'One day, clicking this will take you to the sign up portal',
+    [
+      {
+        text: ':)',
+      },
+    ],
+  );
+};
+
+// Display a confirmation message to the user
+const registeredMessage = () => {
+  Alert.alert('Congratulations', 'Authenticated Successfully', [
+    {
+      text: 'OK',
+    },
+  ]);
+};
+
+
+const authenticateUser = () => {
+  registeredMessage();
+}
 const LogInPage = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
   return (
-    <SafeAreaView style={styles.body}>
+    <SafeAreaView style={styles.safeSpace}>
       <View style={styles.body}>
-        <Text style={[styles.title, styles.text]}>Log In</Text>
+        <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
         <View style={styles.form}>
           <FormField
-            style={styles.element}
             title={'Email'}
             setField={setEmail}
             type={'email'}
           />
           <FormField
-            style={styles.element}
             title={'Password'}
             placeholder={''}
             setField={setPassword}
             type={'password'}
           />
+          <View>
+            <Text
+              style={[textStyles.bluePoppinsBody, styles.footer]}
+              onPress={switchToLogIn}
+            >
+              Forgot your password?
+            </Text>
+          </View>
         </View>
+        <View style={styles.buttons_container}>
+          <PrimaryButton text={'Log In'} onPress={authenticateUser} />
+        </View>
+
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeSpace: {
+    flex: 1,
+    backgroundColor: '#EDEBE7',
+  },
   body: {
     backgroundColor: '#EDEBE7',
     flex: 1,
-    ...Platform.select({
-      ios: {
-        padding: '5%',
-        paddingBottom: '2%',
-      },
-      android: {
-        paddingHorizontal: '3%',
-        paddingVertical: '2%',
-      },
-    }),
-  },
-  text: {
-    fontFamily: 'Josefin Sans',
-    fontWeight: '700',
-    color: '#173C4F',
-  },
-  title: {
-    fontSize: 35,
-    lineHeight: 35,
-    flex: 0.5,
-    marginBottom: '10%',
+    padding: '5%',
   },
   form: {
     flex: 3,
     paddingVertical: '5%',
+  },
+  buttons_container: {
+    alignContent: 'flex-end',
+    marginVertical: '3%',
+  },
+  footer: {
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    textAlignVertical: 'bottom',
   },
 });
 

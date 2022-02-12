@@ -67,7 +67,7 @@ const SignUpPage = () => {
   return (
     <SafeAreaView style={styles.safeSpace}>
       <View style={styles.body}>
-        <Text style={[textStyles.josefinBlueHeading]}>Sign Up</Text>
+        <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
 
         <View style={styles.form}>
           <View style={styles.name_container}>
@@ -140,16 +140,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: '5%',
   },
-  title: {
-    fontSize: 35,
-    lineHeight: 35,
-    flex: 0.2,
-  },
-  text: {
-    fontFamily: 'Josefin Sans',
-    fontWeight: '700',
-    color: '#173C4F',
-  },
   form: {
     flex: 3,
     paddingVertical: '5%',
@@ -161,6 +151,7 @@ const styles = StyleSheet.create({
   },
 
   buttons_container: {
+    flex: 1,
     alignContent: 'flex-end',
   },
   button_container: {
@@ -171,7 +162,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     display: 'flex',
     justifyContent: 'space-between',
-    paddingVertical: '1%',
+    paddingVertical: '2%',
   },
   sub_name_container: {
     flex: 1,
@@ -179,11 +170,6 @@ const styles = StyleSheet.create({
   sub_name_container_left: {
     marginRight: '5%',
   },
-  element: {
-    fontSize: 16,
-    paddingVertical: '1%',
-  },
-
   input: {
     backgroundColor: '#F9F9F9',
     width: '100%',
