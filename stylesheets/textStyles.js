@@ -25,12 +25,12 @@ const textStyles = StyleSheet.create({
 
   bluePoppinsSubHeading: {
     fontSize: 16,
-    fontFamily: 'Poppins-Regular',
     fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
     letterSpacing: 0.3,
     color: '#173C4F',
   },
-  josefinBlueHeading: {
+  blueJosefinHeading: {
     fontSize: 35,
     fontFamily: 'Josefin Sans',
     fontWeight: '700',
