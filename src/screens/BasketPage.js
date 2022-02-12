@@ -9,13 +9,17 @@ const BasketPage = () => {
     <>
       <SafeAreaView style={styles.safe_header}></SafeAreaView>
       <SafeAreaView style={styles.basket}>
-        <BasketHeader style={styles.header} coffeShopName={'ETEN & DRIKEN'} />
-        <View style={styles.main_container}>
-          <BasketContents />
-        </View>
-        <View style={styles.buttons}>
-          <Text style={styles.button}>APPLE/GOOGLE PAY HERE</Text>
-          <PrimaryButton text={'Checkout with card'} />
+        <View style={styles.basket}>
+          <View style={styles.header}>
+            <BasketHeader coffeShopName={'ETEN & DRIKEN'} />
+          </View>
+          <View style={styles.main_container}>
+            <BasketContents/>
+          </View>
+          <View style={styles.buttons}>
+            <PrimaryButton style={styles.button} text={'Apple/Google pay'} />
+            <PrimaryButton style={styles.button} text={'Checkout with card'} />
+          </View>
         </View>
       </SafeAreaView>
     </>
@@ -23,26 +27,33 @@ const BasketPage = () => {
 };
 
 const styles = StyleSheet.create({
-  basket: {
-    flex: 1,
-    backgroundColor: '#E5E5E5',
-  },
   safe_header: {
     flex: 0,
     backgroundColor: '#046D66',
   },
-  header: {
-    flex: 1,
-  },
-  main_container: {
-    flex: 11,
-    padding: '5%',
-  },
-  buttons: {
+  basket: {
     flex: 1,
     display: 'flex',
-    alignSelf: 'center',
-    paddingVertical: '10%',
+    flexDirection: 'column',
+
+    backgroundColor: '#E5E5E5',
+  },
+  header: {
+    flexShrink: 2,
+  },
+  main_container: {
+    flexShrink: 10,
+    marginHorizontal: '5%',
+    marginVertical: '3%',
+  },
+  buttons: {
+    flexShrink: 4,
+    marginVertical: '4%',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    marginVertical: '2%',
+
   },
 });
 
