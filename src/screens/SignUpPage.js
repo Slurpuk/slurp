@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     padding: '5%',
+    paddingBottom: '8%',
   },
   form: {
     flex: 3,
