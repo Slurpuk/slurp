@@ -26,12 +26,11 @@ const ShopIntro = props => {
         >
           <View style={intro.content}>
             <Text style={[textStyles.headingOne, intro.heading]}>
-              Eten & Driken
+              {props.shopName}
             </Text>
             <ShopDetailIcons />
             <Text style={[textStyles.bodyText, intro.body]}>
-              This is the body text about the coffee shop, they do nice stuff
-              you shoudl defo come here sometime.
+              {props.shopIntroText}
             </Text>
           </View>
         </LinearGradient>

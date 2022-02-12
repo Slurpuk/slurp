@@ -6,13 +6,11 @@ import {
   Platform,
 } from 'react-native';
 import React from 'react';
+import MenuItem from './MenuItem';
+import Menu from './Menu';
 
-const ItemCard = ({name}) => {
-  return (
-    <TouchableOpacity style={styles.item}>
-      <Text style={styles.title}>{name}</Text>
-    </TouchableOpacity>
-  );
+const ItemCard = ({item}) => {
+  return <MenuItem item={item} />;
 };
 
 const screenWidth = Dimensions.get('window').width;
