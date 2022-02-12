@@ -60,7 +60,7 @@ const textStyles = StyleSheet.create({
 
   poppinsIconText: {
     fontFamily: 'Poppins-SemiBold',
-    color: 'White',
+    color: 'white',
     letterSpacing: 0.8,
     fontSize: 15,
   },
