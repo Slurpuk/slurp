@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontSize: 27,
     marginLeft: 20,
-  },
+    letterSpacing: 0.4,
+},
 });
 
 export default GreenHeader;
