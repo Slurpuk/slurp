@@ -7,12 +7,15 @@ const DATA = [
         list: [
           {
             name: 'Carrot',
+            price: 200,
           },
           {
             name: 'Cabbage',
+            price: 200,
           },
           {
             name: 'lol',
+            price: 300,
           },
           {
             name: 'lol1',
