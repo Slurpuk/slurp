@@ -166,12 +166,14 @@ const Menus = () => {
                     borderBottomWidth: isActive ? 3 : 0,
                     borderBottomColor: '#046D66',
                   },
-                ]}>
+                ]}
+              >
                 <Text
                   style={[
                     [textStyles.poppinsTitle],
                     {color: isActive ? '#090909' : '#9e9e9e'},
-                  ]}>
+                  ]}
+                >
                   {title}
                 </Text>
               </View>
@@ -182,7 +184,8 @@ const Menus = () => {
         <View style={styles.absoluteArea}>
           <LinearGradient
             colors={['transparent', '#EDEBE7', '#EDEBE7']}
-            style={styles.linearGradient}>
+            style={styles.linearGradient}
+          >
             <NumItemsContext.Consumer>
               {value => {
                 return (

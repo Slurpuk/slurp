@@ -28,12 +28,14 @@ const Menu = ({DATA, renderSection, renderItem}) => (
               style={[
                 styles.tabContainer,
                 isActive ? styles.activeTabBar : null,
-              ]}>
+              ]}
+            >
               <Text
                 style={[
                   [textStyles.poppinsTitle],
                   isActive ? styles.activeText : styles.sleepText,
-                ]}>
+                ]}
+              >
                 {title}
               </Text>
             </View>
@@ -43,7 +45,8 @@ const Menu = ({DATA, renderSection, renderItem}) => (
         <View style={styles.absoluteArea}>
           <LinearGradient
             colors={['transparent', '#EDEBE7', '#EDEBE7']}
-            style={styles.linearGradient}>
+            style={styles.linearGradient}
+          >
             <NumItemsContext.Consumer>
               {value => {
                 return (
