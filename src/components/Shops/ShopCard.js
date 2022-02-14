@@ -17,11 +17,9 @@ const ShopCard = ({name, likeness, queue, image}) => {
     <Pressable style={styles.item}>
       <ImageBackground
         source={image}
-        // imageStyle={{backgroundColor:'#000',  opacity: .6,}}
         style={{
           width: '100%',
           height: '100%',
-          // opacity: 0.85,  applies opacity onto text for some reason
         }}
       >
         <View style={styles.details}>
@@ -29,12 +27,9 @@ const ShopCard = ({name, likeness, queue, image}) => {
             style={[
               textStyles.headingOne,
               {
-                fontFamily: 'JosefinSans-Bold',
-                marginBottom: '2%',
-                borderWidth: 1,
+                marginBottom: '3%',
               },
-            ]}
-          >
+            ]}>
             {name}
           </Text>
           <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
@@ -50,7 +45,7 @@ const styles = StyleSheet.create({
   item: {
     width: screenWidth,
     height: screenWidth * 0.37,
-    marginVertical: '1.3%',
+    marginVertical: '1.8%',
     // marginHorizontal: '2%',
     display: 'flex',
     alignItems: 'center',
@@ -76,17 +71,16 @@ const styles = StyleSheet.create({
     fontFamily: 'JosefinSans-Bold',
     color: 'white',
     fontWeight: '700',
+    paddingBottom: 10,
   },
 
   details: {
-    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
     display: 'flex',
-    marginTop: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    backgroundColor: '#36363677',
+    height: '100%',
   },
 });
 

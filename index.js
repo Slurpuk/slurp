@@ -10,4 +10,4 @@ import LandingMapPage from './src/screens/LandingMapPage';
 import ShopList from "./src/components/Shops/ShopList";
 import testers from "./src/testers";
 
-AppRegistry.registerComponent(appName, () => testers.ShopPageTester);
+AppRegistry.registerComponent(appName, () => testers.ShopListTester);

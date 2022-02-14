@@ -45,11 +45,14 @@ const ShopIntro = props => {
 export default ShopIntro;
 
 const intro = StyleSheet.create({
+  content: {
+    textAlign: 'left',
+  },
+
   wrapper: {
     height: 270,
     maxHeight: '35%',
     // width: 100,
-    backgroundColor: 'lightblue',
     display: 'flex',
   },
 

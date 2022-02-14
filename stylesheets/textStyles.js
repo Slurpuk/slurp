@@ -4,7 +4,7 @@ import {Text, View, StyleSheet, Pressable} from 'react-native';
 const textStyles = StyleSheet.create({
   headingOne: {
     fontSize: 25,
-    fontFamily: 'Josefin-Sans',
+    fontFamily: 'JosefinSans-Bold',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     color: 'white',
@@ -62,7 +62,7 @@ const textStyles = StyleSheet.create({
 
   iconText: {
     fontSize: 16,
-    fontFamily: 'Poppins-Semi-Bold',
+    fontFamily: 'Poppins-SemiBold',
     color: 'white',
     letterSpacing: 0.8,
     marginLeft: 7,

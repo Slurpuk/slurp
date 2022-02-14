@@ -19,15 +19,14 @@ const ShopDetailIcons = ({timeToOrder, likeness}) => {
 
 const iconStyle = {
   container: {
-    borderWidth: 1,
     flexDirection: 'row',
-    alignSelf: 'center',
-    width: 200,
+    // width: '50%',
   },
 
   iconTextWrapper: {
     flexDirection: 'row',
     display: 'flex',
+    marginRight: 18,
   },
 };
 
