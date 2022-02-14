@@ -8,7 +8,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import GreenHeader from '../components/GreenHeader';
+import GreenHeader from '../components/General/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../SubComponents/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';

@@ -4,7 +4,7 @@ import MenuSection from './components/ShopMenu/MenuSection';
 import ItemCard from './components/ShopMenu/ItemCard';
 import ShopCard from './components/Shops/ShopCard';
 import ShopList from './components/Shops/ShopList';
-import ShopIntro from './components/shopIntro';
+import ShopIntro from './components/Shops/shopIntro';
 
 const renderOption = ({item, updateOptions}) => (
   <Option

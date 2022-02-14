@@ -8,9 +8,9 @@ import {StyleSheet, View} from 'react-native';
 import Menu from './components/ShopMenu/Menu';
 import ShopList from './components/Shops/ShopList';
 import ShopsData from './fake-data/ShopsData';
-import ShopIntro from './components/shopIntro';
+import ShopIntro from './components/Shops/shopIntro';
 import ShopData from './fake-data/shopData';
-import ShopPage from './components/shopPage';
+import ShopPage from './components/Shops/shopPage';
 
 const OptionPopUpTester = () => {
   return (
