@@ -28,7 +28,10 @@ const ShopIntro = props => {
             <Text style={[textStyles.headingOne, intro.heading]}>
               {props.shopName}
             </Text>
-            <ShopDetailIcons />
+            <ShopDetailIcons
+              likeness={props.likeness}
+              timeToOrder={props.timeToOrder}
+            />
             <Text style={[textStyles.bodyText, intro.body]}>
               {props.shopIntroText}
             </Text>

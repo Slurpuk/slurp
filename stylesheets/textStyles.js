@@ -1,4 +1,4 @@
-/*import React from 'react';
+import React from 'react';
 import {Text, View, StyleSheet, Pressable} from 'react-native';
 
 const textStyles = StyleSheet.create({
@@ -70,4 +70,4 @@ const textStyles = StyleSheet.create({
 });
 
 export default textStyles;
-*/
+

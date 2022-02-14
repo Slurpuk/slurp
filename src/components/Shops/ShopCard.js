@@ -10,10 +10,11 @@ import {
   ImageBackground,
   Platform,
 } from 'react-native';
+import textStyles from '../../../stylesheets/textStyles';
 
 const ShopCard = ({name, likeness, queue, image}) => {
   return (
-    <TouchableOpacity style={styles.item}>
+    <Pressable style={styles.item}>
       <ImageBackground
         source={image}
         // imageStyle={{backgroundColor:'#000',  opacity: .6,}}
@@ -21,13 +22,25 @@ const ShopCard = ({name, likeness, queue, image}) => {
           width: '100%',
           height: '100%',
           // opacity: 0.85,  applies opacity onto text for some reason
-        }}>
+        }}
+      >
         <View style={styles.details}>
-          <Text>{name}</Text>
+          <Text
+            style={[
+              textStyles.headingOne,
+              {
+                fontFamily: 'JosefinSans-Bold',
+                marginBottom: '2%',
+                borderWidth: 1,
+              },
+            ]}
+          >
+            {name}
+          </Text>
           <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
         </View>
       </ImageBackground>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -40,6 +53,7 @@ const styles = StyleSheet.create({
     marginVertical: '1.3%',
     // marginHorizontal: '2%',
     display: 'flex',
+    alignItems: 'center',
     flex: 1,
     position: 'relative',
     ...Platform.select({
@@ -58,10 +72,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  shopName: {
+    fontFamily: 'JosefinSans-Bold',
+    color: 'white',
+    fontWeight: '700',
+  },
+
   details: {
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    display: 'flex',
     marginTop: 10,
     paddingTop: 10,
     paddingBottom: 10,

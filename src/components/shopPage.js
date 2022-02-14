@@ -13,7 +13,12 @@ const ShopPage = ({
 }) => {
   return (
     <>
-      <ShopIntro shopName={shopName} shopIntroText={shopIntroText} />
+      <ShopIntro
+        shopName={shopName}
+        shopIntroText={shopIntroText}
+        likeness={'65%'}
+        timeToOrder={7}
+      />
       <Menu DATA={DATA} renderItem={renderItem} renderSection={renderSection} />
       <View />
     </>

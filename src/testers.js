@@ -36,12 +36,7 @@ const MenuTester = () => {
 };
 
 const ShopListTester = () => {
-  return (
-    <ShopList
-      DATA={ShopsData}
-      renderItem={renderers.renderShopCard}
-    />
-  );
+  return <ShopList DATA={ShopsData} renderItem={renderers.renderShopCard} />;
 };
 const ShopPageTester = () => {
   const defaultShopData = shopData[0];
