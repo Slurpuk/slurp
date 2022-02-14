@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ShopDetailIcons from '../ShopDetailIcons';
+import ShopDetailIcons from './ShopDetailIcons';
 import {
   View,
   StyleSheet,
@@ -29,7 +29,8 @@ const ShopCard = ({name, likeness, queue, image}) => {
               {
                 marginBottom: '3%',
               },
-            ]}>
+            ]}
+          >
             {name}
           </Text>
           <ShopDetailIcons likeness={likeness} timeToOrder={queue} />

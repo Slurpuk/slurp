@@ -8,7 +8,7 @@ import {
   ImageBackground,
   Pressable,
 } from 'react-native';
-import textStyles from '../../stylesheets/textStyles';
+import textStyles from '../../../stylesheets/textStyles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
@@ -17,7 +17,7 @@ const ShopIntro = props => {
   return (
     <View style={intro.wrapper}>
       <ImageBackground
-        source={require('../assets/images/ShopExterior.png')}
+        source={require('../../assets/images/ShopExterior.png')}
         style={{width: '100%', height: '100%'}}
       >
         <LinearGradient
