@@ -28,7 +28,10 @@ const ShopIntro = props => {
             <Text style={[textStyles.headingOne, intro.heading]}>
               {props.shopName}
             </Text>
-            <ShopDetailIcons />
+            <ShopDetailIcons
+              likeness={props.likeness}
+              timeToOrder={props.timeToOrder}
+            />
             <Text style={[textStyles.bodyText, intro.body]}>
               {props.shopIntroText}
             </Text>
@@ -42,11 +45,14 @@ const ShopIntro = props => {
 export default ShopIntro;
 
 const intro = StyleSheet.create({
+  content: {
+    textAlign: 'left',
+  },
+
   wrapper: {
     height: 270,
     maxHeight: '35%',
     // width: 100,
-    backgroundColor: 'lightblue',
     display: 'flex',
   },
 

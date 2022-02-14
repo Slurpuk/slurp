@@ -6,6 +6,8 @@ import React from 'react';
 import OptionsPopUp from './components/ShopMenu/OptionsPopUp';
 import {StyleSheet, View} from 'react-native';
 import Menu from './components/ShopMenu/Menu';
+import ShopList from './components/Shops/ShopList';
+import ShopsData from './fake-data/ShopsData';
 import ShopIntro from './components/shopIntro';
 import ShopData from './fake-data/shopData';
 import ShopPage from './components/shopPage';
@@ -33,6 +35,9 @@ const MenuTester = () => {
   );
 };
 
+const ShopListTester = () => {
+  return <ShopList DATA={ShopsData} renderItem={renderers.renderShopCard} />;
+};
 const ShopPageTester = () => {
   const defaultShopData = shopData[0];
   return (
@@ -55,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default {MenuTester, OptionPopUpTester, ShopPageTester};
+export default {MenuTester, OptionPopUpTester, ShopPageTester, ShopListTester};
