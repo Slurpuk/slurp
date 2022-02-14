@@ -119,7 +119,7 @@ const SignUpForm = () => {
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'Josefin Sans',
+    fontFamily: 'Josefin-Sans',
     fontWeight: '700',
     color: '#173C4F',
   },
