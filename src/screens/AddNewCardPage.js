@@ -1,29 +1,19 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
 
 import React, {useState} from 'react';
 import GreenHeader from '../components/GreenHeader';
 import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import textStyles from '../../stylesheets/textStyles';
 import CustomButton from '../SubComponents/CustomButton';
 import FormField from '../components/UserManagement/FormField';
 
 
 const AddNewCardPage = () => {
-    // const usersCollection = firestore().collection('Users');
     const [expiryDate, setExpiryDate] = useState();
     const [CVC, setCVC] = useState();
     const [cardNumber, setCardNumber] = useState();
     const [password, setPassword] = useState();
 
-    const handleMMYYYY = (text) => {
+    const handleMMYY = (text) => {
         let textTemp = text;
         if(textTemp.slice(-1)=='/'){
             textTemp=textTemp.slice(0, -2);
@@ -64,7 +54,7 @@ const AddNewCardPage = () => {
                                 placeholder={'MM/YY'}
                                 type={'expiryDate'}
                                 value={expiryDate}
-                                setField={handleMMYYYY}
+                                setField={handleMMYY}
                             />
                             <FormField
                                 style={[styles.sub_name_container]}
