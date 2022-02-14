@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import textStyles from '../../../stylesheets/textStyles';
 import ShopDetailIcons from '../ShopDetailIcons';
 import {
   View,
@@ -24,7 +23,7 @@ const ShopCard = ({name, likeness, queue, image}) => {
           // opacity: 0.85,  applies opacity onto text for some reason
         }}>
         <View style={styles.details}>
-          <Text style={[textStyles.headingOne]}>{name}</Text>
+          <Text>{name}</Text>
           <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
         </View>
       </ImageBackground>
@@ -54,7 +53,6 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: 'Poppins-SemiBold',
     letterSpacing: 0.5,
     fontSize: 17,
     justifyContent: 'center',

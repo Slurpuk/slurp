@@ -1,10 +1,10 @@
-import React from 'react';
+/*import React from 'react';
 import {Text, View, StyleSheet, Pressable} from 'react-native';
 
 const textStyles = StyleSheet.create({
   headingOne: {
     fontSize: 25,
-    fontFamily: 'JosefinSans-Bold',
+    fontFamily: 'Josefin-Sans',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     color: 'white',
@@ -19,26 +19,26 @@ const textStyles = StyleSheet.create({
 
   coffeeSubheading: {
     color: 'White',
-    fontFamily: 'JosefinSans-Bold',
+    fontFamily: 'Josefin-Sans-Bold',
     fontSize: 14,
     textTransform: 'uppercase',
     letterSpacing: 0.4,
   },
   coffeePrice: {
-    fontFamily: 'JosefinSans-Regular',
+    fontFamily: 'Josefin-Sans-Regular',
     fontSize: 16,
     color: '#F4F4F4',
     letterSpacing: 0.4,
   },
 
   poppinsTitle: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Semi-Bold',
     fontSize: 20,
     textAlign: 'left',
   },
 
   poppinsIconText: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Semi-Bold',
     color: 'White',
     letterSpacing: 0.8,
     fontSize: 15,
@@ -56,13 +56,13 @@ const textStyles = StyleSheet.create({
     marginHorizontal: '2%',
     marginTop: '8%',
     marginBottom: '2%',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Semi-Bold',
     fontSize: 20,
   },
 
   iconText: {
     fontSize: 16,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Semi-Bold',
     color: 'white',
     letterSpacing: 0.8,
     marginLeft: 7,
@@ -70,3 +70,4 @@ const textStyles = StyleSheet.create({
 });
 
 export default textStyles;
+*/
