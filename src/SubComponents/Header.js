@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Pressable, Image, Text, Alert} from 'react-native';
 
-const Header = {title} => {
+const Header = ({title}) => {
   const onBackButtonClicked = () => {
     Alert.alert('FUTURE NAVIGATION FEATURE', 'Go back to previous page', [
       {
@@ -18,7 +18,7 @@ const Header = {title} => {
           style={styles.back_button}
         />
       </Pressable>
-      <Text style={styles.title}>{props.title}</Text>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 };

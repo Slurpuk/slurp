@@ -5,6 +5,7 @@ import React from 'react';
 import OptionsPopUp from './components/ShopMenu/OptionsPopUp';
 import {StyleSheet, View} from 'react-native';
 import Menu from './components/ShopMenu/Menu';
+import PaymentCardsPage from "./screens/PaymentCardsPage";
 
 const OptionPopUpTester = () => {
   return (

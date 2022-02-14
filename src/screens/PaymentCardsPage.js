@@ -8,6 +8,7 @@ const PaymentCardsPage = () => {
     return (
         <SafeAreaView>
             <Header title={'PAYMENT CARDS'}></Header>
+            <View><Text>Active Cards Here</Text></View>
             <PrimaryButton text={'Add New Payment Card'}></PrimaryButton>
         </SafeAreaView>
     );
