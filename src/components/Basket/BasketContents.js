@@ -124,7 +124,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: '5%',
-    width: '100%',
     justifyContent: 'space-between',
   },
   item_information: {
