@@ -12,9 +12,8 @@ import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import textStyles from '../../stylesheets/textStyles';
-import PrimaryButton from '../SubComponents/PrimaryButton';
+import CustomButton from '../SubComponents/CustomButton';
 import FormField from '../components/UserManagement/FormField';
-
 
 
 const AddNewCardPage = () => {
@@ -24,6 +23,20 @@ const AddNewCardPage = () => {
     const [cardNumber, setCardNumber] = useState();
     const [password, setPassword] = useState();
 
+    const handleMMYYYY = (text) => {
+        let textTemp = text;
+        if(textTemp.slice(-1)=='/'){
+            textTemp=textTemp.slice(0, -2);
+        }
+        if (textTemp.length === 2) {
+                textTemp += '/';
+        }
+
+
+        setExpiryDate(textTemp);
+    };
+
+
     return (
         <View style={styles.wrapper}>
             <StatusBar translucent={true} backgroundColor="transparent" />
@@ -32,13 +45,13 @@ const AddNewCardPage = () => {
                     <GreenHeader headerText={'Add New Card'} />
                 </View>
                 <View style={styles.body}>
-                    <Text style={[textStyles.blueJosefinHeading]}>Card Stuff</Text>
-
                     <View style={styles.form}>
                         <FormField
                             style={styles.element}
                             title={'Card Number'}
                             placeholder={'xxxxxxxxxxxxxxxx'}
+                            type={'cardNumber'}
+                            value={cardNumber}
                             setField={setCardNumber}
                         />
                         <View style={styles.name_container}>
@@ -48,16 +61,18 @@ const AddNewCardPage = () => {
                                     styles.sub_name_container_left,
                                 ]}
                                 title={'Expiry Date'}
-                                placeholder={'xx/xx'}
-                                setField={setExpiryDate}
-                                //type={'name'}
+                                placeholder={'MM/YY'}
+                                type={'expiryDate'}
+                                value={expiryDate}
+                                setField={handleMMYYYY}
                             />
                             <FormField
                                 style={[styles.sub_name_container]}
                                 title={'CVC'}
                                 placeholder={'xxx'}
                                 setField={setCVC}
-                                //type={'name'}
+                                value={CVC}
+                                type={'CVC'}
                             />
                         </View>
                         <FormField
@@ -65,12 +80,13 @@ const AddNewCardPage = () => {
                             title={'Password'}
                             setField={setPassword}
                             type={'password'}
+                            value={password}
                         />
                     </View>
 
                     <View style={styles.buttons_container}>
                         <View style={styles.button_container}>
-                            <PrimaryButton text={'Add New Payment Card'} onPress={null} />
+                            <CustomButton text={'Add New Payment Card'}priority="secondary" onPress={null} />
                         </View>
                     </View>
                 </View>

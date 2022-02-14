@@ -7,12 +7,15 @@ const FormField = ({
   title = 'Title',
   placeholder = '',
   setField,
+  value='',
   type = '',
 }) => {
   let secureTextEntry = false;
   let autoCapitalize = true;
   let autoCorrect = true;
   let autoCompleteType = 'off';
+  let keyboardType='default';
+  let maxLength=1235;
   switch (type) {
     case 'name':
       autoCapitalize = 'words';
@@ -29,6 +32,28 @@ const FormField = ({
       autoCorrect = false;
       autoCompleteType = 'password';
       break;
+    case 'cardNumber':
+      autoCapitalize = 'none';
+      autoCorrect = false;
+      autoCompleteType = 'cardComponent';
+      keyboardType='numeric';
+      maxLength=16;
+      break;
+    case 'expiryDate':
+      autoCapitalize = 'none';
+      autoCorrect = false;
+      autoCompleteType = 'cardComponent';
+      keyboardType='numeric';
+      maxLength=5;
+      break;
+    case 'CVC':
+      secureTextEntry = true;
+      autoCapitalize = 'none';
+      autoCorrect = false;
+      autoCompleteType = 'cardComponent';
+      keyboardType='numeric';
+      maxLength=3;
+      break;
   }
   return (
     <View style={style}>
@@ -40,9 +65,12 @@ const FormField = ({
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         onChangeText={text => setField(text)}
+        value={value}
         autoCapitalize={autoCapitalize}
         autoCompleteType={autoCompleteType}
         autoCorrect={autoCorrect}
+        keyboardType={keyboardType}
+        maxLength={maxLength}
       />
     </View>
   );
