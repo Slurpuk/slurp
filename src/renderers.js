@@ -3,7 +3,7 @@ import Option from './components/ShopMenu/Option';
 import MenuSection from './components/ShopMenu/MenuSection';
 import ItemCard from './components/ShopMenu/ItemCard';
 import ShopCard from './components/Shops/ShopCard';
-import ShopList from "./components/Shops/ShopList";
+import ShopList from './components/Shops/ShopList';
 import ShopIntro from './components/shopIntro';
 
 const renderOption = ({item, updateOptions}) => (
@@ -22,12 +22,16 @@ const renderMenuSection = ({item, renderItem}) => (
 const renderItemCard = ({item}) => <ItemCard item={item} />;
 
 const renderShopCard = ({item}) => (
-  <ShopCard name={item.name} likeness={item.likeness} queue={item.queue} image={item.image} />
+  <ShopCard
+    name={item.name}
+    likeness={item.likeness}
+    queue={item.queue}
+    image={item.image}
+  />
 );
 const renderShopList = ({item, renderItem}) => (
   <ShopList DATA={item.data} renderItem={renderItem} />
 );
-
 
 export default {
   renderOption,
