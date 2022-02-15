@@ -11,6 +11,7 @@
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd .."
   },
   "dependencies": {
+    "@mdi/font": "^6.5.95",
     "@react-native-community/checkbox": "^0.5.9",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "^14.3.0",
