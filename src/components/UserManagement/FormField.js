@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
-
 const FormField = ({
   style,
   title = 'Title',

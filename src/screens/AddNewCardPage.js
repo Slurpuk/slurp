@@ -66,7 +66,7 @@ const AddNewCardPage = () => {
                             />
                         </View>
                         <FormField
-                            style={styles.element}
+                            style={styles.password_container}
                             title={'Password'}
                             setField={setPassword}
                             type={'password'}
@@ -74,10 +74,8 @@ const AddNewCardPage = () => {
                         />
                     </View>
 
-                    <View style={styles.buttons_container}>
-                        <View style={styles.button_container}>
-                            <CustomButton text={'Add New Payment Card'}priority="secondary" onPress={null} />
-                        </View>
+                    <View style={styles.button_container}>
+                        <CustomButton text={'Add New Payment Card'}priority="secondary" onPress={null} />
                     </View>
                 </View>
             </View>
@@ -105,18 +103,10 @@ const styles = StyleSheet.create({
         flex: 3,
         paddingVertical: '5%',
     },
-    footer: {
-        textAlign: 'center',
-        textDecorationLine: 'underline',
-        textAlignVertical: 'bottom',
-    },
-
-    buttons_container: {
-        flex: 1,
-        alignContent: 'flex-end',
-    },
     button_container: {
+        flex: 5,
         paddingVertical: '3%',
+        alignItems: 'center',
     },
 
     name_container: {
@@ -128,15 +118,13 @@ const styles = StyleSheet.create({
     sub_name_container: {
         flex: 1,
     },
+    password_container: {
+        flex: 1,
+    },
     sub_name_container_left: {
         marginRight: '5%',
     },
-    input: {
-        backgroundColor: '#F9F9F9',
-        width: '100%',
-        height: 37,
-        borderRadius: 5,
-    },
+
 });
 
 export default AddNewCardPage;
