@@ -9,7 +9,32 @@ const textStyles = StyleSheet.create({
     letterSpacing: 0.5,
     color: 'white',
   },
-
+  lightGreyPoppins: {
+    fontSize: 15,
+    fontFamily: 'Poppins-Light',
+    letterSpacing: 0.3,
+    color: '#727272',
+  },
+  greyPoppins: {
+    fontSize: 16,
+    fontFamily: 'Poppins',
+    letterSpacing: 0.3,
+    color: '#3D3D3D',
+  },
+  darkGreyPoppinsSubHeading: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#434343',
+  },
+  veryDarkGreyPoppinsSubHeading: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#212121',
+  },
   bodyText: {
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
@@ -22,7 +47,13 @@ const textStyles = StyleSheet.create({
     letterSpacing: 0.3,
     color: '#173C4F',
   },
-
+  bluePoppinsLargeBody: {
+    fontSize: 17,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#173C4F',
+  },
   bluePoppinsSubHeading: {
     fontSize: 16,
     fontWeight: '600',

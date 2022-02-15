@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#046D66',
     display: 'flex',
-    paddingTop: getStatusBarHeight(),
+    paddingTop:
+      Platform.OS === 'ios' ? getStatusBarHeight() + 8 : getStatusBarHeight(),
     paddingBottom: '6%',
     paddingHorizontal: '5%',
     alignItems: 'center',
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 27,
     marginLeft: 20,
     letterSpacing: 0.4,
-},
+  },
 });
 
 export default GreenHeader;

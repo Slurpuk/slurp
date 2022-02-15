@@ -9,6 +9,8 @@ import Menu from './components/ShopMenu/Menu';
 import ShopIntro from './components/shopIntro';
 import ShopData from './fake-data/shopData';
 import ShopPage from './components/shopPage';
+import orders from './fake-data/OrderData';
+import OrderHistoryPage from './screens/OrderHistoryPage';
 
 const OptionPopUpTester = () => {
   return (
@@ -46,6 +48,10 @@ const ShopPageTester = () => {
   );
 };
 
+const OrderHistoryPageTester = () => {
+  return <OrderHistoryPage orders={orders} />;
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -55,4 +61,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default {MenuTester, OptionPopUpTester, ShopPageTester};
+export default {
+  MenuTester,
+  OptionPopUpTester,
+  ShopPageTester,
+  OrderHistoryPageTester,
+};
