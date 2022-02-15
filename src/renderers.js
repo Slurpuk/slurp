@@ -2,6 +2,9 @@ import React from 'react';
 import Option from './components/ShopMenu/Option';
 import MenuSection from './components/ShopMenu/MenuSection';
 import ItemCard from './components/ShopMenu/ItemCard';
+import ShopCard from './components/Shops/ShopCard';
+import ShopList from './components/Shops/ShopList';
+import ShopIntro from './components/Shops/shopIntro';
 
 const renderOption = ({item, updateOptions}) => (
   <Option
@@ -16,6 +19,24 @@ const renderMenuSection = ({item, renderItem}) => (
   <MenuSection section={item} renderItem={renderItem} />
 );
 
-const renderItemCard = ({item}) => <ItemCard name={item.name} />;
+const renderItemCard = ({item}) => <ItemCard item={item} />;
 
-export default {renderOption, renderMenuSection, renderItemCard};
+const renderShopCard = ({item}) => (
+  <ShopCard
+    name={item.name}
+    likeness={item.likeness}
+    queue={item.queue}
+    image={item.image}
+  />
+);
+const renderShopList = ({item, renderItem}) => (
+  <ShopList DATA={item.data} renderItem={renderItem} />
+);
+
+export default {
+  renderOption,
+  renderMenuSection,
+  renderItemCard,
+  renderShopCard,
+  renderShopList,
+};

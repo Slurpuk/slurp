@@ -8,7 +8,7 @@ import {
   ImageBackground,
   Pressable,
 } from 'react-native';
-import textStyles from '../../stylesheets/textStyles';
+import textStyles from '../../../stylesheets/textStyles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
@@ -17,7 +17,7 @@ const ShopIntro = props => {
   return (
     <View style={intro.wrapper}>
       <ImageBackground
-        source={require('../assets/images/ShopExterior.png')}
+        source={require('../../assets/images/ShopExterior.png')}
         style={{width: '100%', height: '100%'}}
       >
         <LinearGradient
@@ -26,12 +26,14 @@ const ShopIntro = props => {
         >
           <View style={intro.content}>
             <Text style={[textStyles.headingOne, intro.heading]}>
-              Eten & Driken
+              {props.shopName}
             </Text>
-            <ShopDetailIcons />
+            <ShopDetailIcons
+              likeness={props.likeness}
+              timeToOrder={props.timeToOrder}
+            />
             <Text style={[textStyles.bodyText, intro.body]}>
-              This is the body text about the coffee shop, they do nice stuff
-              you shoudl defo come here sometime.
+              {props.shopIntroText}
             </Text>
           </View>
         </LinearGradient>
@@ -43,11 +45,14 @@ const ShopIntro = props => {
 export default ShopIntro;
 
 const intro = StyleSheet.create({
+  content: {
+    textAlign: 'left',
+  },
+
   wrapper: {
     height: 270,
     maxHeight: '35%',
     // width: 100,
-    backgroundColor: 'lightblue',
     display: 'flex',
   },
 

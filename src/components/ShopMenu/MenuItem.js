@@ -1,5 +1,5 @@
 //to do
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
@@ -14,34 +14,45 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-const MenuItem = ({name}) => (
-  <TouchableOpacity style={styles.item}>
-    {/*<Image*/}
-    {/*  style={{width: '100%', height: 100, zIndex: -1}}*/}
-    {/*  source={require('../assets/images/coffeeUnsplash1.jpg')}*/}
-    {/*/>*/}
+const MenuItem = ({item}) => {
+  const [count, setCount] = useState(0);
+  return (
+    <TouchableOpacity style={styles.item}>
+      {/*<Image*/}
+      {/*  style={{width: '100%', height: 100, zIndex: -1}}*/}
+      {/*  source={require('../assets/images/coffeeUnsplash1.jpg')}*/}
+      {/*/>*/}
 
-    <ImageBackground
-      source={require('../../assets/images/coffeeUnsplash1.jpg')}
-      imageStyle={{borderRadius: 10, overflow: 'hidden'}}
-      style={{width: '100%', height: '100%'}}
-    >
-      <LinearGradient
-        colors={['transparent', 'black']}
-        style={styles.linearGradient}
+      <ImageBackground
+        source={require('../../assets/images/coffeeUnsplash1.jpg')}
+        imageStyle={{borderRadius: 10, overflow: 'hidden'}}
+        style={{width: '100%', height: '100%'}}
       >
-        <View style={styles.menuCardTextWrapper}>
-          <Text style={[textStyles.headingOne, styles.title]}>{name}</Text>
-          <Text style={textStyles.coffeePrice}>£3.10</Text>
-        </View>
+        <LinearGradient
+          colors={['transparent', 'black']}
+          style={styles.linearGradient}
+        >
+          <View style={styles.menuCardTextWrapper}>
+            <Text style={[textStyles.headingOne, styles.title]}>
+              {item.name}
+            </Text>
+            <Text style={textStyles.coffeePrice}>{item.price}</Text>
+          </View>
 
-        <Pressable style={styles.menuCardPopupTrigger}>
-          <Text style={[textStyles.iconText, {marginLeft: 0}]}>+</Text>
-        </Pressable>
-      </LinearGradient>
-    </ImageBackground>
-  </TouchableOpacity>
-);
+          <Pressable
+            onPress={() => {
+              setCount(count + 1);
+              console.log(count);
+            }}
+            style={styles.menuCardPopupTrigger}
+          >
+            <Text style={[textStyles.iconText, {marginLeft: 0}]}>{count}</Text>
+          </Pressable>
+        </LinearGradient>
+      </ImageBackground>
+    </TouchableOpacity>
+  );
+};
 
 const screenWidth = Dimensions.get('window').width;
 

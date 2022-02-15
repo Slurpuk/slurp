@@ -1,11 +1,17 @@
 import CoffeeOptionsData from './fake-data/CoffeeOptionsData';
 import ItemsData from './fake-data/ItemsData';
+import shopData from './fake-data/shopData';
 import renderers from './renderers';
 import React from 'react';
 import OptionsPopUp from './components/ShopMenu/OptionsPopUp';
 import {StyleSheet, View} from 'react-native';
 import Menu from './components/ShopMenu/Menu';
-import PaymentCardsPage from "./screens/PaymentCardsPage";
+import ShopList from './components/Shops/ShopList';
+import ShopsData from './fake-data/ShopsData';
+import ShopIntro from './components/Shops/shopIntro';
+import ShopData from './fake-data/shopData';
+import ShopPage from './components/Shops/shopPage';
+
 
 const OptionPopUpTester = () => {
   return (
@@ -30,6 +36,22 @@ const MenuTester = () => {
   );
 };
 
+const ShopListTester = () => {
+  return <ShopList DATA={ShopsData} renderItem={renderers.renderShopCard} />;
+};
+const ShopPageTester = () => {
+  const defaultShopData = shopData[0];
+  return (
+    <ShopPage
+      shopName={defaultShopData.name}
+      shopIntroText={defaultShopData.intro}
+      DATA={ItemsData}
+      renderSection={renderers.renderMenuSection}
+      renderItem={renderers.renderItemCard}
+    />
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -39,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default {MenuTester, OptionPopUpTester};
+export default {MenuTester, OptionPopUpTester, ShopPageTester, ShopListTester};
