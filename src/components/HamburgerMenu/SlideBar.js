@@ -93,7 +93,7 @@ function MyDrawer() {
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={({navigation}) => ({
-        drawerPosition: 'left',
+        drawerPosition: 'right',
         header: () => (
           <View style={styles.header}>
             <TouchableHighlight style={styles.floating_button}>

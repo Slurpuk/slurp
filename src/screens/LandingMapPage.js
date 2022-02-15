@@ -3,9 +3,9 @@ import { Dimensions, StyleSheet, Text, View, Button } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import renderers from '../renderers';
-import ShopIntro from '../components/shopIntro';
+import ShopIntro from '../components/Shops/shopIntro';
 import ShopData from '../fake-data/shopData';
-import ShopPage from '../components/shopPage';
+import ShopPage from '../components/Shops/shopPage';
 import shopData from "../fake-data/shopData";
 import ItemsData from '../fake-data/ItemsData';
 
