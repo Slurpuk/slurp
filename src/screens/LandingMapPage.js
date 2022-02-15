@@ -2,6 +2,12 @@ import React, { useRef } from 'react';
 import { Dimensions, StyleSheet, Text, View, Button } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import BottomSheet from "react-native-gesture-bottom-sheet";
+import renderers from '../renderers';
+import ShopIntro from '../components/shopIntro';
+import ShopData from '../fake-data/shopData';
+import ShopPage from '../components/shopPage';
+import shopData from "../fake-data/shopData";
+import ItemsData from '../fake-data/ItemsData';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -10,14 +16,24 @@ export default function LandingMapPage() {
 
     const bottomSheet = useRef();
 
+    const defaultShopData = shopData[0];
+
     const bringUpBottomSheet = () => {
         bottomSheet.current.show()
     };
 
     return (
         <View style={styles.container}>
-            <BottomSheet hasDraggableIcon ref={bottomSheet} height={300} >
-                <Text>The details of the shop</Text>
+            <BottomSheet  ref={bottomSheet} height={300} >
+                <View>
+                    <ShopPage
+                        shopName={defaultShopData.name}
+                        shopIntroText={defaultShopData.intro}
+                        DATA={ItemsData}
+                        renderSection={renderers.renderMenuSection}
+                        renderItem={renderers.renderItemCard}
+                    />
+                </View>
             </BottomSheet>
             <View style = {{justifyContent:"center", alignItems:'center',flex:1}}>
                 <Text>Map View Will Be There</Text>
