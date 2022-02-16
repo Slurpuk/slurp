@@ -4,7 +4,9 @@ import MenuSection from './components/ShopMenu/MenuSection';
 import ItemCard from './components/ShopMenu/ItemCard';
 import ShopCard from './components/Shops/ShopCard';
 import ShopList from './components/Shops/ShopList';
-import ShopIntro from './components/Shops/shopIntro';
+import ShopIntro from './components/Shops/ShopIntro';
+import Menu from './components/ShopMenu/Menu';
+import ItemsData from './fake-data/ItemsData';
 
 const renderOption = ({item, updateOptions}) => (
   <Option
@@ -14,6 +16,8 @@ const renderOption = ({item, updateOptions}) => (
     updateOptions={updateOptions}
   />
 );
+
+const renderMenu = menu => menu;
 
 const renderMenuSection = ({item, renderItem}) => (
   <MenuSection section={item} renderItem={renderItem} />
@@ -39,4 +43,5 @@ export default {
   renderItemCard,
   renderShopCard,
   renderShopList,
+  renderMenu,
 };

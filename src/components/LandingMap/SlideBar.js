@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   Platform,
+  Dimensions,
 } from 'react-native';
 import {LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -15,6 +16,8 @@ import {
 } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Close from 'react-native-vector-icons/AntDesign';
+import LandingMapPage, {PageContext} from '../../screens/LandingMapPage';
+import {useContext, useEffect, useState} from 'react';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -89,10 +92,21 @@ function CustomDrawerContent(props) {
 }
 
 function MyDrawer() {
+  const context = useContext(PageContext);
+
+  const [isHeaderVisible, setVisible] = useState(context);
+
+  useEffect(() => {
+    console.log(context);
+    context ? setVisible(false) : setVisible(true);
+  }, [context]);
+
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
+      initialRouteName={'LandingMapPage'}
       screenOptions={({navigation}) => ({
+        headerShown: isHeaderVisible,
         drawerPosition: 'left',
         header: () => (
           <View style={styles.header}>
@@ -110,41 +124,44 @@ function MyDrawer() {
         ),
       })}
     >
-      <Drawer.Screen name="View order history" component={HomeScreen} />
-      <Drawer.Screen name="Payment accounts" component={HomeScreen} />
-      <Drawer.Screen name="Change name" component={HomeScreen} />
-      <Drawer.Screen name="Change password" component={HomeScreen} />
-      <Drawer.Screen name="Logout the device" component={HomeScreen} />
+      <Drawer.Screen name="View order history" component={LandingMapPage} />
+      <Drawer.Screen name="Payment accounts" component={LandingMapPage} />
+      <Drawer.Screen name="Change name" component={LandingMapPage} />
+      <Drawer.Screen name="Change password" component={LandingMapPage} />
+      <Drawer.Screen name="Logout the device" component={LandingMapPage} />
     </Drawer.Navigator>
   );
 }
 
-function HomeScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Home</Text>
-    </View>
-  );
-}
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   header: {
+    height: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+
+    // flex: 0,
+    // padding: '4%',
+    // backgroundColor: 'red',
+    // position: 'relative',
+    // top: '10%',
+    // left: '10%',
+  },
+  floating_button: {
     ...Platform.select({
       ios: {
-        marginTop: '10%',
+        marginTop: '15%',
       },
       android: {},
     }),
-    display: 'flex',
-    alignItems: 'flex-end',
-    padding: '4%',
-  },
-  floating_button: {
     backgroundColor: '#ffffff',
-    paddingVertical: '1.8%',
     borderRadius: 11,
-    alignContent: 'center',
+    paddingTop: '0.5%',
     paddingLeft: '2.5%',
+    height: 0.055 * screenHeight,
+    marginRight: '3%',
   },
   drawer_item: {
     borderStyle: 'solid',

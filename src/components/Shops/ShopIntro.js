@@ -51,9 +51,14 @@ const intro = StyleSheet.create({
 
   wrapper: {
     height: 270,
-    maxHeight: '35%',
+    maxHeight: '30%',
+    // minHeight: 270,
+    maxWidth: '100%',
     // width: 100,
     display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   heading: {

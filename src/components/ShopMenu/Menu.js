@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'whitesmoke',
   },
 
   activeTabBar: {
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     minWidth: screenWidth / 3,
     paddingVertical: 6,
+    backgroundColor: '#F2F2F2',
   },
 
   linearGradient: {
