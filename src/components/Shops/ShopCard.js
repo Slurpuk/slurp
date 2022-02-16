@@ -44,7 +44,7 @@ const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   item: {
-    width: screenWidth,
+    maxWidth: screenWidth,
     height: screenWidth * 0.37,
     marginVertical: '1.8%',
     // marginHorizontal: '2%',

@@ -19,26 +19,26 @@ const textStyles = StyleSheet.create({
 
   coffeeSubheading: {
     color: 'White',
-    fontFamily: 'Josefin-Sans-Bold',
+    fontFamily: 'JosefinSans-Bold',
     fontSize: 14,
     textTransform: 'uppercase',
     letterSpacing: 0.4,
   },
   coffeePrice: {
-    fontFamily: 'Josefin-Sans-Regular',
+    fontFamily: 'JosefinSans-Regular',
     fontSize: 16,
     color: '#F4F4F4',
     letterSpacing: 0.4,
   },
 
   poppinsTitle: {
-    fontFamily: 'Poppins-Semi-Bold',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
     textAlign: 'left',
   },
 
   poppinsIconText: {
-    fontFamily: 'Poppins-Semi-Bold',
+    fontFamily: 'Poppins-SemiBold',
     color: 'White',
     letterSpacing: 0.8,
     fontSize: 15,
@@ -56,7 +56,7 @@ const textStyles = StyleSheet.create({
     marginHorizontal: '2%',
     marginTop: '8%',
     marginBottom: '2%',
-    fontFamily: 'Poppins-Semi-Bold',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
   },
 

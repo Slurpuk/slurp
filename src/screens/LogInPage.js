@@ -18,7 +18,7 @@ import {
   Platform,
 } from 'react-native';
 import FormField from '../components/UserManagement/FormField';
-import PrimaryButton from '../SubComponents/PrimaryButton';
+import PrimaryButton from '../sub-components/PrimaryButton';
 import textStyles from '../../stylesheets/textStyles';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 

@@ -1,96 +1,123 @@
-import React, { useRef } from 'react';
-import { Dimensions, StyleSheet, Text, View, Button } from 'react-native';
+import React, {useState} from 'react';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  LogBox,
+  SafeAreaView,
+} from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
-import BottomSheet from "react-native-gesture-bottom-sheet";
 import renderers from '../renderers';
-import ShopIntro from '../components/Shops/shopIntro';
-import ShopData from '../fake-data/shopData';
-import ShopPage from '../components/Shops/shopPage';
-import shopData from "../fake-data/shopData";
+import ShopPage from '../components/Shops/ShopPage';
+import shopData from '../fake-data/ShopData';
 import ItemsData from '../fake-data/ItemsData';
+import MapBackground from '../components/LandingMap/MapBackground';
+import ShopsData from '../fake-data/ShopsData';
 
-const windowHeight = Dimensions.get('window').height;
+LogBox.ignoreLogs([
+  "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
+]);
 
+export default function LandingMapPage({setVisible}) {
+  const [isShopIntro, setIsShopIntro] = useState(false);
 
-export default function LandingMapPage() {
+  const updatePage = ({index}) => {
+    if (index === 0) {
+      setVisible(false);
+    } else {
+      setVisible(true);
+    }
+  };
 
-    const bottomSheet = useRef();
+  const defaultShopData = shopData[0];
 
-    const defaultShopData = shopData[0];
+  const setLOL = () => {
+    setIsShopIntro(!isShopIntro);
+  };
 
-    const bringUpBottomSheet = () => {
-        bottomSheet.current.show()
-    };
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.map}>
+        <MapBackground />
+        <Button title={'Switch bottom sheet'} onPress={setLOL} />
+      </View>
 
-    return (
-        <View style={styles.container}>
-            <BottomSheet  ref={bottomSheet} height={300} >
-                <View>
-                    <ShopPage
-                        shopName={defaultShopData.name}
-                        shopIntroText={defaultShopData.intro}
-                        DATA={ItemsData}
-                        renderSection={renderers.renderMenuSection}
-                        renderItem={renderers.renderItemCard}
-                    />
-                </View>
-            </BottomSheet>
-            <View style = {{justifyContent:"center", alignItems:'center',flex:1}}>
-                <Text>Map View Will Be There</Text>
-                <Button
-                    title = "Locations"
-                    onPress = {bringUpBottomSheet}
-                />
+      {isShopIntro ? (
+        <ScrollBottomSheet
+          componentType="FlatList"
+          snapPoints={['0%', '70%', '100%']}
+          onSettle={index => updatePage({index})}
+          initialSnapIndex={1}
+          renderHandle={() => (
+            <View style={styles.header1}>
+              <ShopPage
+                shopName={defaultShopData.name}
+                shopIntroText={defaultShopData.intro}
+                DATA={ItemsData}
+                renderSection={renderers.renderMenuSection}
+                renderItem={renderers.renderItemCard}
+              />
             </View>
-            <ScrollBottomSheet
-                componentType="FlatList"
-                snapPoints={[128, '50%', windowHeight - 80]}
-                initialSnapIndex={2}
-                renderHandle={() => (
-                    <View style={styles.header}>
-                        <View style={styles.panelHandle} />
-                        <Text style = {{padding: 10, fontWeight: 'bold', fontSize: 25}}>Top Picks Near By</Text>
-                    </View>
-                )}
-                data={Array.from({ length: 200 }).map((_, i) => String(i))}
-                keyExtractor={i => i}
-                renderItem={({ item }) => (
-                    <View style={styles.item}>
-                        <Text>{`Item ${item}`}</Text>
-                    </View>
-                )}
-                contentContainerStyle={styles.contentContainerStyle}
-            />
-        </View>
-    );
+          )}
+          contentContainerStyle={styles.contentContainerStyle}
+        />
+      ) : null}
+      {isShopIntro === false ? (
+        <ScrollBottomSheet
+          componentType="FlatList"
+          snapPoints={['20%', '91.5%']}
+          initialSnapIndex={1}
+          renderHandle={() => (
+            <View style={styles.header2}>
+              <View style={styles.panelHandle} />
+              <Text style={styles.headerText}>Top Picks Nearby</Text>
+            </View>
+          )}
+          data={ShopsData}
+          keyExtractor={item => item.key}
+          renderItem={renderers.renderShopCard}
+          contentContainerStyle={styles.contentContainerStyle}
+        />
+      ) : null}
+    </SafeAreaView>
+  );
 }
 
+const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    contentContainerStyle: {
-        padding: 16,
-        backgroundColor: '#EDEBE7',
-    },
-    header: {
-        alignItems: 'center',
-        backgroundColor: '#EDEBE7',
-        paddingVertical: 10,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20
-    },
-    panelHandle: {
-        width: 40,
-        height: 3,
-        backgroundColor: 'green',
-        borderRadius: 4
-    },
-    item: {
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        alignItems: 'center',
-        marginVertical: 10,
-    },
+  container: {
+    flex: 1,
+  },
+  contentContainerStyle: {
+    backgroundColor: '#EDEBE7',
+  },
+  header1: {
+    height: windowHeight,
+  },
+  header2: {
+    alignItems: 'center',
+    backgroundColor: '#EDEBE7',
+    paddingVertical: '3%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  panelHandle: {
+    width: '10%',
+    height: '7%',
+    backgroundColor: 'green',
+    borderRadius: 4,
+    position: 'absolute',
+    top: '15%',
+  },
+  headerText: {
+    padding: '2%',
+    fontWeight: 'bold',
+    fontSize: 25,
+    color: 'black',
+  },
+  map: {
+    flex: 1,
+  },
 });
