@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",
-    "softRefresh": "npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd .."
+    "soft-refresh": "npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd .."
   },
   "dependencies": {
     "@mdi/font": "^6.5.95",
