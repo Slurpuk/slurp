@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import GreenHeader from '../components/General/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
-import CustomButton from '../SubComponents/CustomButton';
+import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const BasketPage = () => {

@@ -1,28 +1,9 @@
-import * as React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableHighlight,
-  Platform,
-} from 'react-native';
-import {LogBox} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItem,
-} from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React from 'react';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
+import {Dimensions, Platform, StyleSheet} from 'react-native';
 
-LogBox.ignoreLogs([
-  "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-]);
-
-const Drawer = createDrawerNavigator();
-
-function CustomDrawerContent(props) {
+function SideDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <Close.Button
@@ -88,64 +69,7 @@ function CustomDrawerContent(props) {
   );
 }
 
-function MyDrawer() {
-  return (
-    <Drawer.Navigator
-      drawerContent={props => <CustomDrawerContent {...props} />}
-      screenOptions={({navigation}) => ({
-        drawerPosition: 'left',
-        header: () => (
-          <View style={styles.header}>
-            <TouchableHighlight style={styles.floating_button}>
-              <Icon.Button
-                onPress={() => navigation.openDrawer()}
-                name="bars"
-                color={'#046D66'}
-                underlayColor={'transparent'}
-                backgroundColor={'transparent'}
-                size={25}
-              />
-            </TouchableHighlight>
-          </View>
-        ),
-      })}
-    >
-      <Drawer.Screen name="View order history" component={HomeScreen} />
-      <Drawer.Screen name="Payment accounts" component={HomeScreen} />
-      <Drawer.Screen name="Change name" component={HomeScreen} />
-      <Drawer.Screen name="Change password" component={HomeScreen} />
-      <Drawer.Screen name="Logout the device" component={HomeScreen} />
-    </Drawer.Navigator>
-  );
-}
-
-function HomeScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Home</Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  header: {
-    ...Platform.select({
-      ios: {
-        marginTop: '10%',
-      },
-      android: {},
-    }),
-    display: 'flex',
-    alignItems: 'flex-end',
-    padding: '4%',
-  },
-  floating_button: {
-    backgroundColor: '#ffffff',
-    paddingVertical: '1.8%',
-    borderRadius: 11,
-    alignContent: 'center',
-    paddingLeft: '2.5%',
-  },
   drawer_item: {
     borderStyle: 'solid',
     borderBottomWidth: 1,
@@ -162,10 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SlideBar() {
-  return (
-    <NavigationContainer>
-      <MyDrawer />
-    </NavigationContainer>
-  );
-}
+export default SideDrawerContent;

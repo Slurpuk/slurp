@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import ShopIntro from './shopIntro';
+import ShopIntro from './ShopIntro';
 import {StyleSheet, Text, View} from 'react-native';
-import CustomButton from '../../SubComponents/CustomButton';
+import CustomButton from '../../sub-components/CustomButton';
 import Menu from '../ShopMenu/Menu';
 
 const ShopPage = ({

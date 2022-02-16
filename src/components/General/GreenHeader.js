@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import WhiteArrowButton from '../../SubComponents/WhiteArrowButton';
+import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
 const GreenHeader = ({headerText}) => {
   const onBackButtonClicked = () => {

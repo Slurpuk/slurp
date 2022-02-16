@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd .."
+    "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",
+    "softRefresh": "npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd .."
   },
   "dependencies": {
     "@mdi/font": "^6.5.95",
@@ -23,6 +24,7 @@
     "@react-navigation/native-stack": "^6.2.5",
     "@react-navigation/stack": "^6.0.11",
     "react": "17.0.2",
+    "react-input-mask": "^2.0.4",
     "react-native": "0.67.2",
     "react-native-gesture-handler": "2.2.0",
     "react-native-linear-gradient": "^2.5.6",
@@ -31,7 +33,6 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.2",
     "react-native-scroll-bottom-sheet": "*",
-    "react-native-gesture-bottom-sheet": "*",
     "react-native-shadow-2": "^6.0.2",
     "react-native-status-bar-height": "^2.6.0",
     "react-native-svg": "^12.1.1",

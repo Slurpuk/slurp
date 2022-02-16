@@ -11,7 +11,7 @@ import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import textStyles from '../../stylesheets/textStyles';
-import PrimaryButton from '../SubComponents/PrimaryButton';
+import PrimaryButton from '../sub-components/PrimaryButton';
 import FormField from '../components/UserManagement/FormField';
 
 // Redirect the user to the Log In Portal
