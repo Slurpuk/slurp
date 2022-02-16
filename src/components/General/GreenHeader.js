@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import WhiteArrowButton from '../SubComponents/WhiteArrowButton';
+import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
 const GreenHeader = ({headerText}) => {
   const onBackButtonClicked = () => {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 27,
     marginLeft: 20,
     letterSpacing: 0.4,
-},
+  },
 });
 
 export default GreenHeader;

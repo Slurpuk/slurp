@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import ShopIntro from './shopIntro';
+import ShopIntro from './ShopIntro';
 import {StyleSheet, Text, View} from 'react-native';
-import CustomButton from '../SubComponents/CustomButton';
-import Menu from './ShopMenu/Menu';
+import CustomButton from '../../sub-components/CustomButton';
+import Menu from '../ShopMenu/Menu';
 
 const ShopPage = ({
   shopName,
@@ -13,7 +13,12 @@ const ShopPage = ({
 }) => {
   return (
     <>
-      <ShopIntro shopName={shopName} shopIntroText={shopIntroText} />
+      <ShopIntro
+        shopName={shopName}
+        shopIntroText={shopIntroText}
+        likeness={'65%'}
+        timeToOrder={7}
+      />
       <Menu DATA={DATA} renderItem={renderItem} renderSection={renderSection} />
       <View />
     </>

@@ -16,27 +16,6 @@ const textStyles = StyleSheet.create({
     letterSpacing: 0.3,
     color: '#EDEBE7',
   },
-  bluePoppinsBody: {
-    fontSize: 15,
-    fontFamily: 'Poppins-Regular',
-    letterSpacing: 0.3,
-    color: '#173C4F',
-  },
-
-  bluePoppinsSubHeading: {
-    fontSize: 16,
-    fontWeight: '600',
-    fontFamily: 'Poppins-SemiBold',
-    letterSpacing: 0.3,
-    color: '#173C4F',
-  },
-  blueJosefinHeading: {
-    fontSize: 35,
-    fontFamily: 'Josefin Sans',
-    fontWeight: '700',
-    letterSpacing: 0.3,
-    color: '#173C4F',
-  },
 
   coffeeSubheading: {
     color: 'White',
@@ -60,7 +39,7 @@ const textStyles = StyleSheet.create({
 
   poppinsIconText: {
     fontFamily: 'Poppins-SemiBold',
-    color: 'white',
+    color: 'White',
     letterSpacing: 0.8,
     fontSize: 15,
   },
@@ -91,3 +70,4 @@ const textStyles = StyleSheet.create({
 });
 
 export default textStyles;
+

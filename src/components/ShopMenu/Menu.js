@@ -4,7 +4,7 @@ import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAre
 import SectionList from 'react-native-tabs-section-list';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomButton from '../../SubComponents/CustomButton';
+import CustomButton from '../../sub-components/CustomButton';
 
 const NumItemsContext = React.createContext(0);
 
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'whitesmoke',
   },
 
   activeTabBar: {
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     minWidth: screenWidth / 3,
     paddingVertical: 6,
+    backgroundColor: '#F2F2F2',
   },
 
   linearGradient: {

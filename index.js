@@ -1,13 +1,11 @@
 /**
  * @format
  */
-
+import 'react-native-gesture-handler';
 import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
+import App from './App';
+import testers from "./src/testers";
 
-import testers from './src/testers';
-import ShopPage from './src/components/shopPage';
-import SignUpPage from "./src/screens/SignUpPage";
-import AddNewCardPage from "./src/screens/AddNewCardPage";
+AppRegistry.registerComponent(appName, () =>testers.NavigableLandingPage);
 
-AppRegistry.registerComponent(appName, () => AddNewCardPage);
