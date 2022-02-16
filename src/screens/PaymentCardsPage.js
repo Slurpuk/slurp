@@ -9,8 +9,8 @@ import {
   SafeAreaView,
   FlatList,
 } from 'react-native';
-import Header from '../SubComponents/Header';
-import PrimaryButton from '../SubComponents/PrimaryButton';
+import Header from '../sub-components/Header';
+import PrimaryButton from '../sub-components/PrimaryButton';
 import PaymentCardsData from '../fake-data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 

@@ -8,8 +8,8 @@ import {StyleSheet, View} from 'react-native';
 import Menu from './components/ShopMenu/Menu';
 import ShopList from './components/Shops/ShopList';
 import ShopsData from './fake-data/ShopsData';
-import ShopIntro from './components/Shops/ShopIntro';
-import ShopData from './fake-data/ShopData';
+import {NavigationContainer} from '@react-navigation/native';
+import HamburgerSlideBarNavigator from './navigation/HamburgerSlideBarNavigator';
 import ShopPage from './components/Shops/ShopPage';
 
 const OptionPopUpTester = () => {
@@ -51,6 +51,14 @@ const ShopPageTester = () => {
   );
 };
 
+const NavigableLandingPage = () => {
+  return (
+    <NavigationContainer>
+      <HamburgerSlideBarNavigator />
+    </NavigationContainer>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -60,4 +68,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default {MenuTester, OptionPopUpTester, ShopPageTester, ShopListTester};
+export default {
+  MenuTester,
+  OptionPopUpTester,
+  ShopPageTester,
+  ShopListTester,
+  NavigableLandingPage,
+};

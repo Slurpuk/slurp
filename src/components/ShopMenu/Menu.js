@@ -4,7 +4,7 @@ import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAre
 import SectionList from 'react-native-tabs-section-list';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomButton from '../../SubComponents/CustomButton';
+import CustomButton from '../../sub-components/CustomButton';
 
 const NumItemsContext = React.createContext(0);
 

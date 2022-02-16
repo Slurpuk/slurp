@@ -11,7 +11,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export default function MapPage() {
+export default function MapBackground() {
   return (
     <View style={styles.container}>
       <MapView
