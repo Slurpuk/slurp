@@ -6,8 +6,9 @@ import {
 } from 'react-native';
 import FormField from './FormField';
 import PrimaryButton from '../../SubComponents/PrimaryButton';
+import GreenHeader from '../General/GreenHeader';
 
-const updateDetailsConfirm = () => {
+const changeDetailsConfirm = () => {
   Alert.alert('Done.', 'Your details have been updated.', [
     {
       text: 'OK',
@@ -16,19 +17,21 @@ const updateDetailsConfirm = () => {
 };
 
 //Update user details in the database
-const updateUserDetails = () => {
-  updateDetailsConfirm();
+const changeUserDetails = () => {
+  changeDetailsConfirm();
 };
 
 const UpdateDetailsForm = () => {
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
 
   return (
     <View>
-      <View style={styles.form}>
+      <View style={styles.wrapper}>
+        <View style={styles.header}>
+          <GreenHeader headerText={'CHANGE DETAILS'} />
+        </View>
         <View style={styles.name_container}>
           <FormField
             style={[styles.sub_name_container, styles.sub_name_container_left]}
@@ -52,23 +55,16 @@ const UpdateDetailsForm = () => {
           placeholder={'Your current email'}
           type={'email'}
         />
-        <FormField
-          style={styles.element}
-          title={'Password'}
-          setField={setPassword}
-          secureTextEntry={true}
-          type={'password'}
-        />
       </View>
       <View style={styles.button_container}>
-        <PrimaryButton text={'Update Details'} onPress={updateDetailsConfirm} />
+        <PrimaryButton text={'Update Details'} onPress={changeUserDetails} />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  form: {
+  wrapper: {
     paddingVertical: '5%',
   },
 
