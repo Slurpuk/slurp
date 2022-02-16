@@ -15,6 +15,7 @@ const Menu = ({DATA, renderSection, renderItem}) => (
         <SectionList
           sections={DATA}
           stickySectionHeadersEnabled={false}
+          nestedScrollEnabled={true}
           scrollToLocationOffset={-20}
           tabBarStyle={styles.tabBar}
           renderItem={({item}) => renderSection({item, renderItem})} // Here, 'item' is actually a whole section

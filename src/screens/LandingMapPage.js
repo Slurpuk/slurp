@@ -47,6 +47,7 @@ export default function LandingMapPage({setVisible}) {
       {isShopIntro ? (
         <ScrollBottomSheet
           componentType="FlatList"
+          nestedScrollEnabled={true}
           snapPoints={['0%', '70%', '100%']}
           onSettle={index => updatePage({index})}
           initialSnapIndex={1}

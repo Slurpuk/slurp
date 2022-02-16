@@ -4,7 +4,7 @@ import React from 'react';
 const MenuSection = ({section, renderItem}) => {
   return (
     <View style={[styles.sectionContainer]}>
-      <FlatList data={section.list} numColumns={2} renderItem={renderItem} />
+      <FlatList data={section.list} numColumns={2} renderItem={renderItem} nestedScrollEnabled={true}/>
     </View>
   );
 };
