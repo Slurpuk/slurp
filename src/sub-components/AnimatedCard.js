@@ -1,11 +1,20 @@
 import React, { useRef, useState } from "react";
-import { Animated, Text, View, StyleSheet, Button, SafeAreaView } from "react-native";
+import { Animated, Text, View, StyleSheet, Button, SafeAreaView, Pressable } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const AnimatedCard = () => {
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+
+const AnimatedCard = ({collapsableContent, hidableContent, bottomFixed = null}) => {
+
     // fadeAnim will be used as the value for opacity. Initial Value: 0
     const adaptiveHeight = useRef(new Animated.Value(100)).current;
     const [isExpanded, setExpanded] = useState(false);
-    console.log(isExpanded);
+
+
+    const [collapsableHeight, setCollapsableHeight] = useState();
+    const [hidableHeight, setHidableHeight] = useState();
+
 
     const growHeight = () => {
         setExpanded(!isExpanded);
@@ -13,7 +22,7 @@ const AnimatedCard = () => {
 
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(adaptiveHeight, {
-            toValue: 300,
+            toValue: (hidableHeight + collapsableHeight + 10),
             duration: 1000,
             useNativeDriver: false,
         }).start();
@@ -24,17 +33,24 @@ const AnimatedCard = () => {
     const toggleheight = () => {
 
         isExpanded ? shrinkHeight() : growHeight();
+        console.log("toggle height triggered");
     }
+
+    const toggleArrow = () =>{
+        isExpanded ? '180deg' : '0deg';
+    }
+
 
     const shrinkHeight = () => {
 
         setExpanded(!isExpanded);
+        let isFlipped = '180deg';
         console.log(isExpanded);
 
 
         // Will change fadeAnim value to 0 in 3 seconds
         Animated.timing(adaptiveHeight, {
-            toValue: 100,
+            toValue: (collapsableHeight + 10),
             duration: 1000,
             useNativeDriver: false,
         }).start();
@@ -51,18 +67,37 @@ const AnimatedCard = () => {
                         height: adaptiveHeight
                     }
                 ]}
-            >
-                <View>
-                    <Text>HI SARA</Text>
-                    <Button title="weeeee" onPress={toggleheight} />
 
+                onLayout={(event) => {
+                    let {x, y, width, height} = event.nativeEvent.layout;
+                }}
+
+            >
+                <AnimatedPressable onPress = {toggleheight}>
+
+                <View onLayout={(event) => {
+                    setCollapsableHeight(event.nativeEvent.layout.height);
+                }} style = {styles.collapsable}>
+                    {collapsableContent}
                 </View>
+
+                <View onLayout={(event) => {
+                    setHidableHeight(event.nativeEvent.layout.height);
+                }} style = {styles.hidable}>
+                    {hidableContent}
+                </View>
+
+                </AnimatedPressable>
+
+                <View style = {[styles.topRightIcon, {transform: [{rotateZ: '0deg'}]}]}>
+                    <Icon size={24} color="black" name="chevron-down" />
+                </View>
+
+                <View style = {styles.absoluteBottomRight}>
+                    {bottomFixed}
+                </View>
+
             </Animated.View>
-            <View style={styles.buttonRow}>
-                <Button title="peekaboo" onPress={growHeight} />
-                <Button title="bye bye" onPress={shrinkHeight} />
-                {isExpanded ? <Text>true</Text> : <Text>false</Text>}
-            </View>
         </SafeAreaView>
     );
 }
@@ -88,11 +123,51 @@ const styles = StyleSheet.create({
     },
 
     expandable:{
-        backgroundColor: 'green',
-        borderWidth: 10,
+        backgroundColor: '#F5F5F5',
         display: 'flex',
         flexShrink: 0,
         height: 100,
+        position: 'relative',
+        overflow: 'hidden',
+        elevation: 12,
+        borderRadius: 13,
+        padding: '3%'
+    },
+
+    hidable:{
+        paddingBottom: 10,
+        maxWidth: '85%',
+    },
+
+    collapsable:{
+        paddingBottom: 10,
+        maxWidth: '85%',
+    },
+
+    absoluteBottomRight:{
+        position: 'absolute',
+        bottom: 5,
+        right: 5,
+        minWidth: 20,
+        minHeight: 20,
+        // backgroundColor: 'red',
+    },
+
+    topRightIcon:{
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        minWidth: 20,
+        minHeight: 20,
+        transform: [
+    { rotateZ: '0deg' }
+]
+    },
+
+    flipped:{
+        transform: [
+            { rotateZ: '180deg' }
+        ]
     }
 });
 
