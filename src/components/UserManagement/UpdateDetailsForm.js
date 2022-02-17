@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Alert,
-} from 'react-native';
+import {StyleSheet, View, Alert} from 'react-native';
 import FormField from './FormField';
 import PrimaryButton from '../../SubComponents/PrimaryButton';
 import GreenHeader from '../General/GreenHeader';

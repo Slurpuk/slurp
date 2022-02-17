@@ -6,15 +6,15 @@ const FormField = ({
   title = 'Title',
   placeholder = '',
   setField,
-  value='',
+  value = '',
   type = '',
 }) => {
   let secureTextEntry = false;
   let autoCapitalize = true;
   let autoCorrect = true;
   let autoCompleteType = 'off';
-  let keyboardType='default';
-  let maxLength=1235;
+  let keyboardType = 'default';
+  let maxLength = 1235;
   switch (type) {
     case 'name':
       autoCapitalize = 'words';
@@ -35,23 +35,23 @@ const FormField = ({
       autoCapitalize = 'none';
       autoCorrect = false;
       autoCompleteType = 'cardComponent';
-      keyboardType='numeric';
-      maxLength=16;
+      keyboardType = 'numeric';
+      maxLength = 16;
       break;
     case 'expiryDate':
       autoCapitalize = 'none';
       autoCorrect = false;
       autoCompleteType = 'cardComponent';
-      keyboardType='numeric';
-      maxLength=5;
+      keyboardType = 'numeric';
+      maxLength = 5;
       break;
     case 'CVC':
       secureTextEntry = true;
       autoCapitalize = 'none';
       autoCorrect = false;
       autoCompleteType = 'cardComponent';
-      keyboardType='numeric';
-      maxLength=3;
+      keyboardType = 'numeric';
+      maxLength = 3;
       break;
   }
   return (
