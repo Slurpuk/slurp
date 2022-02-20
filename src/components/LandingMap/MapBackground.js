@@ -8,22 +8,32 @@ import {
   View,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {Marker} from 'react-native-maps';
+
+
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 export default function MapBackground() {
+
+    const tokyoRegion = {
+        latitude: 35.6762,
+        longitude: 139.6503,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    };
+
   return (
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
-        }}
-      />
+        region={tokyoRegion}
+      >
+          <MapView.Marker coordinate={tokyoRegion}
+                          pinColor = {'#000000'}
+                          title={"hey there fellas"}/>
+      </MapView>
     </View>
   );
 }
@@ -40,4 +50,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     flex: 1,
   },
+    marker:{
+
+    },
 });

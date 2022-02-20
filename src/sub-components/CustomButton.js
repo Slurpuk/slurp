@@ -20,6 +20,7 @@ export default function CustomButton(props) {
           activeOpacity={1}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
+          onPress={props.onPress}
         >
           <Text style={buttonStyles.buttonText}>{text}</Text>
           {optionalNumber == null ? (

@@ -1,46 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
 
-const BasketContents = () => {
-  const [total, setTotal] = useState(0);
-
-  const [Items] = useState([
-    {
-      key: 1,
-      name: 'Latte',
-      amount: 0,
-      price: '2.40',
-      specifications: ['Oat Milk'],
-    },
-    {
-      key: 2,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 3,
-      name: 'Americano',
-      amount: 0,
-      price: '2.10',
-      specifications: [],
-    },
-    {
-      key: 4,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 5,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-  ]);
+const BasketContents = ({Items, setItems, total, setTotal}) => {
 
   const changeAmount = (item, amount) => {
     if (!(item.amount < 1 && amount < 0)) {
@@ -48,6 +9,8 @@ const BasketContents = () => {
       let add_value = Math.round(item.price * amount * 100) / 100;
       setTotal(total + add_value);
     }
+    // console.log(Items.find(i => i.key === item.key).amount);
+    // setItems((Items.find(i => i.key === item.key).amount += amount));
   };
 
   return (
