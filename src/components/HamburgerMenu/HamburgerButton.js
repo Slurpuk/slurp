@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         marginTop: '15%',
       },
       android: {
-        marginTop: '3%',
+        marginTop: '15%',
       },
     }),
     backgroundColor: '#ffffff',
