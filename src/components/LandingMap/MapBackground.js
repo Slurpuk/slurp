@@ -10,8 +10,6 @@ import {
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 
-
-
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 export default function MapBackground() {
@@ -23,6 +21,10 @@ export default function MapBackground() {
         longitudeDelta: 0.01,
     };
 
+    const locationPress = () => {
+        console.log("Function will be here!!")
+    }
+
   return (
     <View style={styles.container}>
       <MapView
@@ -31,8 +33,11 @@ export default function MapBackground() {
         region={tokyoRegion}
       >
           <MapView.Marker coordinate={tokyoRegion}
-                          pinColor = {'#000000'}
-                          title={"hey there fellas"}/>
+                          pinColor = {'#fefefe'}
+                          title={"hey there fellas"}
+                          description={'Test market'}
+                          onPress = {locationPress}
+          />
       </MapView>
     </View>
   );
