@@ -8,10 +8,15 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from 'react-native';
 
-export default function CustomButton(props) {
-  const {priority, text, optionalNumber = null} = props;
+export default function CustomButton({
+  priority,
+  text,
+  optionalNumber = null,
+  inheritedFunction = () => void 0,
+}) {
   return (
     <View>
       <Animated.View style={{transform: [{scale}]}}>
@@ -20,7 +25,7 @@ export default function CustomButton(props) {
           activeOpacity={1}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
-        >
+          onPress={inheritedFunction}>
           <Text style={buttonStyles.buttonText}>{text}</Text>
           {optionalNumber == null ? (
             <></>
@@ -29,8 +34,7 @@ export default function CustomButton(props) {
               style={[
                 buttonStyles.optionalNumber,
                 buttonStyles[`bubble${priority}`],
-              ]}
-            >
+              ]}>
               {optionalNumber}
             </Text>
           )}
@@ -51,6 +55,7 @@ const onPressIn = () => {
     useNativeDriver: true,
   }).start();
 };
+
 const onPressOut = () => {
   Animated.spring(animation, {
     toValue: 0,

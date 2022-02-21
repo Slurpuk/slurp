@@ -25,7 +25,7 @@ const renderMenuSection = ({item, renderItem}) => (
 
 const renderItemCard = ({item}) => <ItemCard item={item} />;
 
-const renderShopCard = ({item}) => (
+const renderShopCard = ({item, navigation}) => (
   <ShopCard
     name={item.name}
     likeness={item.likeness}

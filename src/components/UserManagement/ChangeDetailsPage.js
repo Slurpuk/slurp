@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 import FormField from './FormField';
-import PrimaryButton from '../../SubComponents/PrimaryButton';
 import GreenHeader from '../General/GreenHeader';
+import CustomButton from '../../sub-components/CustomButton';
 
 const changeDetailsConfirm = () => {
   Alert.alert('Done.', 'Your details have been updated.', [
@@ -17,7 +17,7 @@ const changeUserDetails = () => {
   changeDetailsConfirm();
 };
 
-const UpdateDetailsForm = () => {
+const ChangeDetailsPage = ({navigation}) => {
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -26,7 +26,7 @@ const UpdateDetailsForm = () => {
     <View>
       <View style={styles.wrapper}>
         <View style={styles.header}>
-          <GreenHeader headerText={'CHANGE DETAILS'} />
+          <GreenHeader headerText={'CHANGE DETAILS'} navigation={navigation} />
         </View>
         <View style={styles.name_container}>
           <FormField
@@ -53,7 +53,11 @@ const UpdateDetailsForm = () => {
         />
       </View>
       <View style={styles.button_container}>
-        <PrimaryButton text={'Update Details'} onPress={changeUserDetails} />
+        <CustomButton
+          priority="secondary"
+          text={'Update Details'}
+          inheritedFunction={changeUserDetails}
+        />
       </View>
     </View>
   );
@@ -91,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateDetailsForm;
+export default ChangeDetailsPage;

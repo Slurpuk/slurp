@@ -1,8 +1,8 @@
-import React from 'react';
-import {Pressable} from 'react-native';
+import React, {useEffect} from 'react';
+import {BackHandler, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const WhiteArrowButton = ({direction = 'back', onPress}) => {
+const WhiteArrowButton = ({direction = 'back', navigation}) => {
   let iconName;
   switch (direction) {
     case 'left':
@@ -18,17 +18,32 @@ const WhiteArrowButton = ({direction = 'back', onPress}) => {
       iconName = 'md-chevron-down-circle';
       break;
   }
+
+  // function handleBackButtonClick() {
+  //   navigation.navigate('Home');
+  //   return true;
+  // }
+  //
+  // useEffect(() => {
+  //   BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+  //   return () => {
+  //     BackHandler.removeEventListener(
+  //       'hardwareBackPress',
+  //       handleBackButtonClick,
+  //     );
+  //   };
+  // }, []);
+
   return (
     <Pressable
       underlayColor={'transparent'}
-      onPress={onPress}
+      onPress={() => navigation.goBack()}
       style={({pressed}) => [
         {
           underlayColor: 'gray',
           opacity: pressed ? 0.6 : 1,
         },
-      ]}
-    >
+      ]}>
       <Icon name={iconName} color={'white'} size={34} />
     </Pressable>
   );

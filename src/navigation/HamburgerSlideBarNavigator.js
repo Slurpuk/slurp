@@ -5,6 +5,15 @@ import {useState} from 'react';
 import LandingMapPage from '../screens/LandingMapPage';
 import SideDrawerContent from '../components/UserManagement/SideDrawerContent';
 import HamburgerButton from '../components/UserManagement/HamburgerButton';
+import PaymentCardsPage from '../screens/PaymentCardsPage';
+import ChangeDetailsPage from '../components/UserManagement/ChangeDetailsPage';
+import ChangePasswordPage from '../screens/ChangePasswordPage';
+import LogInPage from '../screens/LogInPage';
+import {
+  ChangeDetailsStackNavigator,
+  HomeStackNavigator,
+  MainStackNavigator, PaymentAccountsNavigator,
+} from "./StackNavigator";
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -18,36 +27,34 @@ function HamburgerSlideBarNavigator() {
   return (
     <Drawer.Navigator
       drawerContent={props => <SideDrawerContent {...props} />}
-      initialRouteName={'Home'}
       screenOptions={({navigation}) => ({
         headerShown: isHeaderVisible,
         drawerPosition: 'left',
         header: () => <HamburgerButton navigation={navigation} />,
-      })}
-    >
+      })}>
       <Drawer.Screen
         name="Home"
-        children={() => <LandingMapPage setVisible={setVisible} />}
+        children={() => <HomeStackNavigator setVisible={setVisible} />}
       />
       <Drawer.Screen
         name="View order history"
-        children={() => <LandingMapPage setVisible={setVisible} />}
+        children={() => <HomeStackNavigator setVisible={setVisible} />} //need to fix this page
       />
       <Drawer.Screen
         name="Payment accounts"
-        children={() => <LandingMapPage setVisible={setVisible} />}
+        children={() => <PaymentAccountsNavigator />}
       />
       <Drawer.Screen
         name="Change name"
-        children={() => <LandingMapPage setVisible={setVisible} />}
+        children={() => <ChangeDetailsStackNavigator />}
       />
       <Drawer.Screen
         name="Change password"
-        children={() => <LandingMapPage setVisible={setVisible} />}
+        children={() => <ChangePasswordPage setVisible={setVisible} />} //need to fix this page
       />
       <Drawer.Screen
         name="Logout the device"
-        children={() => <LandingMapPage setVisible={setVisible} />}
+        children={() => <LogInPage setVisible={setVisible} />}
       />
     </Drawer.Navigator>
   );

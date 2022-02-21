@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import CustomButton from '../../sub-components/CustomButton';
 
 const ChangePasswordForm = () => {
   const [password, setPassword] = useState();
@@ -46,14 +47,20 @@ const ChangePasswordForm = () => {
       </View>
 
       <View style={styles.button_container}>
-        <Pressable
-          style={[styles.button, styles.account_button]}
-          onPress={setNewPassword}
-        >
-          <Text style={[styles.text, styles.button_text]}>
-            Confirm new password
-          </Text>
-        </Pressable>
+        {/*<Pressable*/}
+        {/*  style={[styles.button, styles.account_button]}*/}
+        {/*  onPress={setNewPassword}>*/}
+        {/*  <Text style={[styles.text, styles.button_text]}>*/}
+        {/*    Confirm new password*/}
+        {/*  </Text>*/}
+        {/*</Pressable>*/}
+
+        <CustomButton
+          priority={'secondary'}
+          text={'Confirm new password'}
+          inheritedFunction={setNewPassword}
+        />
+
       </View>
     </View>
   );

@@ -7,6 +7,13 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import SignUpPage from './src/screens/SignUpPage';
 import LoginPage from './src/screens/LogInPage';
+import LandingMapPage from './src/screens/LandingMapPage';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import ChangeDetailsPage from './src/components/UserManagement/ChangeDetailsPage';
+// import ChangePassword from './src/components/UserManagement/ChangePassword';
+import PaymentCardsPage from './src/screens/PaymentCardsPage';
+import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 
 export default function App() {
   const usersCollection = firestore().collection('Users');
@@ -36,8 +43,11 @@ export default function App() {
     //     onPress={registerUser}
     //   />
     // </View>
-    <SignUpPage />
     //  <LoginPage></LoginPage>
+
+    <NavigationContainer>
+      <HamburgerSlideBarNavigator />
+    </NavigationContainer>
   );
 }
 

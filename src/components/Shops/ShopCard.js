@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 
-const ShopCard = ({name, likeness, queue, image}) => {
+const ShopCard = ({name, likeness, queue, image, navigation}) => {
   return (
-    <Pressable style={styles.item}>
+    <Pressable style={styles.item} onPress={() => navigation.navigate()}>
       <ImageBackground
         source={image}
         style={{

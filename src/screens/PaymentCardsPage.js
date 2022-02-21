@@ -13,15 +13,16 @@ import Header from '../sub-components/Header';
 import PrimaryButton from '../sub-components/PrimaryButton';
 import PaymentCardsData from '../fake-data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
+import GreenHeader from '../components/General/GreenHeader';
 
 export const PaymentCardsContext = React.createContext();
 
-const PaymentCardsPage = () => {
+const PaymentCardsPage = ({navigation}) => {
   const [cards, setCards] = useState(PaymentCardsData);
 
   return (
     <SafeAreaView style={styles.page}>
-      <Header title={'PAYMENT CARDS'} />
+      <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
       <PaymentCardsContext.Provider
         value={{
           cards: cards,

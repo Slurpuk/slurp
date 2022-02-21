@@ -14,20 +14,20 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
-const GreenHeader = ({headerText}) => {
+const GreenHeader = ({headerText, navigation}) => {
   const onBackButtonClicked = () => {
-    Alert.alert('FUTURE NAVIGATION FEATURE', 'Go back to previous page', [
-      {
-        text: 'OK',
-      },
-    ]);
+    // Alert.alert('FUTURE NAVIGATION FEATURE', 'Go back to previous page', [
+    //   {
+    //     text: 'OK',
+    //   },
+    // ]);
   };
 
   return (
     <View style={styles.header}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.arrow}>
-        <WhiteArrowButton direction={'left'} onPress={onBackButtonClicked} />
+        <WhiteArrowButton direction={'left'} navigation={navigation}/>
       </View>
       <Text style={styles.headerText}>{headerText}</Text>
     </View>
