@@ -9,6 +9,11 @@ const PaymentCardsData = [
     number: '982 2932 2012 4324',
     type: 'MasterCard Credit',
   },
+  {
+    isDefault: false,
+    number: '982 2932 2012 4324',
+    type: 'MasterCard Credit',
+  },
 ];
 
 export default PaymentCardsData;

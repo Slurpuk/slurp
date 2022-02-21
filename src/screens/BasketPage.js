@@ -9,7 +9,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import GreenHeader from '../components/General/GreenHeader';
+import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
@@ -29,6 +29,8 @@ const BasketPage = () => {
           style={styles.button}
           text={'Apple/Google pay'}
         />
+      </View>
+      <View style={[styles.lastButton, styles.buttons]}>
         <CustomButton
           priority="primary"
           style={styles.button}
@@ -59,13 +61,17 @@ const styles = StyleSheet.create({
     marginVertical: '3%',
   },
   buttons: {
-    flexShrink: 4,
-    marginVertical: '8%',
+    display: 'flex',
+    marginVertical: '2%',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   button: {
-    paddingVertical: '5%',
+    flex: 1,
+  },
+
+  lastButton: {
+    marginBottom: '6%',
   },
 });
 

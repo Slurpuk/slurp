@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import GreenHeader from '../components/GreenHeader';
+import GreenHeader from '../sub-components/GreenHeader';
 import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import CustomButton from '../SubComponents/CustomButton';
-import FormField from '../components/UserManagement/FormField';
+import CustomButton from '../sub-components/CustomButton';
+import FormField from '../sub-components/FormField';
 
 const AddNewCardPage = () => {
   const [expiryDate, setExpiryDate] = useState();
@@ -13,7 +13,7 @@ const AddNewCardPage = () => {
 
   const handleMMYY = text => {
     let textTemp = text;
-    if (textTemp.slice(-1) == '/') {
+    if (textTemp.slice(-1) === '/') {
       textTemp = textTemp.slice(0, -2);
     }
     if (textTemp.length === 2) {
@@ -24,105 +24,76 @@ const AddNewCardPage = () => {
   };
 
   return (
-    <View style={styles.wrapper}>
-      <StatusBar translucent={true} backgroundColor="transparent" />
-      <View style={styles.safeSpace}>
-        <View style={styles.header}>
-          <GreenHeader headerText={'Add New Card'} />
+    <View style={styles.container}>
+      <GreenHeader headerText={'ADD NEW CARD'} />
+      <View style={styles.form}>
+        <FormField
+          title={'Card Number'}
+          placeholder={'xxxxxxxxxxxxxxxx'}
+          type={'cardNumber'}
+          setField={setCardNumber}
+        />
+        <View style={styles.DetailsContainer}>
+          <FormField
+            style={[styles.subDetails, styles.spaceRight]}
+            title={'Expiry Date'}
+            placeholder={'MM/YY'}
+            type={'expiryDate'}
+            setField={handleMMYY}
+          />
+          <FormField
+            style={[styles.subDetails, styles.spaceLeft]}
+            title={'CVC'}
+            placeholder={'xxx'}
+            setField={setCVC}
+            type={'CVC'}
+          />
         </View>
-        <View style={styles.body}>
-          <View style={styles.form}>
-            <FormField
-              style={styles.element}
-              title={'Card Number'}
-              placeholder={'xxxxxxxxxxxxxxxx'}
-              type={'cardNumber'}
-              value={cardNumber}
-              setField={setCardNumber}
-            />
-            <View style={styles.name_container}>
-              <FormField
-                style={[
-                  styles.sub_name_container,
-                  styles.sub_name_container_left,
-                ]}
-                title={'Expiry Date'}
-                placeholder={'MM/YY'}
-                type={'expiryDate'}
-                value={expiryDate}
-                setField={handleMMYY}
-              />
-              <FormField
-                style={[styles.sub_name_container]}
-                title={'CVC'}
-                placeholder={'xxx'}
-                setField={setCVC}
-                value={CVC}
-                type={'CVC'}
-              />
-            </View>
-            <FormField
-              style={styles.password_container}
-              title={'Password'}
-              setField={setPassword}
-              type={'password'}
-              value={password}
-            />
-          </View>
+        <FormField
+          title={'Password'}
+          setField={setPassword}
+          type={'password'}
+        />
+      </View>
 
-          <View style={styles.button_container}>
-            <CustomButton
-              text={'Add New Payment Card'}
-              priority="secondary"
-              onPress={null}
-            />
-          </View>
-        </View>
+      <View style={styles.button}>
+        <CustomButton
+          text={'Add New Payment Card'}
+          priority="secondary"
+          onPress={null}
+        />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-  safeSpace: {
-    flex: 1,
+  container: {
     backgroundColor: '#EDEBE7',
-    paddingTop:
-      Platform.OS === 'android'
-        ? getStatusBarHeight() / 3
-        : getStatusBarHeight(),
-  },
-  body: {
     flex: 1,
-    padding: '5%',
   },
   form: {
-    flex: 3,
-    paddingVertical: '5%',
+    margin: '5%',
   },
-  button_container: {
-    flex: 5,
-    paddingVertical: '3%',
+  button: {
+    display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-
-  name_container: {
+  DetailsContainer: {
     flexDirection: 'row',
     display: 'flex',
     justifyContent: 'space-between',
     paddingVertical: '2%',
   },
-  sub_name_container: {
+  subDetails: {
     flex: 1,
   },
-  password_container: {
-    flex: 1,
+  spaceLeft: {
+    marginLeft: '2%',
   },
-  sub_name_container_left: {
-    marginRight: '5%',
+  spaceRight: {
+    marginRight: '2%',
   },
 });
 

@@ -11,12 +11,17 @@ import {
 } from 'react-native';
 
 export default function CustomButton(props) {
-  const {priority, text, optionalNumber = null} = props;
+  const {
+    priority,
+    text,
+    optionalNumber = null,
+    width = screenWidth * 0.91,
+  } = props;
   return (
     <View>
       <Animated.View style={{transform: [{scale}]}}>
         <TouchableOpacity
-          style={[buttonStyles.outer, buttonStyles[priority]]}
+          style={[buttonStyles.outer, buttonStyles[priority], {width: width}]}
           activeOpacity={1}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
@@ -58,6 +63,7 @@ const onPressOut = () => {
     useNativeDriver: true,
   }).start();
 };
+
 const screenWidth = Dimensions.get('window').width;
 
 const buttonStyles = StyleSheet.create({
@@ -102,7 +108,7 @@ const buttonStyles = StyleSheet.create({
     borderRadius: 13,
     marginHorizontal: 10,
     height: 43,
-    width: screenWidth * 0.91,
+    // width: screenWidth * 0.91,
     // borderWidth: 2,
   },
 });
