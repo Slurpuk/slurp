@@ -54,6 +54,7 @@ const FormField = ({
       maxLength = 3;
       break;
   }
+
   return (
     <View style={style}>
       <Text style={[textStyles.bluePoppinsSubHeading, styles.text]}>

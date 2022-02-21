@@ -9,12 +9,72 @@ const textStyles = StyleSheet.create({
     letterSpacing: 0.5,
     color: 'white',
   },
-
+  whiteTextOnGreenHeaderText: {
+    color: '#EDEBE7',
+    fontFamily: 'JosefinSans-Bold',
+    fontStyle: 'normal',
+    fontSize: 27,
+    marginLeft: 20,
+    letterSpacing: 0.4,
+  },
   bodyText: {
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
     letterSpacing: 0.3,
     color: '#EDEBE7',
+  },
+  lightGreyPoppins: {
+    fontSize: 15,
+    fontFamily: 'Poppins-Light',
+    letterSpacing: 0.3,
+    color: '#727272',
+  },
+  greyPoppins: {
+    fontSize: 16,
+    fontFamily: 'Poppins',
+    letterSpacing: 0.3,
+    color: '#3D3D3D',
+  },
+  darkGreyPoppinsSubHeading: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#434343',
+  },
+  veryDarkGreyPoppinsSubHeading: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#212121',
+  },
+  bluePoppinsBody: {
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    letterSpacing: 0.3,
+    color: '#173C4F',
+  },
+  bluePoppinsLargeBody: {
+    fontSize: 17,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#173C4F',
+  },
+  bluePoppinsSubHeading: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#173C4F',
+  },
+  blueJosefinHeading: {
+    fontSize: 35,
+    fontFamily: 'Josefin Sans',
+    fontWeight: '700',
+    letterSpacing: 0.3,
+    color: '#173C4F',
   },
 
   coffeeSubheading: {
