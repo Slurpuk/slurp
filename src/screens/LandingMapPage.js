@@ -7,6 +7,9 @@ import {
   Button,
   LogBox,
   SafeAreaView,
+  Platform,
+  StatusBar,
+  TextInput,
 } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import renderers from '../renderers';
@@ -19,6 +22,9 @@ import ShopsData from '../fake-data/ShopsData';
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
+
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 export default function LandingMapPage({setVisible}) {
   const [isShopIntro, setIsShopIntro] = useState(false);
@@ -41,6 +47,22 @@ export default function LandingMapPage({setVisible}) {
     <SafeAreaView style={styles.container}>
       <View style={styles.map}>
         <MapBackground />
+        <TextInput
+            style={{
+              borderRadius: 10,
+              margin: 10,
+              color: '#000',
+              borderColor: '#666',
+              backgroundColor: '#FFF',
+              borderWidth: 1,
+              height: screenHeight/19,
+              width: screenWidth/1.4,
+              paddingHorizontal: 10,
+              fontSize: 18,
+            }}
+            placeholder={'Search Location'}
+            placeholderTextColor={'#666'}
+        />
         <Button title={'Switch bottom sheet'} onPress={setLOL} />
       </View>
 
@@ -119,5 +141,6 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+    // marginTop: '10%',
   },
 });

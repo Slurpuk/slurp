@@ -1,13 +1,5 @@
-import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Image,
-  Text,
-  Alert,
-  SafeAreaView,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Pressable, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PaymentCard = ({card}) => {
@@ -29,7 +21,6 @@ const PaymentCard = ({card}) => {
         }}
       >
         <View style={{display: 'flex', flexDirection: 'row'}}>
-          {/*<Image source={require('./visa.svg')} height={24}/>*/}
           <Text
             style={[
               styles.text,
