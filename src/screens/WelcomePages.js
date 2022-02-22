@@ -11,7 +11,7 @@ import {
     Pressable, Alert
 } from "react-native";
 
-const WelcomePages = () => {
+const WelcomePages = ({  onDone }) => {
     const [sliderState, setSliderState] = useState({ currentPage: 0 });
     const { width, height } = Dimensions.get('window');
 
@@ -80,7 +80,7 @@ const WelcomePages = () => {
                     <Text style={styles.text}>Why you should create an account </Text>
                     <Pressable
                         style={[styles.button, styles.account_button]}
-                        onPress={createAccount}>
+                        onPress={onDone}>
                         <Text style={styles.button_text}>Create an Account</Text>
                     </Pressable>
                 </View>
