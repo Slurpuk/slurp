@@ -15,5 +15,5 @@ import PaymentCardsPage from "./src/screens/PaymentCardsPage";
 import AddNewCardPage from "./src/screens/AddNewCardPage";
 
 
-AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
+AppRegistry.registerComponent(appName, () => PaymentCardsPage);
 

@@ -38,7 +38,7 @@ const BasketPage = () => {
         <GreenHeader headerText={'ETEN & DRIKEN'} />
       </View>
       <View style={styles.main_container}>
-        <BasketContents />
+        <BasketContents total={30}/>
       </View>
       <View style={styles.buttons}>
         <CustomButton
