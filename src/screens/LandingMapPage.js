@@ -44,28 +44,30 @@ export default function LandingMapPage({setVisible}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.map}>
         <MapBackground />
-        <TextInput
-            style={{
-              borderRadius: 10,
-              margin: 10,
-              color: '#000',
-              borderColor: '#666',
-              backgroundColor: '#FFF',
-              borderWidth: 1,
-              height: screenHeight/19,
-              width: screenWidth/1.4,
-              paddingHorizontal: 10,
-              fontSize: 18,
-            }}
-            placeholder={'Search Location'}
-            placeholderTextColor={'#666'}
-        />
-        <Button title={'Switch bottom sheet'} onPress={setLOL} />
-      </View>
+        <View style={{margin: '10%'}}>
+          <Button title={'Switch bottom sheet'} onPress={setLOL} />
+        </View>
 
+        <TextInput
+          style={{
+            borderRadius: 10,
+            margin: 10,
+            color: '#000',
+            borderColor: '#666',
+            backgroundColor: '#FFF',
+            borderWidth: 1,
+            height: screenHeight / 19,
+            width: screenWidth / 1.4,
+            paddingHorizontal: 10,
+            fontSize: 18,
+          }}
+          placeholder={'Search Location'}
+          placeholderTextColor={'#666'}
+        />
+      </View>
       {isShopIntro ? (
         <ScrollBottomSheet
           componentType="FlatList"
@@ -103,7 +105,7 @@ export default function LandingMapPage({setVisible}) {
           contentContainerStyle={styles.contentContainerStyle}
         />
       ) : null}
-    </SafeAreaView>
+    </View>
   );
 }
 
