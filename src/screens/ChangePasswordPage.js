@@ -1,71 +1,53 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Alert, Platform} from 'react-native';
-import ChangePasswordForm from '../components/UserManagement/ChangePasswordForm';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import textStyles from '../../stylesheets/textStyles';
-import PrimaryButton from '../sub-components/PrimaryButton';
-import FormField from '../components/UserManagement/FormField';
-
-
-const confirmationMessage = () => {Alert.alert('All OK', 'Password changed', [{text: 'OK'},]);};
-
-const passwordChanged = () => {confirmationMessage();};
+import {StyleSheet, View} from 'react-native';
+import GreenHeader from '../sub-components/GreenHeader';
+import FormField from '../sub-components/FormField';
+import CustomButton from '../sub-components/CustomButton';
 
 const ChangePasswordPage = () => {
-    //const [stage, setStage] = useState();
-    const [password, setPassword] = useState();
-    const [password_confirmation, setPasswordConfirmation] = useState();
-
-    return (
-        <View style={styles.wrapper}>
-            <View style={styles.safeSpace}>
-                <View style={styles.body}>
-                    <Text style={[textStyles.blueJosefinHeading]}>Change Password</Text>
-                    <View style={styles.form}>
-                        <FormField style={styles.element} title={'New Password'} placeholder={''} setField={setPassword}
-                                   type={'password'}/>
-                        <FormField style={styles.element} title={'Password'} placeholder={''} setField={setPassword}
-                                   type={'password'}/>
-                    </View>
-                    <View style={styles.buttons_container}>
-                        <View style={styles.button_container}>
-                            <PrimaryButton text={'Confirm'} onPress={passwordChanged} />
-                        </View>
-                    </View>
-                </View>
-            </View>
-        </View>
-    );
+  const [newPassword, setNewPassword] = useState();
+  const [oldPassword, setOldPassword] = useState();
+  const [passwordConfirmation, setPasswordConfirmation] = useState();
+  return (
+    <View style={styles.container}>
+      <GreenHeader headerText={'CHANGE PASSWORD'} />
+      <View style={styles.form}>
+        <FormField
+          title={'Old Password'}
+          setField={setOldPassword}
+          type={'password'}
+        />
+        <FormField
+          title={'New Password'}
+          setField={setNewPassword}
+          type={'password'}
+        />
+        <FormField
+          title={'Confirm Password'}
+          setField={setPasswordConfirmation}
+          type={'password'}
+        />
+      </View>
+      <View style={styles.button}>
+        <CustomButton text={'Update Password'} priority={'secondary'} />
+      </View>
+    </View>
+  );
 };
+
 const styles = StyleSheet.create({
-    wrapper: {
-        flex: 1,
-    },
-    safeSpace: {
-        flex: 1,
-        backgroundColor: '#EDEBE7',
-    },
-  body: {
-    padding: '5%',
+  container: {
+    backgroundColor: '#EDEBE7',
     flex: 1,
   },
   form: {
-    flex: 3,
-      paddingVertical: 5%,
+    margin: '5%',
   },
-    buttons_container: {
-        flex: 1,
-        alignContent: 'flex-end',
-    },
-    button_container: {
-        paddingVertical: '3%',
-    },
-    input: {
-        backgroundColor: '#F9F9F9',
-        width: '100%',
-        height: 37,
-        borderRadius: 5,
-    },
+  button: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },   
 });
 
 export default ChangePasswordPage;
