@@ -36,7 +36,6 @@ export default function LandingMapPage({setVisible}) {
   const defaultShopData = shopData[0];
 
   const setLOL = () => {
-    getUserInfo();
     setIsShopIntro(!isShopIntro);
   };
 
