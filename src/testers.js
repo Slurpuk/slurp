@@ -32,7 +32,6 @@ const MenuTester = () => {
       DATA={ItemsData}
       renderSection={renderers.renderMenuSection}
       renderItem={renderers.renderItemCard}
-
     />
   );
 };
@@ -61,14 +60,28 @@ const NavigableLandingPage = () => {
   );
 };
 
-const AnimatedCardTester = () =>{
-  return(
-      <AnimatedCard
-          collapsableContent = {<View><Text>This content is always going to be visible, content below will be revealed.</Text></View>}
-          hidableContent = {<View><Text>This content will be revealed on click of the component</Text></View>}
-          bottomFixed = {<View><Text>3.10</Text></View>}>
-      </AnimatedCard>
-
+const AnimatedCardTester = () => {
+  return (
+    <AnimatedCard
+      collapsableContent={
+        <View>
+          <Text>
+            This content is always going to be visible, content below will be
+            revealed.
+          </Text>
+        </View>
+      }
+      hidableContent={
+        <View>
+          <Text>This content will be revealed on click of the component</Text>
+        </View>
+      }
+      bottomFixed={
+        <View>
+          <Text>3.10</Text>
+        </View>
+      }
+    ></AnimatedCard>
   );
 };
 
@@ -93,5 +106,3 @@ export default {
   NavigableLandingPage,
   AnimatedCardTester,
 };
-
-

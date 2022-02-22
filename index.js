@@ -14,4 +14,4 @@ import ChangePasswordPage from "./src/screens/ChangePasswordPage";
 import PaymentCardsPage from "./src/screens/PaymentCardsPage";
 import AddNewCardPage from "./src/screens/AddNewCardPage";
 
-AppRegistry.registerComponent(appName, () => PaymentCardsPage);
+AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
