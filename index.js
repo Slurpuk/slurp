@@ -8,5 +8,5 @@ import App from './App';
 import testers from "./src/testers";
 import WelcomePages from "./src/screens/WelcomePages";
 
-AppRegistry.registerComponent(appName, () =>testers.WelcomePages);
+AppRegistry.registerComponent(appName, () =>WelcomePages);
 

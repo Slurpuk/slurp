@@ -10,9 +10,6 @@ import {
     View,
     Pressable, Alert
 } from "react-native";
-import Cafe from '../assets/svgs/cafe.svg';
-import CoffeeBean from '../assets/svgs/coffee-bean.svg';
-import CoffeeCup from '../assets/svgs/coffee-cup.svg';
 
 const WelcomePages = () => {
     const [sliderState, setSliderState] = useState({ currentPage: 0 });
@@ -46,9 +43,12 @@ const WelcomePages = () => {
             ]
         )
     }
+    const Circle = () => {
+        return <View style={styles.circle} />;
+    };
+
 
     const { currentPage: pageIndex } = sliderState;
-
     return (
         <SafeAreaView style={{display: "flex", height:'100%'}}>
             <ScrollView
@@ -64,20 +64,19 @@ const WelcomePages = () => {
                 <View style={{ width, height, }}>
                     <View style={styles.container}>
                         <Text style={styles.title}>Welcome to the app!</Text>
-                        <CoffeeCup stroke={'#333'} height={200} width={200}  />
+                        <Circle />
                         <Text style={styles.text}>Why our service is awesome part 1</Text>
                     </View>
                 </View>
                 <View style={{ width, height}}>
                     <View style={styles.container}>
                         <Text style={styles.title}>Welcome Part 2!</Text>
-                        <CoffeeBean stroke={'#333'} height={200} width={200} />
+
                         <Text style={styles.text}>Why our service is awesome part 2</Text>
                     </View>
                 </View>
                 <View style={[{ width, height, backgroundColor: 'green'}, styles.ViewWrapper]}>
                     <Text style={styles.title}>Welcome Part 3!</Text>
-                    <Cafe style = {styles.svgImg} stroke={'#333'} height={200} width={200} />
                     <Text style={styles.text}>Why you should create an account </Text>
                     <Pressable
                         style={[styles.button, styles.account_button]}
@@ -96,6 +95,12 @@ const WelcomePages = () => {
 };
 
 const styles = StyleSheet.create({
+    circle: {
+        width: 300,
+        height: 300,
+        borderRadius: 300 / 2,
+        backgroundColor: "grey",
+    },
     container: {
         padding: 5,
     },
