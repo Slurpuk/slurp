@@ -1,9 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import LandingMapPage from '../screens/LandingMapPage';
+import BasketPage from '../__tests__/BasketPage';
 
-test('LandingMapPage shows LandingMapPage text',() => {
+//No text to be tested yet though: General layout included for that included under:
 
-    render(<LandingMapPage />);
+
+test('BsektPage shows Basketpage text',() => {
+
+    render(<BasketPage />);
 
     const alert = screen.findByRole('alert');
     expect(alert).toHaveTextContent(

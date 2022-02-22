@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import SignUpPage from '../screens/LoginPage';
+import SignUpPage from '../__tests__/LoginPage';
 
 test('LoginPage shows Login text',() => {
 

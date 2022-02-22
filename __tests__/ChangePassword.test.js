@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import ChangePassword from '../screens/ChangePassword';
+import ChangePassword from '../__tests__/ChangePassword';
 
 //No text to be tested yet though: General layout included for that included under:
 
