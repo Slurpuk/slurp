@@ -8,7 +8,8 @@ import App from './App';
 import testers from "./src/testers";
 import RegisterEmailPassword from "./src/firebase/authentication/registerEmailPassword";
 import BasketPage from "./src/screens/BasketPage"
+import LandingMapPage from "./src/screens/LandingMapPage"
 // import Query from "./src/firebase/firestore/basicQuery";
 
-// AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
-AppRegistry.registerComponent(appName, () => BasketPage);
+AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
+// AppRegistry.registerComponent(appName, () => LandingMapPage);

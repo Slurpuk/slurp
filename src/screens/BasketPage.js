@@ -62,11 +62,11 @@ const BasketPage = () => {
     firestore()
         .collection('FakeOrder')
         .add({
-          customerName: 'Ada Lovelace',
+          customerName: 'Shaun the sheep',
           status: 'incoming',
           total: total.toFixed(2),
           items: Items.filter(item => item.amount !== 0),
-          key: 2,
+          key: 3,
         })
         .then(() => {
           console.log('Order added!');
