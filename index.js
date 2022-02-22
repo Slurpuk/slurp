@@ -16,3 +16,4 @@ import AddNewCardPage from "./src/screens/AddNewCardPage";
 
 
 AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
+
