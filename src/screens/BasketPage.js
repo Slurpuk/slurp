@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import { firebase } from '@react-native-firebase/functions';
+import {firebase} from '@react-native-firebase/functions';
 import React from 'react';
 
 import {
@@ -9,7 +9,7 @@ import {
   Fragment,
   SafeAreaView,
   Platform,
-    Pressable,
+  Pressable,
   StatusBar,
 } from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
@@ -18,18 +18,17 @@ import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const BasketPage = () => {
-
   function sendOrder() {
     firestore()
-        .collection('FakeOrder')
-        .add({
-          name: 'Ada Lovelace',
-          type: 'incoming',
-          total: 30,
-        })
-        .then(() => {
-          console.log('Order added!');
-        });
+      .collection('FakeOrder')
+      .add({
+        name: 'Ada Lovelace',
+        type: 'incoming',
+        total: 30,
+      })
+      .then(() => {
+        console.log('Order added!');
+      });
   }
 
   return (
@@ -38,7 +37,7 @@ const BasketPage = () => {
         <GreenHeader headerText={'ETEN & DRIKEN'} />
       </View>
       <View style={styles.main_container}>
-        <BasketContents />
+        <BasketContents total={30} />
       </View>
       <View style={styles.buttons}>
         <CustomButton

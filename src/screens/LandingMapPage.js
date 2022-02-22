@@ -17,7 +17,6 @@ import shopData from '../fake-data/ShopData';
 import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
 import ShopsData from '../fake-data/ShopsData';
-import getUserInfo from '../firebase/queries/getUserInfo';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -37,7 +36,6 @@ export default function LandingMapPage({setVisible}) {
   const defaultShopData = shopData[0];
 
   const setLOL = () => {
-    getUserInfo();
     setIsShopIntro(!isShopIntro);
   };
 
