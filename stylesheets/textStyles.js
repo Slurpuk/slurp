@@ -24,7 +24,7 @@ const textStyles = StyleSheet.create({
     color: '#EDEBE7',
   },
   lightGreyPoppins: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: 'Poppins-Light',
     letterSpacing: 0.3,
     color: '#727272',
@@ -42,8 +42,15 @@ const textStyles = StyleSheet.create({
     letterSpacing: 0.3,
     color: '#434343',
   },
+  darkGreyPoppinsHeading: {
+    fontSize: 18,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#434343',
+  },
   veryDarkGreyPoppinsSubHeading: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
     fontFamily: 'Poppins-SemiBold',
     letterSpacing: 0.3,
