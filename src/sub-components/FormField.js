@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
-import textStyles from '../../../stylesheets/textStyles';
+import textStyles from '../../stylesheets/textStyles';
 const FormField = ({
   style,
   title = 'Title',
@@ -54,6 +54,7 @@ const FormField = ({
       maxLength = 3;
       break;
   }
+
   return (
     <View style={style}>
       <Text style={[textStyles.bluePoppinsSubHeading, styles.text]}>
@@ -64,7 +65,6 @@ const FormField = ({
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         onChangeText={text => setField(text)}
-        value={value}
         autoCapitalize={autoCapitalize}
         autoCompleteType={autoCompleteType}
         autoCorrect={autoCorrect}

@@ -17,10 +17,10 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import FormField from '../components/UserManagement/FormField';
-import PrimaryButton from '../sub-components/PrimaryButton';
+import FormField from '../sub-components/FormField';
 import textStyles from '../../stylesheets/textStyles';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import CustomButton from '../sub-components/CustomButton';
 
 const switchToLogIn = () => {
   Alert.alert(
@@ -47,8 +47,8 @@ const authenticateUser = () => {
   registeredMessage();
 };
 const LogInPage = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <View style={styles.wrapper}>
@@ -74,7 +74,11 @@ const LogInPage = () => {
             </View>
           </View>
           <View style={styles.buttons_container}>
-            <PrimaryButton text={'Log In'} onPress={authenticateUser} />
+            <CustomButton
+              text={'Log In'}
+              onPress={authenticateUser}
+              priority={'primary'}
+            />
           </View>
         </View>
       </View>

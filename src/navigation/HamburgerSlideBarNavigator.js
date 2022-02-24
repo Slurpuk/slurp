@@ -1,10 +1,10 @@
 import React from 'react';
-import {LogBox} from 'react-native';
+import {LogBox, SafeAreaView} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useState} from 'react';
 import LandingMapPage from '../screens/LandingMapPage';
-import SideDrawerContent from '../components/UserManagement/SideDrawerContent';
-import HamburgerButton from '../components/UserManagement/HamburgerButton';
+import SideDrawerContent from '../components/HamburgerMenu/SideDrawerContent';
+import HamburgerButton from '../components/HamburgerMenu/HamburgerButton';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",

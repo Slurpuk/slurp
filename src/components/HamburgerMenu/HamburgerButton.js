@@ -37,10 +37,10 @@ const styles = StyleSheet.create({
   floating_button: {
     ...Platform.select({
       ios: {
-        marginTop: '15%',
+        marginTop: '32%',
       },
       android: {
-        marginTop: '3%',
+        marginTop: '31%',
       },
     }),
     backgroundColor: '#ffffff',

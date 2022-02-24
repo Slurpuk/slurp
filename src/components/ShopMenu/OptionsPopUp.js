@@ -2,7 +2,7 @@ import CheckboxSectionList from './CheckboxSectionList';
 import React, {useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
-import PrimaryButton from '../../sub-components/PrimaryButton';
+import CustomButton from '../../sub-components/CustomButton';
 
 const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
   const [totalPrice, setTotalPrice] = useState(curr_price); // Current total price in pennies
@@ -36,8 +36,10 @@ const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
         />
       </View>
       <View style={styles.button}>
-        <PrimaryButton
+        <CustomButton
           text={`Add To Order  £${(totalPrice / 100).toPrecision(3)}`}
+          priority={'primary'}
+          width={screenWidth * 0.805}
         />
       </View>
     </View>
@@ -48,6 +50,8 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',
+    justifyContent: 'center',
     paddingLeft: '3%',
     width: 0.9128 * screenWidth,
     height: 0.5723 * screenHeight,
@@ -68,7 +72,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginLeft: '-3%',
+    paddingRight: '3%',
   },
 });
 

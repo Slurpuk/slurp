@@ -1,3 +1,5 @@
+import firestore from '@react-native-firebase/firestore';
+import {firebase} from '@react-native-firebase/functions';
 import React from 'react';
 
 import {
@@ -7,21 +9,35 @@ import {
   Fragment,
   SafeAreaView,
   Platform,
+  Pressable,
   StatusBar,
 } from 'react-native';
-import GreenHeader from '../components/General/GreenHeader';
+import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const BasketPage = () => {
+  function sendOrder() {
+    firestore()
+      .collection('FakeOrder')
+      .add({
+        name: 'Ada Lovelace',
+        type: 'incoming',
+        total: 30,
+      })
+      .then(() => {
+        console.log('Order added!');
+      });
+  }
+
   return (
     <View style={styles.basket}>
       <View style={styles.header}>
         <GreenHeader headerText={'ETEN & DRIKEN'} />
       </View>
       <View style={styles.main_container}>
-        <BasketContents />
+        <BasketContents total={30} />
       </View>
       <View style={styles.buttons}>
         <CustomButton
@@ -29,11 +45,16 @@ const BasketPage = () => {
           style={styles.button}
           text={'Apple/Google pay'}
         />
+      </View>
+      <View style={[styles.lastButton, styles.buttons]}>
         <CustomButton
           priority="primary"
           style={styles.button}
           text={'Checkout with card'}
         />
+        <Pressable onPress={sendOrder}>
+          <Text>Send Order</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -59,13 +80,17 @@ const styles = StyleSheet.create({
     marginVertical: '3%',
   },
   buttons: {
-    flexShrink: 4,
-    marginVertical: '8%',
+    display: 'flex',
+    marginVertical: '2%',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   button: {
-    paddingVertical: '5%',
+    flex: 1,
+  },
+
+  lastButton: {
+    marginBottom: '6%',
   },
 });
 
