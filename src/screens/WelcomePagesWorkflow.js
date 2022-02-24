@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SignUpPage from "./SignUpPage";
 
 export default function App() {
-    const [isFirstTime, setIsFirstTime] = useState(true);
+    const [isFirstTime, setIsFirstTime] = useState(false);//change this to false for everything to work
 
     const checkForFirstTime = async () => {
         const result = await AsyncStorage.getItem('isFirstTime');
@@ -20,7 +20,7 @@ export default function App() {
 
     const handleDone = () => {
         setIsFirstTime(false);
-        AsyncStorage.setItem('isFirstTime', 'no');
+        AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
     };
 
     if (isFirstTime)

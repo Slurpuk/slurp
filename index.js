@@ -7,6 +7,6 @@ import {name as appName} from './app.json';
 import App from './App';
 import testers from "./src/testers";
 import WelcomePages from "./src/screens/WelcomePages";
-
+import WelcomePagesWorkflow from "./src/screens/WelcomePagesWorkflow";
 AppRegistry.registerComponent(appName, () =>WelcomePages);
 

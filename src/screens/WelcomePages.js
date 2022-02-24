@@ -2,14 +2,18 @@ import React, {useState} from 'react'
 import {
     Dimensions,
     StyleSheet,
-    PixelRatio,
     SafeAreaView,
     ScrollView,
-    StatusBar,
     Text,
     View,
-    Pressable, Alert
+    StatusBar, Platform
 } from "react-native";
+import CustomButton from '../sub-components/CustomButton';
+import textStyles from '../../stylesheets/textStyles';
+import CoffeeShopSvg from '../assets/svgs/CoffeeShopSvg';
+import CoffeeCupSvg from '../assets/svgs/CoffeeCupSvg';
+import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
+import {getStatusBarHeight} from "react-native-status-bar-height";
 
 const WelcomePages = ({  onDone }) => {
     const [sliderState, setSliderState] = useState({ currentPage: 0 });
@@ -27,120 +31,104 @@ const WelcomePages = ({  onDone }) => {
         }
     };
 
-    const createAccount = () =>{
-        registeredMessage()
-    }
-
-    // Display a confirmation message to the user
-    const registeredMessage = () => {
-        Alert.alert(
-            "Hey man",
-            "Why dont you go and create an account",
-            [
-                {
-                    text: "OK",
-                }
-            ]
-        )
-    }
     const Circle = () => {
         return <View style={styles.circle} />;
     };
 
-
     const { currentPage: pageIndex } = sliderState;
     return (
-        <SafeAreaView style={{display: "flex", height:'100%'}}>
-            <ScrollView
-                style={{display: "flex", flex: 1 }}
-                horizontal={true}
-                scrollEventThrottle={16}
-                pagingEnabled={true}
-                showsHorizontalScrollIndicator={false}
-                onScroll={(event: any) => {
-                    setSliderPage(event);
-                }}
-            >
-                <View style={{ width, height, }}>
-                    <View style={styles.container}>
-                        <Text style={styles.title}>Welcome to the app!</Text>
-                        <Circle />
-                        <Text style={styles.text}>Why our service is awesome part 1</Text>
-                    </View>
-                </View>
-                <View style={{ width, height}}>
-                    <View style={styles.container}>
-                        <Text style={styles.title}>Welcome Part 2!</Text>
-
-                        <Text style={styles.text}>Why our service is awesome part 2</Text>
-                    </View>
-                </View>
-                <View style={[{ width, height, backgroundColor: 'green'}, styles.ViewWrapper]}>
-                    <Text style={styles.title}>Welcome Part 3!</Text>
-                    <Text style={styles.text}>Why you should create an account </Text>
-                    <Pressable
-                        style={[styles.button, styles.account_button]}
-                        onPress={onDone}>
-                        <Text style={styles.button_text}>Create an Account</Text>
-                    </Pressable>
-                </View>
-            </ScrollView>
-            <View style={styles.paginationWrapper}>
-                {Array.from(Array(3).keys()).map((key, index) => (
-                    <View style={[styles.paginationDots, { opacity: pageIndex === index ? 1 : 0.7 }]} key={index} />
-                ))}
+        <View style={styles.wrapper}>
+            <StatusBar translucent={true} backgroundColor="transparent" />
+            <View style={styles.safeSpace}>
+                <SafeAreaView style={{display: "flex", height:'100%',backgroundColor:"#E5E5E5"}}>
+                    <ScrollView style={{display: "flex"}}
+                        horizontal={true}
+                        scrollEventThrottle={16}
+                        pagingEnabled={true}
+                        showsHorizontalScrollIndicator={false}
+                        onScroll={(event: any) => {
+                            setSliderPage(event);
+                        }}
+                    >
+                        <View style={ {width, height,paddingVertical: '5%',justifyContent:'center'
+                            }}>
+                            <View >
+                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to the app</Text>
+                                <CoffeeShopSvg style={[styles.circle]}/>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Why our service is awesome part 1. Our service is very very awesome my friend it is so awesome that the awesome people find it awesome</Text>
+                            </View>
+                        </View>
+                        <View style={ {width, height,paddingVertical: '5%',justifyContent:'center'
+                        }}>
+                            <View >
+                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to the app</Text>
+                                <CoffeeCupSvg style={[styles.circle]}/>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Why our service is awesome part 1. Our service is very very awesome my friend it is so awesome that the awesome people find it awesome</Text>
+                            </View>
+                        </View>
+                        <View style={ {width, height,paddingVertical: '5%',justifyContent:'flex-end'
+                        }}>
+                            <View >
+                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to the app</Text>
+                                <CoffeeBeanSvg style={[styles.circle]}/>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Why our service is awesome part 1. Our service is very very awesome my friend it is so awesome that the awesome people find it awesome</Text>
+                                <CustomButton
+                                    text={'Sign Up'}
+                                    priority={'primary'}
+                                    onPress={onDone}>
+                                </CustomButton>
+                            </View>
+                        </View>
+                    </ScrollView>
+                        <View style={styles.paginationWrapper}>
+                            {Array.from(Array(3).keys()).map((key, index) => (
+                                <View style={[styles.paginationDots, { opacity: pageIndex === index ? 1 : 0.7 }]} key={index} />
+                            ))}
+                        </View>
+                </SafeAreaView>
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    circle: {
-        width: 300,
-        height: 300,
-        borderRadius: 300 / 2,
-        backgroundColor: "grey",
-    },
-    container: {
-        padding: 5,
-    },
-
-    ViewWrapper:{
+    wrapper: {
         flex: 1,
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        position: "relative"
-
-    },
-
-    svgImg:{
-        marginTop: '15%'
-    },
-    text: {
-        fontFamily: 'Josefin Sans',
-        fontSize: 20,
-        color: '#173C4F',
-        marginTop: '15%',
-        marginBottom: '8%',
-        flex: 0
-
     },
     title: {
-        fontFamily: 'Josefin Sans',
-        fontWeight:'bold',
-        color: '#173C4F',
-        fontSize: 30,
-        backgroundColor: 'orange',
-        marginTop: '15%'
-
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingHorizontal:20,
+        textAlign:'center',
+    },
+    text: {
+        paddingTop: 10,
+        textAlign:'center',
+        paddingHorizontal:20,
+    },
+    safeSpace: {
+        flex: 1,
+        backgroundColor: '#EDEBE7',
+        paddingTop:
+            Platform.OS === 'android'
+                ? getStatusBarHeight() / 3
+                : getStatusBarHeight(),
+    },
+    circle: {
+        width: 350,
+        height: 350,
+        borderRadius: 350 / 2,
+        backgroundColor: '#173C4F',
+        marginBottom:20,
+        marginTop:20,
+        marginHorizontal:20,
     },
     paginationWrapper: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         minHeight: 40,
-        backgroundColor: 'purple'
+        paddingBottom:40
     },
     paginationDots: {
         height: 10,
@@ -150,18 +138,5 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         flex: 0
     },
-    button: {
-        borderRadius: 13,
-        backgroundColor: '#087562',
-
-    },
-
-    button_text: {
-        fontFamily: 'Josefin Sans',
-        fontWeight:'bold',
-        color: '#EFEFEF',
-        textAlign: 'center',
-        textAlignVertical: 'center',
-    }
 });
 export default WelcomePages;
