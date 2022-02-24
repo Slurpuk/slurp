@@ -13,7 +13,7 @@ import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
 
 const CollapsableOrder = ({order}) => {
-  const totalPrice = 3;
+  const totalPrice = getTotalPrice(order);
 
   return (
     <View style={styles.order}>
@@ -28,6 +28,12 @@ const CollapsableOrder = ({order}) => {
       />
     </View>
   );
+};
+
+const getTotalPrice = order => {
+  let total = 0;
+  order.items.forEach(item => (total += item.quantity * item.price));
+  return total;
 };
 
 const styles = StyleSheet.create({

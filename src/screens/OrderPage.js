@@ -10,8 +10,9 @@ const OrderPage = () => {
     <View style={styles.basket}>
       <GreenHeader headerText={'ORDERS'} />
       <SectionList
-        style={styles.mainContainer}
+        contentContainerStyle={styles.mainContainer}
         sections={orders}
+        stickySectionHeadersEnabled={false}
         keyExtractor={(item, index) => item + index}
         renderItem={({item}) => <CollapsedOrder order={item} />}
         renderSectionHeader={({section: {period}}) => (
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     marginHorizontal: '5%',
-    marginBottom: '5%',
+    paddingBottom: '5%',
   },
 });
 

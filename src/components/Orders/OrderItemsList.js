@@ -18,7 +18,7 @@ const Item = ({item}) => {
         </View>
         <View style={styles.elementPrice}>
           <Text style={textStyles.darkGreyPoppinsSubHeading}>
-            £{item.price.toFixed(2)}
+            £{(item.price * item.quantity).toFixed(2)}
           </Text>
         </View>
       </View>

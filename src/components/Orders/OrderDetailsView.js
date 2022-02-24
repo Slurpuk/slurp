@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 
 const OrderDetailsView = ({order}) => {
+  const itemsComponent = getItemsComponent(order);
   return (
     <View style={styles.orderDetails}>
       <View>
@@ -28,11 +29,24 @@ const OrderDetailsView = ({order}) => {
         <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
           {order.date} • {order.time}
         </Text>
-        <Text style={[textStyles.greyPoppins, styles.textFlex]}>4 Items</Text>
+        <Text style={[textStyles.greyPoppins, styles.textFlex]}>{itemsComponent}</Text>
       </View>
     </View>
   );
 };
+
+const getItemsComponent = order => {
+  let itemsComponent = '';
+  if (order.items.length === 1) {
+    let singleItem = order.items[0];
+    itemsComponent = singleItem.quantity + ' ' + singleItem.name;
+  } else {
+    let numberOfItems = 0;
+    order.items.forEach(item => (numberOfItems += item.quantity));
+    itemsComponent = numberOfItems + ' Items';
+  };
+  return itemsComponent;
+}
 
 const styles = StyleSheet.create({
   orderDetails: {
