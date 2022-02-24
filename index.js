@@ -6,7 +6,9 @@ import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
 import App from './App';
 import testers from "./src/testers";
-import WelcomePages from "./src/screens/WelcomePages";
-import WelcomePagesWorkflow from "./src/screens/WelcomePagesWorkflow";
-AppRegistry.registerComponent(appName, () =>WelcomePages);
+import RegisterEmailPassword from "./src/firebase/authentication/registerEmailPassword";
+import Query from "./src/firebase/firestore/basicQuery";
+
+AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
+
 
