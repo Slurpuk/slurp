@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg"
 const CoffeeBeanSvg = (props) => (
     <Svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 511.996 511.996"
+        viewBox="0 -19 511.996 511.996"
         style={{
             enableBackground: "new 0 0 511.996 511.996",
         }}
