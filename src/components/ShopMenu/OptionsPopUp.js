@@ -1,13 +1,15 @@
 import CheckboxSectionList from './CheckboxSectionList';
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
+import {OptionsContext} from '../../screens/LandingMapPage';
 
 const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
+  const context = useContext(OptionsContext);
   const [totalPrice, setTotalPrice] = useState(curr_price); // Current total price in pennies
   const [options, setOptions] = useState({}); // List of options currently selected
-
+  const [isVisible, setVisible] = useState(true);
   const updateOptions = (name, price, isAdd) => {
     if (isAdd) {
       setTotalPrice(price + totalPrice);
@@ -22,6 +24,12 @@ const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
       setOptions(newState);
     }
   };
+
+  useEffect(() => {
+    if (isVisible === false) {
+      context.setOptionsVisible(isVisible);
+    }
+  }, [isVisible]);
 
   return (
     <View style={styles.container}>
@@ -40,6 +48,7 @@ const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
           text={`Add To Order  £${(totalPrice / 100).toPrecision(3)}`}
           priority={'primary'}
           width={screenWidth * 0.805}
+          onPress={() => setVisible(false)}
         />
       </View>
     </View>
@@ -57,7 +66,13 @@ const styles = StyleSheet.create({
     height: 0.5723 * screenHeight,
     backgroundColor: 'white',
     paddingVertical: '4%',
-    position: 'relative',
+    position: 'absolute',
+    top: '20%',
+    bottom: '23%',
+    left: '4%',
+    right: '4%',
+    elevation: 200,
+    zIndex: 100,
   },
 
   product_name: {
