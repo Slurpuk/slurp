@@ -10,6 +10,8 @@ import {
   Platform,
   StatusBar,
   TextInput,
+  Pressable,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import renderers from '../renderers';
@@ -21,7 +23,7 @@ import ShopsData from '../fake-data/ShopsData';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
 import {BlurView} from '@react-native-community/blur';
-import {FlatList} from "react-native-gesture-handler";
+import {FlatList} from 'react-native-gesture-handler';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -84,6 +86,7 @@ export default function LandingMapPage({setVisible}) {
           snapPoints={['0%', '70%', '100%']}
           onSettle={index => updatePage({index})}
           initialSnapIndex={1}
+          enableOverScroll={false}
           renderHandle={() => (
             <OptionsContext.Provider
               value={{
@@ -93,23 +96,28 @@ export default function LandingMapPage({setVisible}) {
               }}
             >
               <View>
-                <View style={[styles.header1]}>
-                  <ShopPage
-                    shopName={defaultShopData.name}
-                    shopIntroText={defaultShopData.intro}
-                    DATA={ItemsData}
-                    renderSection={renderers.renderMenuSection}
-                    renderItem={renderers.renderItemCard}
-                  />
-                  {optionsVisible ? (
-                    <BlurView
-                      style={styles.absolute}
-                      blurType="dark"
-                      blurAmount={2}
-                      reducedTransparencyFallbackColor="white"
+                <TouchableWithoutFeedback
+                  onPressIn={() => setOptionsVisible(false)}
+                >
+                  <View style={[styles.header1]}>
+                    <ShopPage
+                      shopName={defaultShopData.name}
+                      shopIntroText={defaultShopData.intro}
+                      DATA={ItemsData}
+                      renderSection={renderers.renderMenuSection}
+                      renderItem={renderers.renderItemCard}
                     />
-                  ) : null}
-                </View>
+
+                    {optionsVisible ? (
+                      <BlurView
+                        style={styles.absolute}
+                        blurType="dark"
+                        blurAmount={2}
+                        reducedTransparencyFallbackColor="white"
+                      />
+                    ) : null}
+                  </View>
+                </TouchableWithoutFeedback>
                 {optionsVisible ? (
                   <OptionsPopUp
                     data={CoffeeOptionsData}
