@@ -31,9 +31,6 @@ const WelcomePages = ({  onDone }) => {
         }
     };
 
-    const Circle = () => {
-        return <View style={styles.circle} />;
-    };
 
     const { currentPage: pageIndex } = sliderState;
     return (
@@ -53,25 +50,25 @@ const WelcomePages = ({  onDone }) => {
                         <View style={ {width, height,paddingVertical: '5%',justifyContent:'center'
                             }}>
                             <View >
-                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to the app</Text>
+                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to CoffeeGems</Text>
                                 <CoffeeShopSvg style={[styles.circle]}/>
-                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Why our service is awesome part 1. Our service is very very awesome my friend it is so awesome that the awesome people find it awesome</Text>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We dont even sell coffee but me make a commission from every purchase you make, because we can and we want</Text>
                             </View>
                         </View>
                         <View style={ {width, height,paddingVertical: '5%',justifyContent:'center'
                         }}>
                             <View >
-                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to the app</Text>
+                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Why CoffeeGems?</Text>
                                 <CoffeeCupSvg style={[styles.circle]}/>
-                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Why our service is awesome part 1. Our service is very very awesome my friend it is so awesome that the awesome people find it awesome</Text>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Please use this platform because we need the money to cover all the costs of the platform to make the svgs above</Text>
                             </View>
                         </View>
                         <View style={ {width, height,paddingVertical: '5%',justifyContent:'flex-end'
                         }}>
                             <View >
-                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to the app</Text>
+                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>How does it work?</Text>
                                 <CoffeeBeanSvg style={[styles.circle]}/>
-                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Why our service is awesome part 1. Our service is very very awesome my friend it is so awesome that the awesome people find it awesome</Text>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We am not going to explain you how it works, we just want you to click the sign up button below, in fact if you dont we will hack your device </Text>
                                 <CustomButton
                                     text={'Sign Up'}
                                     priority={'primary'}
@@ -118,7 +115,7 @@ const styles = StyleSheet.create({
         width: 350,
         height: 350,
         borderRadius: 350 / 2,
-        backgroundColor: '#173C4F',
+        backgroundColor: '#C4C4C4',
         marginBottom:20,
         marginTop:20,
         marginHorizontal:20,
