@@ -44,31 +44,6 @@ export default function LandingMapPage({setVisible}) {
     return () => subscriber();
   }, []);
 
-  const [DefaultShopItems, setDefaultShopItems] = useState([])
-  useEffect(() => {
-    const subscriber = firestore()
-        .collection('CoffeeShop')
-        .doc('EMV0LWK61SyPiRjvQsIY')
-        .collection('ItemsOffered')
-        .onSnapshot(querySnapshot => {
-          const items = []
-
-          querySnapshot.forEach(documentSnapshot => {
-            items.push({
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
-            });
-          });
-
-          setDefaultShopItems(items);
-        });
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
-
-  console.log(DefaultShopItems)
-
   const updatePage = ({index}) => {
     if (index === 0) {
       setVisible(false);
