@@ -101,6 +101,12 @@ const textStyles = StyleSheet.create({
     color: '#0A6C73',
     includeFontPadding: false,
   },
+  bluePoppinsMediumBody: {
+    fontSize: 14,
+    fontFamily: 'Poppins-Regular',
+    letterSpacing: 0.8,
+    color: '#173C4F',
+  },
   blueJosefinHeading: {
     fontSize: 35,
     fontFamily: 'Josefin Sans',
@@ -162,4 +168,3 @@ const textStyles = StyleSheet.create({
 });
 
 export default textStyles;
-
