@@ -72,47 +72,49 @@ const BasketPage = () => {
         .then(() => {
           console.log('Order added!');
         });
-  function sendOrder() {
-    firestore()
-      .collection('FakeOrder')
-      .add({
-        name: 'Ada Lovelace',
-        type: 'incoming',
-        total: 30,
-      })
-      .then(() => {
-        console.log('Order added!');
-      });
-  }
 
-  return (
-    <View style={styles.basket}>
-      <View style={styles.header}>
-        <GreenHeader headerText={'ETEN & DRIKEN'} />
-      </View>
-      <View style={styles.main_container}>
-        <BasketContents total={total} setTotal={setTotal} Items={Items}/>
-      </View>
-      <View style={styles.buttons}>
-        <CustomButton
-          priority="primary"
-          style={styles.button}
-          text={'Apple/Google pay'}
-        />
-      </View>
-      <View style={[styles.lastButton, styles.buttons]}>
-        <CustomButton
-          priority="primary"
-          style={styles.button}
-          text={'Checkout with card'}
-        />
-        <Pressable onPress={sendOrder}>
-          <Text>Send Order</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
-};
+    function sendOrder() {
+      firestore()
+          .collection('FakeOrder')
+          .add({
+            name: 'Ada Lovelace',
+            type: 'incoming',
+            total: 30,
+          })
+          .then(() => {
+            console.log('Order added!');
+          });
+    }
+
+    return (
+        <View style={styles.basket}>
+          <View style={styles.header}>
+            <GreenHeader headerText={'ETEN & DRIKEN'}/>
+          </View>
+          <View style={styles.main_container}>
+            <BasketContents total={total} setTotal={setTotal} Items={Items}/>
+          </View>
+          <View style={styles.buttons}>
+            <CustomButton
+                priority="primary"
+                style={styles.button}
+                text={'Apple/Google pay'}
+            />
+          </View>
+          <View style={[styles.lastButton, styles.buttons]}>
+            <CustomButton
+                priority="primary"
+                style={styles.button}
+                text={'Checkout with card'}
+            />
+            <Pressable onPress={sendOrder}>
+              <Text>Send Order</Text>
+            </Pressable>
+          </View>
+        </View>
+    );
+  };
+}
 
 const styles = StyleSheet.create({
   safe_header: {

@@ -20,7 +20,6 @@ import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from "@react-native-firebase/firestore";
 import firebase from "@react-native-firebase/app";
-import ShopsData from '../fake-data/ShopsData';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
 import {BlurView} from '@react-native-community/blur';
@@ -113,55 +112,46 @@ export default function LandingMapPage({setVisible}) {
           initialSnapIndex={1}
           enableOverScroll={false}
           renderHandle={() => (
-            <View style={styles.header1}>
-              <ShopPage
-                shopName={defaultShopData.Name}
-                shopIntroText={defaultShopData.Intro}
-                DATA={ItemsData}
-                renderSection={renderers.renderMenuSection}
-                renderItem={renderers.renderItemCard}
-              />
-            </View>
-            <OptionsContext.Provider
-              value={{
-                optionsVisible: optionsVisible,
-                setOptionsVisible: setOptionsVisible,
-                setCurrItem: setCurrItem,
-              }}
-            >
-              <View>
-                <TouchableWithoutFeedback
-                  onPressIn={() => setOptionsVisible(false)}
-                >
-                  <View style={[styles.header1]}>
-                    <ShopPage
-                      shopName={defaultShopData.name}
-                      shopIntroText={defaultShopData.intro}
-                      DATA={ItemsData}
-                      renderSection={renderers.renderMenuSection}
-                      renderItem={renderers.renderItemCard}
-                    />
-
-                    {optionsVisible ? (
-                      <BlurView
-                        style={styles.absolute}
-                        blurType="dark"
-                        blurAmount={2}
-                        reducedTransparencyFallbackColor="white"
+              <OptionsContext.Provider
+                  value={{
+                    optionsVisible: optionsVisible,
+                    setOptionsVisible: setOptionsVisible,
+                    setCurrItem: setCurrItem,
+                  }}
+              >
+                <View>
+                  <TouchableWithoutFeedback
+                      onPressIn={() => setOptionsVisible(false)}
+                  >
+                    <View style={[styles.header1]}>
+                      <ShopPage
+                          shopName={defaultShopData.Name}
+                          shopIntroText={defaultShopData.Intro}
+                          DATA={ItemsData}
+                          renderSection={renderers.renderMenuSection}
+                          renderItem={renderers.renderItemCard}
                       />
-                    ) : null}
-                  </View>
-                </TouchableWithoutFeedback>
-                {optionsVisible ? (
-                  <OptionsPopUp
-                    data={CoffeeOptionsData}
-                    curr_price={currItem.price}
-                    product_name={currItem.name}
-                    renderer={renderers.renderOption}
-                  />
-                ) : null}
-              </View>
-            </OptionsContext.Provider>
+
+                      {optionsVisible ? (
+                          <BlurView
+                              style={styles.absolute}
+                              blurType="dark"
+                              blurAmount={2}
+                              reducedTransparencyFallbackColor="white"
+                          />
+                      ) : null}
+                    </View>
+                  </TouchableWithoutFeedback>
+                  {optionsVisible ? (
+                      <OptionsPopUp
+                          data={CoffeeOptionsData}
+                          curr_price={currItem.price}
+                          product_name={currItem.name}
+                          renderer={renderers.renderOption}
+                      />
+                  ) : null}
+                </View>
+              </OptionsContext.Provider>
           )}
           contentContainerStyle={styles.contentContainerStyle}
         />
