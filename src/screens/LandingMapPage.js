@@ -10,6 +10,8 @@ import {
   Platform,
   StatusBar,
   TextInput,
+  Pressable,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import renderers from '../renderers';
@@ -18,6 +20,10 @@ import shopData from '../fake-data/ShopData';
 import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
 import ShopsData from '../fake-data/ShopsData';
+import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
+import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
+import {BlurView} from '@react-native-community/blur';
+import {FlatList} from 'react-native-gesture-handler';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -25,9 +31,11 @@ LogBox.ignoreLogs([
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-
+export const OptionsContext = React.createContext();
 export default function LandingMapPage({setVisible}) {
   const [isShopIntro, setIsShopIntro] = useState(false);
+  const [optionsVisible, setOptionsVisible] = useState(false);
+  const [currItem, setCurrItem] = useState(null);
 
   const updatePage = ({index}) => {
     if (index === 0) {
@@ -41,6 +49,10 @@ export default function LandingMapPage({setVisible}) {
 
   const setLOL = () => {
     setIsShopIntro(!isShopIntro);
+  };
+
+  const setHidden = () => {
+    setOptionsVisible(false);
   };
 
   return (
@@ -74,16 +86,48 @@ export default function LandingMapPage({setVisible}) {
           snapPoints={['0%', '70%', '100%']}
           onSettle={index => updatePage({index})}
           initialSnapIndex={1}
+          enableOverScroll={false}
           renderHandle={() => (
-            <View style={styles.header1}>
-              <ShopPage
-                shopName={defaultShopData.name}
-                shopIntroText={defaultShopData.intro}
-                DATA={ItemsData}
-                renderSection={renderers.renderMenuSection}
-                renderItem={renderers.renderItemCard}
-              />
-            </View>
+            <OptionsContext.Provider
+              value={{
+                optionsVisible: optionsVisible,
+                setOptionsVisible: setOptionsVisible,
+                setCurrItem: setCurrItem,
+              }}
+            >
+              <View>
+                <TouchableWithoutFeedback
+                  onPressIn={() => setOptionsVisible(false)}
+                >
+                  <View style={[styles.header1]}>
+                    <ShopPage
+                      shopName={defaultShopData.name}
+                      shopIntroText={defaultShopData.intro}
+                      DATA={ItemsData}
+                      renderSection={renderers.renderMenuSection}
+                      renderItem={renderers.renderItemCard}
+                    />
+
+                    {optionsVisible ? (
+                      <BlurView
+                        style={styles.absolute}
+                        blurType="dark"
+                        blurAmount={2}
+                        reducedTransparencyFallbackColor="white"
+                      />
+                    ) : null}
+                  </View>
+                </TouchableWithoutFeedback>
+                {optionsVisible ? (
+                  <OptionsPopUp
+                    data={CoffeeOptionsData}
+                    curr_price={currItem.price}
+                    product_name={currItem.name}
+                    renderer={renderers.renderOption}
+                  />
+                ) : null}
+              </View>
+            </OptionsContext.Provider>
           )}
           contentContainerStyle={styles.contentContainerStyle}
         />
@@ -119,6 +163,10 @@ const styles = StyleSheet.create({
   },
   header1: {
     height: windowHeight,
+    position: 'relative',
+    width: '100%',
+    left: 0,
+    top: 0,
   },
   header2: {
     alignItems: 'center',
@@ -143,6 +191,14 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-    // marginTop: '10%',
+  },
+
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderRadius: 20,
   },
 });
