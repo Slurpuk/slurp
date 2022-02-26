@@ -1,6 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
-import {firebase} from '@react-native-firebase/functions';
-import React from 'react';
+import { firebase } from '@react-native-firebase/functions';
+import React, {useState} from 'react';
+
 
 import {
   StyleSheet,
@@ -18,6 +19,59 @@ import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const BasketPage = () => {
+  const [Items] = useState([
+    {
+      key: 1,
+      name: 'Latte',
+      amount: 0,
+      price: '2.40',
+      specifications: ['Oat Milk'],
+    },
+    {
+      key: 2,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+    {
+      key: 3,
+      name: 'Americano',
+      amount: 0,
+      price: '2.10',
+      specifications: [],
+    },
+    {
+      key: 4,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+    {
+      key: 5,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+  ]);
+
+  const [total, setTotal] = useState(0);
+
+  function sendOrder() {
+    firestore()
+        .collection('FakeOrder')
+        .add({
+          customerName: 'Shaun the sheep',
+          status: 'incoming',
+          total: total.toFixed(2),
+          items: Items.filter(item => item.amount !== 0),
+          key: 3,
+        })
+        .then(() => {
+          console.log('Order added!');
+        });
   function sendOrder() {
     firestore()
       .collection('FakeOrder')
@@ -37,7 +91,7 @@ const BasketPage = () => {
         <GreenHeader headerText={'ETEN & DRIKEN'} />
       </View>
       <View style={styles.main_container}>
-        <BasketContents total={30} />
+        <BasketContents total={total} setTotal={setTotal} Items={Items}/>
       </View>
       <View style={styles.buttons}>
         <CustomButton

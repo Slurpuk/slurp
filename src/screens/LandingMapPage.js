@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -16,9 +16,10 @@ import {
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import renderers from '../renderers';
 import ShopPage from '../components/Shops/ShopPage';
-import shopData from '../fake-data/ShopData';
 import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
+import firestore from "@react-native-firebase/firestore";
+import firebase from "@react-native-firebase/app";
 import ShopsData from '../fake-data/ShopsData';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
@@ -34,8 +35,32 @@ const screenWidth = Dimensions.get('window').width;
 export const OptionsContext = React.createContext();
 export default function LandingMapPage({setVisible}) {
   const [isShopIntro, setIsShopIntro] = useState(false);
+
+  const [ShopsData, setShopsData] = useState([]);
+
+  useEffect(() => {
+    const subscriber = firestore()
+        .collection('CoffeeShop')
+        .onSnapshot(querySnapshot => {
+          const shops = []
+
+          querySnapshot.forEach(documentSnapshot => {
+            shops.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+            });
+          });
+
+          setShopsData(shops);
+        });
+
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
+
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
+
 
   const updatePage = ({index}) => {
     if (index === 0) {
@@ -45,7 +70,7 @@ export default function LandingMapPage({setVisible}) {
     }
   };
 
-  const defaultShopData = shopData[0];
+  const defaultShopData = ShopsData[0];
 
   const setLOL = () => {
     setIsShopIntro(!isShopIntro);
@@ -88,6 +113,15 @@ export default function LandingMapPage({setVisible}) {
           initialSnapIndex={1}
           enableOverScroll={false}
           renderHandle={() => (
+            <View style={styles.header1}>
+              <ShopPage
+                shopName={defaultShopData.Name}
+                shopIntroText={defaultShopData.Intro}
+                DATA={ItemsData}
+                renderSection={renderers.renderMenuSection}
+                renderItem={renderers.renderItemCard}
+              />
+            </View>
             <OptionsContext.Provider
               value={{
                 optionsVisible: optionsVisible,
