@@ -11,12 +11,16 @@ import {
   Platform,
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
+import firebase from "@react-native-firebase/app";
+import {useState} from 'react';
+import storage from "@react-native-firebase/storage"
 
 const ShopCard = ({name, likeness, queue, image}) => {
+
   return (
     <Pressable style={styles.item}>
       <ImageBackground
-        source={image}
+        source={{uri: image}}
         style={{
           width: '100%',
           height: '100%',

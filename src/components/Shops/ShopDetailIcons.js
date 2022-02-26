@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, FlatList, StyleSheet, Text, Dimensions} from 'react-native';
+import React from 'react';
+import {View, Text} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const ShopDetailIcons = ({timeToOrder, likeness}) => {
