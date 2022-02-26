@@ -3,17 +3,18 @@ import {FlatList, View, StyleSheet, Text} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 
 const Item = ({item}) => {
-  const syrupText = (item.syrup ? " • " + item.syrup : '');
+  const syrupText = item.syrup ? ' • ' + item.syrup : '';
 
   return (
     <View>
       <View style={styles.singleElement}>
         <View style={styles.elementDetails}>
           <Text style={textStyles.bluePoppinsSubHeading}>
-            {item.quantity}  {item.name}
+            {item.quantity} {item.name}
           </Text>
           <Text style={textStyles.lightGreyPoppins}>
-            {item.milk}{syrupText}
+            {item.milk}
+            {syrupText}
           </Text>
         </View>
         <View style={styles.elementPrice}>
@@ -33,12 +34,10 @@ const Item = ({item}) => {
 };
 
 const EmptyItemLine = () => {
-  return(
+  return (
     <View style={styles.bottomLeftTag}>
-          <Text style={textStyles.bluePoppinsSubHeading}>
-            Total
-          </Text>
-        </View>
+      <Text style={textStyles.bluePoppinsSubHeading}>Total</Text>
+    </View>
   );
 };
 

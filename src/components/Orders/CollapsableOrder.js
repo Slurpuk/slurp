@@ -40,25 +40,5 @@ const styles = StyleSheet.create({
   order: {
     marginTop: 15,
   },
-
-  collapsedOrderContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  collapsedOrderSectionLeft: {
-    flex: 2,
-    display: 'flex',
-  },
-  collapsedOrderSectionRight: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  collapsedOrderSectionRightTop: {
-    flex: 1,
-  },
-
-  textFlex: {
-    flex: 1,
-  },
 });
 export default CollapsableOrder;
