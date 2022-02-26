@@ -37,10 +37,8 @@ const CategoriesTabScreens = () => {
             }}
             style={{paddingHorizontal: 24, marginTop: 121, borderRadius: 13, fontFamily: "Poppins"}}
         >
-            <Tab.Screen name="Current" component={() => (<View style={{marginTop: 20, borderRadius: 13}}>
-                <Text style={{fontFamily: "Poppins", color: '#046D66', letterSpacing: 0.01, fontSize: 17.4}}>Current</Text></View>)} />
-            <Tab.Screen name="Past" component={() => (<View style={{marginTop: 20, borderRadius: 13}}>
-                <Text style={{fontFamily:"Poppins", letterSpacing: 0.01, fontSize: 17.4}}>Past</Text></View>)} />
+            <Tab.Screen name="Current" component={OrderPage}/>
+            <Tab.Screen name="Past" component={PastOrders} />
         </Tab.Navigator>
     );
 };
