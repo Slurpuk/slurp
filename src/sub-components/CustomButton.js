@@ -107,9 +107,7 @@ const buttonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 13,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     height: 43,
-    // width: screenWidth * 0.91,
-    // borderWidth: 2,
   },
 });
