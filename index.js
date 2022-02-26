@@ -13,5 +13,6 @@ import UpdateDetailsPage from "./src/screens/UpdateDetailsPage";
 import ChangePasswordPage from "./src/screens/ChangePasswordPage";
 import PaymentCardsPage from "./src/screens/PaymentCardsPage";
 import AddNewCardPage from "./src/screens/AddNewCardPage";
+import OrderPage from "./src/screens/OrderPage";
 
-AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
+AppRegistry.registerComponent(appName, () => OrderPage);

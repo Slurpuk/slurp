@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
 
-const BasketContents = ({Items, setItems, total, setTotal}) => {
+const BasketContents = ({total, setTotal, Items}) => {
+
   const changeAmount = (item, amount) => {
     if (!(item.amount < 1 && amount < 0)) {
       item.amount += amount;

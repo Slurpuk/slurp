@@ -27,10 +27,10 @@ const renderItemCard = ({item}) => <ItemCard item={item} />;
 
 const renderShopCard = ({item}) => (
   <ShopCard
-    name={item.name}
-    likeness={item.likeness}
-    queue={item.queue}
-    image={item.image}
+    name={item.Name}
+    likeness={item.Likeness}
+    queue={item.Queue}
+    image={item.Image}
   />
 );
 const renderShopList = ({item, renderItem}) => (

@@ -21,6 +21,8 @@ target 'MyProject' do
 
 pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
+  pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
+
   target 'MyProjectTests' do
     inherit! :complete
     # Pods for testing
