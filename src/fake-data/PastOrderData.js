@@ -1,4 +1,4 @@
-const orders = [
+const pastOrders = [
   {
     period: 'December 2021',
     key: 'December 2021',
@@ -6,7 +6,7 @@ const orders = [
       {
         key: 54,
         orderNumber: 654321,
-        status: 'Cancelled',
+        status: 'Ready',
         coffeeShopName: 'Eten & Driken',
         date: '30th Nov',
         time: '18:20',
@@ -70,22 +70,6 @@ const orders = [
       {
         key: 56,
         orderNumber: 123456,
-        coffeeShopName: 'Eten & Driken',
-        date: '30th Nov',
-        time: '18:20',
-        items: [
-          {
-            name: 'Latte',
-            quantity: 2,
-            price: 2.3,
-            milk: 'Dairy milk',
-            syrup: null,
-          },
-        ],
-      },
-      {
-        key: 56,
-        orderNumber: 123456,
         status: 'Collected',
         coffeeShopName: 'Eten & Driken',
         date: '30th Nov',
@@ -104,6 +88,23 @@ const orders = [
         key: 56,
         orderNumber: 123456,
         status: 'Collected',
+        coffeeShopName: 'Eten & Driken',
+        date: '30th Nov',
+        time: '18:20',
+        items: [
+          {
+            name: 'Latte',
+            quantity: 2,
+            price: 2.3,
+            milk: 'Dairy milk',
+            syrup: null,
+          },
+        ],
+      },
+      {
+        key: 56,
+        orderNumber: 123456,
+        status: 'Ready',
         coffeeShopName: 'Eten & Driken',
         date: '30th Nov',
         time: '18:20',
@@ -138,4 +139,4 @@ const orders = [
   },
 ];
 
-export default orders;
+export default pastOrders;
