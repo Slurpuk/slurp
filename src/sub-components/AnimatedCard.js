@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useRef, useState} from 'react';
 import {
   Animated,
   Text,
@@ -26,37 +26,40 @@ const AnimatedCard = ({
 
   const growHeight = () => {
     setExpanded(!isExpanded);
-    //console.log(isExpanded);
+    console.log(isExpanded);
 
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(adaptiveHeight, {
       toValue: hidableHeight + collapsableHeight + 10,
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
     }).start();
   };
 
   const toggleheight = () => {
     isExpanded ? shrinkHeight() : growHeight();
-    //console.log('toggle height triggered');
+    console.log('toggle height triggered');
   };
 
+  const toggleArrow = () => {
+    isExpanded ? '180deg' : '0deg';
+  };
 
   const shrinkHeight = () => {
     setExpanded(!isExpanded);
     let isFlipped = '180deg';
-    //console.log(isExpanded);
+    console.log(isExpanded);
 
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(adaptiveHeight, {
       toValue: collapsableHeight + 10,
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
     }).start();
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Animated.View
         style={[
           styles.expandable,
@@ -88,24 +91,22 @@ const AnimatedCard = ({
             {hidableContent}
           </View>
         </AnimatedPressable>
-        <View style={[styles.topRightIcon, {transform: [{rotateZ: isExpanded ? '180deg' : '0deg'}]}]}>
-          <Icon size={30} color="black" name="chevron-down" />
+
+        <View style={[styles.topRightIcon, {transform: [{rotateZ: '0deg'}]}]}>
+          <Icon size={24} color="black" name="chevron-down" />
         </View>
 
         <View style={styles.absoluteBottomRight}>{bottomFixed}</View>
-
       </Animated.View>
-    </View>
+    </SafeAreaView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%',
   },
   fadingContainer: {
     padding: 20,
@@ -126,16 +127,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexShrink: 0,
     height: 100,
-    width: '100%',
     position: 'relative',
     overflow: 'hidden',
+    elevation: 12,
     borderRadius: 13,
     padding: '3%',
   },
 
   hidable: {
     paddingBottom: 10,
-    maxWidth: '100%',
+    maxWidth: '85%',
   },
 
   collapsable: {
@@ -146,9 +147,10 @@ const styles = StyleSheet.create({
   absoluteBottomRight: {
     position: 'absolute',
     bottom: 5,
-    right: 10,
+    right: 5,
     minWidth: 20,
     minHeight: 20,
+    // backgroundColor: 'red',
   },
 
   topRightIcon: {
