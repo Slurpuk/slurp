@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useContext, useEffect, useState} from 'react';
 import ShopIntro from './ShopIntro';
 import {
   Image,
@@ -19,40 +19,49 @@ import renderers from '../../renderers';
 import ShopDetailIcons from './ShopDetailIcons';
 import textStyles from '../../../stylesheets/textStyles';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
+import {OptionsContext} from '../../screens/LandingMapPage';
 
 const ShopPage = ({navigation, route}) => {
   const MENUDATA = ItemsData;
   // const item = ShopPage.sharedElements.route.params;
-  const {item} = route.params;
+  const tempContext = useContext(OptionsContext);
+  const context = route === undefined ? tempContext : route.params;
+  const shop = context.currShop;
+  console.log(context);
   return (
     <View style={styles.container}>
       <View style={{maxHeight: '35%', minHeight: '30%', position: 'relative'}}>
-        <SharedElement id={`item.id}`}>
+        <SharedElement id={`shop.id}`}>
           <Image
             style={styles.cardImgs}
-            source={item.image_url}
+            source={shop.image_url}
             resizeMode="cover"
           />
         </SharedElement>
 
-        <SharedElement id={`item.id`}>
+        <SharedElement id={`shop.id`}>
           <Text style={[textStyles.headingOne, styles.cardHeading]}>
-            {item.name}
+            {shop.name}
           </Text>
         </SharedElement>
 
-        <SharedElement id={`item.id`}>
+        <SharedElement id={`shop.id`}>
           <ShopDetailIcons
             style={styles.details}
-            likeness={item.details.likeness}
-            timeToOrder={item.details.queue}
+            likeness={shop.details.likeness}
+            timeToOrder={shop.details.queue}
           />
         </SharedElement>
         <View>
           <WhiteArrowButton
             style={styles.back_button}
-            direction={'down'}
+            direction={context.isShopIntro ? 'down' : 'left'}
             navigation={navigation}
+            onPressAction={
+              context.bottomSheetRef.current === null
+                ? null
+                : context.bottomSheetRef.current.snapTo(1)
+            }
           />
         </View>
       </View>

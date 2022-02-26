@@ -38,8 +38,6 @@ const WhiteArrowButton = ({
   //   };
   // }, []);
 
-
-
   return (
     <Pressable
       underlayColor={'transparent'}
@@ -49,7 +47,8 @@ const WhiteArrowButton = ({
           underlayColor: 'gray',
           opacity: pressed ? 0.6 : 1,
         },
-      ]}>
+      ]}
+    >
       <Icon name={iconName} color={'white'} size={34} />
     </Pressable>
   );

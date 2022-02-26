@@ -9,20 +9,19 @@ import {
   SafeAreaView,
   FlatList,
 } from 'react-native';
-import Header from '../sub-components/Header';
-import PrimaryButton from '../sub-components/PrimaryButton';
 import PaymentCardsData from '../fake-data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
-import GreenHeader from '../components/General/GreenHeader';
+import GreenHeader from '../sub-components/GreenHeader';
+import CustomButton from '../sub-components/CustomButton';
 
 export const PaymentCardsContext = React.createContext();
 
-const PaymentCardsPage = ({navigation}) => {
+const PaymentCardsPage = () => {
   const [cards, setCards] = useState(PaymentCardsData);
 
   return (
     <SafeAreaView style={styles.page}>
-      <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
+      <GreenHeader headerText={'PAYMENT CARDS'} />
       <PaymentCardsContext.Provider
         value={{
           cards: cards,
@@ -32,10 +31,12 @@ const PaymentCardsPage = ({navigation}) => {
         <FlatList
           data={cards}
           renderItem={({item}) => <PaymentCard card={item} />}
-          style={{padding: '5%'}}
+          style={styles.list}
         />
       </PaymentCardsContext.Provider>
-      <PrimaryButton text={'Add New Payment Card'} />
+      <View style={styles.button}>
+        <CustomButton text={'Add New Payment Card'} priority={'secondary'} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -43,8 +44,19 @@ const PaymentCardsPage = ({navigation}) => {
 const styles = StyleSheet.create({
   page: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     backgroundColor: '#E5E5E5',
+    flex: 1,
+  },
+  button: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+  },
+
+  list: {
+    padding: '5%',
+    flexGrow: 0,
   },
 });
 

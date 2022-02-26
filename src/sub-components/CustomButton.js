@@ -8,24 +8,25 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  Alert,
 } from 'react-native';
 
-export default function CustomButton({
-  priority,
-  text,
-  optionalNumber = null,
-  inheritedFunction = () => void 0,
-}) {
+export default function CustomButton(props) {
+  const {
+    priority,
+    text,
+    optionalNumber = null,
+    width = screenWidth * 0.91,
+  } = props;
   return (
     <View>
       <Animated.View style={{transform: [{scale}]}}>
         <TouchableOpacity
-          style={[buttonStyles.outer, buttonStyles[priority]]}
+          style={[buttonStyles.outer, buttonStyles[priority], {width: width}]}
           activeOpacity={1}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
-          onPress={inheritedFunction}>
+          onPress={props.onPress}
+        >
           <Text style={buttonStyles.buttonText}>{text}</Text>
           {optionalNumber == null ? (
             <></>
@@ -34,7 +35,8 @@ export default function CustomButton({
               style={[
                 buttonStyles.optionalNumber,
                 buttonStyles[`bubble${priority}`],
-              ]}>
+              ]}
+            >
               {optionalNumber}
             </Text>
           )}
@@ -55,7 +57,6 @@ const onPressIn = () => {
     useNativeDriver: true,
   }).start();
 };
-
 const onPressOut = () => {
   Animated.spring(animation, {
     toValue: 0,
@@ -63,6 +64,7 @@ const onPressOut = () => {
     useNativeDriver: true,
   }).start();
 };
+
 const screenWidth = Dimensions.get('window').width;
 
 const buttonStyles = StyleSheet.create({
@@ -105,9 +107,7 @@ const buttonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 13,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     height: 43,
-    width: screenWidth * 0.91,
-    // borderWidth: 2,
   },
 });

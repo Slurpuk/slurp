@@ -51,54 +51,6 @@ const CoffeeOptionsData = [
       },
     ],
   },
-
-  {
-    title: 'Add Syrup',
-    data: [
-      {
-        key: 1,
-        name: 'Caramel',
-        price: 40,
-        currency: 'p',
-      },
-      {
-        key: 2,
-        name: 'Vanilla',
-        price: 40,
-        currency: 'p',
-      },
-      {
-        key: 3,
-        name: 'Hazelnut',
-        price: 40,
-        currency: 'p',
-      },
-    ],
-  },
-
-  {
-    title: 'Add Syrup',
-    data: [
-      {
-        key: 1,
-        name: 'Caramel',
-        price: 40,
-        currency: 'p',
-      },
-      {
-        key: 2,
-        name: 'Vanilla',
-        price: 40,
-        currency: 'p',
-      },
-      {
-        key: 3,
-        name: 'Hazelnut',
-        price: 40,
-        currency: 'p',
-      },
-    ],
-  },
 ];
 
 export default CoffeeOptionsData;

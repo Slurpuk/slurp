@@ -1,43 +1,54 @@
-import React, {Component} from 'react';
+import React, {Component, useContext, useEffect, useState} from 'react';
 import ShopDetailIcons from './ShopDetailIcons';
 import {
-  View,
   StyleSheet,
   Text,
   Dimensions,
-  TouchableOpacity,
   Pressable,
-  ImageBackground,
   Platform,
   Image,
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import {SharedElement} from 'react-native-shared-element';
 import {useSharedValue, withDelay, withTiming} from 'react-native-reanimated';
+import {OptionsContext} from '../../screens/LandingMapPage';
+import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 
-const ShopCard = ({item, navigation}) => {
+const ShopCard = ({shop, navigation}) => {
+  const context = useContext(OptionsContext);
+  const [cont, setContext] = useState(false);
+  const visible = useContext(VisibleContext);
   const opacity = useSharedValue(1);
   const shopPageDetails = () => {
-    opacity.value = withDelay(300, withTiming(0));
-    navigation.navigate('Shop page', {item});
+    // opacity.value = withDelay(300, withTiming(0));
+    context.setCurrShop(shop);
+    setContext(true);
   };
+
+  useEffect(() => {
+    if (cont) {
+      visible(false);
+      setContext(false);
+      navigation.navigate('Shop page', context);
+    }
+  }, [cont]);
   return (
     <Pressable style={styles.item} onPress={shopPageDetails}>
-      <SharedElement id={`item.id}`}>
+      <SharedElement id={'shop.id}'}>
         <Image
           style={styles.cardImgs}
-          source={item.image_url}
+          source={shop.image_url}
           resizeMode="cover"
         />
       </SharedElement>
 
-      <SharedElement id={`item.id}`}>
+      <SharedElement id={'shop.id'}>
         <Text style={[textStyles.headingOne, styles.cardHeading]}>
-          {item.name}
+          {shop.name}
         </Text>
       </SharedElement>
 
-      <SharedElement id={`item.id}`}>
+      <SharedElement id={'shop.id'}>
         <ShopDetailIcons
           style={styles.details}
           likeness={item.details.likeness}

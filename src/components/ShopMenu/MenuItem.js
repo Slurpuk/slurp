@@ -1,5 +1,5 @@
 //to do
-import React, {Component, useState} from 'react';
+import React, {Component, useContext, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
@@ -13,16 +13,19 @@ import {
   ImageBackground,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {OptionsContext} from '../../screens/LandingMapPage';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
-  return (
-    <TouchableOpacity style={styles.item}>
-      {/*<Image*/}
-      {/*  style={{width: '100%', height: 100, zIndex: -1}}*/}
-      {/*  source={require('../assets/images/coffeeUnsplash1.jpg')}*/}
-      {/*/>*/}
+  const context = useContext(OptionsContext);
 
+  const showOptions = () => {
+    context.setCurrItem(item);
+    context.setOptionsVisible(true);
+  };
+
+  return (
+    <TouchableOpacity style={styles.item} onPress={() => showOptions()}>
       <ImageBackground
         source={require('../../assets/images/coffeeUnsplash1.jpg')}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}

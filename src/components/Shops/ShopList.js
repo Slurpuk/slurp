@@ -1,22 +1,15 @@
 import {
   Dimensions,
   FlatList,
-  Image,
-  ImageBackground,
   Platform,
   Pressable,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
-import {SafeAreaView, ScrollView} from 'react-navigation';
-import {SharedElement} from 'react-navigation-shared-element';
+import React, {useContext} from 'react';
 import ShopCard from './ShopCard';
 import ShopsData from '../../fake-data/ShopsData';
-import textStyles from '../../../stylesheets/textStyles';
-import ShopDetailIcons from './ShopDetailIcons';
+import {OptionsContext} from '../../screens/LandingMapPage';
 
 const ShopList = ({navigation}) => {
   const DATA = ShopsData;

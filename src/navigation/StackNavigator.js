@@ -1,6 +1,6 @@
 import LandingMapPage from '../screens/LandingMapPage';
 import PaymentCardsPage from '../screens/PaymentCardsPage';
-import ChangeDetailsPage from '../components/UserManagement/ChangeDetailsPage';
+import UpdateDetailsPage from '../screens/UpdateDetailsPage';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ShopList from '../components/Shops/ShopList';
@@ -12,32 +12,28 @@ const HomeStack = createSharedElementStackNavigator();
 const HomeStackNavigator = ({setVisible}) => {
   return (
     <HomeStack.Navigator
-      initialRouteName="LandingMap"
+      initialRouteName="Landing map"
       screenOptions={{
         headerShown: false,
         useNativeDriver: true,
         gestureEnabled: false,
-        transitionSpec: {
-          open: iosTransitionSpec,
-          close: iosTransitionSpec,
-        },
-      }}>
-      <HomeStack.Screen
-        name="Landing map"
-        component={LandingMapPage}
-        initialParams={{setVisible: setVisible}}
-      />
+        // transitionSpec: {
+        //   open: iosTransitionSpec,
+        //   close: iosTransitionSpec,
+        // },
+      }}
+    >
+      <HomeStack.Screen name="Landing map" component={LandingMapPage} />
       <HomeStack.Screen name="Shop list" component={ShopList} />
       <HomeStack.Screen
         name="Shop page"
         component={ShopPage}
         sharedElements={(route, otherRoute) => {
           if (['Shop list'].includes(otherRoute.name)) {
-            return [route.params.item.id];
+            return [route.params.shop.id];
           }
           return [];
         }}
-        options={() => options}
       />
     </HomeStack.Navigator>
   );
@@ -49,7 +45,8 @@ const PaymentAccountsNavigator = () => {
     <PaymentAccountsStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <PaymentAccountsStack.Screen
         name="Payment accounts"
         component={PaymentCardsPage}
@@ -64,10 +61,11 @@ const ChangeDetailsStackNavigator = () => {
     <ChangeDetailsStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <ChangeDetailsStack.Screen
         name="Change details"
-        component={ChangeDetailsPage}
+        component={UpdateDetailsPage}
       />
     </ChangeDetailsStack.Navigator>
   );

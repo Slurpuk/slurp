@@ -18,7 +18,8 @@ const ShopIntro = props => {
     <View style={intro.wrapper}>
       <LinearGradient
         colors={['transparent', 'black']}
-        style={intro.linearGradient}>
+        style={intro.linearGradient}
+      >
         <View style={intro.content}>
           <Text style={[textStyles.headingOne, intro.heading]}>
             {props.shopName}

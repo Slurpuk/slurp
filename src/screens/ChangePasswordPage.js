@@ -1,35 +1,52 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
-import ChangePasswordForm from '../components/UserManagement/ChangePasswordForm';
+import {StyleSheet, View} from 'react-native';
+import GreenHeader from '../sub-components/GreenHeader';
+import FormField from '../sub-components/FormField';
+import CustomButton from '../sub-components/CustomButton';
 
 const ChangePasswordPage = () => {
+  const [newPassword, setNewPassword] = useState();
+  const [oldPassword, setOldPassword] = useState();
+  const [passwordConfirmation, setPasswordConfirmation] = useState();
   return (
-    <View style={styles.body}>
-      <Text style={[styles.title, styles.text]}>Change Password</Text>
-      <ChangePasswordForm style={styles.form} />
+    <View style={styles.container}>
+      <GreenHeader headerText={'CHANGE PASSWORD'} />
+      <View style={styles.form}>
+        <FormField
+          title={'Old Password'}
+          setField={setOldPassword}
+          type={'password'}
+        />
+        <FormField
+          title={'New Password'}
+          setField={setNewPassword}
+          type={'password'}
+        />
+        <FormField
+          title={'Confirm Password'}
+          setField={setPasswordConfirmation}
+          type={'password'}
+        />
+      </View>
+      <View style={styles.button}>
+        <CustomButton text={'Update Password'} priority={'secondary'} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
+  container: {
     backgroundColor: '#EDEBE7',
-    padding: '5%',
     flex: 1,
   },
-  title: {
-    fontSize: 35,
-    lineHeight: 35,
-    flex: 0.2,
-    textAlignVertical: 'center',
-  },
-  text: {
-    fontFamily: 'Josefin-Sans',
-    fontWeight: '700',
-    color: '#173C4F',
-  },
   form: {
-    flex: 3,
+    margin: '5%',
+  },
+  button: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
