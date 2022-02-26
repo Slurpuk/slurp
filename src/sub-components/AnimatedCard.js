@@ -56,7 +56,7 @@ const AnimatedCard = ({
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Animated.View
         style={[
           styles.expandable,
@@ -95,7 +95,7 @@ const AnimatedCard = ({
         <View style={styles.absoluteBottomRight}>{bottomFixed}</View>
 
       </Animated.View>
-    </SafeAreaView>
+    </View>
   );
 };
 
