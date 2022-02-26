@@ -3,12 +3,13 @@ import ItemsData from './fake-data/ItemsData';
 import renderers from './renderers';
 import React from 'react';
 import OptionsPopUp from './components/ShopMenu/OptionsPopUp';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import Menu from './components/ShopMenu/Menu';
 import ShopList from './components/Shops/ShopList';
 import {NavigationContainer} from '@react-navigation/native';
 import HamburgerSlideBarNavigator from './navigation/HamburgerSlideBarNavigator';
 import ShopPage from './components/Shops/ShopPage';
+import AnimatedCard from './sub-components/AnimatedCard';
 
 const OptionPopUpTester = () => {
   return (
@@ -57,6 +58,35 @@ const NavigableLandingPage = () => {
   );
 };
 
+const AnimatedCardTester = () => {
+  return (
+    <AnimatedCard
+      collapsableContent={
+        <View>
+          <Text>
+            This content is always going to be visible, content below will be
+            revealed.
+          </Text>
+        </View>
+      }
+      hidableContent={
+        <View>
+          <Text>This content will be revealed on click of the component</Text>
+        </View>
+      }
+      bottomFixed={
+        <View>
+          <Text>3.10</Text>
+        </View>
+      }
+    ></AnimatedCard>
+  );
+};
+
+// const empty = () =>{
+//
+// }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -72,4 +102,5 @@ export default {
   ShopPageTester,
   ShopListTester,
   NavigableLandingPage,
+  AnimatedCardTester,
 };

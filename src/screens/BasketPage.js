@@ -2,6 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import { firebase } from '@react-native-firebase/functions';
 import React, {useState} from 'react';
 
+
 import {
   StyleSheet,
   Text,
@@ -9,10 +10,10 @@ import {
   Fragment,
   SafeAreaView,
   Platform,
-    Pressable,
+  Pressable,
   StatusBar,
 } from 'react-native';
-import GreenHeader from '../components/General/GreenHeader';
+import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
@@ -71,6 +72,17 @@ const BasketPage = () => {
         .then(() => {
           console.log('Order added!');
         });
+  function sendOrder() {
+    firestore()
+      .collection('FakeOrder')
+      .add({
+        name: 'Ada Lovelace',
+        type: 'incoming',
+        total: 30,
+      })
+      .then(() => {
+        console.log('Order added!');
+      });
   }
 
   return (
@@ -87,6 +99,8 @@ const BasketPage = () => {
           style={styles.button}
           text={'Apple/Google pay'}
         />
+      </View>
+      <View style={[styles.lastButton, styles.buttons]}>
         <CustomButton
           priority="primary"
           style={styles.button}
@@ -120,13 +134,17 @@ const styles = StyleSheet.create({
     marginVertical: '3%',
   },
   buttons: {
-    flexShrink: 4,
-    marginVertical: '8%',
+    display: 'flex',
+    marginVertical: '2%',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   button: {
-    paddingVertical: '5%',
+    flex: 1,
+  },
+
+  lastButton: {
+    marginBottom: '6%',
   },
 });
 

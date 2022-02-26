@@ -9,6 +9,8 @@ const BasketContents = ({total, setTotal, Items}) => {
       let add_value = Math.round(item.price * amount * 100) / 100;
       setTotal(total + add_value);
     }
+    // console.log(Items.find(i => i.key === item.key).amount);
+    // setItems((Items.find(i => i.key === item.key).amount += amount));
   };
 
   return (

@@ -7,6 +7,11 @@ import {
   Button,
   LogBox,
   SafeAreaView,
+  Platform,
+  StatusBar,
+  TextInput,
+  Pressable,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import renderers from '../renderers';
@@ -15,13 +20,22 @@ import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from "@react-native-firebase/firestore";
 import firebase from "@react-native-firebase/app";
+import ShopsData from '../fake-data/ShopsData';
+import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
+import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
+import {BlurView} from '@react-native-community/blur';
+import {FlatList} from 'react-native-gesture-handler';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
 
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
+export const OptionsContext = React.createContext();
 export default function LandingMapPage({setVisible}) {
   const [isShopIntro, setIsShopIntro] = useState(false);
+
   const [ShopsData, setShopsData] = useState([]);
 
   useEffect(() => {
@@ -44,6 +58,10 @@ export default function LandingMapPage({setVisible}) {
     return () => subscriber();
   }, []);
 
+  const [optionsVisible, setOptionsVisible] = useState(false);
+  const [currItem, setCurrItem] = useState(null);
+
+
   const updatePage = ({index}) => {
     if (index === 0) {
       setVisible(false);
@@ -58,19 +76,42 @@ export default function LandingMapPage({setVisible}) {
     setIsShopIntro(!isShopIntro);
   };
 
+  const setHidden = () => {
+    setOptionsVisible(false);
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.map}>
         <MapBackground />
-        <Button title={'Switch bottom sheet'} onPress={setLOL} />
-      </View>
+        <View style={{margin: '10%'}}>
+          <Button title={'Switch bottom sheet'} onPress={setLOL} />
+        </View>
 
+        <TextInput
+          style={{
+            borderRadius: 10,
+            margin: 10,
+            color: '#000',
+            borderColor: '#666',
+            backgroundColor: '#FFF',
+            borderWidth: 1,
+            height: screenHeight / 19,
+            width: screenWidth / 1.4,
+            paddingHorizontal: 10,
+            fontSize: 18,
+          }}
+          placeholder={'Search Location'}
+          placeholderTextColor={'#666'}
+        />
+      </View>
       {isShopIntro ? (
         <ScrollBottomSheet
           componentType="FlatList"
           snapPoints={['0%', '70%', '100%']}
           onSettle={index => updatePage({index})}
           initialSnapIndex={1}
+          enableOverScroll={false}
           renderHandle={() => (
             <View style={styles.header1}>
               <ShopPage
@@ -81,6 +122,46 @@ export default function LandingMapPage({setVisible}) {
                 renderItem={renderers.renderItemCard}
               />
             </View>
+            <OptionsContext.Provider
+              value={{
+                optionsVisible: optionsVisible,
+                setOptionsVisible: setOptionsVisible,
+                setCurrItem: setCurrItem,
+              }}
+            >
+              <View>
+                <TouchableWithoutFeedback
+                  onPressIn={() => setOptionsVisible(false)}
+                >
+                  <View style={[styles.header1]}>
+                    <ShopPage
+                      shopName={defaultShopData.name}
+                      shopIntroText={defaultShopData.intro}
+                      DATA={ItemsData}
+                      renderSection={renderers.renderMenuSection}
+                      renderItem={renderers.renderItemCard}
+                    />
+
+                    {optionsVisible ? (
+                      <BlurView
+                        style={styles.absolute}
+                        blurType="dark"
+                        blurAmount={2}
+                        reducedTransparencyFallbackColor="white"
+                      />
+                    ) : null}
+                  </View>
+                </TouchableWithoutFeedback>
+                {optionsVisible ? (
+                  <OptionsPopUp
+                    data={CoffeeOptionsData}
+                    curr_price={currItem.price}
+                    product_name={currItem.name}
+                    renderer={renderers.renderOption}
+                  />
+                ) : null}
+              </View>
+            </OptionsContext.Provider>
           )}
           contentContainerStyle={styles.contentContainerStyle}
         />
@@ -102,7 +183,7 @@ export default function LandingMapPage({setVisible}) {
           contentContainerStyle={styles.contentContainerStyle}
         />
       ) : null}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -116,6 +197,10 @@ const styles = StyleSheet.create({
   },
   header1: {
     height: windowHeight,
+    position: 'relative',
+    width: '100%',
+    left: 0,
+    top: 0,
   },
   header2: {
     alignItems: 'center',
@@ -140,5 +225,14 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderRadius: 20,
   },
 });

@@ -20,7 +20,6 @@ const ShopPage = ({
         timeToOrder={7}
       />
       <Menu DATA={DATA} renderItem={renderItem} renderSection={renderSection} />
-      <View />
     </>
   );
 };

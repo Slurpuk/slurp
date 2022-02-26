@@ -9,10 +9,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import textStyles from '../../stylesheets/textStyles';
-import PrimaryButton from '../sub-components/PrimaryButton';
-import FormField from '../components/UserManagement/FormField';
+import FormField from '../sub-components/FormField';
+import CustomButton from '../sub-components/CustomButton';
 
 // Redirect the user to the Log In Portal
 const switchToLogIn = () => {
@@ -38,14 +37,6 @@ const registeredMessage = () => {
 
 // Register the user to the database after checking their credentials
 const registerUser = () => {
-  //     auth().createUserWithEmailAndPassword(email,password)
-  //         .then((re)=>{
-  //             console.log(re);
-  //             console.log(x);
-  //         })
-  //         .catch((re)=>{
-  //             console.log(re);
-  //         })
   registeredMessage();
 };
 
@@ -63,7 +54,6 @@ const SignUpPage = () => {
       <View style={styles.safeSpace}>
         <View style={styles.body}>
           <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
-
           <View style={styles.form}>
             <View style={styles.name_container}>
               <FormField
@@ -107,10 +97,18 @@ const SignUpPage = () => {
 
           <View style={styles.buttons_container}>
             <View style={styles.button_container}>
-              <PrimaryButton text={'Set Coffee Preferences'} onPress={null} />
+              <CustomButton
+                text={'Set Coffee Preferences'}
+                onPress={null}
+                priority={'primary'}
+              />
             </View>
             <View style={styles.button_container}>
-              <PrimaryButton text={'Create Account'} onPress={registerUser} />
+              <CustomButton
+                text={'Create Account'}
+                onPress={registerUser}
+                priority={'primary'}
+              />
             </View>
             <View>
               <Text

@@ -1,18 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Image,
-  Text,
-  Alert,
-  TouchableHighlight,
-  StatusBar,
-  Platform,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
+import WhiteArrowButton from './WhiteArrowButton';
+import textStyles from '../../stylesheets/textStyles';
 
 const GreenHeader = ({headerText}) => {
   const onBackButtonClicked = () => {
@@ -29,7 +19,9 @@ const GreenHeader = ({headerText}) => {
       <View style={styles.arrow}>
         <WhiteArrowButton direction={'left'} onPress={onBackButtonClicked} />
       </View>
-      <Text style={styles.headerText}>{headerText}</Text>
+      <View style={styles.title}>
+        <Text style={textStyles.whiteTextOnGreenHeaderText}>{headerText}</Text>
+      </View>
     </View>
   );
 };
@@ -45,13 +37,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  headerText: {
-    color: '#EDEBE7',
-    fontWeight: '700',
-    fontStyle: 'normal',
-    fontSize: 27,
-    marginLeft: 20,
-    letterSpacing: 0.4,
+  title: {
+    ...Platform.select({
+      ios: {
+        marginTop: '2%',
+      },
+    }),
   },
 });
 

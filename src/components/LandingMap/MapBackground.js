@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+
 import {
   Button,
   Dimensions,
@@ -8,22 +9,70 @@ import {
   View,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {Marker} from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
+import GetLocation from 'react-native-get-location';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+
 export default function MapBackground() {
+  const [clatitude, setcLatitude] = useState(0);
+  const [clongitude, setcLongitude] = useState(0);
+  const [clatitudeDelta, setcLatitudeDelta] = useState(0);
+  const [clongitudeDelta, setcLongitudeDelta] = useState(0);
+  // const [coordinates, setCoordinates] = useState([0]);
+
+  // const coordinatesMaker = () => {
+  //
+  // }
+
+  GetLocation.getCurrentPosition({
+    enableHighAccuracy: true,
+    timeout: 15000,
+  })
+    .then(location => {
+      setcLatitude(location.latitude);
+      setcLongitude(location.longitude);
+    })
+    .catch(error => {
+      const {code, message} = error;
+      console.warn(code, message);
+    });
+
+  const tokyoRegion = {
+    latitude: 35.6762,
+    longitude: 139.6503,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const currentLocation = {
+    latitude: clatitude,
+    longitude: clongitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const locationPress = () => {
+    console.log('Function will be here!!');
+  };
+
   return (
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
-        }}
-      />
+        region={tokyoRegion}
+      >
+        <MapView.Marker
+          coordinate={currentLocation}
+          pinColor={'#fefefe'}
+          title={'hey there fellas'}
+          description={'Test market'}
+          onPress={locationPress}
+        />
+      </MapView>
     </View>
   );
 }
@@ -40,4 +89,5 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     flex: 1,
   },
+  marker: {},
 });
