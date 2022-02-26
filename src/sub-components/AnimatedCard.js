@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Text,
@@ -26,7 +26,7 @@ const AnimatedCard = ({
 
   const growHeight = () => {
     setExpanded(!isExpanded);
-    console.log(isExpanded);
+    //console.log(isExpanded);
 
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(adaptiveHeight, {
@@ -41,9 +41,6 @@ const AnimatedCard = ({
     //console.log('toggle height triggered');
   };
 
-  const toggleArrow = () => {
-    isExpanded ? '180deg' : '0deg';
-  };
 
   const shrinkHeight = () => {
     setExpanded(!isExpanded);
@@ -91,22 +88,24 @@ const AnimatedCard = ({
             {hidableContent}
           </View>
         </AnimatedPressable>
-
-        <View style={[styles.topRightIcon, {transform: [{rotateZ: '0deg'}]}]}>
+        <View style={[styles.topRightIcon, {transform: [{rotateZ: isExpanded ? '180deg' : '0deg'}]}]}>
           <Icon size={30} color="black" name="chevron-down" />
         </View>
 
         <View style={styles.absoluteBottomRight}>{bottomFixed}</View>
+
       </Animated.View>
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: '100%',
   },
   fadingContainer: {
     padding: 20,
