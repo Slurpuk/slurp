@@ -47,35 +47,38 @@ const WelcomePages = ({  onDone }) => {
                             setSliderPage(event);
                         }}
                     >
-                        <View style={ {width, height,paddingVertical: '5%',justifyContent:'center'
-                            }}>
-                            <View >
+                        <View style={ {width, height,display:'flex'}}>
+                            <View style={{alignItems:'center'}}>
                                 <Text style={[textStyles.blueJosefinHeading, styles.title]}>Welcome to CoffeeGems</Text>
                                 <CoffeeShopSvg style={[styles.circle]}/>
-                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We dont even sell coffee but me make a commission from every purchase you make, because we can and we want</Text>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We dont even sell coffee but me make a commission from every purchase you make, because we can and we want.</Text>
                             </View>
                         </View>
-                        <View style={ {width, height,paddingVertical: '5%',justifyContent:'center'
-                        }}>
-                            <View >
+                        <View style={ {width, height}}>
+                            <View style={{alignItems:'center'}}>
                                 <Text style={[textStyles.blueJosefinHeading, styles.title]}>Why CoffeeGems?</Text>
                                 <CoffeeCupSvg style={[styles.circle]}/>
-                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Please use this platform because we need the money to cover all the costs of the platform to make the svgs above</Text>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>Please use this platform because we need the money to cover all the costs of the platform to make the svgs above.</Text>
                             </View>
                         </View>
-                        <View style={ {width, height,paddingVertical: '5%',justifyContent:'flex-end'
-                        }}>
-                            <View >
-                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>How does it work?</Text>
-                                <CoffeeBeanSvg style={[styles.circle]}/>
-                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We am not going to explain you how it works, we just want you to click the sign up button below, in fact if you dont we will hack your device </Text>
+                        <View style={ {width, height}}>
+                            <View style={{alignItems:'center'}}>
+                                <Text style={[textStyles.blueJosefinHeading, styles.title]}>Why CoffeeGems?</Text>
+                                <CoffeeBeanSvg style={[styles.circle, {marginTop:5}]}/>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We am not going to explain you how it works, we just want you to click the sign up button below, in fact if you dont we will hack your device. </Text>
                                 <CustomButton
                                     text={'Sign Up'}
                                     priority={'primary'}
                                     onPress={onDone}>
                                 </CustomButton>
-                            </View>
+                                <View>
+                                    <Text
+                                        style={[textStyles.bluePoppinsBody, styles.footer]}>
+                                        Already have an account? Log in here
+                                    </Text>
+                                </View></View>
                         </View>
+
                     </ScrollView>
                         <View style={styles.paginationWrapper}>
                             {Array.from(Array(3).keys()).map((key, index) => (
@@ -92,14 +95,21 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
     },
-    title: {
-        paddingTop: 10,
-        paddingBottom: 10,
+    footer: {
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+        textAlignVertical: 'bottom',
+        paddingTop:16
+    },    title: {
+        minHeight:'12%',
+        marginTop: '15%',
         paddingHorizontal:20,
         textAlign:'center',
+
     },
     text: {
-        paddingTop: 10,
+        paddingTop: '6%',
+        paddingBottom: '6%',
         textAlign:'center',
         paddingHorizontal:20,
     },
@@ -115,9 +125,9 @@ const styles = StyleSheet.create({
         width: 350,
         height: 350,
         borderRadius: 350 / 2,
-        backgroundColor: '#C4C4C4',
-        marginBottom:20,
-        marginTop:20,
+        backgroundColor: '#DADADA',
+        marginBottom:'6%',
+        marginTop:'8%',
         marginHorizontal:20,
     },
     paginationWrapper: {

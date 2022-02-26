@@ -13,7 +13,7 @@ const CoffeeShopSvg = (props) => (
     >
         <Path
             style={{
-                fill: '#087562',  //primary button
+                fill: '#087562',  //primary button color
             }}
             d="M32.663 94.785h356.73v300.78H32.663z"
         />
