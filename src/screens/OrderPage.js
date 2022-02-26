@@ -1,17 +1,54 @@
 import React from 'react';
-import {StyleSheet, Text, View, SectionList, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SectionList,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
 import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
 import pastOrders from '../fake-data/PastOrderData';
 import currentOrders from '../fake-data/CurrentOrderData';
+import {NavigationContainer} from '@react-navigation/native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
+const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = () => {
   return (
-    <View style={styles.basket}>
-      <GreenHeader headerText={'ORDERS'} />
-      <PastOrders />
-    </View>
+    <NavigationContainer independent={true}>
+      <View style={styles.container}>
+        <GreenHeader headerText={'ORDERS'} />
+        <Tab.Navigator
+          style={styles.basket}
+          screenOptions={{
+            tabBarLabelStyle: {
+              fontSize: 17,
+              fontFamily: 'Poppins-SemiBold',
+              textTransform: 'capitalize',
+            },
+            tabBarIndicatorStyle: {
+              top: 0,
+              height: null,
+              backgroundColor: '#046D66',
+              borderRadius: 13,
+            },
+            tabBarActiveTintColor: '#fff',
+            tabBarInactiveTintColor: '#6D6D6D',
+            tabBarStyle: {
+              borderRadius: 13,
+              height: 50,
+              backgroundColor: '#E5E5E5',
+            },
+          }}>
+          <Tab.Screen name="Current" component={CurrentOrders} />
+          <Tab.Screen name="Past" component={PastOrders} />
+        </Tab.Navigator>
+      </View>
+    </NavigationContainer>
   );
 };
 
@@ -33,31 +70,31 @@ const PastOrders = () => {
 };
 
 const CurrentOrders = () => {
-  return(
-    <Text> Hi </Text>
+  return (
+    <FlatList
+      contentContainerStyle={styles.mainContainer}
+      data={currentOrders}
+      renderItem={({item}) => <CollapsedOrder order={item} />}
+    />
   );
 };
 
-// <FlatList
-//   contentContainerStyle={styles.mainContainer}
-//   sections={currentOrders}
-//   keyExtractor={item => item.orderNumber}
-//   renderItem={({item}) => <CollapsedOrder order={item} />}
-// />
-
 const styles = StyleSheet.create({
-  basket: {
+  container: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#E5E5E5',
+  },
+  basket: {
+    marginHorizontal: '5%',
+    marginTop: '5%',
+    fontFamily: 'Poppins-SemiBold',
   },
   periodHeader: {
     marginLeft: 7,
     marginTop: 20,
   },
   mainContainer: {
-    marginHorizontal: '5%',
     paddingBottom: '5%',
   },
 });
