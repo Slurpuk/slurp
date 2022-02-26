@@ -16,28 +16,22 @@ import ShopDetailIcons from './ShopDetailIcons';
 const ShopIntro = props => {
   return (
     <View style={intro.wrapper}>
-      <ImageBackground
-        source={require('../../assets/images/ShopExterior.png')}
-        style={{width: '100%', height: '100%'}}
-      >
-        <LinearGradient
-          colors={['transparent', 'black']}
-          style={intro.linearGradient}
-        >
-          <View style={intro.content}>
-            <Text style={[textStyles.headingOne, intro.heading]}>
-              {props.shopName}
-            </Text>
-            <ShopDetailIcons
-              likeness={props.likeness}
-              timeToOrder={props.timeToOrder}
-            />
-            <Text style={[textStyles.bodyText, intro.body]}>
-              {props.shopIntroText}
-            </Text>
-          </View>
-        </LinearGradient>
-      </ImageBackground>
+      <LinearGradient
+        colors={['transparent', 'black']}
+        style={intro.linearGradient}>
+        <View style={intro.content}>
+          <Text style={[textStyles.headingOne, intro.heading]}>
+            {props.shopName}
+          </Text>
+          <ShopDetailIcons
+            likeness={props.likeness}
+            timeToOrder={props.timeToOrder}
+          />
+          <Text style={[textStyles.bodyText, intro.body]}>
+            {props.shopIntroText}
+          </Text>
+        </View>
+      </LinearGradient>
     </View>
   );
 };

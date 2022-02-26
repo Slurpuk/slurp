@@ -25,23 +25,23 @@ const renderMenuSection = ({item, renderItem}) => (
 
 const renderItemCard = ({item}) => <ItemCard item={item} />;
 
-const renderShopCard = ({item, navigation}) => (
-  <ShopCard
-    name={item.name}
-    likeness={item.likeness}
-    queue={item.queue}
-    image={item.image}
-  />
-);
-const renderShopList = ({item, renderItem}) => (
-  <ShopList DATA={item.data} renderItem={renderItem} />
-);
+// const renderShopCard = ({item}) => (
+//   <ShopCard
+//     name={item.name}
+//     likeness={item.likeness}
+//     queue={item.queue}
+//     image={item.image}
+//   />
+// );
+// const renderShopList = ({item, renderItem}) => (
+//   <ShopList DATA={item.data} renderItem={renderItem} />
+// );
 
 export default {
   renderOption,
   renderMenuSection,
   renderItemCard,
-  renderShopCard,
-  renderShopList,
+  // renderShopCard,
+  // renderShopList,
   renderMenu,
 };

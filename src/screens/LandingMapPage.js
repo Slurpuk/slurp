@@ -15,6 +15,10 @@ import shopData from '../fake-data/ShopData';
 import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
 import ShopsData from '../fake-data/ShopsData';
+import ShopList from '../components/Shops/ShopList';
+import {ShopListStackNavigator} from '../navigation/StackNavigator';
+import ShopCard from '../components/Shops/ShopCard';
+import { useRoute } from "@react-navigation/native";
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -31,7 +35,7 @@ export default function LandingMapPage({setVisible, navigation}) {
     }
   };
 
-  const defaultShopData = shopData[0];
+  const defaultShopData = ShopsData[0];
 
   const setLOL = () => {
     setIsShopIntro(!isShopIntro);
@@ -52,13 +56,7 @@ export default function LandingMapPage({setVisible, navigation}) {
           initialSnapIndex={1}
           renderHandle={() => (
             <View style={styles.header1}>
-              <ShopPage
-                shopName={defaultShopData.name}
-                shopIntroText={defaultShopData.intro}
-                DATA={ItemsData}
-                renderSection={renderers.renderMenuSection}
-                renderItem={renderers.renderItemCard}
-              />
+              <ShopList navigation={navigation} />
             </View>
           )}
           contentContainerStyle={styles.contentContainerStyle}
@@ -73,11 +71,9 @@ export default function LandingMapPage({setVisible, navigation}) {
             <View style={styles.header2}>
               <View style={styles.panelHandle} />
               <Text style={styles.headerText}>Top Picks Nearby</Text>
+              <ShopList navigation={navigation} />
             </View>
           )}
-          data={ShopsData}
-          keyExtractor={item => item.key}
-          renderItem={renderers.renderShopCard}
           contentContainerStyle={styles.contentContainerStyle}
         />
       ) : null}
@@ -102,6 +98,8 @@ const styles = StyleSheet.create({
     paddingVertical: '3%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    overflow: 'visible',
+    height: 600,
   },
   panelHandle: {
     width: '10%',

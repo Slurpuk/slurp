@@ -14,6 +14,7 @@ import ChangeDetailsPage from './src/components/UserManagement/ChangeDetailsPage
 // import ChangePassword from './src/components/UserManagement/ChangePassword';
 import PaymentCardsPage from './src/screens/PaymentCardsPage';
 import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
+import { ShopListStackNavigator } from "./src/navigation/StackNavigator";
 
 export default function App() {
   const usersCollection = firestore().collection('Users');

@@ -9,33 +9,41 @@ import {
   Pressable,
   ImageBackground,
   Platform,
+  Image,
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
+import {SharedElement} from 'react-native-shared-element';
+import {useSharedValue, withDelay, withTiming} from 'react-native-reanimated';
 
-const ShopCard = ({name, likeness, queue, image, navigation}) => {
+const ShopCard = ({item, navigation}) => {
+  const opacity = useSharedValue(1);
+  const shopPageDetails = () => {
+    opacity.value = withDelay(300, withTiming(0));
+    navigation.navigate('Shop page', {item});
+  };
   return (
-    <Pressable style={styles.item} onPress={() => navigation.navigate()}>
-      <ImageBackground
-        source={image}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <View style={styles.details}>
-          <Text
-            style={[
-              textStyles.headingOne,
-              {
-                marginBottom: '3%',
-              },
-            ]}
-          >
-            {name}
-          </Text>
-          <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
-        </View>
-      </ImageBackground>
+    <Pressable style={styles.item} onPress={shopPageDetails}>
+      <SharedElement id={`item.id}`}>
+        <Image
+          style={styles.cardImgs}
+          source={item.image_url}
+          resizeMode="cover"
+        />
+      </SharedElement>
+
+      <SharedElement id={`item.id}`}>
+        <Text style={[textStyles.headingOne, styles.cardHeading]}>
+          {item.name}
+        </Text>
+      </SharedElement>
+
+      <SharedElement id={`item.id}`}>
+        <ShopDetailIcons
+          style={styles.details}
+          likeness={item.details.likeness}
+          timeToOrder={item.details.queue}
+        />
+      </SharedElement>
     </Pressable>
   );
 };
@@ -44,12 +52,15 @@ const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   item: {
-    maxWidth: screenWidth,
+    overflow: 'hidden',
+    maxWidth: screenWidth * 1,
+    minWidth: screenWidth * 1,
     height: screenWidth * 0.37,
     marginVertical: '1.8%',
     // marginHorizontal: '2%',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+
     flex: 1,
     position: 'relative',
     ...Platform.select({
@@ -73,6 +84,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '700',
     paddingBottom: 10,
+  },
+  cardImgs: {
+    position: 'absolute',
+    width: '100%',
+    left: 0,
   },
 
   details: {

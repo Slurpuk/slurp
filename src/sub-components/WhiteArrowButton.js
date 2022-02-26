@@ -2,7 +2,11 @@ import React, {useEffect} from 'react';
 import {BackHandler, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const WhiteArrowButton = ({direction = 'back', navigation}) => {
+const WhiteArrowButton = ({
+  direction = 'back',
+  navigation,
+  onPressAction = null,
+}) => {
   let iconName;
   switch (direction) {
     case 'left':
@@ -19,10 +23,10 @@ const WhiteArrowButton = ({direction = 'back', navigation}) => {
       break;
   }
 
-  // function handleBackButtonClick() {
-  //   navigation.navigate('Home');
-  //   return true;
-  // }
+  function handleBackButtonClick() {
+    if (onPressAction != null) onPressAction();
+    else navigation.goBack();
+  }
   //
   // useEffect(() => {
   //   BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
@@ -34,10 +38,12 @@ const WhiteArrowButton = ({direction = 'back', navigation}) => {
   //   };
   // }, []);
 
+
+
   return (
     <Pressable
       underlayColor={'transparent'}
-      onPress={() => navigation.goBack()}
+      onPress={handleBackButtonClick}
       style={({pressed}) => [
         {
           underlayColor: 'gray',
