@@ -118,14 +118,14 @@ const shopPageCustom = StyleSheet.create({
   },
 });
 
-ShopPage.sharedElements = route => {
-  const {item} = route.params;
-  return [
-    {
-      id: `item.id`,
-      animation: 'move',
-      resize: 'clip',
-    },
-  ];
-};
+// ShopPage.sharedElements = route => {
+//   const {shop} = route.params;
+//   return [
+//     {
+//       id: `shop.id`,
+//       animation: 'move',
+//       resize: 'clip',
+//     },
+//   ];
+// };
 export default ShopPage;

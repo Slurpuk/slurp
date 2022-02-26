@@ -51,8 +51,8 @@ const ShopCard = ({shop, navigation}) => {
       <SharedElement id={'shop.id'}>
         <ShopDetailIcons
           style={styles.details}
-          likeness={item.details.likeness}
-          timeToOrder={item.details.queue}
+          likeness={shop.details.likeness}
+          timeToOrder={shop.details.queue}
         />
       </SharedElement>
     </Pressable>

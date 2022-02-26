@@ -71,28 +71,28 @@ const ChangeDetailsStackNavigator = () => {
   );
 };
 
-export const iosTransitionSpec = {
-  animation: 'spring',
-  config: {
-    stiffness: 1000,
-    damping: 500,
-    mass: 3,
-    overshootClamping: true,
-    restDisplacementThreshold: 10,
-    restSpeedThreshold: 10,
-  },
-};
+// export const iosTransitionSpec = {
+//   animation: 'spring',
+//   config: {
+//     stiffness: 1000,
+//     damping: 500,
+//     mass: 3,
+//     overshootClamping: true,
+//     restDisplacementThreshold: 10,
+//     restSpeedThreshold: 10,
+//   },
+// };
 
-const options = {
-  headerBackTitleVisible: false,
-  cardStyleInterpolator: ({current: {progress}}) => {
-    return {
-      cardStyle: {
-        opacity: progress,
-      },
-    };
-  },
-};
+// const options = {
+//   headerBackTitleVisible: false,
+//   cardStyleInterpolator: ({current: {progress}}) => {
+//     return {
+//       cardStyle: {
+//         opacity: progress,
+//       },
+//     };
+//   },
+// };
 
 export {
   HomeStackNavigator,

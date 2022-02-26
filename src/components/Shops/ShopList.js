@@ -24,7 +24,7 @@ const ShopList = ({navigation}) => {
           return (
             <View>
               <Pressable>
-                <ShopCard item={item} navigation={navigation} />
+                <ShopCard shop={item} navigation={navigation} />
               </Pressable>
             </View>
           );
