@@ -65,7 +65,7 @@ const WelcomePages = ({  onDone }) => {
                             <View style={{alignItems:'center'}}>
                                 <Text style={[textStyles.blueJosefinHeading, styles.title]}>Why CoffeeGems?</Text>
                                 <CoffeeBeanSvg style={[styles.circle, {marginTop:5}]}/>
-                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We am not going to explain you how it works, we just want you to click the sign up button below, in fact if you dont we will hack your device. </Text>
+                                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>We are not going to explain you how it works, we just want you to click the sign up button below, in fact if you dont we will hack your device. </Text>
                                 <CustomButton
                                     text={'Sign Up'}
                                     priority={'primary'}
@@ -76,7 +76,8 @@ const WelcomePages = ({  onDone }) => {
                                         style={[textStyles.bluePoppinsBody, styles.footer]}>
                                         Already have an account? Log in here
                                     </Text>
-                                </View></View>
+                                </View>
+                            </View>
                         </View>
 
                     </ScrollView>
@@ -100,9 +101,10 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         textAlignVertical: 'bottom',
         paddingTop:16
-    },    title: {
+    },
+    title: {
         minHeight:'12%',
-        marginTop: '15%',
+        marginTop: '12%',
         paddingHorizontal:20,
         textAlign:'center',
 
@@ -122,9 +124,9 @@ const styles = StyleSheet.create({
                 : getStatusBarHeight(),
     },
     circle: {
-        width: 350,
-        height: 350,
-        borderRadius: 350 / 2,
+        width: 320,
+        height: 320,
+        borderRadius: 320 / 2,
         backgroundColor: '#DADADA',
         marginBottom:'6%',
         marginTop:'8%',
