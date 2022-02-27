@@ -24,7 +24,7 @@ const PaymentCardsPage = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.page}>
-      <GreenHeader headerText={'PAYMENT CARDS'} />
+      <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
       <PaymentCardsContext.Provider
         value={{
           cards: cards,

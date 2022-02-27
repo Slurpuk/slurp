@@ -4,13 +4,13 @@ import GreenHeader from '../sub-components/GreenHeader';
 import FormField from '../sub-components/FormField';
 import CustomButton from '../sub-components/CustomButton';
 
-const ChangePasswordPage = () => {
+const ChangePasswordPage = ({navigation}) => {
   const [newPassword, setNewPassword] = useState();
   const [oldPassword, setOldPassword] = useState();
   const [passwordConfirmation, setPasswordConfirmation] = useState();
   return (
     <View style={styles.container}>
-      <GreenHeader headerText={'CHANGE PASSWORD'} />
+      <GreenHeader headerText={'CHANGE PASSWORD'} navigation={navigation} />
       <View style={styles.form}>
         <FormField
           title={'Old Password'}
