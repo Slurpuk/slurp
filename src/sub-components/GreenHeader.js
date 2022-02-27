@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
-import { getPerfectPadding } from '../../stylesheets/StyleFunctions';
+import { getTightPadding } from "../../stylesheets/StyleFunctions";
 import WhiteArrowButton from './WhiteArrowButton';
 import textStyles from '../../stylesheets/textStyles';
 
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#046D66',
     display: 'flex',
-    paddingTop: getPerfectPadding(),
+    paddingTop: getTightPadding(),
     paddingBottom: '4%',
     paddingHorizontal: '5%',
     alignItems: 'center',

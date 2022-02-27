@@ -12,6 +12,10 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
 import CustomButton from '../sub-components/CustomButton';
+import {
+  getCushyPaddingTop,
+  getPerfectPadding,
+} from '../../stylesheets/StyleFunctions';
 
 // Redirect the user to the Log In Portal
 const switchToLogIn = () => {
@@ -128,6 +132,8 @@ const SignUpPage = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    backgroundColor: '#EDEBE7',
+    paddingTop: getCushyPaddingTop(),
   },
   safeSpace: {
     flex: 1,
