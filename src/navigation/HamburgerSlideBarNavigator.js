@@ -2,18 +2,13 @@ import React from 'react';
 import {LogBox} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useState} from 'react';
-import LandingMapPage from '../screens/LandingMapPage';
 import SideDrawerContent from '../components/HamburgerMenu/SideDrawerContent';
 import HamburgerButton from '../components/HamburgerMenu/HamburgerButton';
-import PaymentCardsPage from '../screens/PaymentCardsPage';
-import UpdateDetailsPage from '../screens/UpdateDetailsPage';
-import ChangePasswordPage from '../screens/ChangePasswordPage';
 import LogInPage from '../screens/LogInPage';
 import {
   ChangeDetailsStackNavigator,
   ChangePasswordStackNavigator,
   HomeStackNavigator,
-  MainStackNavigator,
   PaymentAccountsNavigator,
 } from './StackNavigator';
 

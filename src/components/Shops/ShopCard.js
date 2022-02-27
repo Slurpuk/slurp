@@ -19,8 +19,8 @@ const ShopCard = ({shop, navigation}) => {
   const [cont, setContext] = useState(false);
   const visible = useContext(VisibleContext);
   const opacity = useSharedValue(1);
+
   const shopPageDetails = () => {
-    // opacity.value = withDelay(300, withTiming(0));
     context.setCurrShop(shop);
     setContext(true);
   };
@@ -32,6 +32,7 @@ const ShopCard = ({shop, navigation}) => {
       navigation.navigate('Shop page', context);
     }
   }, [cont]);
+
   return (
     <Pressable style={styles.item} onPress={shopPageDetails}>
       <SharedElement id={'shop.id}'}>
@@ -64,11 +65,9 @@ const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   item: {
     overflow: 'hidden',
-    maxWidth: screenWidth * 1,
-    minWidth: screenWidth * 1,
+    width: screenWidth,
     height: screenWidth * 0.37,
     marginVertical: '1.8%',
-    // marginHorizontal: '2%',
     display: 'flex',
     alignItems: 'flex-start',
 

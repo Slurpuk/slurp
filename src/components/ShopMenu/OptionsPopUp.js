@@ -9,14 +9,14 @@ import {
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
-import {OptionsContext} from '../../screens/LandingMapPage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ShopContext} from "../Shops/ShopPage";
 
 const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
-  const context = useContext(OptionsContext);
+  const context = useContext(ShopContext);
   const [totalPrice, setTotalPrice] = useState(curr_price); // Current total price in pennies
   const [options, setOptions] = useState({}); // List of options currently selected
-  const [isVisible, setVisible] = useState(true);
+  const [isVisible, setVisible] = useState(true); // State for tracking if the popup is currently visible
   const updateOptions = (name, price, isAdd) => {
     if (isAdd) {
       setTotalPrice(price + totalPrice);

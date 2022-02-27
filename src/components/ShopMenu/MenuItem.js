@@ -1,23 +1,20 @@
-//to do
-import React, {Component, useContext, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
-  FlatList,
   StyleSheet,
   Text,
   Dimensions,
   TouchableOpacity,
   Pressable,
-  Image,
   ImageBackground,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {OptionsContext} from '../../screens/LandingMapPage';
+import {ShopContext} from '../Shops/ShopPage';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
-  const context = useContext(OptionsContext);
+  const context = useContext(ShopContext);
 
   const showOptions = () => {
     context.setCurrItem(item);

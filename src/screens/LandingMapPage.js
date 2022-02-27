@@ -38,13 +38,11 @@ const screenWidth = Dimensions.get('window').width;
 export const OptionsContext = React.createContext();
 
 export default function LandingMapPage({navigation}) {
+  const setVisible = useContext(VisibleContext);
+  const defaultShopData = ShopsData[1];
   const bottomSheetRef = useRef(null);
   const [currRef, setCurrRef] = useState(bottomSheetRef.current);
-  const setVisible = useContext(VisibleContext);
   const [isShopIntro, setIsShopIntro] = useState(false);
-  const [optionsVisible, setOptionsVisible] = useState(false);
-  const [currItem, setCurrItem] = useState(null);
-  const defaultShopData = ShopsData[1];
   const [currShop, setCurrShop] = useState(defaultShopData);
 
   useFocusEffect(
@@ -53,7 +51,6 @@ export default function LandingMapPage({navigation}) {
 
       return () => {
         setVisible(false);
-        // Useful for cleanup functions
       };
     }, []),
   );
@@ -67,54 +64,44 @@ export default function LandingMapPage({navigation}) {
     }
   };
 
-  // const swipeDown = useCallback(() => {
-  //   console.log(bottomSheetRef)
-  //   if (isShopIntro && bottomSheetRef.current !== null){
-  //
-  //   }
-  // }, [isShopIntro])
-
   const setLOL = () => {
     setIsShopIntro(!isShopIntro);
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.map}>
-        <MapBackground />
-        <View style={{margin: '10%'}}>
-          <Button title={'Switch bottom sheet'} onPress={setLOL} />
-        </View>
+    <OptionsContext.Provider
+      value={{
+        currShop: currShop,
+        setCurrShop: setCurrShop,
+        isShopIntro: isShopIntro,
+        currRef: currRef,
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.map}>
+          <MapBackground />
+          <View style={{margin: '10%'}}>
+            <Button title={'Switch bottom sheet'} onPress={setLOL} />
+          </View>
 
-        <TextInput
-          style={{
-            borderRadius: 10,
-            margin: 10,
-            color: '#000',
-            borderColor: '#666',
-            backgroundColor: '#FFF',
-            borderWidth: 1,
-            height: screenHeight / 19,
-            width: screenWidth / 1.4,
-            paddingHorizontal: 10,
-            fontSize: 18,
-          }}
-          placeholder={'Search Location'}
-          placeholderTextColor={'#666'}
-        />
-      </View>
-      {isShopIntro ? (
-        <OptionsContext.Provider
-          value={{
-            optionsVisible: optionsVisible,
-            setOptionsVisible: setOptionsVisible,
-            setCurrItem: setCurrItem,
-            currShop: currShop,
-            setCurrShop: setCurrShop,
-            isShopIntro: isShopIntro,
-            currRef: currRef,
-          }}
-        >
+          <TextInput
+            style={{
+              borderRadius: 10,
+              margin: 10,
+              color: '#000',
+              borderColor: '#666',
+              backgroundColor: '#FFF',
+              borderWidth: 1,
+              height: screenHeight / 19,
+              width: screenWidth / 1.4,
+              paddingHorizontal: 10,
+              fontSize: 18,
+            }}
+            placeholder={'Search Location'}
+            placeholderTextColor={'#666'}
+          />
+        </View>
+        {isShopIntro ? (
           <ScrollBottomSheet
             componentType="FlatList"
             ref={bottomSheetRef}
@@ -123,48 +110,12 @@ export default function LandingMapPage({navigation}) {
             initialSnapIndex={1}
             enableOverScroll={false}
             renderHandle={() => (
-              <View>
-                <TouchableWithoutFeedback
-                  onPressIn={() => setOptionsVisible(false)}
-                >
-                  <View style={[styles.header1]}>
-                    <ShopPage navigation={navigation} shop={currShop} />
-                    {optionsVisible ? (
-                      <BlurView
-                        style={styles.absolute}
-                        blurType="dark"
-                        blurAmount={2}
-                        reducedTransparencyFallbackColor="white"
-                      />
-                    ) : null}
-                  </View>
-                </TouchableWithoutFeedback>
-                {optionsVisible ? (
-                  <OptionsPopUp
-                    data={CoffeeOptionsData}
-                    curr_price={currItem.price}
-                    product_name={currItem.name}
-                    renderer={renderers.renderOption}
-                  />
-                ) : null}
-              </View>
+              <ShopPage navigation={navigation} shop={currShop} />
             )}
             contentContainerStyle={styles.contentContainerStyle}
           />
-        </OptionsContext.Provider>
-      ) : null}
-      {isShopIntro === false ? (
-        <OptionsContext.Provider
-          value={{
-            optionsVisible: optionsVisible,
-            setOptionsVisible: setOptionsVisible,
-            setCurrItem: setCurrItem,
-            currShop: currShop,
-            setCurrShop: setCurrShop,
-            isShopIntro: isShopIntro,
-            bottomSheetRef: bottomSheetRef,
-          }}
-        >
+        ) : null}
+        {isShopIntro === false ? (
           <ScrollBottomSheet
             componentType="FlatList"
             snapPoints={['20%', '91.5%']}
@@ -178,9 +129,9 @@ export default function LandingMapPage({navigation}) {
             )}
             contentContainerStyle={styles.contentContainerStyle}
           />
-        </OptionsContext.Provider>
-      ) : null}
-    </View>
+        ) : null}
+      </View>
+    </OptionsContext.Provider>
   );
 }
 
@@ -225,13 +176,13 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-
-  absolute: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    borderRadius: 20,
-  },
+  //
+  // absolute: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   bottom: 0,
+  //   right: 0,
+  //   borderRadius: 20,
+  // },
 });
