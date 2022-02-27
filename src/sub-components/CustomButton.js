@@ -16,9 +16,10 @@ export default function CustomButton(props) {
     text,
     optionalNumber = null,
     width = screenWidth * 0.91,
+    style = null,
   } = props;
   return (
-    <View>
+    <View style={style}>
       <Animated.View style={{transform: [{scale}]}}>
         <TouchableOpacity
           style={[buttonStyles.outer, buttonStyles[priority], {width: width}]}

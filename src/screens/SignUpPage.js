@@ -55,74 +55,67 @@ const SignUpPage = () => {
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <View style={styles.safeSpace}>
-        <View style={styles.body}>
-          <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
-          <View style={styles.form}>
-            <View style={styles.name_container}>
-              <FormField
-                style={[
-                  styles.sub_name_container,
-                  styles.sub_name_container_left,
-                ]}
-                title={'First Name'}
-                placeholder={'John'}
-                setField={setFirstName}
-                type={'name'}
-              />
-              <FormField
-                style={[styles.sub_name_container]}
-                title={'Last Name'}
-                placeholder={'Doe'}
-                setField={setLastName}
-                type={'name'}
-              />
-            </View>
+      <View style={styles.container}>
+        <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
+        <View style={styles.formContainer}>
+          <View style={styles.namesContainer}>
             <FormField
-              style={styles.element}
-              title={'Email'}
-              placeholder={'johndoe@gmail.com'}
-              setField={setEmail}
-              type={'email'}
+              style={[
+                styles.sub_name_container,
+                styles.sub_name_container_left,
+              ]}
+              title={'First Name'}
+              placeholder={'John'}
+              setField={setFirstName}
+              type={'name'}
             />
             <FormField
-              style={styles.element}
-              title={'Password'}
-              setField={setPassword}
-              type={'password'}
-            />
-            <FormField
-              style={styles.element}
-              title={'Confirm Password'}
-              setField={setPasswordConfirmation}
-              type={'password'}
+              style={[styles.sub_name_container]}
+              title={'Last Name'}
+              placeholder={'Doe'}
+              setField={setLastName}
+              type={'name'}
             />
           </View>
+          <FormField
+            style={styles.element}
+            title={'Email'}
+            placeholder={'johndoe@gmail.com'}
+            setField={setEmail}
+            type={'email'}
+          />
+          <FormField
+            style={styles.element}
+            title={'Password'}
+            setField={setPassword}
+            type={'password'}
+          />
+          <FormField
+            style={styles.element}
+            title={'Confirm Password'}
+            setField={setPasswordConfirmation}
+            type={'password'}
+          />
+        </View>
 
-          <View style={styles.buttons_container}>
-            <View style={styles.button_container}>
-              <CustomButton
-                text={'Set Coffee Preferences'}
-                onPress={null}
-                priority={'primary'}
-              />
-            </View>
-            <View style={styles.button_container}>
-              <CustomButton
-                text={'Create Account'}
-                onPress={registerUser}
-                priority={'primary'}
-              />
-            </View>
-            <View>
-              <Text
-                style={[textStyles.bluePoppinsBody, styles.footer]}
-                onPress={switchToLogIn}
-              >
-                Already have an account? Log in here
-              </Text>
-            </View>
-          </View>
+        <View style={styles.buttonsContainer}>
+          <CustomButton
+            text={'Set Coffee Preferences'}
+            onPress={null}
+            priority={'primary'}
+            style={styles.button}
+          />
+          <CustomButton
+            text={'Create Account'}
+            onPress={registerUser}
+            priority={'primary'}
+            style={styles.button}
+          />
+          <Text
+            style={[textStyles.bluePoppinsBody, styles.hyperlink]}
+            onPress={switchToLogIn}>
+            Already have an account? Log in here
+          </Text>
         </View>
       </View>
     </View>
@@ -131,44 +124,24 @@ const SignUpPage = () => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    display: 'flex',
     flex: 1,
     backgroundColor: '#EDEBE7',
     paddingTop: getCushyPaddingTop(),
   },
-  safeSpace: {
+  container: {
     flex: 1,
-    backgroundColor: '#EDEBE7',
-    paddingTop:
-      Platform.OS === 'android'
-        ? getStatusBarHeight() / 3
-        : getStatusBarHeight(),
+    paddingHorizontal: '5%',
   },
-  body: {
+  formContainer: {
     flex: 1,
-    padding: '5%',
-  },
-  form: {
-    flex: 3,
-    paddingVertical: '5%',
-  },
-  footer: {
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-    textAlignVertical: 'bottom',
+    marginTop: 8,
+    borderWidth: 2,
   },
 
-  buttons_container: {
-    flex: 1,
-    alignContent: 'flex-end',
-  },
-  button_container: {
-    paddingVertical: '3%',
-  },
-
-  name_container: {
+  namesContainer: {
     flexDirection: 'row',
     display: 'flex',
-    justifyContent: 'space-between',
     paddingVertical: '2%',
   },
   sub_name_container: {
@@ -177,11 +150,19 @@ const styles = StyleSheet.create({
   sub_name_container_left: {
     marginRight: '5%',
   },
-  input: {
-    backgroundColor: '#F9F9F9',
-    width: '100%',
-    height: 37,
-    borderRadius: 5,
+
+  buttonsContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  button: {
+    marginVertical: '2%',
+  },
+  hyperlink: {
+    marginVertical: '2%',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    textAlignVertical: 'bottom',
   },
 });
 
