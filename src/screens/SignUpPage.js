@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
     marginTop: 8,
-    borderWidth: 2,
   },
 
   namesContainer: {
