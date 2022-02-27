@@ -1,12 +1,5 @@
-import {
-  FlatList,
-  View,
-  StyleSheet,
-  Pressable,
-  Text,
-  ImageBackground,
-} from 'react-native';
-import React, {useState} from 'react';
+import {View, StyleSheet, Text, ImageBackground} from 'react-native';
+import React from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 
 const OrderDetailsView = ({order}) => {
@@ -23,7 +16,8 @@ const OrderDetailsView = ({order}) => {
         </View>
         <View>
           <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
+          >
             {order.coffeeShopName}
           </Text>
           {getStatusAndDateComponent(order)}
@@ -32,9 +26,7 @@ const OrderDetailsView = ({order}) => {
           </Text>
         </View>
       </View>
-      <View style={styles.bottomComponent}>
-        {currentOrderStatusComponent}
-      </View>
+      <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
     </View>
   );
 };
@@ -61,7 +53,8 @@ const getStatusAndDateComponent = order => {
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}>
+        ]}
+      >
         {order.status} {dateAndTime}
       </Text>
     );
@@ -73,7 +66,8 @@ const getStatusAndDateComponent = order => {
           styles.textFlex,
           styles.finishedOrder,
           styles.cancelledOrder,
-        ]}>
+        ]}
+      >
         {order.status} {dateAndTime}
       </Text>
     );
@@ -103,11 +97,6 @@ const styles = StyleSheet.create({
   orderDetails: {
     display: 'flex',
     flexDirection: 'row',
-  },
-  orderPrice: {
-    position: 'absolute',
-    bottom: '2%',
-    right: '2%',
   },
   picture: {
     borderRadius: 5,

@@ -1,12 +1,5 @@
-import {
-  FlatList,
-  View,
-  StyleSheet,
-  Pressable,
-  Text,
-  ImageBackground,
-} from 'react-native';
-import React, {useState} from 'react';
+import {View, StyleSheet, Text} from 'react-native';
+import React from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';

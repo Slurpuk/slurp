@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Animated,
   Text,
@@ -40,7 +40,6 @@ const AnimatedCard = ({
     isExpanded ? shrinkHeight() : growHeight();
     //console.log('toggle height triggered');
   };
-
 
   const shrinkHeight = () => {
     setExpanded(!isExpanded);
@@ -88,17 +87,20 @@ const AnimatedCard = ({
             {hidableContent}
           </View>
         </AnimatedPressable>
-        <View style={[styles.topRightIcon, {transform: [{rotateZ: isExpanded ? '180deg' : '0deg'}]}]}>
+        <View
+          style={[
+            styles.topRightIcon,
+            {transform: [{rotateZ: isExpanded ? '180deg' : '0deg'}]},
+          ]}
+        >
           <Icon size={30} color="black" name="chevron-down" />
         </View>
 
         <View style={styles.absoluteBottomRight}>{bottomFixed}</View>
-
       </Animated.View>
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -106,19 +108,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-  },
-  fadingContainer: {
-    padding: 20,
-    backgroundColor: 'powderblue',
-  },
-  fadingText: {
-    fontSize: 28,
-  },
-  buttonRow: {
-    flexBasis: 100,
-    justifyContent: 'space-evenly',
-    marginVertical: 16,
-    color: 'black',
   },
 
   expandable: {

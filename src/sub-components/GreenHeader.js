@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import { getPerfectPadding } from '../../stylesheets/StyleFunctions';
 import WhiteArrowButton from './WhiteArrowButton';
 import textStyles from '../../stylesheets/textStyles';
 
@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#046D66',
     display: 'flex',
-    paddingTop: getStatusBarHeight(),
-    paddingBottom: '6%',
+    paddingTop: getPerfectPadding(),
+    paddingBottom: '4%',
     paddingHorizontal: '5%',
     alignItems: 'center',
   },
