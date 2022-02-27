@@ -27,7 +27,6 @@ const ShopPage = ({navigation, route}) => {
   const tempContext = useContext(OptionsContext);
   const context = route === undefined ? tempContext : route.params;
   const shop = context.currShop;
-  console.log(context);
   return (
     <View style={styles.container}>
       <View style={{maxHeight: '35%', minHeight: '30%', position: 'relative'}}>
@@ -57,11 +56,7 @@ const ShopPage = ({navigation, route}) => {
             style={styles.back_button}
             direction={context.isShopIntro ? 'down' : 'left'}
             navigation={navigation}
-            onPressAction={
-              context.bottomSheetRef.current === null
-                ? null
-                : context.bottomSheetRef.current.snapTo(1)
-            }
+            onPressAction={context.isShopIntro ? context.currRef : null}
           />
         </View>
       </View>

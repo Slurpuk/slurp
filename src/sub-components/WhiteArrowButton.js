@@ -24,19 +24,13 @@ const WhiteArrowButton = ({
   }
 
   function handleBackButtonClick() {
-    if (onPressAction != null) onPressAction();
-    else navigation.goBack();
+    if (onPressAction != null) {
+      onPressAction.snapTo(1);
+    } else {
+      console.log(onPressAction);
+      navigation.goBack();
+    }
   }
-  //
-  // useEffect(() => {
-  //   BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-  //   return () => {
-  //     BackHandler.removeEventListener(
-  //       'hardwareBackPress',
-  //       handleBackButtonClick,
-  //     );
-  //   };
-  // }, []);
 
   return (
     <Pressable

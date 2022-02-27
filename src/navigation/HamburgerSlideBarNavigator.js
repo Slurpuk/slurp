@@ -11,6 +11,7 @@ import ChangePasswordPage from '../screens/ChangePasswordPage';
 import LogInPage from '../screens/LogInPage';
 import {
   ChangeDetailsStackNavigator,
+  ChangePasswordStackNavigator,
   HomeStackNavigator,
   MainStackNavigator,
   PaymentAccountsNavigator,
@@ -34,14 +35,12 @@ function HamburgerSlideBarNavigator() {
           drawerPosition: 'left',
           header: () => <HamburgerButton navigation={navigation} />,
         })}
+        onNavigationStateChange={() => console.log('LOL')}
       >
-        <Drawer.Screen
-          name="Home"
-          children={() => <HomeStackNavigator setVisible={setVisible} />}
-        />
+        <Drawer.Screen name="Home" children={() => <HomeStackNavigator />} />
         <Drawer.Screen
           name="View order history"
-          children={() => <HomeStackNavigator setVisible={setVisible} />} //need to fix this page
+          children={() => <HomeStackNavigator />} //need to fix this page
         />
         <Drawer.Screen
           name="Payment accounts"
@@ -53,11 +52,11 @@ function HamburgerSlideBarNavigator() {
         />
         <Drawer.Screen
           name="Change password"
-          children={() => <ChangePasswordPage setVisible={setVisible} />} //need to fix this page
+          children={() => <ChangePasswordStackNavigator />}
         />
         <Drawer.Screen
           name="Logout the device"
-          children={() => <LogInPage setVisible={setVisible} />}
+          children={() => <LogInPage />}
         />
       </Drawer.Navigator>
     </VisibleContext.Provider>

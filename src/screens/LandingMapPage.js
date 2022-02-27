@@ -1,4 +1,10 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -21,6 +27,7 @@ import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
 import {BlurView} from '@react-native-community/blur';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -29,8 +36,10 @@ LogBox.ignoreLogs([
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 export const OptionsContext = React.createContext();
+
 export default function LandingMapPage({navigation}) {
   const bottomSheetRef = useRef(null);
+  const [currRef, setCurrRef] = useState(bottomSheetRef.current);
   const setVisible = useContext(VisibleContext);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [optionsVisible, setOptionsVisible] = useState(false);
@@ -38,13 +47,32 @@ export default function LandingMapPage({navigation}) {
   const defaultShopData = ShopsData[1];
   const [currShop, setCurrShop] = useState(defaultShopData);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setVisible(true);
+
+      return () => {
+        setVisible(false);
+        // Useful for cleanup functions
+      };
+    }, []),
+  );
+
   const updatePage = ({index}) => {
     if (index === 0) {
       setVisible(false);
+      setCurrRef(bottomSheetRef.current);
     } else {
       setVisible(true);
     }
   };
+
+  // const swipeDown = useCallback(() => {
+  //   console.log(bottomSheetRef)
+  //   if (isShopIntro && bottomSheetRef.current !== null){
+  //
+  //   }
+  // }, [isShopIntro])
 
   const setLOL = () => {
     setIsShopIntro(!isShopIntro);
@@ -84,7 +112,7 @@ export default function LandingMapPage({navigation}) {
             currShop: currShop,
             setCurrShop: setCurrShop,
             isShopIntro: isShopIntro,
-            bottomSheetRef: bottomSheetRef,
+            currRef: currRef,
           }}
         >
           <ScrollBottomSheet

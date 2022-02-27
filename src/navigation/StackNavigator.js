@@ -7,9 +7,10 @@ import ShopList from '../components/Shops/ShopList';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {TransitionPresets} from '@react-navigation/stack';
 import ShopPage from '../components/Shops/ShopPage';
+import ChangePasswordPage from '../screens/ChangePasswordPage';
 
 const HomeStack = createSharedElementStackNavigator();
-const HomeStackNavigator = ({setVisible}) => {
+const HomeStackNavigator = () => {
   return (
     <HomeStack.Navigator
       initialRouteName="Landing map"
@@ -17,10 +18,6 @@ const HomeStackNavigator = ({setVisible}) => {
         headerShown: false,
         useNativeDriver: true,
         gestureEnabled: false,
-        // transitionSpec: {
-        //   open: iosTransitionSpec,
-        //   close: iosTransitionSpec,
-        // },
       }}
     >
       <HomeStack.Screen name="Landing map" component={LandingMapPage} />
@@ -48,7 +45,7 @@ const PaymentAccountsNavigator = () => {
       }}
     >
       <PaymentAccountsStack.Screen
-        name="Payment accounts"
+        name="PaymentAccounts"
         component={PaymentCardsPage}
       />
     </PaymentAccountsStack.Navigator>
@@ -64,24 +61,27 @@ const ChangeDetailsStackNavigator = () => {
       }}
     >
       <ChangeDetailsStack.Screen
-        name="Change details"
+        name="ChangeDetails"
         component={UpdateDetailsPage}
       />
     </ChangeDetailsStack.Navigator>
   );
 };
-
-// export const iosTransitionSpec = {
-//   animation: 'spring',
-//   config: {
-//     stiffness: 1000,
-//     damping: 500,
-//     mass: 3,
-//     overshootClamping: true,
-//     restDisplacementThreshold: 10,
-//     restSpeedThreshold: 10,
-//   },
-// };
+const ChangePasswordStack = createNativeStackNavigator();
+const ChangePasswordStackNavigator = () => {
+  return (
+    <ChangePasswordStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <ChangePasswordStack.Screen
+        name="ChangePassword"
+        component={ChangePasswordPage}
+      />
+    </ChangePasswordStack.Navigator>
+  );
+};
 
 // const options = {
 //   headerBackTitleVisible: false,
@@ -98,4 +98,5 @@ export {
   HomeStackNavigator,
   ChangeDetailsStackNavigator,
   PaymentAccountsNavigator,
+  ChangePasswordStackNavigator,
 };
