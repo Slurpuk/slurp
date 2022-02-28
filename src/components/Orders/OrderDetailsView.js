@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 
 const OrderDetailsView = ({order}) => {
+  console.log(order.status)
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
   return (
     <View style={styles.container}>
@@ -24,7 +25,7 @@ const OrderDetailsView = ({order}) => {
         <View>
           <Text
             style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
-            {order.coffeeShopName}
+            {order.customerName}
           </Text>
           {getStatusAndDateComponent(order)}
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
@@ -43,10 +44,10 @@ const getItemsText = order => {
   let itemsComponent = '';
   if (order.items.length === 1) {
     let singleItem = order.items[0];
-    itemsComponent = singleItem.quantity + ' ' + singleItem.name;
+    itemsComponent = singleItem.amount + ' ' + singleItem.name;
   } else {
     let numberOfItems = 0;
-    order.items.forEach(item => (numberOfItems += item.quantity));
+    order.items.forEach(item => (numberOfItems += item.amount));
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
@@ -54,7 +55,7 @@ const getItemsText = order => {
 
 const getStatusAndDateComponent = order => {
   let dateAndTime = order.date + ' • ' + order.time;
-  if (order.status === 'Collected') {
+  if (order.status === 'collected') {
     return (
       <Text
         style={[
@@ -65,7 +66,7 @@ const getStatusAndDateComponent = order => {
         {order.status} {dateAndTime}
       </Text>
     );
-  } else if (order.status === 'Rejected' || order.status === 'Cancelled') {
+  } else if (order.status === 'rejected' || order.status === 'cancelled') {
     return (
       <Text
         style={[
@@ -87,11 +88,11 @@ const getStatusAndDateComponent = order => {
 };
 
 const getCurrentOrderStatusComponent = order => {
-  if (order.status === 'Pending') {
+  if (order.status === 'incoming') {
     return <Text style={textStyles.pendingBluePoppins}>Pending</Text>;
-  } else if (order.status === 'Accepted') {
+  } else if (order.status === 'accepted') {
     return <Text style={textStyles.pendingBluePoppins}>Accepted</Text>;
-  } else if (order.status === 'Ready') {
+  } else if (order.status === 'ready') {
     return <Text style={textStyles.readyGreenPoppins}>Ready to Collect</Text>;
   }
 };
