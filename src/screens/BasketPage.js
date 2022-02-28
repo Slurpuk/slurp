@@ -1,7 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
-import { firebase } from '@react-native-firebase/functions';
+import {firebase} from '@react-native-firebase/functions';
 import React, {useState} from 'react';
-
 
 import {
   StyleSheet,
@@ -61,60 +60,60 @@ const BasketPage = () => {
 
   function sendOrder() {
     firestore()
+      .collection('FakeOrder')
+      .add({
+        customerName: 'Shaun the sheep',
+        status: 'incoming',
+        total: total.toFixed(2),
+        items: Items.filter(item => item.amount !== 0),
+        key: 3,
+      })
+      .then(() => {
+        console.log('Order added!');
+      });
+
+    function sendOrder() {
+      firestore()
         .collection('FakeOrder')
         .add({
-          customerName: 'Shaun the sheep',
-          status: 'incoming',
-          total: total.toFixed(2),
-          items: Items.filter(item => item.amount !== 0),
-          key: 3,
+          name: 'Ada Lovelace',
+          type: 'incoming',
+          total: 30,
         })
         .then(() => {
           console.log('Order added!');
         });
-
-    function sendOrder() {
-      firestore()
-          .collection('FakeOrder')
-          .add({
-            name: 'Ada Lovelace',
-            type: 'incoming',
-            total: 30,
-          })
-          .then(() => {
-            console.log('Order added!');
-          });
     }
 
     return (
-        <View style={styles.basket}>
-          <View style={styles.header}>
-            <GreenHeader headerText={'ETEN & DRIKEN'}/>
-          </View>
-          <View style={styles.main_container}>
-            <BasketContents total={total} setTotal={setTotal} Items={Items}/>
-          </View>
-          <View style={styles.buttons}>
-            <CustomButton
-                priority="primary"
-                style={styles.button}
-                text={'Apple/Google pay'}
-            />
-          </View>
-          <View style={[styles.lastButton, styles.buttons]}>
-            <CustomButton
-                priority="primary"
-                style={styles.button}
-                text={'Checkout with card'}
-            />
-            <Pressable onPress={sendOrder}>
-              <Text>Send Order</Text>
-            </Pressable>
-          </View>
+      <View style={styles.basket}>
+        <View style={styles.header}>
+          <GreenHeader headerText={'ETEN & DRIKEN'} />
         </View>
+        <View style={styles.main_container}>
+          <BasketContents total={total} setTotal={setTotal} Items={Items} />
+        </View>
+        <View style={styles.buttons}>
+          <CustomButton
+            priority="primary"
+            style={styles.button}
+            text={'Apple/Google pay'}
+          />
+        </View>
+        <View style={[styles.lastButton, styles.buttons]}>
+          <CustomButton
+            priority="primary"
+            style={styles.button}
+            text={'Checkout with card'}
+          />
+          <Pressable onPress={sendOrder}>
+            <Text>Send Order</Text>
+          </Pressable>
+        </View>
+      </View>
     );
-  };
-}
+  }
+};
 
 const styles = StyleSheet.create({
   safe_header: {

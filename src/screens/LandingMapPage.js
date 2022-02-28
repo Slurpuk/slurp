@@ -13,23 +13,15 @@ import {
   Button,
   LogBox,
   TextInput,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
-import renderers from '../renderers';
 import ShopPage from '../components/Shops/ShopPage';
-import shopData from '../fake-data/ShopData';
-import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
-import firestore from "@react-native-firebase/firestore";
-import firebase from "@react-native-firebase/app";
-import ShopsData from '../fake-data/ShopsData';
+import firestore from '@react-native-firebase/firestore';
+import firebase from '@react-native-firebase/app';
 import ShopList from '../components/Shops/ShopList';
-import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
-import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
-import {BlurView} from '@react-native-community/blur';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -41,11 +33,11 @@ export const OptionsContext = React.createContext();
 
 export default function LandingMapPage({navigation}) {
   const setVisible = useContext(VisibleContext);
-  const defaultShopData = ShopsData[1];
+  const [shopsData, setShopsData] = useState([]);
   const bottomSheetRef = useRef(null);
   const [currRef, setCurrRef] = useState(bottomSheetRef.current);
   const [isShopIntro, setIsShopIntro] = useState(false);
-  const [currShop, setCurrShop] = useState(defaultShopData);
+  const [currShop, setCurrShop] = useState(shopsData[0]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -57,23 +49,22 @@ export default function LandingMapPage({navigation}) {
     }, []),
   );
 
-  const [ShopsData, setShopsData] = useState([]);
-
   useEffect(() => {
     const subscriber = firestore()
-        .collection('CoffeeShop')
-        .onSnapshot(querySnapshot => {
-          const shops = []
+      .collection('CoffeeShop')
+      .onSnapshot(querySnapshot => {
+        const shops = [];
 
-          querySnapshot.forEach(documentSnapshot => {
-            shops.push({
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
-            });
+        querySnapshot.forEach(documentSnapshot => {
+          shops.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
           });
-
-          setShopsData(shops);
         });
+
+        setShopsData(shops);
+        setCurrShop(shops[0]);
+      });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
@@ -99,6 +90,7 @@ export default function LandingMapPage({navigation}) {
         setCurrShop: setCurrShop,
         isShopIntro: isShopIntro,
         currRef: currRef,
+        shopsData: shopsData,
       }}
     >
       <View style={styles.container}>

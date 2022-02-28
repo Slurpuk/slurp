@@ -6,19 +6,18 @@ import {
   Dimensions,
   Pressable,
   Platform,
+  Image,
 } from 'react-native';
 import {SharedElement} from 'react-native-shared-element';
-import {useSharedValue, withDelay, withTiming} from 'react-native-reanimated';
 import {OptionsContext} from '../../screens/LandingMapPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 import textStyles from '../../../stylesheets/textStyles';
-import firebase from "@react-native-firebase/app";
-import storage from "@react-native-firebase/storage"
+import firebase from '@react-native-firebase/app';
+import storage from '@react-native-firebase/storage';
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(OptionsContext);
   const [cont, setContext] = useState(false);
   const visible = useContext(VisibleContext);
-  const opacity = useSharedValue(1);
 
   const shopPageDetails = () => {
     context.setCurrShop(shop);
@@ -45,15 +44,15 @@ const ShopCard = ({shop, navigation}) => {
 
       <SharedElement id={'shop.id'}>
         <Text style={[textStyles.headingOne, styles.cardHeading]}>
-          {shop.name}
+          {shop.Name}
         </Text>
       </SharedElement>
 
       <SharedElement id={'shop.id'}>
         <ShopDetailIcons
           style={styles.details}
-          likeness={shop.details.likeness}
-          timeToOrder={shop.details.queue}
+          likeness={shop.Likeness}
+          timeToOrder={shop.Queue}
         />
       </SharedElement>
     </Pressable>
@@ -97,7 +96,8 @@ const styles = StyleSheet.create({
   },
   cardImgs: {
     position: 'absolute',
-    width: '100%',
+    width: screenWidth,
+    height: screenWidth * 0.37,
     left: 0,
   },
 

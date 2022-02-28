@@ -43,7 +43,8 @@ const OrderPage = () => {
               height: 50,
               backgroundColor: '#E5E5E5',
             },
-          }}>
+          }}
+        >
           <Tab.Screen name="Current" component={CurrentOrders} />
           <Tab.Screen name="Past" component={PastOrders} />
         </Tab.Navigator>

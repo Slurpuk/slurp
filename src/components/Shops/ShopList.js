@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  Image,
   Platform,
   Pressable,
   StyleSheet,
@@ -8,11 +9,11 @@ import {
 } from 'react-native';
 import React, {useContext} from 'react';
 import ShopCard from './ShopCard';
-import ShopsData from '../../fake-data/ShopsData';
 import {OptionsContext} from '../../screens/LandingMapPage';
 
 const ShopList = ({navigation}) => {
-  const DATA = ShopsData;
+  const context = useContext(OptionsContext);
+  const DATA = context.shopsData;
   return (
     <View>
       <FlatList
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
   cardImgs: {
     position: 'absolute',
     width: '100%',
+    height: '50%',
     left: 0,
   },
 

@@ -1,5 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {
+  Dimensions,
   Image,
   StyleSheet,
   Text,
@@ -39,22 +40,22 @@ const ShopPage = ({navigation, route}) => {
             <SharedElement id={`shop.id}`}>
               <Image
                 style={styles.cardImgs}
-                source={shop.image_url}
+                source={{uri: shop.Image}}
                 resizeMode="cover"
               />
             </SharedElement>
 
             <SharedElement id={`shop.id`}>
               <Text style={[textStyles.headingOne, styles.cardHeading]}>
-                {shop.name}
+                {shop.Name}
               </Text>
             </SharedElement>
 
             <SharedElement id={`shop.id`}>
               <ShopDetailIcons
                 style={styles.details}
-                likeness={shop.details.likeness}
-                timeToOrder={shop.details.queue}
+                likeness={shop.Likeness}
+                timeToOrder={shop.Queue}
               />
             </SharedElement>
             <View>
@@ -92,7 +93,7 @@ const ShopPage = ({navigation, route}) => {
     </ShopContext.Provider>
   );
 };
-
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -110,7 +111,8 @@ const styles = StyleSheet.create({
   },
   cardImgs: {
     position: 'absolute',
-    width: '100%',
+    width: screenWidth,
+    height: screenWidth * 0.7,
     left: 0,
   },
   back_button: {
