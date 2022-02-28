@@ -1,4 +1,4 @@
-import React, {Component, useContext, useEffect, useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import ShopDetailIcons from './ShopDetailIcons';
 import {
   StyleSheet,
@@ -6,14 +6,14 @@ import {
   Dimensions,
   Pressable,
   Platform,
-  Image,
 } from 'react-native';
-import textStyles from '../../../stylesheets/textStyles';
 import {SharedElement} from 'react-native-shared-element';
 import {useSharedValue, withDelay, withTiming} from 'react-native-reanimated';
 import {OptionsContext} from '../../screens/LandingMapPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
-
+import textStyles from '../../../stylesheets/textStyles';
+import firebase from "@react-native-firebase/app";
+import storage from "@react-native-firebase/storage"
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(OptionsContext);
   const [cont, setContext] = useState(false);
@@ -38,7 +38,7 @@ const ShopCard = ({shop, navigation}) => {
       <SharedElement id={'shop.id}'}>
         <Image
           style={styles.cardImgs}
-          source={shop.image_url}
+          source={{uri: shop.Image}}
           resizeMode="cover"
         />
       </SharedElement>

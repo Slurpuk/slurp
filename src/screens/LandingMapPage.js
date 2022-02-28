@@ -21,6 +21,8 @@ import ShopPage from '../components/Shops/ShopPage';
 import shopData from '../fake-data/ShopData';
 import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
+import firestore from "@react-native-firebase/firestore";
+import firebase from "@react-native-firebase/app";
 import ShopsData from '../fake-data/ShopsData';
 import ShopList from '../components/Shops/ShopList';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
@@ -54,6 +56,28 @@ export default function LandingMapPage({navigation}) {
       };
     }, []),
   );
+
+  const [ShopsData, setShopsData] = useState([]);
+
+  useEffect(() => {
+    const subscriber = firestore()
+        .collection('CoffeeShop')
+        .onSnapshot(querySnapshot => {
+          const shops = []
+
+          querySnapshot.forEach(documentSnapshot => {
+            shops.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+            });
+          });
+
+          setShopsData(shops);
+        });
+
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
 
   const updatePage = ({index}) => {
     if (index === 0) {
