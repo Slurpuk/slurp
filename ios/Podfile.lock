@@ -759,6 +759,8 @@ PODS:
     - React-perflogger (= 0.67.3)
   - ReactNativeGetLocation (2.2.1):
     - React-Core
+  - RNCAsyncStorage (1.16.1):
+    - React-Core
   - RNCCheckbox (0.5.9):
     - React-Core
   - RNCMaskedView (0.1.11):
@@ -862,6 +864,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeGetLocation (from `../node_modules/react-native-get-location`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -974,6 +977,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeGetLocation:
     :path: "../node_modules/react-native-get-location"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCCheckbox:
     :path: "../node_modules/@react-native-community/checkbox"
   RNCMaskedView:
@@ -1059,6 +1064,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: af1946623656f9c5fd64ca6f36f3863516193446
   ReactCommon: 650e33cde4fb7d36781cd3143f5276da0abb2f96
   ReactNativeGetLocation: d6b15cb2a2023ab7703f756501bad86d3ecf6fea
+  RNCAsyncStorage: b49b4e38a1548d03b74b30e558a1d18465b94be7
   RNCCheckbox: 6369808337432cdbd5025d62ceced2480b4c51df
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNFBApp: 16bdf8b75b84631513da3d5f5e2520a436ec9b29
