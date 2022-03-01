@@ -15,4 +15,5 @@ import PaymentCardsPage from "./src/screens/PaymentCardsPage";
 import AddNewCardPage from "./src/screens/AddNewCardPage";
 import OrderPage from "./src/screens/OrderPage";
 
-AppRegistry.registerComponent(appName, () => OrderPage);
+
+AppRegistry.registerComponent(appName, () => LogInPage);
