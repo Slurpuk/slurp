@@ -41,8 +41,8 @@ export default function MapBackground() {
     });
 
   const tokyoRegion = {
-    latitude: 35.6762,
-    longitude: 139.6503,
+    latitude: 51.512772,
+    longitude: -0.117188,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
