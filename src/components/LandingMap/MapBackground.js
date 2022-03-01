@@ -42,7 +42,7 @@ export default function MapBackground() {
 
   const tokyoRegion = {
     latitude: 51.512772,
-    longitude: -0.117188,
+    longitude: -0.11718,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
