@@ -8,6 +8,7 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import {TransitionPresets} from '@react-navigation/stack';
 import ShopPage from '../components/Shops/ShopPage';
 import ChangePasswordPage from '../screens/ChangePasswordPage';
+import OrderPage from '../screens/OrderPage';
 
 const HomeStack = createSharedElementStackNavigator();
 const HomeStackNavigator = () => {
@@ -83,20 +84,23 @@ const ChangePasswordStackNavigator = () => {
   );
 };
 
-// const options = {
-//   headerBackTitleVisible: false,
-//   cardStyleInterpolator: ({current: {progress}}) => {
-//     return {
-//       cardStyle: {
-//         opacity: progress,
-//       },
-//     };
-//   },
-// };
+const OrderHistoryStack = createNativeStackNavigator();
+const OrderHistoryStackNavigator = () => {
+  return (
+    <OrderHistoryStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <OrderHistoryStack.Screen name="OrderHistory" component={OrderPage} />
+    </OrderHistoryStack.Navigator>
+  );
+};
 
 export {
   HomeStackNavigator,
   ChangeDetailsStackNavigator,
   PaymentAccountsNavigator,
   ChangePasswordStackNavigator,
+  OrderHistoryStackNavigator,
 };

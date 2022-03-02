@@ -9,6 +9,7 @@ import {
   ChangeDetailsStackNavigator,
   ChangePasswordStackNavigator,
   HomeStackNavigator,
+  OrderHistoryStackNavigator,
   PaymentAccountsNavigator,
 } from './StackNavigator';
 
@@ -30,12 +31,11 @@ function HamburgerSlideBarNavigator() {
           drawerPosition: 'left',
           header: () => <HamburgerButton navigation={navigation} />,
         })}
-        onNavigationStateChange={() => console.log('LOL')}
       >
         <Drawer.Screen name="Home" children={() => <HomeStackNavigator />} />
         <Drawer.Screen
           name="View order history"
-          children={() => <HomeStackNavigator />} //need to fix this page
+          children={() => <OrderHistoryStackNavigator />}
         />
         <Drawer.Screen
           name="Payment accounts"
