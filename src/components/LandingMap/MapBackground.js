@@ -29,32 +29,9 @@ export default function MapBackground() {
     setCurrentLatitude
   ] = useState(0);
 
-  const calculateDistance = () => {
+  const outputCurrentLocation = () => {
     console.log('This is my current latitude: '+currentLatitude)
     console.log('This is my current longitude: '+currentLongitude)
-    console.log('This is my bush house latitude: '+hardcodedMarker1.latitude)
-    console.log('This is my bush house longitude: '+hardcodedMarker1.longitude)
-    console.log('This is my shop latitude: '+hardcodedMarker2.latitude)
-    console.log('This is my shop longitude: '+hardcodedMarker2.latitude)
-
-    const manhattanDistance = Math.abs(hardcodedMarker1.latitude-hardcodedMarker2.latitude) + Math.abs(hardcodedMarker1.longitude-hardcodedMarker2.longitude);
-
-    console.log('(Manhattan) The places are '+manhattanDistance+' metres away')
-
-    const R = 6371e3; // metres
-    const latitude1 = hardcodedMarker1.latitude * Math.PI/180; // φ, λ in radians
-    const latitude2 = hardcodedMarker2.latitude * Math.PI/180;
-    const diffLat = (hardcodedMarker2.latitude-hardcodedMarker1.latitude) * Math.PI/180;
-    const diffLon = (hardcodedMarker2.longitude-hardcodedMarker1.longitude) * Math.PI/180;
-
-    const aa = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
-        Math.cos(latitude1) * Math.cos(latitude2) *
-        Math.sin(diffLon/2) * Math.sin(diffLon/2);
-    const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1-aa));
-
-    const distance = parseInt(R * cc); // in metresv
-
-    console.log('(Eucledian Second Method)The places are '+distance+' metres away')
   };
 
   const hardcodedMapArea = { //this corresponds to the bush house area
@@ -71,9 +48,16 @@ export default function MapBackground() {
     longitudeDelta: 0.01,
   };
 
-  const hardcodedMarker1={ //this corresponds to the bush house area
+  const bushHouse={ //this corresponds to the bush house area
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const ourPalace={ //this corresponds to the queen palace
+    latitude: 51.495741653990926,
+    longitude: -0.14553530781225651,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -115,6 +99,9 @@ export default function MapBackground() {
             getOneTimeLocation();
             subscribeLocationLocation();
           } else {
+            //set a default location for the user to explore the app
+            setCurrentLongitude(ourPalace.longitude);
+            setCurrentLatitude(ourPalace.latitude);
           }
         } catch (err) {
           console.warn(err);
@@ -188,11 +175,11 @@ export default function MapBackground() {
         />
       </MapView>
       <View>
-        <Pressable onPress={calculateDistance}>
+        <Pressable onPress={outputCurrentLocation}>
           <Text style={{fontFamily: 'Poppins-SemiBold',
             letterSpacing: 0.5,
             fontSize: 40,
-          backgroundColor:'red'}}>Calculate distance </Text>
+          backgroundColor:'red'}}>Output current location </Text>
         </Pressable>
       </View>
     </View>
