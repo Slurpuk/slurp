@@ -29,18 +29,6 @@ export default function MapBackground() {
     setCurrentLatitude
   ] = useState(0);
 
-  const outputCurrentLocation = () => {
-    console.log('This is my current latitude: '+currentLatitude)
-    console.log('This is my current longitude: '+currentLongitude)
-  };
-
-  const hardcodedMapArea = { //this corresponds to the bush house area
-    latitude: 51.5140310233705,
-    longitude: -0.1164075624320158,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
-
   const currentArea = {
     latitude: currentLatitude,
     longitude: currentLongitude,
@@ -48,23 +36,9 @@ export default function MapBackground() {
     longitudeDelta: 0.01,
   };
 
-  const bushHouse={ //this corresponds to the bush house area
-    latitude: 51.5140310233705,
-    longitude: -0.1164075624320158,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
-
   const ourPalace={ //this corresponds to the queen palace
     latitude: 51.495741653990926,
     longitude: -0.14553530781225651,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
-
-  const hardcodedMarker2={ //this corresponds to the bush house area
-    latitude: 51.51143534301982,
-    longitude: -0.11969058630179567,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -174,14 +148,6 @@ export default function MapBackground() {
           onPress={locationPress}
         />
       </MapView>
-      <View>
-        <Pressable onPress={outputCurrentLocation}>
-          <Text style={{fontFamily: 'Poppins-SemiBold',
-            letterSpacing: 0.5,
-            fontSize: 40,
-          backgroundColor:'red'}}>Output current location </Text>
-        </Pressable>
-      </View>
     </View>
   );
 }
