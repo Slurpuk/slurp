@@ -14,60 +14,67 @@ import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import GetLocation from 'react-native-get-location';
 import textStyles from "../../../stylesheets/textStyles";
-import CustomButton from "../../sub-components/CustomButton";
-
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export default function MapBackground() {
-  const [cLatitude, setcLatitude] = useState(0);
-  const [cLongitude, setcLongitude] = useState(0);
-  const [clatitudeDelta, setcLatitudeDelta] = useState(0);
-  const [clongitudeDelta, setcLongitudeDelta] = useState(0);
-  // const [coordinates, setCoordinates] = useState([0]);
-
-  // const coordinatesMaker = () => {
-  //
-  // }
+  const [
+    currentLongitude,
+    setCurrentLongitude
+  ] = useState(0);
+  const [
+    currentLatitude,
+    setCurrentLatitude
+  ] = useState(0);
+  const [
+    locationStatus,
+    setLocationStatus
+  ] = useState(0);
 
   const calculateDistance = () => {
-    console.log('This is my current latitude: '+cLatitude)
-    console.log('This is my current longitude: '+cLongitude)
-    console.log('This is my hardcoded latitude: '+currentArea.latitude)
-    console.log('This is my hardcoded longitude: '+currentArea.longitude)
+    console.log('This is my current latitude: '+currentLatitude)
+    console.log('This is my current longitude: '+currentLongitude)
+    console.log('This is my bush house latitude: '+hardcodedMarker1.latitude)
+    console.log('This is my bush house longitude: '+hardcodedMarker1.longitude)
+    console.log('This is my shop latitude: '+hardcodedMarker2.latitude)
+    console.log('This is my shop longitude: '+hardcodedMarker2.latitude)
+
+    const manhattanDistance = Math.abs(hardcodedMarker1.latitude-hardcodedMarker2.latitude) + Math.abs(hardcodedMarker1.longitude-hardcodedMarker2.longitude);
+
+    console.log('(Manhattan) The places are '+manhattanDistance+' metres away')
+
+    const R = 6371e3; // metres
+    const latitude1 = hardcodedMarker1.latitude * Math.PI/180; // φ, λ in radians
+    const latitude2 = hardcodedMarker2.latitude * Math.PI/180;
+    const diffLat = (hardcodedMarker2.latitude-hardcodedMarker1.latitude) * Math.PI/180;
+    const diffLon = (hardcodedMarker2.longitude-hardcodedMarker1.longitude) * Math.PI/180;
+
+    const aa = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
+        Math.cos(latitude1) * Math.cos(latitude2) *
+        Math.sin(diffLon/2) * Math.sin(diffLon/2);
+    const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1-aa));
+
+    const distance = parseInt(R * cc); // in metresv
+
+    console.log('(Eucledian Second Method)The places are '+distance+' metres away')
   };
 
-  /*GetLocation.getCurrentPosition({
-    enableHighAccuracy: true,
-    timeout: 15000,
-  })
-    .then(location => {
-      setcLatitude(location.latitude);
-      setcLongitude(location.longitude);
-    })
-    .catch(error => {
-      const {code, message} = error;
-      console.warn(code, message);
-    });*/
 
   Geolocation.getCurrentPosition(
       (position) => {
-        //getting the Longitude from the location json
         const currentLongitude =
             position.coords.longitude;
-
-        //getting the Latitude from the location json
         const currentLatitude =
             position.coords.latitude;
-        setcLatitude(currentLatitude);
-        setcLongitude(currentLongitude);
+        setCurrentLatitude(currentLatitude);
+        setCurrentLongitude(currentLongitude);
 
       }, (error) => alert(error.message), {
-        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+        enableHighAccuracy: true
       }
   );
 
-  const hardcodedMapArea = {
+  const hardcodedMapArea = { //this corresponds to the bush house area
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
     latitudeDelta: 0.01,
@@ -75,22 +82,29 @@ export default function MapBackground() {
   };
 
   const currentArea = {
-    latitude: cLatitude,
-    longitude: cLongitude,
+    latitude: currentLatitude,
+    longitude: currentLongitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
 
-  const hardcodedMarker={
+  const hardcodedMarker1={ //this corresponds to the bush house area
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
 
-  const currentLocationMarker = {
-    latitude: cLatitude,
-    longitude: cLongitude,
+  const hardcodedMarker2={ //this corresponds to the bush house area
+    latitude: 51.51143534301982,
+    longitude: -0.11969058630179567,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const currentLocationMarker = {//this corresponds rn to the current location but should be a shop marker
+    latitude: currentLatitude,
+    longitude: currentLongitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
