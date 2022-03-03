@@ -1,45 +1,60 @@
-import React, {Component} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import ShopDetailIcons from './ShopDetailIcons';
 import {
-  View,
   StyleSheet,
   Text,
   Dimensions,
-  TouchableOpacity,
   Pressable,
-  ImageBackground,
   Platform,
+  Image,
 } from 'react-native';
+import {SharedElement} from 'react-native-shared-element';
+import {OptionsContext} from '../../screens/LandingMapPage';
+import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 import textStyles from '../../../stylesheets/textStyles';
-import firebase from "@react-native-firebase/app";
-import {useState} from 'react';
-import storage from "@react-native-firebase/storage"
+import firebase from '@react-native-firebase/app';
+import storage from '@react-native-firebase/storage';
+const ShopCard = ({shop, navigation}) => {
+  const context = useContext(OptionsContext);
+  const [cont, setContext] = useState(false);
+  const visible = useContext(VisibleContext);
 
-const ShopCard = ({name, likeness, queue, image}) => {
+  const shopPageDetails = () => {
+    context.setCurrShop(shop);
+    setContext(true);
+  };
+
+  useEffect(() => {
+    if (cont) {
+      visible(false);
+      setContext(false);
+      navigation.navigate('Shop page', context);
+    }
+  }, [cont]);
 
   return (
-    <Pressable style={styles.item}>
-      <ImageBackground
-        source={{uri: image}}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <View style={styles.details}>
-          <Text
-            style={[
-              textStyles.headingOne,
-              {
-                marginBottom: '3%',
-              },
-            ]}
-          >
-            {name}
-          </Text>
-          <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
-        </View>
-      </ImageBackground>
+    <Pressable style={styles.item} onPress={shopPageDetails}>
+      <SharedElement id={'shop.id}'}>
+        <Image
+          style={styles.cardImgs}
+          source={{uri: shop.Image}}
+          resizeMode="cover"
+        />
+      </SharedElement>
+
+      <SharedElement id={'shop.id'}>
+        <Text style={[textStyles.headingOne, styles.cardHeading]}>
+          {shop.Name}
+        </Text>
+      </SharedElement>
+
+      <SharedElement id={'shop.id'}>
+        <ShopDetailIcons
+          style={styles.details}
+          likeness={shop.Likeness}
+          timeToOrder={shop.Queue}
+        />
+      </SharedElement>
     </Pressable>
   );
 };
@@ -48,12 +63,13 @@ const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   item: {
-    maxWidth: screenWidth,
+    overflow: 'hidden',
+    width: screenWidth,
     height: screenWidth * 0.37,
     marginVertical: '1.8%',
-    // marginHorizontal: '2%',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+
     flex: 1,
     position: 'relative',
     ...Platform.select({
@@ -77,6 +93,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '700',
     paddingBottom: 10,
+  },
+  cardImgs: {
+    position: 'absolute',
+    width: screenWidth,
+    height: screenWidth * 0.37,
+    left: 0,
   },
 
   details: {

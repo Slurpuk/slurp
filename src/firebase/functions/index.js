@@ -9,9 +9,9 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 });
 
 exports.myFunction = functions.firestore
-    .document('FakeOrder/{status}')
-    .onUpdate((change, context) => {
-      /**
-       * inform the user of a change in their current orders' status
-       */
-    });
+  .document('FakeOrder/{status}')
+  .onUpdate((change, context) => {
+    /**
+     * inform the user of a change in their current orders' status
+     */
+  });
