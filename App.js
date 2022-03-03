@@ -1,12 +1,10 @@
+import 'react-native-gesture-handler';
 import React, {useState} from 'react';
-import {BottomSheet} from 'react-native-bottomsheet-reanimated';
-import type {Node} from 'react';
-//import Inputs from 'DesignMap/src/screens/inputs.js'
 import {StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import SignUpPage from './src/screens/SignUpPage';
-import LoginPage from './src/screens/LogInPage';
+import {NavigationContainer} from '@react-navigation/native';
+import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 
 export default function App() {
   const usersCollection = firestore().collection('Users');
@@ -36,8 +34,11 @@ export default function App() {
     //     onPress={registerUser}
     //   />
     // </View>
-    <SignUpPage />
     //  <LoginPage></LoginPage>
+
+    <NavigationContainer>
+      <HamburgerSlideBarNavigator />
+    </NavigationContainer>
   );
 }
 

@@ -10,7 +10,6 @@ import React, {useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 
 const OrderDetailsView = ({order}) => {
-  console.log(order.status)
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
   return (
     <View style={styles.container}>
@@ -24,8 +23,9 @@ const OrderDetailsView = ({order}) => {
         </View>
         <View>
           <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
-            {order.customerName}
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
+          >
+            {order.coffeeShopName}
           </Text>
           {getStatusAndDateComponent(order)}
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
@@ -33,9 +33,7 @@ const OrderDetailsView = ({order}) => {
           </Text>
         </View>
       </View>
-      <View style={styles.bottomComponent}>
-        {currentOrderStatusComponent}
-      </View>
+      <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
     </View>
   );
 };
@@ -44,10 +42,10 @@ const getItemsText = order => {
   let itemsComponent = '';
   if (order.items.length === 1) {
     let singleItem = order.items[0];
-    itemsComponent = singleItem.amount + ' ' + singleItem.name;
+    itemsComponent = singleItem.quantity + ' ' + singleItem.name;
   } else {
     let numberOfItems = 0;
-    order.items.forEach(item => (numberOfItems += item.amount));
+    order.items.forEach(item => (numberOfItems += item.quantity));
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
@@ -55,18 +53,19 @@ const getItemsText = order => {
 
 const getStatusAndDateComponent = order => {
   let dateAndTime = order.date + ' • ' + order.time;
-  if (order.status === 'collected') {
+  if (order.status === 'Collected') {
     return (
       <Text
         style={[
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}>
+        ]}
+      >
         {order.status} {dateAndTime}
       </Text>
     );
-  } else if (order.status === 'rejected' || order.status === 'cancelled') {
+  } else if (order.status === 'Rejected' || order.status === 'Cancelled') {
     return (
       <Text
         style={[
@@ -74,7 +73,8 @@ const getStatusAndDateComponent = order => {
           styles.textFlex,
           styles.finishedOrder,
           styles.cancelledOrder,
-        ]}>
+        ]}
+      >
         {order.status} {dateAndTime}
       </Text>
     );
@@ -88,11 +88,11 @@ const getStatusAndDateComponent = order => {
 };
 
 const getCurrentOrderStatusComponent = order => {
-  if (order.status === 'incoming') {
+  if (order.status === 'Pending') {
     return <Text style={textStyles.pendingBluePoppins}>Pending</Text>;
-  } else if (order.status === 'accepted') {
+  } else if (order.status === 'Accepted') {
     return <Text style={textStyles.pendingBluePoppins}>Accepted</Text>;
-  } else if (order.status === 'ready') {
+  } else if (order.status === 'Ready') {
     return <Text style={textStyles.readyGreenPoppins}>Ready to Collect</Text>;
   }
 };
