@@ -8,7 +8,9 @@ import {
   StyleSheet,
   Text,
   View,
+  PermissionsAndroid,
 } from 'react-native';
+//import Geolocation from '@react-native-community/geolocation';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
@@ -16,7 +18,7 @@ import GetLocation from 'react-native-get-location';
 import textStyles from "../../../stylesheets/textStyles";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-
+let watchID;
 export default function MapBackground() {
   const [
     currentLongitude,
@@ -25,10 +27,6 @@ export default function MapBackground() {
   const [
     currentLatitude,
     setCurrentLatitude
-  ] = useState(0);
-  const [
-    locationStatus,
-    setLocationStatus
   ] = useState(0);
 
   const calculateDistance = () => {
@@ -58,21 +56,6 @@ export default function MapBackground() {
 
     console.log('(Eucledian Second Method)The places are '+distance+' metres away')
   };
-
-
-  Geolocation.getCurrentPosition(
-      (position) => {
-        const currentLongitude =
-            position.coords.longitude;
-        const currentLatitude =
-            position.coords.latitude;
-        setCurrentLatitude(currentLatitude);
-        setCurrentLongitude(currentLongitude);
-
-      }, (error) => alert(error.message), {
-        enableHighAccuracy: true
-      }
-  );
 
   const hardcodedMapArea = { //this corresponds to the bush house area
     latitude: 51.5140310233705,
@@ -111,6 +94,82 @@ export default function MapBackground() {
 
   const locationPress = () => {
     console.log('Function will be hre!!');
+  };
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === 'ios') {
+        getOneTimeLocation();
+        subscribeLocationLocation();
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+              {
+                title: 'Location Access Required',
+                message: 'This App needs to Access your location',
+              },
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            //To Check, If Permission is granted
+            getOneTimeLocation();
+            subscribeLocationLocation();
+          } else {
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    };
+    requestLocationPermission();
+    return () => {
+      Geolocation.clearWatch(watchID);
+    };
+  }, []);
+
+  const getOneTimeLocation = () => {
+    Geolocation.getCurrentPosition(
+        //Will give you the current location
+        (position) => {
+          const currentLongitude =
+              position.coords.longitude;
+          const currentLatitude =
+              position.coords.latitude;
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+          //Setting Longitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 30000,
+          maximumAge: 1000
+        },
+    );
+  };
+
+  const subscribeLocationLocation = () => {
+    watchID = Geolocation.watchPosition(
+        (position) => {
+          //Will give you the location on location change
+          const currentLongitude =
+            position.coords.longitude;
+          const currentLatitude =
+              position.coords.latitude;
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+          //Setting Latitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 1000
+        },
+    );
   };
 
   return (
