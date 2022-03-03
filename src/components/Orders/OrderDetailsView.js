@@ -23,7 +23,8 @@ const OrderDetailsView = ({order}) => {
         </View>
         <View>
           <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
+          >
             {order.coffeeShopName}
           </Text>
           {getStatusAndDateComponent(order)}
@@ -32,9 +33,7 @@ const OrderDetailsView = ({order}) => {
           </Text>
         </View>
       </View>
-      <View style={styles.bottomComponent}>
-        {currentOrderStatusComponent}
-      </View>
+      <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
     </View>
   );
 };
@@ -61,7 +60,8 @@ const getStatusAndDateComponent = order => {
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}>
+        ]}
+      >
         {order.status} {dateAndTime}
       </Text>
     );
@@ -73,7 +73,8 @@ const getStatusAndDateComponent = order => {
           styles.textFlex,
           styles.finishedOrder,
           styles.cancelledOrder,
-        ]}>
+        ]}
+      >
         {order.status} {dateAndTime}
       </Text>
     );

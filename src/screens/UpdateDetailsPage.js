@@ -17,7 +17,7 @@ const changeUserDetails = () => {
   changeDetailsConfirm();
 };
 
-const UpdateDetailsPage = () => {
+const UpdateDetailsPage = ({navigation}) => {
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -25,7 +25,7 @@ const UpdateDetailsPage = () => {
 
   return (
     <View>
-      <GreenHeader headerText={'CHANGE DETAILS'} />
+      <GreenHeader headerText={'CHANGE DETAILS'} navigation={navigation} />
       <View style={styles.form}>
         <View style={styles.DetailsContainer}>
           <FormField
