@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 
 import {
+  Alert,
   Button,
   Dimensions,
-  Platform,
+  Platform, Pressable,
   StyleSheet,
   Text,
   View,
@@ -12,6 +13,8 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import GetLocation from 'react-native-get-location';
+import textStyles from "../../../stylesheets/textStyles";
+import CustomButton from "../../sub-components/CustomButton";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -27,6 +30,13 @@ export default function MapBackground() {
   //
   // }
 
+  const calculateDistance = () => {
+      console.log('Hello')
+    console.log(clatitude)
+    console.log(clongitude)
+    console.log(GetLocation.getCurrentPosition())
+  };
+
   GetLocation.getCurrentPosition({
     enableHighAccuracy: true,
     timeout: 15000,
@@ -40,14 +50,21 @@ export default function MapBackground() {
       console.warn(code, message);
     });
 
-  const tokyoRegion = {
-    latitude: 35.6762,
-    longitude: 139.6503,
+  const bushHouse = {
+    latitude: 51.5140310233705,
+    longitude: -0.1164075624320158,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
 
-  const currentLocation = {
+  const hardcodedMarker={
+    latitude: 51.5140310233705,
+    longitude: -0.1164075624320158,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const currentLocationMarker = {
     latitude: clatitude,
     longitude: clongitude,
     latitudeDelta: 0.01,
@@ -63,16 +80,24 @@ export default function MapBackground() {
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={tokyoRegion}
+        region={bushHouse}
       >
         <MapView.Marker
-          coordinate={currentLocation}
+          coordinate={currentLocationMarker}
           pinColor={'#fefefe'}
           title={'hey there fellas'}
           description={'Test market'}
           onPress={locationPress}
         />
       </MapView>
+      <View>
+        <Pressable onPress={calculateDistance}>
+          <Text style={{fontFamily: 'Poppins-SemiBold',
+            letterSpacing: 0.5,
+            fontSize: 40,
+          backgroundColor:'red'}}>Calculate distance </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
