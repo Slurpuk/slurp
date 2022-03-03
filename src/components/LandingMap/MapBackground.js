@@ -20,8 +20,8 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export default function MapBackground() {
-  const [clatitude, setcLatitude] = useState(0);
-  const [clongitude, setcLongitude] = useState(0);
+  const [cLatitude, setcLatitude] = useState(0);
+  const [cLongitude, setcLongitude] = useState(0);
   const [clatitudeDelta, setcLatitudeDelta] = useState(0);
   const [clongitudeDelta, setcLongitudeDelta] = useState(0);
   // const [coordinates, setCoordinates] = useState([0]);
@@ -31,13 +31,13 @@ export default function MapBackground() {
   // }
 
   const calculateDistance = () => {
-      console.log('Hello')
-    console.log(clatitude)
-    console.log(clongitude)
-    console.log(GetLocation.getCurrentPosition())
+    console.log('This is my current latitude: '+cLatitude)
+    console.log('This is my current longitude: '+cLongitude)
+    console.log('This is my hardcoded latitude: '+currentArea.latitude)
+    console.log('This is my hardcoded longitude: '+currentArea.longitude)
   };
 
-  GetLocation.getCurrentPosition({
+  /*GetLocation.getCurrentPosition({
     enableHighAccuracy: true,
     timeout: 15000,
   })
@@ -48,11 +48,35 @@ export default function MapBackground() {
     .catch(error => {
       const {code, message} = error;
       console.warn(code, message);
-    });
+    });*/
 
-  const bushHouse = {
+  Geolocation.getCurrentPosition(
+      (position) => {
+        //getting the Longitude from the location json
+        const currentLongitude =
+            position.coords.longitude;
+
+        //getting the Latitude from the location json
+        const currentLatitude =
+            position.coords.latitude;
+        setcLatitude(currentLatitude);
+        setcLongitude(currentLongitude);
+
+      }, (error) => alert(error.message), {
+        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+      }
+  );
+
+  const hardcodedMapArea = {
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const currentArea = {
+    latitude: cLatitude,
+    longitude: cLongitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -65,14 +89,14 @@ export default function MapBackground() {
   };
 
   const currentLocationMarker = {
-    latitude: clatitude,
-    longitude: clongitude,
+    latitude: cLatitude,
+    longitude: cLongitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
 
   const locationPress = () => {
-    console.log('Function will be here!!');
+    console.log('Function will be hre!!');
   };
 
   return (
@@ -80,7 +104,7 @@ export default function MapBackground() {
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={bushHouse}
+        region={currentArea}
       >
         <MapView.Marker
           coordinate={currentLocationMarker}
