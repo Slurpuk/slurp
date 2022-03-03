@@ -1,12 +1,7 @@
 import React from 'react';
 import Option from './components/ShopMenu/Option';
 import MenuSection from './components/ShopMenu/MenuSection';
-import ItemCard from './components/ShopMenu/ItemCard';
-import ShopCard from './components/Shops/ShopCard';
-import ShopList from './components/Shops/ShopList';
-import ShopIntro from './components/Shops/ShopIntro';
-import Menu from './components/ShopMenu/Menu';
-import ItemsData from './fake-data/ItemsData';
+import MenuItem from './components/ShopMenu/MenuItem';
 
 const renderOption = ({item, updateOptions}) => (
   <Option
@@ -23,25 +18,13 @@ const renderMenuSection = ({item, renderItem}) => (
   <MenuSection section={item} renderItem={renderItem} />
 );
 
-const renderItemCard = ({item}) => <ItemCard item={item} />;
-
-const renderShopCard = ({item}) => (
-  <ShopCard
-    name={item.Name}
-    likeness={item.Likeness}
-    queue={item.Queue}
-    image={item.Image}
-  />
-);
-const renderShopList = ({item, renderItem}) => (
-  <ShopList DATA={item.data} renderItem={renderItem} />
-);
+const renderMenuItem = ({item}) => <MenuItem item={item} />;
 
 export default {
   renderOption,
   renderMenuSection,
-  renderItemCard,
-  renderShopCard,
-  renderShopList,
+  renderMenuItem,
+  // renderShopCard,
+  // renderShopList,
   renderMenu,
 };

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,15 +13,18 @@ import PaymentCardsData from '../fake-data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
+import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
+import {useIsFocused} from '@react-navigation/native';
 
 export const PaymentCardsContext = React.createContext();
 
-const PaymentCardsPage = () => {
+const PaymentCardsPage = ({navigation}) => {
   const [cards, setCards] = useState(PaymentCardsData);
+  const setVisible = useContext(VisibleContext);
 
   return (
     <SafeAreaView style={styles.page}>
-      <GreenHeader headerText={'PAYMENT CARDS'} />
+      <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
       <PaymentCardsContext.Provider
         value={{
           cards: cards,

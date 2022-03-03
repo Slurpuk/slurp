@@ -10,7 +10,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 
 const Tab = createMaterialTopTabNavigator();
 
-const OrderPage = () => {
+const OrderPage = ({navigation}) => {
   return (
     <View style={styles.container}>
       <GreenHeader headerText={'ORDERS'} />
@@ -41,7 +41,8 @@ const OrderPage = () => {
               borderWidth: 0.5,
               borderColor: '#919191',
             },
-          }}>
+          }}
+        >
           <Tab.Screen name="Current" component={CurrentOrders} />
           <Tab.Screen name="Past" component={PastOrders} />
         </Tab.Navigator>

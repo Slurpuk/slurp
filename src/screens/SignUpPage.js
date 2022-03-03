@@ -12,37 +12,11 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
 import CustomButton from '../sub-components/CustomButton';
-import {
-  getCushyPaddingTop,
-  getPerfectPadding,
-} from '../../stylesheets/StyleFunctions';
 
 // Redirect the user to the Log In Portal
-const switchToLogIn = () => {
-  Alert.alert(
-    'FUTURE NAVIGATION FEATURE',
-    'One day, clicking this will take you to the log in portal',
-    [
-      {
-        text: ':)',
-      },
-    ],
-  );
-};
 
-// Display a confirmation message to the user
-const registeredMessage = () => {
-  Alert.alert('Congratulations', 'Registered Successfully', [
-    {
-      text: 'OK',
-    },
-  ]);
-};
-
-// Register the user to the database after checking their credentials
-const registerUser = () => {
-  registeredMessage();
-};
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const SignUpPage = () => {
   // const usersCollection = firestore().collection('Users');
@@ -51,6 +25,84 @@ const SignUpPage = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [password_confirmation, setPasswordConfirmation] = useState();
+
+  const resetFields = () => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setPasswordConfirmation('');
+  };
+
+  const resetFLEFields = () => {
+    setPassword('');
+    setPasswordConfirmation('');
+  };
+
+  const switchToLogIn = () => {
+    Alert.alert(
+        'FUTURE NAVIGATION FEATURE',
+        'One day, clicking this will take you to the log in portal',
+        [
+          {
+            text: ':)',
+          },
+        ],
+    );
+  };
+
+  const warningPassword = () => {
+    Alert.alert('Warning!', 'Password should be same as password confirmation!', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
+
+  const warningUserAlreadyExists = () => {
+    Alert.alert('Warning!', 'This email already exists', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
+
+
+// Display a confirmation message to the user
+  const registeredMessage = () => {
+    Alert.alert('Congratulations', 'Registered Successfully', [
+      {
+        text: 'OK',
+      },
+    ]);
+    resetFields();
+  };
+
+
+
+// Register the user to the database after checking their credentials
+  const registerUser = () => {
+    if(password == password_confirmation) {
+      auth().createUserWithEmailAndPassword(email, password)
+          .then((re) => {
+            console.log(re);
+            console.log(x);
+          })
+          .catch((re) => {
+            console.log(re);
+          })
+          .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+              warningUserAlreadyExists()
+            }})
+      registeredMessage(); }
+
+    else{
+      warningPassword();
+      resetFLEFields();
+    }
+  };
+
 
   return (
     <View style={styles.wrapper}>
@@ -166,3 +218,4 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpPage;
+
