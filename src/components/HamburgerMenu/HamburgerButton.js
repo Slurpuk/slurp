@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     paddingTop: '0.5%',
     paddingLeft: '2.5%',
-    height: 0.055 * screenHeight,
+    height: 44,
     marginRight: '3%',
   },
 });
