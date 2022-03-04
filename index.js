@@ -7,4 +7,4 @@ import {name as appName} from './app.json';
 import App from './App';
 import MapBackground from "./src/components/LandingMap/MapBackground";
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => MapBackground);

@@ -32,7 +32,7 @@ const CollapsableOrder = ({order}) => {
 
 const getTotalPrice = order => {
   let total = 0;
-  order.items.forEach(item => (total += item.amount * item.price));
+  order.items.forEach(item => (total += item.quantity * item.price));
   return total;
 };
 
