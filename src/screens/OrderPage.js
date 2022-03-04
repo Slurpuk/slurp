@@ -5,7 +5,6 @@ import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
 import pastOrders from '../fake-data/PastOrderData';
 import currentOrders from '../fake-data/CurrentOrderData';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator();
@@ -13,40 +12,40 @@ const Tab = createMaterialTopTabNavigator();
 const OrderPage = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <GreenHeader headerText={'ORDERS'} />
-        <Tab.Navigator
-          style={styles.navigatorContent}
-          screenOptions={{
-            tabBarLabelStyle: {
-              fontSize: 18,
-              fontFamily: 'Poppins-SemiBold',
-              letterSpacing: 0.3,
-              textTransform: 'capitalize',
-              transform: [{translateY: -7}],
-            },
-            tabBarIndicatorStyle: {
-              top: 0,
-              height: null,
-              backgroundColor: '#046D66',
-              borderRadius: 13,
-            },
-            tabBarActiveTintColor: '#FFFFFF',
-            tabBarInactiveTintColor: '#6D6D6D',
-            tabBarStyle: {
-              borderRadius: 13,
-              height: 42,
-              backgroundColor: '#E5E5E5',
-              elevation: 0,
-              borderColor: '#919191',
-            },
-          }}>
-          <Tab.Screen
-            name="Current"
-            component={CurrentOrders}
-            style={styles.mainContainer}
-          />
-          <Tab.Screen name="Past" component={PastOrders} />
-        </Tab.Navigator>
+      <GreenHeader headerText={'ORDERS'} navigation={navigation} />
+      <Tab.Navigator
+        style={styles.navigatorContent}
+        screenOptions={{
+          tabBarLabelStyle: {
+            fontSize: 18,
+            fontFamily: 'Poppins-SemiBold',
+            letterSpacing: 0.3,
+            textTransform: 'capitalize',
+            transform: [{translateY: -7}],
+          },
+          tabBarIndicatorStyle: {
+            top: 0,
+            height: null,
+            backgroundColor: '#046D66',
+            borderRadius: 13,
+          },
+          tabBarActiveTintColor: '#FFFFFF',
+          tabBarInactiveTintColor: '#6D6D6D',
+          tabBarStyle: {
+            borderRadius: 13,
+            height: 42,
+            backgroundColor: '#E5E5E5',
+            elevation: 0,
+            borderColor: '#919191',
+          },
+        }}>
+        <Tab.Screen
+          name="Current"
+          component={CurrentOrders}
+          style={styles.mainContainer}
+        />
+        <Tab.Screen name="Past" component={PastOrders} />
+      </Tab.Navigator>
     </View>
   );
 };
