@@ -18,7 +18,7 @@ const HamburgerButton = ({navigation}) => {
           color={'#046D66'}
           underlayColor={'transparent'}
           backgroundColor={'transparent'}
-          size={25}
+          size={screenHeight * 0.03}
         />
       </TouchableHighlight>
     </View>
