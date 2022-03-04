@@ -23,7 +23,7 @@ const PaymentCardsPage = ({navigation}) => {
   const setVisible = useContext(VisibleContext);
 
   return (
-    <SafeAreaView style={styles.page}>
+    <View style={styles.page}>
       <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
       <PaymentCardsContext.Provider
         value={{
@@ -40,7 +40,7 @@ const PaymentCardsPage = ({navigation}) => {
       <View style={styles.button}>
         <CustomButton text={'Add New Payment Card'} priority={'secondary'} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
