@@ -37,27 +37,19 @@ const ShopPage = ({navigation, route}) => {
           <View
             style={{maxHeight: '35%', minHeight: '30%', position: 'relative'}}
           >
-            <SharedElement id={`shop.id}`}>
-              <Image
-                style={styles.cardImgs}
-                source={{uri: shop.Image}}
-                resizeMode="cover"
-              />
-            </SharedElement>
-
-            <SharedElement id={`shop.id`}>
-              <Text style={[textStyles.headingOne, styles.cardHeading]}>
-                {shop.Name}
-              </Text>
-            </SharedElement>
-
-            <SharedElement id={`shop.id`}>
-              <ShopDetailIcons
-                style={styles.details}
-                likeness={shop.Likeness}
-                timeToOrder={shop.Queue}
-              />
-            </SharedElement>
+            <Image
+              style={styles.cardImgs}
+              source={{uri: shop.Image}}
+              resizeMode="cover"
+            />
+            <Text style={[textStyles.headingOne, styles.cardHeading]}>
+              {shop.Name}
+            </Text>
+            <ShopDetailIcons
+              style={styles.details}
+              likeness={shop.Likeness}
+              timeToOrder={shop.Queue}
+            />
             <View>
               <WhiteArrowButton
                 style={styles.back_button}

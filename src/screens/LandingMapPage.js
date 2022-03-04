@@ -17,8 +17,8 @@ import {
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopPage from '../components/Shops/ShopPage';
 import MapBackground from '../components/LandingMap/MapBackground';
-import firestore from '@react-native-firebase/firestore';
 import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
 import ShopList from '../components/Shops/ShopList';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
@@ -134,7 +134,7 @@ export default function LandingMapPage({navigation}) {
         {isShopIntro === false ? (
           <ScrollBottomSheet
             componentType="FlatList"
-            snapPoints={['20%', '91.5%']}
+            snapPoints={['20%', '90.7%']}
             initialSnapIndex={1}
             renderHandle={() => (
               <View style={styles.header2}>
@@ -177,14 +177,14 @@ const styles = StyleSheet.create({
   },
   panelHandle: {
     width: '10%',
-    height: '7%',
+    height: '1%',
     backgroundColor: 'green',
     borderRadius: 4,
     position: 'absolute',
-    top: '15%',
+    top: '2%',
   },
   headerText: {
-    padding: '2%',
+    padding: '4%',
     fontWeight: 'bold',
     fontSize: 25,
     color: 'black',
@@ -192,13 +192,4 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  //
-  // absolute: {
-  //   position: 'absolute',
-  //   top: 0,
-  //   left: 0,
-  //   bottom: 0,
-  //   right: 0,
-  //   borderRadius: 20,
-  // },
 });
