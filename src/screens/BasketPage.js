@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#EDEBE7',
   },
   header: {
     flexShrink: 1,
