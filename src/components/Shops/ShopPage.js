@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import Menu from '../ShopMenu/Menu';
 import {SharedElement} from 'react-native-shared-element';
-import ItemsData from '../../fake-data/ItemsData';
 import renderers from '../../renderers';
 import ShopDetailIcons from './ShopDetailIcons';
 import textStyles from '../../../stylesheets/textStyles';
@@ -21,12 +20,24 @@ import CoffeeOptionsData from '../../fake-data/CoffeeOptionsData';
 
 export const ShopContext = React.createContext();
 const ShopPage = ({navigation, route}) => {
-  const MENUDATA = ItemsData;
   const defaultContext = useContext(OptionsContext);
   const context = route === undefined ? defaultContext : route.params;
   const shop = context.currShop;
+  let MENUDATA = context.currShop.ItemsOffered;
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
+
+  filterData()
+
+  function filterData(){
+    let data = [{title: 'Coffee', data: [{key: 'Coffees', list: []}], key: 1},
+      {title: 'Drinks', data: [{key: 'Cold Drinks', list: []}], key: 2},
+      {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3}]
+    context.currShop.ItemsOffered.forEach(item => {
+      data[0].data[0].list.push(item)
+    })
+    MENUDATA = data
+  }
 
   return (
     <ShopContext.Provider
