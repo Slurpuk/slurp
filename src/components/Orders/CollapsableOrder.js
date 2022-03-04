@@ -11,13 +11,18 @@ import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 const CollapsableOrder = ({order}) => {
   const totalPrice = getTotalPrice(order);
+  const isOrderCurrent = order.status === 'Ready' || order.status === 'Pending' || order.status === 'Accepted'
+  const initialHeight = isOrderCurrent ? 126 : 100;
 
   return (
     <View style={styles.order}>
       <AnimatedCard
+        initialHeight={initialHeight}
         collapsableContent={<OrderDetailsView order={order} />}
         hidableContent={<OrderItemsList order={order} />}
         bottomFixed={
@@ -39,6 +44,13 @@ const getTotalPrice = order => {
 const styles = StyleSheet.create({
   order: {
     marginTop: 15,
+    flex: 1,
+  },
+  linearGradient: {
+    padding: 10,
+    flex: 1,
+    zIndex: 1,
+    borderRadius: 10,
   },
 });
 export default CollapsableOrder;
