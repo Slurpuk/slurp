@@ -28,6 +28,7 @@ const ShopCard = ({shop, navigation}) => {
     if (isShopPage) {
       hamburgerVisible(false);
       setShopPage(false);
+      context.setFull;
       navigation.navigate('Shop page', context);
     }
   }, [isShopPage]);
@@ -58,7 +59,6 @@ const styles = StyleSheet.create({
     height: screenWidth * 0.37,
     marginVertical: '1.8%',
     display: 'flex',
-    backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: screenWidth,
     height: screenWidth * 0.37,
+    opacity: 0.7,
   },
 });
 

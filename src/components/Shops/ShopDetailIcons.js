@@ -6,9 +6,11 @@ const ShopDetailIcons = ({timeToOrder, likeness}) => {
   return (
     <View style={styles.container}>
       <Icon size={24} color="#FFE" name="clock" />
-      <Text style={[textStyles.iconText, styles.spacing]}>{timeToOrder}</Text>
+      <Text style={[textStyles.iconText, styles.spacing]}>
+        {timeToOrder}min
+      </Text>
       <Icon size={24} color="#FFE" name="heart-circle" />
-      <Text style={[textStyles.iconText]}>{likeness}</Text>
+      <Text style={[textStyles.iconText]}>{likeness}%</Text>
     </View>
   );
 };
