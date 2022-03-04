@@ -34,9 +34,9 @@ const MenuItem = ({item}) => {
         >
           <View style={styles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, styles.title]}>
-              {item.name}
+              {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>{item.price}</Text>
+            <Text style={textStyles.coffeePrice}>{item.Price}</Text>
           </View>
 
           <Pressable
