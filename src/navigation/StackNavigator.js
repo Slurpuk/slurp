@@ -9,6 +9,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import ShopPage from '../components/Shops/ShopPage';
 import ChangePasswordPage from '../screens/ChangePasswordPage';
 import OrderPage from '../screens/OrderPage';
+import LogInPage from '../screens/LogInPage';
 
 const HomeStack = createSharedElementStackNavigator();
 const HomeStackNavigator = () => {
@@ -21,6 +22,7 @@ const HomeStackNavigator = () => {
         gestureEnabled: false,
       }}
     >
+      <HomeStack.Screen name="Log in" component={LogInPage} />
       <HomeStack.Screen name="Landing map" component={LandingMapPage} />
       <HomeStack.Screen name="Shop list" component={ShopList} />
       <HomeStack.Screen

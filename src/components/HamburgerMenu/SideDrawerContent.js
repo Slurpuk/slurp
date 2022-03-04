@@ -2,8 +2,15 @@ import React from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
 import {Dimensions, Platform, StyleSheet} from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 function SideDrawerContent(props) {
+  const logout = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+    props.navigation.navigate('Logout the device')
+  }
   return (
     <DrawerContentScrollView {...props}>
       <Close.Button
@@ -57,7 +64,7 @@ function SideDrawerContent(props) {
       />
       <DrawerItem
         label="Logout the device"
-        onPress={() => props.navigation.navigate('Logout the device')}
+        onPress={() => logout() }
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
         inactiveTintColor="rgba(0, 0, 0, .87)"
