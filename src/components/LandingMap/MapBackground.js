@@ -1,61 +1,136 @@
 import React, {useState, useEffect} from 'react';
 
 import {
+  Alert,
   Button,
   Dimensions,
-  Platform,
+  Platform, Pressable,
   StyleSheet,
   Text,
   View,
+  PermissionsAndroid,
 } from 'react-native';
+//import Geolocation from '@react-native-community/geolocation';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import GetLocation from 'react-native-get-location';
-
+import textStyles from "../../../stylesheets/textStyles";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-
+let watchID;
 export default function MapBackground() {
-  const [clatitude, setcLatitude] = useState(0);
-  const [clongitude, setcLongitude] = useState(0);
-  const [clatitudeDelta, setcLatitudeDelta] = useState(0);
-  const [clongitudeDelta, setcLongitudeDelta] = useState(0);
-  // const [coordinates, setCoordinates] = useState([0]);
+  const [
+    currentLongitude,
+    setCurrentLongitude
+  ] = useState(0);
+  const [
+    currentLatitude,
+    setCurrentLatitude
+  ] = useState(0);
 
-  // const coordinatesMaker = () => {
-  //
-  // }
-
-  GetLocation.getCurrentPosition({
-    enableHighAccuracy: true,
-    timeout: 15000,
-  })
-    .then(location => {
-      setcLatitude(location.latitude);
-      setcLongitude(location.longitude);
-    })
-    .catch(error => {
-      const {code, message} = error;
-      console.warn(code, message);
-    });
-
-  const tokyoRegion = {
-    latitude: 35.6762,
-    longitude: 139.6503,
+  const currentArea = {
+    latitude: currentLatitude,
+    longitude: currentLongitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
 
-  const currentLocation = {
-    latitude: clatitude,
-    longitude: clongitude,
+  const ourPalace={ //this corresponds to the queen palace
+    latitude: 51.495741653990926,
+    longitude: -0.14553530781225651,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const currentLocationMarker = {//this corresponds rn to the current location but should be a shop marker
+    latitude: currentLatitude,
+    longitude: currentLongitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
 
   const locationPress = () => {
-    console.log('Function will be here!!');
+    console.log('Function will be hre!!');
+  };
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === 'ios') {
+        getOneTimeLocation();
+        subscribeLocationLocation();
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+              {
+                title: 'Location Access Required',
+                message: 'This App needs to Access your location',
+              },
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            //To Check, If Permission is granted
+            getOneTimeLocation();
+            subscribeLocationLocation();
+          } else {
+            //set a default location for the user to explore the app
+            setCurrentLongitude(ourPalace.longitude);
+            setCurrentLatitude(ourPalace.latitude);
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    };
+    requestLocationPermission();
+    return () => {
+      Geolocation.clearWatch(watchID);
+    };
+  }, []);
+
+  const getOneTimeLocation = () => {
+    Geolocation.getCurrentPosition(
+        //Will give you the current location
+        (position) => {
+          const currentLongitude =
+              position.coords.longitude;
+          const currentLatitude =
+              position.coords.latitude;
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+          //Setting Longitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 30000,
+          maximumAge: 1000
+        },
+    );
+  };
+
+  const subscribeLocationLocation = () => {
+    watchID = Geolocation.watchPosition(
+        (position) => {
+          //Will give you the location on location change
+          const currentLongitude =
+            position.coords.longitude;
+          const currentLatitude =
+              position.coords.latitude;
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+          //Setting Latitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 1000
+        },
+    );
   };
 
   return (
@@ -63,10 +138,10 @@ export default function MapBackground() {
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={tokyoRegion}
+        region={currentArea}
       >
         <MapView.Marker
-          coordinate={currentLocation}
+          coordinate={currentLocationMarker}
           pinColor={'#fefefe'}
           title={'hey there fellas'}
           description={'Test market'}
