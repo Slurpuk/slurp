@@ -1,14 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Image,
-  Text,
-  Alert,
-  SafeAreaView,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, View, FlatList} from 'react-native';
 import PaymentCardsData from '../fake-data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 import GreenHeader from '../sub-components/GreenHeader';
@@ -29,8 +20,7 @@ const PaymentCardsPage = ({navigation}) => {
         value={{
           cards: cards,
           setCards: setCards,
-        }}
-      >
+        }}>
         <FlatList
           data={cards}
           renderItem={({item}) => <PaymentCard card={item} />}
