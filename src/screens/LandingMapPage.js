@@ -49,6 +49,7 @@ export default function LandingMapPage({navigation}) {
     }, []),
   );
 
+  // Subscribe to the Shops model
   useEffect(() => {
     const subscriber = firestore()
       .collection('CoffeeShop')
