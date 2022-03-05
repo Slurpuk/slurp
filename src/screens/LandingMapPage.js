@@ -49,6 +49,7 @@ export default function LandingMapPage({navigation}) {
     }, []),
   );
 
+  // Subscribe to the Shops model
   useEffect(() => {
     const subscriber = firestore()
       .collection('CoffeeShop')
@@ -56,19 +57,34 @@ export default function LandingMapPage({navigation}) {
         const shops = [];
 
         querySnapshot.forEach(documentSnapshot => {
-          shops.push({
+
+          let shopData = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
-          });
-        });
+          }
 
-        setShopsData(shops);
-        setCurrShop(shops[0]);
+          let items = []
+          documentSnapshot.data().ItemsOffered.forEach(itemRef => {
+            firestore().doc(itemRef.path).onSnapshot(querySnapshot => {
+              items.push({
+                ...querySnapshot.data(),
+                key: querySnapshot.id,
+              })
+              shopData.ItemsOffered = items
+            })
+          })
+          shops.push(shopData);
+          setShopsData(shops);
+          setCurrShop(shops[0]);
+        });
       });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
+
+  console.log(shopsData)
+
 
   const updatePage = ({index}) => {
     if (index === 0) {

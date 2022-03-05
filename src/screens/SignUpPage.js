@@ -7,17 +7,7 @@
  */
 
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  StatusBar,
-  Platform,
-  Button,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Text, Alert, StatusBar, Platform, Button, Dimensions, TouchableOpacity} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import textStyles from '../../stylesheets/textStyles';
@@ -55,27 +45,23 @@ const SignUpPage = navigation => {
 
   const switchToLogIn = () => {
     Alert.alert(
-      'FUTURE NAVIGATION FEATURE',
-      'One day, clicking this will take you to the log in portal',
-      [
-        {
-          text: ':)',
-        },
-      ],
+        'FUTURE NAVIGATION FEATURE',
+        'One day, clicking this will take you to the log in portal',
+        [
+          {
+            text: ':)',
+          },
+        ],
     );
   };
 
   const warningPassword = () => {
-    Alert.alert(
-      'Warning!',
-      'Password should be same as password confirmation!',
-      [
-        {
-          text: 'OK',
-        },
-      ],
-    );
-  };
+    Alert.alert('Warning!', 'Password should be same as password confirmation!', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
 
   const warningUserAlreadyExists = () => {
     Alert.alert('Warning!', 'This email already exists', [
@@ -83,9 +69,10 @@ const SignUpPage = navigation => {
         text: 'OK',
       },
     ]);
-  };
+  }
 
-  // Display a confirmation message to the user
+
+// Display a confirmation message to the user
   const registeredMessage = () => {
     Alert.alert('Congratulations', 'Registered Successfully', [
       {
@@ -95,29 +82,31 @@ const SignUpPage = navigation => {
     resetFields();
   };
 
-  // Register the user to the database after checking their credentials
+
+
+// Register the user to the database after checking their credentials
   const registerUser = () => {
-    if (password == password_confirmation) {
-      auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(re => {
-          console.log(re);
-          console.log(x);
-        })
-        .catch(re => {
-          console.log(re);
-        })
-        .catch(error => {
-          if (error.code === 'auth/email-already-in-use') {
-            warningUserAlreadyExists();
-          }
-        });
-      registeredMessage();
-    } else {
+    if(password == password_confirmation) {
+      auth().createUserWithEmailAndPassword(email, password)
+          .then((re) => {
+            console.log(re);
+            console.log(x);
+          })
+          .catch((re) => {
+            console.log(re);
+          })
+          .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+              warningUserAlreadyExists()
+            }})
+      registeredMessage(); }
+
+    else{
       warningPassword();
       resetFLEFields();
     }
   };
+
 
   return (
     <View style={styles.wrapper}>
@@ -184,7 +173,6 @@ const SignUpPage = navigation => {
           </Text>
         </View>
       </View>
-    </View>
   );
 };
 
@@ -233,3 +221,4 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpPage;
+
