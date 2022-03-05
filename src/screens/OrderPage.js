@@ -12,44 +12,48 @@ import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
 import pastOrders from '../fake-data/PastOrderData';
 import currentOrders from '../fake-data/CurrentOrderData';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = ({navigation}) => {
   return (
-    <NavigationContainer independent={true}>
-      <View style={styles.container}>
-        <GreenHeader headerText={'ORDERS'} navigation={navigation} />
-        <Tab.Navigator
-          style={styles.basket}
-          screenOptions={{
-            tabBarLabelStyle: {
-              fontSize: 17,
-              fontFamily: 'Poppins-SemiBold',
-              textTransform: 'capitalize',
-            },
-            tabBarIndicatorStyle: {
-              top: 0,
-              height: null,
-              backgroundColor: '#046D66',
-              borderRadius: 13,
-            },
-            tabBarActiveTintColor: '#fff',
-            tabBarInactiveTintColor: '#6D6D6D',
-            tabBarStyle: {
-              borderRadius: 13,
-              height: 50,
-              backgroundColor: '#E5E5E5',
-            },
-          }}
-        >
-          <Tab.Screen name="Current" component={CurrentOrders} />
-          <Tab.Screen name="Past" component={PastOrders} />
-        </Tab.Navigator>
-      </View>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <GreenHeader headerText={'ORDERS'} navigation={navigation} />
+      <Tab.Navigator
+        style={styles.navigatorContent}
+        screenOptions={{
+          tabBarLabelStyle: {
+            fontSize: 18,
+            fontFamily: 'Poppins-SemiBold',
+            letterSpacing: 0.3,
+            textTransform: 'capitalize',
+            transform: [{translateY: -7}],
+          },
+          tabBarIndicatorStyle: {
+            top: 0,
+            height: null,
+            backgroundColor: '#046D66',
+            borderRadius: 13,
+          },
+          tabBarActiveTintColor: '#FFFFFF',
+          tabBarInactiveTintColor: '#6D6D6D',
+          tabBarStyle: {
+            borderRadius: 13,
+            height: 42,
+            backgroundColor: '#E5E5E5',
+            elevation: 0,
+            borderColor: '#919191',
+          },
+        }}>
+        <Tab.Screen
+          name="Current"
+          component={CurrentOrders}
+          style={styles.mainContainer}
+        />
+        <Tab.Screen name="Past" component={PastOrders} />
+      </Tab.Navigator>
+    </View>
   );
 };
 
@@ -83,20 +87,19 @@ const CurrentOrders = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
+    backgroundColor: '#EDEBE7',
   },
-  basket: {
-    marginHorizontal: '5%',
+  navigatorContent: {
+    paddingHorizontal: '5%',
     marginTop: '5%',
-    fontFamily: 'Poppins-SemiBold',
   },
   periodHeader: {
-    marginLeft: 7,
+    marginLeft: 6,
     marginTop: 20,
   },
   mainContainer: {
-    paddingBottom: '5%',
+    backgroundColor: '#EDEBE7',
+    flexGrow: 1,
   },
 });
 

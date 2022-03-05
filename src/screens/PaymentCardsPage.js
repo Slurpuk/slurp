@@ -1,14 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Image,
-  Text,
-  Alert,
-  SafeAreaView,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, View, FlatList} from 'react-native';
 import PaymentCardsData from '../fake-data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 import GreenHeader from '../sub-components/GreenHeader';
@@ -23,14 +14,13 @@ const PaymentCardsPage = ({navigation}) => {
   const setVisible = useContext(VisibleContext);
 
   return (
-    <SafeAreaView style={styles.page}>
+    <View style={styles.page}>
       <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
       <PaymentCardsContext.Provider
         value={{
           cards: cards,
           setCards: setCards,
-        }}
-      >
+        }}>
         <FlatList
           data={cards}
           renderItem={({item}) => <PaymentCard card={item} />}
@@ -40,7 +30,7 @@ const PaymentCardsPage = ({navigation}) => {
       <View style={styles.button}>
         <CustomButton text={'Add New Payment Card'} priority={'secondary'} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
