@@ -3,10 +3,9 @@ import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import WhiteArrowButton from './WhiteArrowButton';
 import textStyles from '../../stylesheets/textStyles';
-import { getTightPadding } from "../../stylesheets/StyleFunction";
+import {getTightPadding} from '../../stylesheets/StyleFunction';
 
 const GreenHeader = ({headerText, navigation}) => {
-
   return (
     <View style={styles.header}>
       <StatusBar translucent={true} backgroundColor="transparent" />

@@ -13,10 +13,12 @@ import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
 import LinearGradient from 'react-native-linear-gradient';
 
-
 const CollapsableOrder = ({order}) => {
   const totalPrice = getTotalPrice(order);
-  const isOrderCurrent = order.status === 'Ready' || order.status === 'Pending' || order.status === 'Accepted'
+  const isOrderCurrent =
+    order.status === 'Ready' ||
+    order.status === 'Pending' ||
+    order.status === 'Accepted';
   const initialHeight = isOrderCurrent ? 126 : 100;
 
   return (
