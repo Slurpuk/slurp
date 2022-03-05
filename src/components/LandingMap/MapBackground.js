@@ -4,8 +4,7 @@ import {
   Alert,
   Button,
   Dimensions,
-  Platform,
-  Pressable,
+  Platform, Pressable,
   StyleSheet,
   Text,
   View,
@@ -16,13 +15,19 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import GetLocation from 'react-native-get-location';
-import textStyles from '../../../stylesheets/textStyles';
+import textStyles from "../../../stylesheets/textStyles";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;
 export default function MapBackground() {
-  const [currentLongitude, setCurrentLongitude] = useState(0);
-  const [currentLatitude, setCurrentLatitude] = useState(0);
+  const [
+    currentLongitude,
+    setCurrentLongitude
+  ] = useState(0);
+  const [
+    currentLatitude,
+    setCurrentLatitude
+  ] = useState(0);
 
   const currentArea = {
     latitude: currentLatitude,
@@ -31,16 +36,14 @@ export default function MapBackground() {
     longitudeDelta: 0.01,
   };
 
-  const ourPalace = {
-    //this corresponds to the queen palace
+  const ourPalace={ //this corresponds to the queen palace
     latitude: 51.495741653990926,
     longitude: -0.14553530781225651,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
 
-  const currentLocationMarker = {
-    //this corresponds rn to the current location but should be a shop marker
+  const currentLocationMarker = {//this corresponds rn to the current location but should be a shop marker
     latitude: currentLatitude,
     longitude: currentLongitude,
     latitudeDelta: 0.01,
@@ -59,11 +62,11 @@ export default function MapBackground() {
       } else {
         try {
           const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Access Required',
-              message: 'This App needs to Access your location',
-            },
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+              {
+                title: 'Location Access Required',
+                message: 'This App needs to Access your location',
+              },
           );
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             //To Check, If Permission is granted
@@ -87,40 +90,46 @@ export default function MapBackground() {
 
   const getOneTimeLocation = () => {
     Geolocation.getCurrentPosition(
-      //Will give you the current location
-      position => {
-        const currentLongitude = position.coords.longitude;
-        const currentLatitude = position.coords.latitude;
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
-        //Setting Longitude state
-        setCurrentLatitude(currentLatitude);
-      },
-      error => {},
-      {
-        enableHighAccuracy: false,
-        timeout: 30000,
-        maximumAge: 1000,
-      },
+        //Will give you the current location
+        (position) => {
+          const currentLongitude =
+              position.coords.longitude;
+          const currentLatitude =
+              position.coords.latitude;
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+          //Setting Longitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 30000,
+          maximumAge: 1000
+        },
     );
   };
 
   const subscribeLocationLocation = () => {
     watchID = Geolocation.watchPosition(
-      position => {
-        //Will give you the location on location change
-        const currentLongitude = position.coords.longitude;
-        const currentLatitude = position.coords.latitude;
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
-        //Setting Latitude state
-        setCurrentLatitude(currentLatitude);
-      },
-      error => {},
-      {
-        enableHighAccuracy: false,
-        maximumAge: 1000,
-      },
+        (position) => {
+          //Will give you the location on location change
+          const currentLongitude =
+            position.coords.longitude;
+          const currentLatitude =
+              position.coords.latitude;
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+          //Setting Latitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 1000
+        },
     );
   };
 

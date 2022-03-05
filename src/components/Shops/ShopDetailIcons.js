@@ -1,28 +1,33 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const ShopDetailIcons = ({timeToOrder, likeness}) => {
   return (
-    <View style={styles.container}>
-      <Icon size={24} color="#FFE" name="clock" />
-      <Text style={[textStyles.iconText, styles.spacing]}>
-        {timeToOrder}min
-      </Text>
-      <Icon size={24} color="#FFE" name="heart-circle" />
-      <Text style={[textStyles.iconText]}>{likeness}%</Text>
+    <View style={iconStyle.container}>
+      <View style={iconStyle.iconTextWrapper}>
+        <Icon size={24} color="#FFE" name="clock" />
+        <Text style={textStyles.iconText}>{timeToOrder}</Text>
+      </View>
+      <View style={iconStyle.iconTextWrapper}>
+        <Icon size={24} color="#FFE" name="heart-circle" />
+        <Text style={textStyles.iconText}>{likeness}</Text>
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const iconStyle = {
   container: {
-    display: 'flex',
     flexDirection: 'row',
+    // width: '50%',
   },
-  spacing: {
-    paddingRight: '3%',
+
+  iconTextWrapper: {
+    flexDirection: 'row',
+    display: 'flex',
+    marginRight: 18,
   },
-});
+};
 
 export default ShopDetailIcons;

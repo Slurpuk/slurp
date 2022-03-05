@@ -1,108 +1,73 @@
-import React, {useContext} from 'react';
+import React, {Component} from 'react';
 import {
   View,
+  FlatList,
   StyleSheet,
   Text,
-  ImageBackground,
   Dimensions,
-  Platform,
+  ImageBackground,
+  Pressable,
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
-import {ShopContext} from './ShopPage';
-import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
 const ShopIntro = props => {
-  const shopContext = useContext(ShopContext);
   return (
-    <ImageBackground
-      imageStyle={styles.cardImgs}
-      style={styles.container}
-      source={{uri: shopContext.shop.Image}}
-    >
+    <View style={intro.wrapper}>
       <LinearGradient
         colors={['transparent', 'black']}
-        style={styles.linearGradient}
+        style={intro.linearGradient}
       >
-        <View
-          style={[
-            styles.back_button,
-            shopContext.isFullScreen
-              ? {opacity: 1}
-              : shopContext.isShopIntro
-              ? {opacity: 0}
-              : {opacity: 1},
-          ]}
-        >
-          <WhiteArrowButton
-            direction={shopContext.isShopIntro ? 'down' : 'left'}
-            navigation={shopContext.navigation}
-            onPressAction={shopContext.isShopIntro ? shopContext.currRef : null}
-          />
-        </View>
-        <View style={styles.content}>
-          <Text style={[textStyles.headingOne, styles.heading]}>
+        <View style={intro.content}>
+          <Text style={[textStyles.headingOne, intro.heading]}>
             {props.shopName}
           </Text>
           <ShopDetailIcons
             likeness={props.likeness}
             timeToOrder={props.timeToOrder}
           />
-          <Text style={[textStyles.bodyText, styles.body]}>
+          <Text style={[textStyles.bodyText, intro.body]}>
             {props.shopIntroText}
           </Text>
         </View>
       </LinearGradient>
-    </ImageBackground>
+    </View>
   );
 };
 
 export default ShopIntro;
 
-const screenWidth = Dimensions.get('window').width;
-const styles = StyleSheet.create({
+const intro = StyleSheet.create({
+  content: {
+    textAlign: 'left',
+  },
+
+  wrapper: {
+    height: 270,
+    maxHeight: '30%',
+    // minHeight: 270,
+    maxWidth: '100%',
+    // width: 100,
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   heading: {
     paddingVertical: 7,
-  },
-
-  content: {
-    marginLeft: '2%',
-  },
-
-  cardImgs: {
-    position: 'absolute',
-    width: screenWidth,
-    height: screenWidth * 0.7,
-    left: 0,
-    borderRadius: 20,
-  },
-
-  container: {
-    maxHeight: '35%',
-    minHeight: '30%',
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'space-between',
   },
 
   body: {
     paddingVertical: 7,
   },
 
-  back_button: {
-    ...Platform.select({
-      ios: {
-        marginTop: '5%',
-      },
-      android: {},
-    }),
-  },
-
   linearGradient: {
     flex: 1,
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingVertical: 15,
     paddingHorizontal: 15,
   },

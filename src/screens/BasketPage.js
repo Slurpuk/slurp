@@ -72,19 +72,6 @@ const BasketPage = () => {
         console.log('Order added!');
       });
 
-    function sendOrder() {
-      firestore()
-        .collection('FakeOrder')
-        .add({
-          name: 'Ada Lovelace',
-          type: 'incoming',
-          total: 30,
-        })
-        .then(() => {
-          console.log('Order added!');
-        });
-    }
-
     return (
       <View style={styles.basket}>
         <View style={styles.header}>
@@ -124,7 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#EDEBE7',
+    backgroundColor: '#E5E5E5',
   },
   header: {
     flexShrink: 1,
