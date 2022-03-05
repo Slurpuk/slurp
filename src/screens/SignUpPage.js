@@ -173,6 +173,7 @@ const SignUpPage = navigation => {
           </Text>
         </View>
       </View>
+    </View>
   );
 };
 

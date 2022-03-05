@@ -87,20 +87,19 @@ const CurrentOrders = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
+    backgroundColor: '#EDEBE7',
   },
-  basket: {
-    marginHorizontal: '5%',
+  navigatorContent: {
+    paddingHorizontal: '5%',
     marginTop: '5%',
-    fontFamily: 'Poppins-SemiBold',
   },
   periodHeader: {
-    marginLeft: 7,
+    marginLeft: 6,
     marginTop: 20,
   },
   mainContainer: {
-    paddingBottom: '5%',
+    backgroundColor: '#EDEBE7',
+    flexGrow: 1,
   },
 });
 
