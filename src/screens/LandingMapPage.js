@@ -31,8 +31,6 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 export const OptionsContext = React.createContext();
 
-// well...
-
 export default function LandingMapPage({navigation}) {
   const setVisible = useContext(VisibleContext);
   const [shopsData, setShopsData] = useState([]);
@@ -42,35 +40,50 @@ export default function LandingMapPage({navigation}) {
   const [currShop, setCurrShop] = useState(shopsData[0]);
 
   useFocusEffect(
-    React.useCallback(() => {
-      setVisible(true);
+      React.useCallback(() => {
+        setVisible(true);
 
-      return () => {
-        setVisible(false);
-      };
-    }, []),
+        return () => {
+          setVisible(false);
+        };
+      }, []),
   );
 
   useEffect(() => {
     const subscriber = firestore()
-      .collection('CoffeeShop')
-      .onSnapshot(querySnapshot => {
-        const shops = [];
+        .collection('CoffeeShop')
+        .onSnapshot(querySnapshot => {
+          const shops = [];
 
-        querySnapshot.forEach(documentSnapshot => {
-          shops.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
+          querySnapshot.forEach(documentSnapshot => {
+
+            let shopData = {
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+            }
+
+            let items = []
+            documentSnapshot.data().ItemsOffered.forEach(itemRef => {
+              firestore().doc(itemRef.path).onSnapshot(querySnapshot => {
+                items.push({
+                  ...querySnapshot.data(),
+                  key: querySnapshot.id,
+                })
+                shopData.ItemsOffered = items
+              })
+            })
+            shops.push(shopData);
+            setShopsData(shops);
+            setCurrShop(shops[0]);
           });
         });
-
-        setShopsData(shops);
-        setCurrShop(shops[0]);
-      });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
+
+  console.log(shopsData)
+
 
   const updatePage = ({index}) => {
     if (index === 0) {
@@ -86,70 +99,70 @@ export default function LandingMapPage({navigation}) {
   };
 
   return (
-    <OptionsContext.Provider
-      value={{
-        currShop: currShop,
-        setCurrShop: setCurrShop,
-        isShopIntro: isShopIntro,
-        currRef: currRef,
-        shopsData: shopsData,
-      }}
-    >
-      <View style={styles.container}>
-        <View style={styles.map}>
-          <MapBackground />
-          <View style={{margin: '10%'}}>
-            <Button title={'Switch bottom sheet'} onPress={setLOL} />
-          </View>
+      <OptionsContext.Provider
+          value={{
+            currShop: currShop,
+            setCurrShop: setCurrShop,
+            isShopIntro: isShopIntro,
+            currRef: currRef,
+            shopsData: shopsData,
+          }}
+      >
+        <View style={styles.container}>
+          <View style={styles.map}>
+            <MapBackground />
+            <View style={{margin: '10%'}}>
+              <Button title={'Switch bottom sheet'} onPress={setLOL} />
+            </View>
 
-          <TextInput
-            style={{
-              borderRadius: 10,
-              margin: 10,
-              color: '#000',
-              borderColor: '#666',
-              backgroundColor: '#FFF',
-              borderWidth: 1,
-              height: screenHeight / 19,
-              width: screenWidth / 1.4,
-              paddingHorizontal: 10,
-              fontSize: 18,
-            }}
-            placeholder={'Search Location'}
-            placeholderTextColor={'#666'}
-          />
+            <TextInput
+                style={{
+                  borderRadius: 10,
+                  margin: 10,
+                  color: '#000',
+                  borderColor: '#666',
+                  backgroundColor: '#FFF',
+                  borderWidth: 1,
+                  height: screenHeight / 19,
+                  width: screenWidth / 1.4,
+                  paddingHorizontal: 10,
+                  fontSize: 18,
+                }}
+                placeholder={'Search Location'}
+                placeholderTextColor={'#666'}
+            />
+          </View>
+          {isShopIntro ? (
+              <ScrollBottomSheet
+                  componentType="FlatList"
+                  ref={bottomSheetRef}
+                  snapPoints={['0%', '70%', '100%']}
+                  onSettle={index => updatePage({index})}
+                  initialSnapIndex={1}
+                  enableOverScroll={false}
+                  renderHandle={() => (
+                      <ShopPage navigation={navigation} shop={currShop} />
+                  )}
+                  contentContainerStyle={styles.contentContainerStyle}
+              />
+          ) : null}
+          {isShopIntro === false ? (
+              <ScrollBottomSheet
+                  componentType="FlatList"
+                  snapPoints={['20%', '91.5%']}
+                  initialSnapIndex={1}
+                  renderHandle={() => (
+                      <View style={styles.header2}>
+                        <View style={styles.panelHandle} />
+                        <Text style={styles.headerText}>Top Picks Nearby</Text>
+                        <ShopList navigation={navigation} />
+                      </View>
+                  )}
+                  contentContainerStyle={styles.contentContainerStyle}
+              />
+          ) : null}
         </View>
-        {isShopIntro ? (
-          <ScrollBottomSheet
-            componentType="FlatList"
-            ref={bottomSheetRef}
-            snapPoints={['0%', '70%', '100%']}
-            onSettle={index => updatePage({index})}
-            initialSnapIndex={1}
-            enableOverScroll={false}
-            renderHandle={() => (
-              <ShopPage navigation={navigation} shop={currShop} />
-            )}
-            contentContainerStyle={styles.contentContainerStyle}
-          />
-        ) : null}
-        {isShopIntro === false ? (
-          <ScrollBottomSheet
-            componentType="FlatList"
-            snapPoints={['20%', '91.5%']}
-            initialSnapIndex={1}
-            renderHandle={() => (
-              <View style={styles.header2}>
-                <View style={styles.panelHandle} />
-                <Text style={styles.headerText}>Top Picks Nearby</Text>
-                <ShopList navigation={navigation} />
-              </View>
-            )}
-            contentContainerStyle={styles.contentContainerStyle}
-          />
-        ) : null}
-      </View>
-    </OptionsContext.Provider>
+      </OptionsContext.Provider>
   );
 }
 
