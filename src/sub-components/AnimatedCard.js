@@ -13,13 +13,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const AnimatedCard = ({
-  initialHeight,
   collapsableContent,
   hidableContent,
   bottomFixed = null,
 }) => {
   // fadeAnim will be used as the value for opacity. Initial Value: 0
-  const adaptiveHeight = useRef(new Animated.Value(initialHeight)).current;
+  const adaptiveHeight = useRef(new Animated.Value(100)).current;
   const [isExpanded, setExpanded] = useState(false);
 
   const [collapsableHeight, setCollapsableHeight] = useState();
@@ -87,6 +86,7 @@ const AnimatedCard = ({
           >
             {hidableContent}
           </View>
+        </AnimatedPressable>
         <View
           style={[
             styles.topRightIcon,
@@ -95,7 +95,6 @@ const AnimatedCard = ({
         >
           <Icon size={30} color="black" name="chevron-down" />
         </View>
-        </AnimatedPressable>
 
         <View style={styles.absoluteBottomRight}>{bottomFixed}</View>
       </Animated.View>
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
   },
 
   expandable: {
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#F5F5F5',
     display: 'flex',
     flexShrink: 0,
     height: 100,
@@ -156,8 +155,8 @@ const styles = StyleSheet.create({
 
   topRightIcon: {
     position: 'absolute',
-    top: -3,
-    right: -3,
+    top: 5,
+    right: 5,
     minWidth: 20,
     minHeight: 20,
     transform: [{rotateZ: '0deg'}],
