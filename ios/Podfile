@@ -19,7 +19,7 @@ target 'MyProject' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
-pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
+  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
   pod 'RNSharedElement', :path => '../node_modules/react-native-shared-element'
 
