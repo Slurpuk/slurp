@@ -67,13 +67,15 @@ const AnimatedCard = ({
         ]}
         onLayout={event => {
           let {x, y, width, height} = event.nativeEvent.layout;
-        }}>
+        }}
+      >
         <AnimatedPressable onPress={toggleheight}>
           <View
             onLayout={event => {
               setCollapsableHeight(event.nativeEvent.layout.height);
             }}
-            style={styles.collapsable}>
+            style={styles.collapsable}
+          >
             {collapsableContent}
           </View>
 
@@ -81,14 +83,16 @@ const AnimatedCard = ({
             onLayout={event => {
               setHidableHeight(event.nativeEvent.layout.height);
             }}
-            style={styles.hidable}>
+            style={styles.hidable}
+          >
             {hidableContent}
           </View>
           <View
             style={[
               styles.topRightIcon,
               {transform: [{rotateZ: isExpanded ? '180deg' : '0deg'}]},
-            ]}>
+            ]}
+          >
             <Icon size={30} color="black" name="chevron-down" />
           </View>
         </AnimatedPressable>

@@ -20,7 +20,8 @@ const PaymentCardsPage = ({navigation}) => {
         value={{
           cards: cards,
           setCards: setCards,
-        }}>
+        }}
+      >
         <FlatList
           data={cards}
           renderItem={({item}) => <PaymentCard card={item} />}
