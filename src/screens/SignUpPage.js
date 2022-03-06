@@ -13,26 +13,18 @@ import {
   Text,
   Alert,
   StatusBar,
-  Platform,
-  Button,
   Dimensions,
-  TouchableOpacity,
 } from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
-
-// Redirect the user to the Log In Portal
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const SignUpPage = navigation => {
+const SignUpPage = ({navigation}) => {
   // const usersCollection = firestore().collection('Users');
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
@@ -54,15 +46,7 @@ const SignUpPage = navigation => {
   };
 
   const switchToLogIn = () => {
-    Alert.alert(
-      'FUTURE NAVIGATION FEATURE',
-      'One day, clicking this will take you to the log in portal',
-      [
-        {
-          text: ':)',
-        },
-      ],
-    );
+    navigation.navigate('LogIn');
   };
 
   const warningPassword = () => {
@@ -181,7 +165,7 @@ const SignUpPage = navigation => {
             style={[textStyles.bluePoppinsBody, styles.hyperlink]}
             onPress={switchToLogIn}
           >
-            Already have an account? Log in here
+            Already have an account? Log in
           </Text>
         </View>
       </View>

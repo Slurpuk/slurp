@@ -1,51 +1,71 @@
 import 'react-native-gesture-handler';
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
+import SignUpPage from './src/screens/SignUpPage';
+import LogInPage from './src/screens/LogInPage';
+import WelcomePages from './src/screens/WelcomePages';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firebase from '@react-native-firebase/app';
 
+export const AppContext = React.createContext();
 export default function App() {
-  const usersCollection = firestore().collection('Users');
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [x, setX] = useState(usersCollection);
+  const [isFirstTime, setIsFirstTime] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
 
-  const registerUser = () => {
-    auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(re => {
-        console.log(re);
-        console.log(x);
-      })
-      .catch(re => {
-        console.log(re);
-      });
+  const checkForFirstTime = async () => {
+    const result = await AsyncStorage.getItem('isFirstTime');
+    //if what we get from the Async is null we are opening the app for the first time
+    //if we pressed the sign up button on the last slide we set the 'isFirstTime' to 'no'
+    if (result === null) {
+      setIsFirstTime(true);
+    } //now we can use the isFirstTimeLoad state to choose what to render
   };
 
-  return (
-    // <View style = {styles.mainContainer}>
-    //   <TextInput placeholder="email" value={email} onChangeText={text => setEmail(text)}/>
-    //   <TextInput placeholder="password" value={password} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
-    //   <Button
-    //     title='Registerlol'
-    //     onPress={registerUser}
-    //   />
-    // </View>
-    //  <LoginPage></LoginPage>
+  useEffect(() => {
+    checkForFirstTime();
+  }, []);
 
-    <NavigationContainer>
-      <HamburgerSlideBarNavigator />
-    </NavigationContainer>
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        setIsLoggedIn(true);
+        setCurrentUser(user);
+      } else {
+        setIsLoggedIn(false);
+        setCurrentUser(null);
+      }
+    });
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  });
+
+  const enterApp = () => {
+    setIsFirstTime(false);
+    AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
+  };
+
+  const Stack = createNativeStackNavigator();
+  return (
+    <AppContext.Provider value={{enterApp: enterApp, user: currentUser}}>
+      <NavigationContainer>
+        {isLoggedIn ? (
+          <HamburgerSlideBarNavigator />
+        ) : (
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}>
+            {isFirstTime ? (
+              <Stack.Screen name="Welcome" component={WelcomePages} />
+            ) : null}
+            <Stack.Screen name="LogIn" component={LogInPage} />
+            <Stack.Screen name="SignUp" component={SignUpPage} />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </AppContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    marginTop: 55,
-    flex: 1,
-    padding: 10,
-  },
-});
