@@ -1,5 +1,5 @@
-import React from 'react';
-import {LogBox} from 'react-native';
+import React, {useContext} from 'react';
+import {LogBox, StyleSheet} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useState} from 'react';
 import SideDrawerContent from '../components/HamburgerMenu/SideDrawerContent';
