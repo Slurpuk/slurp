@@ -7,34 +7,16 @@
  */
 
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Alert,
-  StatusBar,
-  Platform,
-  Button,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import FormField from '../sub-components/FormField';
 import textStyles from '../../stylesheets/textStyles';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import {emitNotificationDecl} from 'react-native/ReactCommon/hermes/inspector/tools/msggen/src/HeaderWriter';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
+import CustomButton from '../sub-components/CustomButton';
 
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
-
-const LogInPage = navigation => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+const LogInPage = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const switchToSignUp = () => {
     navigation.navigate('SignUp');
@@ -62,22 +44,15 @@ const LogInPage = navigation => {
     setPassword('');
   };
 
-  const navigateToLandingMapPage = () => {
-    navigation.navigate('LandingMapPage');
-  };
-
   const authenticateUser = async () => {
     try {
       let response = await auth().signInWithEmailAndPassword(email, password);
       if (response && response.user) {
-        authMessage();
         resetFields();
-        // navigateToLandingMapPage();
       } else {
         invalidUserMessage();
       }
     } catch (e) {
-      //console.error(e.message)
       invalidMessage(e.message);
     }
   };

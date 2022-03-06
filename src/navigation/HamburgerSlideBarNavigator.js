@@ -12,6 +12,9 @@ import {
   OrderHistoryStackNavigator,
   PaymentAccountsNavigator,
 } from './StackNavigator';
+import {AppContext} from '../../App';
+import textStyles from '../../stylesheets/textStyles';
+import auth from '@react-native-firebase/auth';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -49,13 +52,11 @@ function HamburgerSlideBarNavigator() {
           name="Change password"
           children={() => <ChangePasswordStackNavigator />}
         />
-        <Drawer.Screen
-          name="Logout the device"
-          children={() => <LogInPage />}
-        />
       </Drawer.Navigator>
     </VisibleContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({});
 
 export default HamburgerSlideBarNavigator;
