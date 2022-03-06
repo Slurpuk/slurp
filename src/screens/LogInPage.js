@@ -36,26 +36,10 @@ const LogInPage = navigation => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  const switchToLogIn = () => {
-    Alert.alert(
-      'FUTURE NAVIGATION FEATURE',
-      'One day, clicking this will take you to the sign up portal',
-      [
-        {
-          text: ':)',
-        },
-      ],
-    );
+  const switchToSignUp = () => {
+    navigation.navigate('SignUp');
   };
 
-  // Display a confirmation message to the user
-  const authMessage = () => {
-    Alert.alert('Success', 'Authenticated Successfully', [
-      {
-        text: 'OK',
-      },
-    ]);
-  };
 
   const invalidUserMessage = () => {
     Alert.alert('Invalid', 'Authenticated Denied', [
@@ -101,48 +85,44 @@ const LogInPage = navigation => {
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <View style={styles.safeSpace}>
-        <View style={styles.body}>
-          <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
-          <View style={styles.form}>
-            <FormField
-              title={'Email'}
-              setField={setEmail}
-              type={'email'}
-              value={email}
-            />
-            <FormField
-              title={'Password'}
-              placeholder={''}
-              setField={setPassword}
-              type={'password'}
-              value={password}
-            />
-            <View>
-              <Text
-                style={[textStyles.bluePoppinsBody, styles.footer]}
-                onPress={switchToLogIn}
-              >
-                Forgot your password?
-              </Text>
-            </View>
-          </View>
-          <View style={styles.buttons_container}>
-            <TouchableOpacity
-              onPress={authenticateUser}
-              style={{
-                backgroundColor: '#087562',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: screenHeight / 18,
-                width: screenWidth / 1.1,
-                borderRadius: 13,
-              }}
-            >
-              <Text style={{color: 'white', fontWeight: 'bold'}}>Log In</Text>
-            </TouchableOpacity>
-          </View>
+      <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
+      <View style={styles.form}>
+        <FormField
+          title={'Email'}
+          setField={setEmail}
+          type={'email'}
+          value={email}
+        />
+        <FormField
+          title={'Password'}
+          placeholder={''}
+          setField={setPassword}
+          type={'password'}
+          value={password}
+        />
+        <View>
+          <Text
+            style={[textStyles.bluePoppinsBody, styles.footer]}
+            onPress={null}
+          >
+            Forgot your password?
+          </Text>
         </View>
+        <View>
+          <Text
+            style={[textStyles.bluePoppinsBody, styles.footer]}
+            onPress={switchToSignUp}
+          >
+            New? Create an account
+          </Text>
+        </View>
+      </View>
+      <View style={styles.buttonsContainer}>
+        <CustomButton
+          text={'Log in'}
+          onPress={authenticateUser}
+          priority={'primary'}
+        />
       </View>
     </View>
   );
@@ -150,28 +130,19 @@ const LogInPage = navigation => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-  },
-  safeSpace: {
+    display: 'flex',
     flex: 1,
     backgroundColor: '#EDEBE7',
-    paddingTop:
-      Platform.OS === 'android'
-        ? getStatusBarHeight() / 3
-        : getStatusBarHeight(),
-  },
-  body: {
-    backgroundColor: '#EDEBE7',
-    flex: 1,
-    padding: '5%',
+    paddingTop: getCushyPaddingTop(),
+    paddingHorizontal: '5%',
   },
   form: {
     flex: 3,
     paddingVertical: '5%',
   },
-  buttons_container: {
-    alignContent: 'flex-end',
-    marginVertical: '3%',
+  buttonsContainer: {
+    justifyContent: 'flex-end',
+    marginBottom: '4%',
   },
   footer: {
     textAlign: 'center',
