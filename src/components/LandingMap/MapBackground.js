@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from "react";
 
 import {
     Alert,
@@ -13,6 +13,8 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import firestore from '@react-native-firebase/firestore';
+import {OptionsContext} from '../../screens/LandingMapPage';
+
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -44,11 +46,13 @@ export default function MapBackground() {
     ] = useState([]);
 
     const [shopsData, setShopsData] = useState([]);
+    const context = useContext(OptionsContext);
 
     const showShopsNearby = () => {
         console.log("THESE ARE THE MARKED LOCATIONS")
         console.log(markers.map(item=> item.name))
     };
+
 
     useEffect(() => {
         const editedShopsData = shopsData.map((item) => {
@@ -87,13 +91,6 @@ export default function MapBackground() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const calculateDistance = (coords) => {
-        // console.log('This is my current latitude: '+defaultLocation.latitude)
-        // console.log('This is my current longitude: '+defaultLocation.longitude)
-        // console.log("this is ")
-        // console.log(coords)
-        //
-        // console.log('This is the shop latitude: '+coords.latitude)
-        // console.log('This is the shop longitude: '+coords.longitude)
 
         //TODO change defaultLocation for currentLocation (currentLatitude and currentLongitude)
 
@@ -131,25 +128,10 @@ export default function MapBackground() {
     };
 
     useEffect(() => {
-        const subscriber = firestore()
-            .collection('CoffeeShop')
-            .onSnapshot(querySnapshot => {
-                const shops = [];
-
-                querySnapshot.forEach(documentSnapshot => {
-                    shops.push({
-                        ...documentSnapshot.data(),
-                        key: documentSnapshot.id,
-                    });
-                });
-
-                setShopsData(shops);
-            });
-
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
-    }, []);
-
+        const temp = context.shopsData;
+        setShopsData(temp);
+        console.log(temp);
+    });
 
     const locationPress = () => {
         console.log('Function will be hre!!');

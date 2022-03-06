@@ -18,7 +18,6 @@ import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopPage from '../components/Shops/ShopPage';
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from '@react-native-firebase/firestore';
-import firebase from '@react-native-firebase/app';
 import ShopList from '../components/Shops/ShopList';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
@@ -37,7 +36,8 @@ export default function LandingMapPage({navigation}) {
   const bottomSheetRef = useRef(null);
   const [currRef, setCurrRef] = useState(bottomSheetRef.current);
   const [isShopIntro, setIsShopIntro] = useState(false);
-  const [currShop, setCurrShop] = useState(shopsData[0]);
+  const [currShop, setCurrShop] = useState([0]);
+  const [orderedShops, setOrderedShops] = useState([]);
 
   useFocusEffect(
       React.useCallback(() => {
@@ -48,6 +48,10 @@ export default function LandingMapPage({navigation}) {
         };
       }, []),
   );
+  //
+  // useEffect(() => {
+  //   setCurrShop(MapBackground.shopsData[0])
+  // }, []);
 
   useEffect(() => {
     const subscriber = firestore()
@@ -78,11 +82,9 @@ export default function LandingMapPage({navigation}) {
           });
         });
 
-    // Unsubscribe from events when no longer in use
+    //Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
-
-  console.log(shopsData)
 
 
   const updatePage = ({index}) => {
