@@ -11,6 +11,8 @@ const CoffeeBeanSvg = props => (
     xmlSpace="preserve"
     {...props}
   >
+    <Circle cx="255.5" cy="236.5" r="255.5" fill="#C4C4C4" />
+
     <Path
       style={{
         fill: '#573728',

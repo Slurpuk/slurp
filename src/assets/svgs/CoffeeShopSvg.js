@@ -11,6 +11,7 @@ const CoffeeShopSvg = props => (
     xmlSpace="preserve"
     {...props}
   >
+    <Circle cx="210.8" cy="210.8" r="210.8" fill="#C4C4C4" />
     <Path
       style={{
         fill: '#087562', //primary button color
