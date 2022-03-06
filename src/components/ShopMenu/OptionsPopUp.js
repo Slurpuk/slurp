@@ -10,7 +10,7 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ShopContext} from '../Shops/ShopPage';
+import {ShopContext} from '../../screens/ShopPage';
 
 const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
   const context = useContext(ShopContext);

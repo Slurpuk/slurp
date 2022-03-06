@@ -10,7 +10,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {ShopContext} from '../Shops/ShopPage';
+import {ShopContext} from '../../screens/ShopPage';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
@@ -42,7 +42,6 @@ const MenuItem = ({item}) => {
           <Pressable
             onPress={() => {
               setCount(count + 1);
-              console.log(count);
             }}
             style={styles.menuCardPopupTrigger}
           >
@@ -59,15 +58,13 @@ const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   item: {
     width: screenWidth * 0.43,
-    // backgroundColor: 'white',
     height: screenWidth * 0.43 * 0.74,
     borderRadius: 11,
     shadowOpacity: 0.2,
     marginVertical: '2%',
     marginHorizontal: '2%',
     display: 'flex',
-    flex: 1,
-    // backgroundColor: 'white',
+    // flex: 1,
     borderWidth: 1,
     position: 'relative',
   },
@@ -100,7 +97,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     fontSize: 17,
     justifyContent: 'center',
-    // alignSelf: 'center',
   },
 });
 

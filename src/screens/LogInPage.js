@@ -22,7 +22,6 @@ const LogInPage = ({navigation}) => {
     navigation.navigate('SignUp');
   };
 
-
   const invalidUserMessage = () => {
     Alert.alert('Invalid', 'Authenticated Denied', [
       {
