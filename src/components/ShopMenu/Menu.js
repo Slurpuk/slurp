@@ -7,7 +7,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
 import {ShopContext} from '../Shops/ShopPage';
 import {BasketContext} from '../../navigation/HamburgerSlideBarNavigator';
-import basketContents from '../Basket/BasketContents';
 
 const Menu = ({DATA, renderSection, renderItem, navigation}) => {
   const context = useContext(ShopContext);
@@ -54,7 +53,6 @@ const Menu = ({DATA, renderSection, renderItem, navigation}) => {
               optionalNumber={context.numBasketItems}
               onPress={() => {
                 basketContext.setNumBasketItems(context.numBasketItems);
-                basketContext.setShopTitle()
                 navigation.navigate('BasketPage');
               }}
             />

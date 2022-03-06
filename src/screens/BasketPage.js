@@ -97,7 +97,10 @@ const BasketPage = props => {
     <View style={styles.basket}>
 
       <View style={styles.header}>
-        <GreenHeader headerText={basketContext.currentShop} />
+        <GreenHeader headerText={basketContext.shopTitle} navigation={props.navigation} />
+      </View>
+      <View>
+        <Text>Number of basket items {basketContext.numBasketItems}</Text>
       </View>
       {/*<View style={styles.main_container}>*/}
       {/*  <BasketContents total={total} setTotal={setTotal} Items={Items} />*/}

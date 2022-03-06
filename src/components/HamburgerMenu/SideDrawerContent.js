@@ -56,6 +56,16 @@ function SideDrawerContent(props) {
         labelStyle={styles.drawer_item_label}
       />
       <DrawerItem
+        label="View Basket"
+        onPress={() => props.navigation.navigate('BasketPage')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
+      <DrawerItem
         label="Logout the device"
         onPress={() => props.navigation.navigate('Logout the device')}
         activeTintColor="#2196f3"

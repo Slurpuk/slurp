@@ -16,6 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Close from 'react-native-vector-icons/AntDesign';
 import getUserInfo from '../../firebase/queries/getUserInfo';
+import BasketPage from "../../screens/BasketPage";
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -85,6 +86,16 @@ function CustomDrawerContent(props) {
         style={styles.drawer_item}
         labelStyle={styles.drawer_item_label}
       />
+        <DrawerItem
+        label="View Basket"
+        onPress={() => props.navigation.navigate('BasketPage')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
     </DrawerContentScrollView>
   );
 }
@@ -116,6 +127,7 @@ function MyDrawer() {
       <Drawer.Screen name="Change name" component={HomeScreen} />
       <Drawer.Screen name="Change password" component={HomeScreen} />
       <Drawer.Screen name="Logout the device" component={HomeScreen} />
+      <Drawer.Screen name="BasketPage" component={BasketPage} />
     </Drawer.Navigator>
   );
 }

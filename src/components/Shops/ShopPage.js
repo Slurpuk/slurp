@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -31,6 +31,12 @@ const ShopPage = ({navigation, route}) => {
   const [currItem, setCurrItem] = useState(null);
   const [numBasketItems, setNumBasketItems] = useState(0);
 
+  useEffect(() => {
+    basketContext.setShopTitle(shop.Name);
+  }, [basketContext, shop.Name]);
+
+  // basketContext.setShopTitle(shop.Name);
+
   return (
     <ShopContext.Provider
       value={{
@@ -42,7 +48,11 @@ const ShopPage = ({navigation, route}) => {
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <View style={styles.container}>
           <View
-            style={{maxHeight: '35%', minHeight: '30%', position: 'relative'}}>
+            style={{
+              maxHeight: '35%',
+              minHeight: '30%',
+              position: 'relative',
+            }}>
             <SharedElement id={'shop.id}'}>
               <Image
                 style={styles.cardImgs}
