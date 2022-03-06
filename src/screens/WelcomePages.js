@@ -119,6 +119,12 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
+  component: {
+    width: screenWidth,
+    height: '40%',
+    alignItems: 'center',
+    paddingHorizontal: '2%',
+  },
   footer: {
     textAlign: 'center',
     textDecorationLine: 'underline',
@@ -132,10 +138,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   text: {
-    paddingTop: '6%',
-    paddingBottom: '6%',
+    paddingVertical: '4%',
     textAlign: 'center',
-    paddingHorizontal: 20,
+    overflow: 'hidden',
   },
   safeSpace: {
     flex: 1,
