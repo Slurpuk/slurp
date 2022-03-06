@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 
 import {
     Alert,
-    Button,
     Dimensions,
     Platform, Pressable,
     StyleSheet,
@@ -10,18 +9,15 @@ import {
     View,
     PermissionsAndroid,
 } from 'react-native';
-//import Geolocation from '@react-native-community/geolocation';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import GetLocation from 'react-native-get-location';
-import textStyles from "../../../stylesheets/textStyles";
 import firestore from '@react-native-firebase/firestore';
-import firebase from '@react-native-firebase/app';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;
+
 export default function MapBackground() {
     const [
         currentLongitude,
@@ -42,49 +38,64 @@ export default function MapBackground() {
         setLongitude
     ] = useState(0);
 
+    const [
+      markers,
+      setMarkers
+    ] = useState([]);
+
     const [shopsData, setShopsData] = useState([]);
 
     const showShopsNearby = () => {
+        console.log("THESE ARE THE MARKED LOCATIONS")
+        console.log(markers.map(item=> item.name))
+    };
 
-        console.log(shopsData)
-
+    useEffect(() => {
         const editedShopsData = shopsData.map((item) => {
             return {
+                name: item.Name,
+                description: item.Intro,
                 latitude: item.Location._latitude,
                 longitude: item.Location._longitude,
+                image: item.Image,
             }
         });
 
-        console.log(editedShopsData);
-
         const finalShopsData = editedShopsData.map((item) => {
             return {
+                name: item.name,
+                description: item.description,
+                image: item.image,
                 latitude: item.latitude,
                 longitude: item.longitude,
                 d: calculateDistance(item),
             }
         }).sort((a, b) => (a.d > b.d) ? 1 : -1)
-            .filter((item) => item.d > 2000)
+          .filter((item) => item.d > 2000)
 
-        console.log(finalShopsData);
+        setMarkers(finalShopsData.map((item=> {
+            return {
+                name: item.name,
+                description: item.description,
+                image: item.image,
+                coords:{latitude: item.latitude,
+                longitude: item.longitude},
+            }
+        })));
 
-        // + display places on the map using markers
-    };
+    }, [shopsData, calculateDistance]);
 
-    //TODO print out the names of the sorted shops
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const calculateDistance = (coords) => {
+        // console.log('This is my current latitude: '+defaultLocation.latitude)
+        // console.log('This is my current longitude: '+defaultLocation.longitude)
+        // console.log("this is ")
+        // console.log(coords)
+        //
+        // console.log('This is the shop latitude: '+coords.latitude)
+        // console.log('This is the shop longitude: '+coords.longitude)
 
-
-        //console.log('This is the user latitude: '+currentLatitude)
-        //console.log('This is  the user longitude: '+currentLongitude)
-        console.log('This is my current latitude: '+defaultLocation.latitude)
-        console.log('This is my current longitude: '+defaultLocation.longitude)
-        console.log("this is ")
-        console.log(coords)
-
-        console.log('This is the shop latitude: '+coords.latitude)
-        console.log('This is the shop longitude: '+coords.longitude)
+        //TODO change defaultLocation for currentLocation (currentLatitude and currentLongitude)
 
         const R = 6371e3; // metres
         const latitude1 = defaultLocation.latitude * Math.PI/180; // φ, λ in radians
@@ -99,29 +110,17 @@ export default function MapBackground() {
 
         const distance = parseInt(R * cc); // in metres
 
-        console.log('(Eucledian Second Method)The places are '+distance+' metres away')
+        //console.log('(Euclidean Second Method)The places are '+distance+' metres away')
         return distance;
     };
 
+    //hard-coded markers for the purposes of testing
+    //TODO remove these
     const defaultLocation = {
-        latitude: 37.335480,
-        longitude: -121.893028,
+        latitude:  51.54817999763736,
+        longitude: -0.10673900193854804,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01
-    };
-
-    const hardcodedMapArea = { //this corresponds to the bush house area
-        latitude: 51.5140310233705,
-        longitude: -0.1164075624320158,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    };
-
-    const currentArea = {
-        latitude: currentLatitude,
-        longitude: currentLongitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
     };
 
     const bushHouse={ //this corresponds to the bush house area
@@ -130,38 +129,6 @@ export default function MapBackground() {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     };
-
-    const ourPalace={ //this corresponds to the queen palace
-        latitude: 51.495741653990926,
-        longitude: -0.14553530781225651,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    };
-
-    const hardcodedMarker2={ //this corresponds to the bush house area
-        latitude: 51.51143534301982,
-        longitude: -0.11969058630179567,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-
-    };
-
-    // this.state = {
-    //   markers: [{
-    //     title: 'bush',
-    //     coordinates: {
-    //       latitude: 51.5140310233705,
-    //       longitude: -0.1164075624320158
-    //     },
-    //   },
-    //     {
-    //       title: 'hihi',
-    //       coordinates: {
-    //         latitude: 51.51143534301982,
-    //         longitude: -0.11969058630179567
-    //       },
-    //     }]
-    // }
 
     useEffect(() => {
         const subscriber = firestore()
@@ -184,18 +151,9 @@ export default function MapBackground() {
     }, []);
 
 
-    const setLoc = (latitude, longitude) => {
-        setLatitude(latitude)
-        setLongitude(longitude)
-    };
-
-    const currentLocationMarker = {//this corresponds rn to the current location but should be a shop marker
-        latitude: currentLatitude,
-        longitude: currentLongitude,
-    };
-
     const locationPress = () => {
         console.log('Function will be hre!!');
+        //TODO takes you to the shop
     };
 
     useEffect(() => {
@@ -248,9 +206,8 @@ export default function MapBackground() {
             (error) => {
             },
             {
-                enableHighAccuracy: false,
+                enableHighAccuracy: true,
                 timeout: 30000,
-               // maximumAge: 1000
             },
         );
     };
@@ -271,8 +228,7 @@ export default function MapBackground() {
             (error) => {
             },
             {
-                enableHighAccuracy: false,
-                maximumAge: 1000
+                enableHighAccuracy: true,
             },
         );
     };
@@ -282,15 +238,19 @@ export default function MapBackground() {
             <MapView
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
-                region={currentArea}
+                region={bushHouse}
             >
-                <MapView.Marker
-                    coordinate={currentLocationMarker}
-                    pinColor={'#fefefe'}
-                    title={'hey there fellas'}
-                    description={'Test market'}
+                {markers.map((marker, index) => (
+                <Marker
+                    key={index}
+                    coordinate={marker.coords}
+                    pinColor={'navy'}
+                    title={marker.name}
+                    description={marker.description}
                     onPress={locationPress}
                 />
+                ))}
+
             </MapView>
             <View>
                 <Pressable onPress={showShopsNearby}>
