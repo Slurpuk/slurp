@@ -5,9 +5,9 @@ const CoffeeShopSvg = props => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 421.601 421.601"
-    style={{
-      enableBackground: 'new 0 0 421.601 421.601',
-    }}
+    // style={{
+    //   // enableBackground: 'new 0 0 421.601 421.601',
+    // }}
     xmlSpace="preserve"
     {...props}
   >
