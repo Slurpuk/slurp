@@ -83,10 +83,6 @@ const AnimatedCardTester = () => {
   );
 };
 
-// const empty = () =>{
-//
-// }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

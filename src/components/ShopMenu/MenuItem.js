@@ -26,12 +26,10 @@ const MenuItem = ({item}) => {
       <ImageBackground
         source={require('../../assets/images/coffeeUnsplash1.jpg')}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}
-        style={{width: '100%', height: '100%'}}
-      >
+        style={{width: '100%', height: '100%'}}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={styles.linearGradient}
-        >
+          style={styles.linearGradient}>
           <View style={styles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.name}
@@ -41,11 +39,11 @@ const MenuItem = ({item}) => {
 
           <Pressable
             onPress={() => {
+              context.setNumBasketItems(prevState => prevState + 1);
               setCount(count + 1);
-              console.log(count);
+              console.log(context.numBasketItems);
             }}
-            style={styles.menuCardPopupTrigger}
-          >
+            style={styles.menuCardPopupTrigger}>
             <Text style={[textStyles.iconText, {marginLeft: 0}]}>{count}</Text>
           </Pressable>
         </LinearGradient>

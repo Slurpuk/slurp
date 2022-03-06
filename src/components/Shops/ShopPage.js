@@ -18,26 +18,32 @@ import {OptionsContext} from '../../screens/LandingMapPage';
 import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../ShopMenu/OptionsPopUp';
 import CoffeeOptionsData from '../../fake-data/CoffeeOptionsData';
+import {BasketContext} from '../../navigation/HamburgerSlideBarNavigator';
 
 export const ShopContext = React.createContext();
 const ShopPage = ({navigation, route}) => {
   const MENUDATA = ItemsData;
   const defaultContext = useContext(OptionsContext);
+  const basketContext = useContext(BasketContext);
   const context = route === undefined ? defaultContext : route.params;
   const shop = context.currShop;
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
+  const [numBasketItems, setNumBasketItems] = useState(0);
 
   return (
     <ShopContext.Provider
-      value={{setOptionsVisible: setOptionsVisible, setCurrItem: setCurrItem}}
-    >
+      value={{
+        setOptionsVisible: setOptionsVisible,
+        setCurrItem: setCurrItem,
+        setNumBasketItems: setNumBasketItems,
+        numBasketItems: numBasketItems,
+      }}>
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <View style={styles.container}>
           <View
-            style={{maxHeight: '35%', minHeight: '30%', position: 'relative'}}
-          >
-            <SharedElement id={`shop.id}`}>
+            style={{maxHeight: '35%', minHeight: '30%', position: 'relative'}}>
+            <SharedElement id={'shop.id}'}>
               <Image
                 style={styles.cardImgs}
                 source={{uri: shop.Image}}
@@ -45,13 +51,13 @@ const ShopPage = ({navigation, route}) => {
               />
             </SharedElement>
 
-            <SharedElement id={`shop.id`}>
+            <SharedElement id={'shop.id'}>
               <Text style={[textStyles.headingOne, styles.cardHeading]}>
                 {shop.Name}
               </Text>
             </SharedElement>
 
-            <SharedElement id={`shop.id`}>
+            <SharedElement id={'shop.id'}>
               <ShopDetailIcons
                 style={styles.details}
                 likeness={shop.Likeness}
@@ -71,6 +77,7 @@ const ShopPage = ({navigation, route}) => {
             DATA={MENUDATA}
             renderItem={renderers.renderMenuItem}
             renderSection={renderers.renderMenuSection}
+            navigation={navigation}
           />
           {optionsVisible ? (
             <BlurView

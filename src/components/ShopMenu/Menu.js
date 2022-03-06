@@ -1,16 +1,20 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
 import SectionList from 'react-native-tabs-section-list';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
+import {ShopContext} from '../Shops/ShopPage';
+import {BasketContext} from '../../navigation/HamburgerSlideBarNavigator';
+import basketContents from '../Basket/BasketContents';
 
-const NumItemsContext = React.createContext(0);
+const Menu = ({DATA, renderSection, renderItem, navigation}) => {
+  const context = useContext(ShopContext);
+  const basketContext = useContext(BasketContext);
 
-const Menu = ({DATA, renderSection, renderItem}) => (
-  <>
-    <NumItemsContext.Provider value="0">
+  return (
+    <>
       <SafeAreaView style={styles.container}>
         <SectionList
           sections={DATA}
@@ -28,14 +32,12 @@ const Menu = ({DATA, renderSection, renderItem}) => (
               style={[
                 styles.tabContainer,
                 isActive ? styles.activeTabBar : null,
-              ]}
-            >
+              ]}>
               <Text
                 style={[
                   [textStyles.poppinsTitle],
                   isActive ? styles.activeText : styles.sleepText,
-                ]}
-              >
+                ]}>
                 {title}
               </Text>
             </View>
@@ -45,25 +47,23 @@ const Menu = ({DATA, renderSection, renderItem}) => (
         <View style={styles.absoluteArea}>
           <LinearGradient
             colors={['transparent', '#EDEBE7', '#EDEBE7']}
-            style={styles.linearGradient}
-          >
-            <NumItemsContext.Consumer>
-              {value => {
-                return (
-                  <CustomButton
-                    text="View Basket"
-                    priority="primary"
-                    optionalNumber={value}
-                  />
-                );
+            style={styles.linearGradient}>
+            <CustomButton
+              text="View Basket"
+              priority="primary"
+              optionalNumber={context.numBasketItems}
+              onPress={() => {
+                basketContext.setNumBasketItems(context.numBasketItems);
+                basketContext.setShopTitle()
+                navigation.navigate('BasketPage');
               }}
-            </NumItemsContext.Consumer>
+            />
           </LinearGradient>
         </View>
       </SafeAreaView>
-    </NumItemsContext.Provider>
-  </>
-);
+    </>
+  );
+};
 
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
