@@ -1,24 +1,21 @@
 import {
-  FlatList,
   View,
   StyleSheet,
-  Pressable,
   Text,
-  ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
-import LinearGradient from 'react-native-linear-gradient';
+import firestore from '@react-native-firebase/firestore';
 
-const CollapsableOrder = ({order}) => {
-  const totalPrice = getTotalPrice(order);
+const CollapsableOrder = async ({order}) => {
+  const totalPrice = await getTotalPrice(order);
   const isOrderCurrent =
-    order.status === 'Ready' ||
-    order.status === 'Pending' ||
-    order.status === 'Accepted';
+    order.status === 'ready' ||
+    order.status === 'pending' ||
+    order.status === 'accepted';
   const initialHeight = isOrderCurrent ? 126 : 100;
 
   return (
@@ -37,9 +34,13 @@ const CollapsableOrder = ({order}) => {
   );
 };
 
-const getTotalPrice = order => {
+const getTotalPrice = async order => {
   let total = 0;
-  order.items.forEach(item => (total += item.quantity * item.price));
+  for (const item of order.Items) {
+    let coffee = await firestore().doc(item.Coffee.path).get();
+    //console.log(coffee.data().Name);
+    total += item.Quantity * coffee.data().Price;
+  }
   return total;
 };
 

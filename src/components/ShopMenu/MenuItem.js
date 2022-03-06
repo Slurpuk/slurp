@@ -1,13 +1,13 @@
 import React, {useContext, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
-  View,
+  Dimensions,
+  ImageBackground,
+  Pressable,
   StyleSheet,
   Text,
-  Dimensions,
   TouchableOpacity,
-  Pressable,
-  ImageBackground,
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../Shops/ShopPage';

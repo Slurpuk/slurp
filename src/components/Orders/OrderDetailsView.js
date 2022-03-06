@@ -8,9 +8,11 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
+import firestore from '@react-native-firebase/firestore';
 
-const OrderDetailsView = ({order}) => {
+const OrderDetailsView = async ({order}) => {
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
+  let coffeeShopName = await firestore().doc(order.ShopID.path).get();
   return (
     <View style={styles.container}>
       <View style={styles.orderDetails}>
@@ -25,11 +27,11 @@ const OrderDetailsView = ({order}) => {
           <Text
             style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
           >
-            {order.coffeeShopName}
+            {coffeeShopName}
           </Text>
           {getStatusAndDateComponent(order)}
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
-            {getItemsText(order)}
+            {await getItemsText(order)}
           </Text>
         </View>
       </View>
@@ -38,14 +40,15 @@ const OrderDetailsView = ({order}) => {
   );
 };
 
-const getItemsText = order => {
+const getItemsText = async order => {
   let itemsComponent = '';
-  if (order.items.length === 1) {
-    let singleItem = order.items[0];
-    itemsComponent = singleItem.quantity + ' ' + singleItem.name;
+  if (order.Items.length === 1) {
+    let singleItem = order.Items[0];
+    let coffee = firestore().doc(singleItem.Coffee.path).get()
+    itemsComponent = singleItem.Quantity + ' ' + coffee.data().Name;
   } else {
     let numberOfItems = 0;
-    order.items.forEach(item => (numberOfItems += item.quantity));
+    order.Items.forEach(item => (numberOfItems += item.Quantity));
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;

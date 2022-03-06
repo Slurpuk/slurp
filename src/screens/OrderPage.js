@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,15 +8,47 @@ import {
   Dimensions,
 } from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
-import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
-import pastOrders from '../fake-data/PastOrderData';
-import currentOrders from '../fake-data/CurrentOrderData';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import firestore from '@react-native-firebase/firestore';
+import textStyles from '../../stylesheets/textStyles';
 
 const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = ({navigation}) => {
+  const [Orders, setOrders] = useState([]);
+  let pastOrders = Orders.filter(
+    order => order.Status === 'finished' || order.Status === 'rejected',
+  );
+  let currentOrders = Orders.filter(
+    order =>
+      order.Status === 'incoming' ||
+      order.Status === 'accepted' ||
+      order.Status === 'ready',
+  );
+
+  // Subscribe to the Orders model
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Orders')
+      .onSnapshot(querySnapshot => {
+        const orders = [];
+
+        querySnapshot.forEach(documentSnapshot => {
+          let orderData = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          };
+
+          orders.push(orderData);
+          setOrders(orders);
+        });
+      });
+
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
+
   return (
     <View style={styles.container}>
       <GreenHeader headerText={'ORDERS'} navigation={navigation} />
@@ -49,16 +81,19 @@ const OrderPage = ({navigation}) => {
       >
         <Tab.Screen
           name="Current"
-          component={CurrentOrders}
+          component={() => <CurrentOrders currentOrders={currentOrders}/>}
           style={styles.mainContainer}
         />
-        <Tab.Screen name="Past" component={PastOrders} />
+        <Tab.Screen
+          name="Past"
+          component={() => <PastOrders pastOrders={pastOrders} />}
+        />
       </Tab.Navigator>
     </View>
   );
 };
 
-const PastOrders = () => {
+const PastOrders = ({pastOrders}) => {
   return (
     <SectionList
       contentContainerStyle={styles.mainContainer}
@@ -75,7 +110,7 @@ const PastOrders = () => {
   );
 };
 
-const CurrentOrders = () => {
+const CurrentOrders = ({currentOrders}) => {
   return (
     <FlatList
       contentContainerStyle={styles.mainContainer}

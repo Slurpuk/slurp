@@ -11,7 +11,6 @@ import {
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopPage from '../components/Shops/ShopPage';
 import MapBackground from '../components/LandingMap/MapBackground';
-import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 import ShopList from '../components/Shops/ShopList';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
@@ -54,22 +53,23 @@ export default function LandingMapPage({navigation}) {
         const shops = [];
 
         querySnapshot.forEach(documentSnapshot => {
-
           let shopData = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
-          }
+          };
 
-          let items = []
+          let items = [];
           documentSnapshot.data().ItemsOffered.forEach(itemRef => {
-            firestore().doc(itemRef.path).onSnapshot(querySnapshot => {
-              items.push({
-                ...querySnapshot.data(),
-                key: querySnapshot.id,
-              })
-              shopData.ItemsOffered = items
-            })
-          })
+            firestore()
+              .doc(itemRef.path)
+              .onSnapshot(querySnapshot => {
+                items.push({
+                  ...querySnapshot.data(),
+                  key: querySnapshot.id,
+                });
+                shopData.ItemsOffered = items;
+              });
+          });
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
