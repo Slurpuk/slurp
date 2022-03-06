@@ -79,6 +79,14 @@ const textStyles = StyleSheet.create({
     color: '#173C4F',
     includeFontPadding: false,
   },
+  redPoppinsLargeBody: {
+    fontSize: 17,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: 0.3,
+    color: '#C12E48',
+    includeFontPadding: false,
+  },
   bluePoppinsSubHeading: {
     fontSize: 16,
     fontWeight: '600',
