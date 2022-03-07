@@ -13,6 +13,8 @@ const NumItemsContext = React.createContext(0);
 
 const Menu = ({DATA, renderSection, renderItem, navigation}) => {
   const context = useContext(ShopContext);
+
+
   return (
     <>
       <NumItemsContext.Provider value="0">
@@ -59,7 +61,7 @@ const Menu = ({DATA, renderSection, renderItem, navigation}) => {
                       <CustomButton
                         text="View Basket"
                         priority="primary"
-                        optionalNumber={value}
+                        optionalNumber={context.basketContent.length}
                       />
                     </TouchableOpacity>
                   );

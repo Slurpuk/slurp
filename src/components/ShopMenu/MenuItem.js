@@ -21,6 +21,16 @@ const MenuItem = ({item}) => {
     context.setOptionsVisible(true);
   };
 
+  function addToBasket(prev, item) {
+    let updated = [...prev, item];
+
+    // return updated.reduce(function (acc, curr) {
+    //   return acc[curr] ? ++acc[curr] : (acc[curr] = 1), acc;
+    // }, {});
+
+    return updated;
+  }
+
   return (
     <TouchableOpacity style={styles.item} onPress={() => showOptions()}>
       <ImageBackground
@@ -39,9 +49,11 @@ const MenuItem = ({item}) => {
 
           <Pressable
             onPress={() => {
-              context.setNumBasketItems(prevState => prevState + 1);
               setCount(count + 1);
-              console.log(context.numBasketItems);
+              item.count = count;
+              // console.log(count);
+              // console.log(item.count);
+              context.setBasketContent(prev => addToBasket(prev, item));
             }}
             style={styles.menuCardPopupTrigger}>
             <Text style={[textStyles.iconText, {marginLeft: 0}]}>{count}</Text>

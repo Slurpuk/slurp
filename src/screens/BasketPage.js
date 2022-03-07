@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import {firebase} from '@react-native-firebase/functions';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {
   StyleSheet,
@@ -20,6 +20,8 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const BasketPage = ({navigation, route}) => {
+  // const basket = route.params.basket;
+
   const [Items] = useState([
     {
       key: 1,
@@ -60,6 +62,21 @@ const BasketPage = ({navigation, route}) => {
 
   const [total, setTotal] = useState(0);
   const context = route.params;
+  console.log(context.basketContent);
+
+
+  // function reduceBasketContent() {
+  //   const reduced = context.basketContent.reduce((occurrences, item) => {
+  //     occurrences[item] = (occurrences[item] || 0) + 1;
+  //     return occurrences;
+  //   }, {});
+  //
+  //   const result = Object.keys(reduced).map(item => {
+  //     return {key: item, value: reduced[item]};
+  //   });
+  //   console.log(result);
+  //   return result;
+  // }
 
   function confirmOrder() {
     firestore()
@@ -95,7 +112,11 @@ const BasketPage = ({navigation, route}) => {
         />
       </View>
       <View style={styles.main_container}>
-        <BasketContents total={total} setTotal={setTotal} Items={Items} />
+        <BasketContents
+          total={total}
+          setTotal={setTotal}
+          Items={context.basketContent}
+        />
       </View>
       <TouchableOpacity onPress={confirmOrder} style={styles.buttons}>
         <CustomButton

@@ -12,6 +12,8 @@ const BasketContents = ({total, setTotal, Items}) => {
     // setItems((Items.find(i => i.key === item.key).amount += amount));
   };
 
+
+
   return (
     <View style={styles.basket_content}>
       <Text style={styles.my_order}>My Order</Text>
@@ -20,7 +22,7 @@ const BasketContents = ({total, setTotal, Items}) => {
         renderItem={({item}) => (
           <View style={styles.item_container}>
             <View style={styles.item_information}>
-              <Text style={styles.item_name}>{item.name}</Text>
+              <Text style={styles.item_name}>{item.Name}</Text>
               <FlatList
                 data={item.specifications}
                 renderItem={specification => (
@@ -35,14 +37,12 @@ const BasketContents = ({total, setTotal, Items}) => {
               <Pressable onPress={() => changeAmount(item, -1)}>
                 <Text style={styles.change_amount_button}>-</Text>
               </Pressable>
-              <Text style={styles.amount}>{item.amount}</Text>
+              <Text style={styles.amount}>{item.count}</Text>
               <Pressable onPress={() => changeAmount(item, 1)}>
                 <Text style={styles.change_amount_button}>+</Text>
               </Pressable>
             </View>
-            <Text style={styles.price}>
-              £{(item.price * item.amount).toFixed(2)}
-            </Text>
+            <Text style={styles.price}>£{item.Price * 1}</Text>
           </View>
         )}
         style={styles.items_list}
