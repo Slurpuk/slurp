@@ -6,7 +6,7 @@ const pastOrders = [
       {
         key: 54,
         orderNumber: 654321,
-        status: 'Ready',
+        status: 'Rejected',
         coffeeShopName: 'Eten & Driken',
         date: '30th Nov',
         time: '18:20',
@@ -104,7 +104,7 @@ const pastOrders = [
       {
         key: 56,
         orderNumber: 123456,
-        status: 'Ready',
+        status: 'Cancelled',
         coffeeShopName: 'Eten & Driken',
         date: '30th Nov',
         time: '18:20',

@@ -18,7 +18,7 @@ const HamburgerButton = ({navigation}) => {
           color={'#046D66'}
           underlayColor={'transparent'}
           backgroundColor={'transparent'}
-          size={25}
+          size={0.03 * screenHeight}
         />
       </TouchableHighlight>
     </View>
@@ -30,7 +30,6 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   header: {
     height: 0,
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },

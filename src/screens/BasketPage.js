@@ -72,19 +72,6 @@ const BasketPage = () => {
         console.log('Order added!');
       });
 
-    function sendOrder() {
-      firestore()
-        .collection('FakeOrder')
-        .add({
-          name: 'Ada Lovelace',
-          type: 'incoming',
-          total: 30,
-        })
-        .then(() => {
-          console.log('Order added!');
-        });
-    }
-
     return (
       <View style={styles.basket}>
         <View style={styles.header}>
