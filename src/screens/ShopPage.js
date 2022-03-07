@@ -19,7 +19,6 @@ const ShopPage = ({navigation, route}) => {
   const context = route === undefined ? defaultContext : route.params;
   const shop = context.currShop;
   const [menuData, setMenuData] = useState(null);
-  // let MENUDATA = shop.ItemsOffered;
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
 
@@ -29,7 +28,7 @@ const ShopPage = ({navigation, route}) => {
 
   function filterData() {
     let data = [
-      {title: 'Coffee', data: [{key: 'Coffees', list: []}], key: 1},
+      {title: 'Coffees', data: [{key: 'Coffees', list: []}], key: 1},
       {title: 'Drinks', data: [{key: 'Cold Drinks', list: []}], key: 2},
       {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3},
     ];

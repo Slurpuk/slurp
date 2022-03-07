@@ -3,9 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
-  Pressable,
   Animated,
-  Image,
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
@@ -17,6 +15,7 @@ export default function CustomButton(props) {
     optionalNumber = null,
     width = screenWidth * 0.91,
   } = props;
+
   return (
     <View>
       <Animated.View style={{transform: [{scale}]}}>
@@ -28,9 +27,7 @@ export default function CustomButton(props) {
           onPress={props.onPress}
         >
           <Text style={buttonStyles.buttonText}>{text}</Text>
-          {optionalNumber == null ? (
-            <></>
-          ) : (
+          {optionalNumber === null ? null : (
             <Text
               style={[
                 buttonStyles.optionalNumber,
@@ -77,7 +74,8 @@ const buttonStyles = StyleSheet.create({
   },
 
   optionalNumber: {
-    borderRadius: 30,
+    borderRadius: 10,
+    overflow: 'hidden',
     width: 20,
     height: 20,
     textAlign: 'center',
@@ -87,6 +85,8 @@ const buttonStyles = StyleSheet.create({
 
   bubbleprimary: {
     backgroundColor: '#183342',
+    color: '#E9E5D8',
+    fontFamily: 'Poppins-SemiBold',
   },
 
   bubblesecondary: {

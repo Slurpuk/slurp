@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
@@ -14,14 +14,12 @@ import {ShopContext} from '../../screens/ShopPage';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
-  const context = useContext(ShopContext);
+  const shopContext = useContext(ShopContext);
 
   const showOptions = () => {
-    context.setCurrItem(item);
-    context.setOptionsVisible(true);
+    shopContext.setCurrItem(item);
+    shopContext.setOptionsVisible(true);
   };
-
-  useEffect(() => {});
 
   return (
     <TouchableOpacity style={styles.item} onPress={() => showOptions()}>
@@ -38,7 +36,9 @@ const MenuItem = ({item}) => {
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>£{item.Price}</Text>
+            <Text style={textStyles.coffeePrice}>
+              £{item.Price.toPrecision(3)}
+            </Text>
           </View>
 
           <Pressable
@@ -52,7 +52,7 @@ const MenuItem = ({item}) => {
               style={[
                 textStyles.iconText,
                 {
-                  marginLeft: 0,
+                  marginLeft: 1,
                   marginTop: 2,
                   color: 'black',
                   textAlign: 'center',

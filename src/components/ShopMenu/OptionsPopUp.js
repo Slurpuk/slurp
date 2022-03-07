@@ -18,13 +18,13 @@ const OptionsPopUp = ({data, renderer, item}) => {
   const [options, setOptions] = useState({}); // List of options currently selected
   const updateOptions = (name, price, isAdd) => {
     if (isAdd) {
-      setTotalPrice(price + totalPrice);
+      setTotalPrice(((price + totalPrice * 100) / 100).toPrecision(3));
       setOptions(prevState => ({
         ...prevState,
         [name]: price,
       }));
     } else {
-      setTotalPrice(totalPrice - price);
+      setTotalPrice(((100 * totalPrice - price) / 100).toPrecision(3));
       let newState = options;
       delete newState[name];
       setOptions(newState);
