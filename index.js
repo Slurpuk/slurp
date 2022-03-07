@@ -11,5 +11,5 @@ import LandingMapPage from "./src/screens/LandingMapPage";
 import MapBackground from "./src/components/LandingMap/MapBackground";
 // import Query from "./src/firebase/firestore/basicQuery";
 
-AppRegistry.registerComponent(appName, () => testers.NavigableLandingPage);
+AppRegistry.registerComponent(appName, () => App);
 // AppRegistry.registerComponent(appName, () => MapBackground);

@@ -29,10 +29,7 @@ export default function MapBackground() {
   const [shopsData, setShopsData] = useState([]);
   const context = useContext(OptionsContext);
 
-  const showShopsNearby = () => {
-    console.log('THESE ARE THE MARKED LOCATIONS');
-    console.log(markers.map(item => item.name));
-  };
+
 
   useEffect(() => {
     const editedShopsData = shopsData.map(item => {
@@ -60,7 +57,6 @@ export default function MapBackground() {
       .sort((a, b) => {
         return a.d < b.d;
       });
-    console.log(finalShopsData.map(item => item.d));
 
     setMarkers(
       finalShopsData.map(item => {
@@ -96,7 +92,6 @@ export default function MapBackground() {
 
     const distance = parseInt(R * cc); // in metres
 
-    //console.log('(Euclidean Second Method)The places are '+distance+' metres away')
     return distance;
   };
 
@@ -110,7 +105,7 @@ export default function MapBackground() {
   };
 
   const bushHouse = {
-    //this corresponds to the bush house area
+    //this corresponds to the bush house area = default area
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
     latitudeDelta: 0.01,
@@ -120,8 +115,7 @@ export default function MapBackground() {
   useEffect(() => {
     const temp = context.shopsData;
     setShopsData(temp);
-    console.log(temp);
-  });
+  }, [context.shopsData]);
 
   const locationPress = () => {
     console.log('Function will be hre!!');
@@ -213,19 +207,19 @@ export default function MapBackground() {
           />
         ))}
       </MapView>
-      <View>
-        <Pressable onPress={showShopsNearby}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-SemiBold',
-              letterSpacing: 0.5,
-              fontSize: 40,
-              backgroundColor: 'red',
-            }}>
-            Show shops nearby{' '}
-          </Text>
-        </Pressable>
-      </View>
+      {/*<View>*/}
+      {/*  <Pressable onPress={showShopsNearby}>*/}
+      {/*    <Text*/}
+      {/*      style={{*/}
+      {/*        fontFamily: 'Poppins-SemiBold',*/}
+      {/*        letterSpacing: 0.5,*/}
+      {/*        fontSize: 40,*/}
+      {/*        backgroundColor: 'red',*/}
+      {/*      }}>*/}
+      {/*      Show shops nearby{' '}*/}
+      {/*    </Text>*/}
+      {/*  </Pressable>*/}
+      {/*</View>*/}
     </View>
   );
 }
