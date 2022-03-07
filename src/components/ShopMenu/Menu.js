@@ -5,60 +5,70 @@ import SectionList from 'react-native-tabs-section-list';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
+import {OptionsContext} from '../../screens/LandingMapPage';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ShopContext} from '../Shops/ShopPage';
-import {BasketContext} from '../../navigation/HamburgerSlideBarNavigator';
+
+const NumItemsContext = React.createContext(0);
 
 const Menu = ({DATA, renderSection, renderItem, navigation}) => {
   const context = useContext(ShopContext);
-  const basketContext = useContext(BasketContext);
-
   return (
     <>
-      <SafeAreaView style={styles.container}>
-        <SectionList
-          sections={DATA}
-          stickySectionHeadersEnabled={false}
-          scrollToLocationOffset={-20}
-          tabBarStyle={styles.tabBar}
-          renderItem={({item}) => renderSection({item, renderItem})} // Here, 'item' is actually a whole section
-          renderSectionHeader={({section: {title}}) => (
-            <View style={[textStyles.sectionHeader, styles.sectionHeader]}>
-              <Text style={textStyles.poppinsTitle}>{title}</Text>
-            </View>
-          )}
-          renderTab={({title, isActive}) => (
-            <View
-              style={[
-                styles.tabContainer,
-                isActive ? styles.activeTabBar : null,
-              ]}>
-              <Text
+      <NumItemsContext.Provider value="0">
+        <SafeAreaView style={styles.container}>
+          <SectionList
+            sections={DATA}
+            stickySectionHeadersEnabled={false}
+            scrollToLocationOffset={-20}
+            tabBarStyle={styles.tabBar}
+            renderItem={({item}) => renderSection({item, renderItem})} // Here, 'item' is actually a whole section
+            renderSectionHeader={({section: {title}}) => (
+              <View style={[textStyles.sectionHeader, styles.sectionHeader]}>
+                <Text style={textStyles.poppinsTitle}>{title}</Text>
+              </View>
+            )}
+            renderTab={({title, isActive}) => (
+              <View
                 style={[
-                  [textStyles.poppinsTitle],
-                  isActive ? styles.activeText : styles.sleepText,
+                  styles.tabContainer,
+                  isActive ? styles.activeTabBar : null,
                 ]}>
-                {title}
-              </Text>
-            </View>
-          )}
-        />
+                <Text
+                  style={[
+                    [textStyles.poppinsTitle],
+                    isActive ? styles.activeText : styles.sleepText,
+                  ]}>
+                  {title}
+                </Text>
+              </View>
+            )}
+          />
 
-        <View style={styles.absoluteArea}>
-          <LinearGradient
-            colors={['transparent', '#EDEBE7', '#EDEBE7']}
-            style={styles.linearGradient}>
-            <CustomButton
-              text="View Basket"
-              priority="primary"
-              optionalNumber={context.numBasketItems}
-              onPress={() => {
-                basketContext.setNumBasketItems(context.numBasketItems);
-                navigation.navigate('BasketPage');
-              }}
-            />
-          </LinearGradient>
-        </View>
-      </SafeAreaView>
+          <View style={styles.absoluteArea}>
+            <LinearGradient
+              colors={['transparent', '#EDEBE7', '#EDEBE7']}
+              style={styles.linearGradient}>
+              <NumItemsContext.Consumer>
+                {value => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('Basket page', context)
+                      }>
+                      <CustomButton
+                        text="View Basket"
+                        priority="primary"
+                        optionalNumber={value}
+                      />
+                    </TouchableOpacity>
+                  );
+                }}
+              </NumItemsContext.Consumer>
+            </LinearGradient>
+          </View>
+        </SafeAreaView>
+      </NumItemsContext.Provider>
     </>
   );
 };
@@ -125,7 +135,6 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: '',
     bottom: 0,
-    // borderWidth: 2,
     width: '100%',
   },
 });

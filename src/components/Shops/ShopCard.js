@@ -6,55 +6,55 @@ import {
   Dimensions,
   Pressable,
   Platform,
-  Image,
+  ImageBackground,
 } from 'react-native';
-import {SharedElement} from 'react-native-shared-element';
 import {OptionsContext} from '../../screens/LandingMapPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 import textStyles from '../../../stylesheets/textStyles';
 import firebase from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
+import {BlurView} from '@react-native-community/blur';
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(OptionsContext);
-  const [cont, setContext] = useState(false);
-  const visible = useContext(VisibleContext);
+  const [isShopPage, setShopPage] = useState(false);
+  const hamburgerVisible = useContext(VisibleContext);
 
   const shopPageDetails = () => {
     context.setCurrShop(shop);
-    setContext(true);
+    setShopPage(true);
   };
 
   useEffect(() => {
-    if (cont) {
-      visible(false);
-      setContext(false);
+    if (isShopPage) {
+      hamburgerVisible(false);
+      setShopPage(false);
+      context.setFull;
       navigation.navigate('Shop page', context);
     }
-  }, [cont]);
+  }, [isShopPage]);
 
-  return (
-    <Pressable style={styles.item} onPress={shopPageDetails}>
-      <SharedElement id={'shop.id}'}>
-        <Image
-          style={styles.cardImgs}
-          source={{uri: shop.Image}}
-          resizeMode="cover"
-        />
-      </SharedElement>
-
-      <SharedElement id={'shop.id'}>
-        <Text style={[textStyles.headingOne, styles.cardHeading]}>
+  return !shop.IsOpen ? (
+    <ImageBackground
+      style={styles.item}
+      imageStyle={styles.image}
+      source={{uri: shop.Image}}
+      resizeMode="cover"
+      blurRadius={4}>
+      <Text style={[textStyles.headingOne, styles.shopName]}>{shop.Name}</Text>
+      <Text style={[textStyles.bodyText]}> CLOSED </Text>
+    </ImageBackground>
+  ) : (
+    <Pressable onPress={shopPageDetails}>
+      <ImageBackground
+        style={styles.item}
+        imageStyle={styles.image}
+        source={{uri: shop.Image}}
+        resizeMode="cover">
+        <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-      </SharedElement>
-
-      <SharedElement id={'shop.id'}>
-        <ShopDetailIcons
-          style={styles.details}
-          likeness={shop.Likeness}
-          timeToOrder={shop.Queue}
-        />
-      </SharedElement>
+        <ShopDetailIcons likeness={shop.Likeness} timeToOrder={shop.Queue} />
+      </ImageBackground>
     </Pressable>
   );
 };
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     height: screenWidth * 0.37,
     marginVertical: '1.8%',
     display: 'flex',
-    alignItems: 'flex-start',
-
+    alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
     position: 'relative',
     ...Platform.select({
@@ -82,32 +82,18 @@ const styles = StyleSheet.create({
     }),
   },
 
-  title: {
-    letterSpacing: 0.5,
-    fontSize: 17,
-    justifyContent: 'center',
-  },
-
   shopName: {
     fontFamily: 'JosefinSans-Bold',
     color: 'white',
     fontWeight: '700',
-    paddingBottom: 10,
+    paddingBottom: '2%',
   },
-  cardImgs: {
+
+  image: {
     position: 'absolute',
     width: screenWidth,
     height: screenWidth * 0.37,
-    left: 0,
-  },
-
-  details: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    display: 'flex',
-    backgroundColor: '#36363677',
-    height: '100%',
+    opacity: 0.7,
   },
 });
 

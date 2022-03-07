@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import {firebase} from '@react-native-firebase/functions';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 
 import {
   StyleSheet,
@@ -11,117 +11,108 @@ import {
   Platform,
   Pressable,
   StatusBar,
+  Alert,
 } from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import textStyles from '../../stylesheets/textStyles';
-import WhiteArrowButton from '../sub-components/WhiteArrowButton';
-import {BasketContext} from '../navigation/HamburgerSlideBarNavigator';
-import {ShopContext} from '../components/Shops/ShopPage';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const BasketPage = props => {
-  const basketContext = useContext(BasketContext);
-  const shopContext = useContext(ShopContext);
+const BasketPage = ({navigation, route}) => {
+  const [Items] = useState([
+    {
+      key: 1,
+      name: 'Latte',
+      amount: 0,
+      price: '2.40',
+      specifications: ['Oat Milk'],
+    },
+    {
+      key: 2,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+    {
+      key: 3,
+      name: 'Americano',
+      amount: 0,
+      price: '2.10',
+      specifications: [],
+    },
+    {
+      key: 4,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+    {
+      key: 5,
+      name: 'Cappuccino',
+      amount: 0,
+      price: '2.30',
+      specifications: ['Dairy', 'Caramel Syrup'],
+    },
+  ]);
 
-  //   const [Items] = useState([
-  //     {
-  //       key: 1,
-  //       name: 'Latte',
-  //       amount: 0,
-  //       price: '2.40',
-  //       specifications: ['Oat Milk'],
-  //     },
-  //     {
-  //       key: 2,
-  //       name: 'Cappuccino',
-  //       amount: 0,
-  //       price: '2.30',
-  //       specifications: ['Dairy', 'Caramel Syrup'],
-  //     },
-  //     {
-  //       key: 3,
-  //       name: 'Americano',
-  //       amount: 0,
-  //       price: '2.10',
-  //       specifications: [],
-  //     },
-  //     {
-  //       key: 4,
-  //       name: 'Cappuccino',
-  //       amount: 0,
-  //       price: '2.30',
-  //       specifications: ['Dairy', 'Caramel Syrup'],
-  //     },
-  //     {
-  //       key: 5,
-  //       name: 'Cappuccino',
-  //       amount: 0,
-  //       price: '2.30',
-  //       specifications: ['Dairy', 'Caramel Syrup'],
-  //     },
-  //   ]);
+  const [total, setTotal] = useState(0);
+  const context = route.params;
 
-  // const [total, setTotal] = useState(0);
-
-  // function sendOrder() {
-  //   firestore()
-  //     .collection('FakeOrder')
-  //     .add({
-  //       customerName: 'Shaun the sheep',
-  //       status: 'incoming',
-  //       total: total.toFixed(2),
-  //       items: Items.filter(item => item.amount !== 0),
-  //       key: 3,
-  //     })
-  //     .then(() => {
-  //       console.log('Order added!');
-  //     });
-  // }
-
-  // function sendOrder() {
-  //   firestore()
-  //     .collection('FakeOrder')
-  //     .add({
-  //       name: 'Ada Lovelace',
-  //       type: 'incoming',
-  //       total: 30,
-  //     })
-  //     .then(() => {
-  //       console.log('Order added!');
-  //     });
-  // }
+  function confirmOrder() {
+    firestore()
+      .collection('FakeOrder')
+      .add({
+        customerName: 'Shaun the sheep',
+        status: 'incoming',
+        total: total.toFixed(2),
+        items: Items.filter(item => item.amount !== 0),
+        key: 3,
+      })
+      .then(() => {
+        console.log('Order added!');
+      });
+    Alert.alert(
+      'Order received.',
+      'Your order has been sent to the shop! Awaiting response.',
+      [
+        {
+          text: 'OK',
+        },
+      ],
+    );
+    navigation.navigate('Order history');
+  }
 
   return (
     <View style={styles.basket}>
-
       <View style={styles.header}>
-        <GreenHeader headerText={basketContext.shopTitle} navigation={props.navigation} />
+        <GreenHeader
+          headerText={'My Basket - ' + context.shop.Name}
+          navigation={navigation}
+        />
       </View>
-      <View>
-        <Text>Number of basket items {basketContext.numBasketItems}</Text>
+      <View style={styles.main_container}>
+        <BasketContents total={total} setTotal={setTotal} Items={Items} />
       </View>
-      {/*<View style={styles.main_container}>*/}
-      {/*  <BasketContents total={total} setTotal={setTotal} Items={Items} />*/}
-      {/*</View>*/}
-      {/*<View style={styles.buttons}>*/}
-      {/*  <CustomButton*/}
-      {/*    priority="primary"*/}
-      {/*    style={styles.button}*/}
-      {/*    text={'Apple/Google pay'}*/}
-      {/*  />*/}
-      {/*</View>*/}
-      {/*<View style={[styles.lastButton, styles.buttons]}>*/}
-      {/*  <CustomButton*/}
-      {/*    priority="primary"*/}
-      {/*    style={styles.button}*/}
-      {/*    text={'Checkout with card'}*/}
-      {/*  />*/}
-      {/*  <Pressable onPress={sendOrder}>*/}
-      {/*    <Text>Send Order</Text>*/}
-      {/*  </Pressable>*/}
-      {/*</View>*/}
+      <TouchableOpacity onPress={confirmOrder} style={styles.buttons}>
+        <CustomButton
+          priority="primary"
+          style={styles.button}
+          text={'Apple/Google Pay'}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={confirmOrder}
+        style={[styles.lastButton, styles.buttons]}>
+        <CustomButton
+          priority="primary"
+          style={styles.button}
+          text={'Checkout with card'}
+        />
+      </TouchableOpacity>
     </View>
   );
 };

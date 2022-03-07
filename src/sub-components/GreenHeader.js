@@ -3,16 +3,9 @@ import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import WhiteArrowButton from './WhiteArrowButton';
 import textStyles from '../../stylesheets/textStyles';
+import {getTightPadding} from '../../stylesheets/StyleFunction';
 
 const GreenHeader = ({headerText, navigation}) => {
-  const onBackButtonClicked = () => {
-    // Alert.alert('FUTURE NAVIGATION FEATURE', 'Go back to previous page', [
-    //   {
-    //     text: 'OK',
-    //   },
-    // ]);
-  };
-
   return (
     <View style={styles.header}>
       <StatusBar translucent={true} backgroundColor="transparent" />
@@ -30,19 +23,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     backgroundColor: '#046D66',
-    display: 'flex',
-    paddingTop: getStatusBarHeight(),
+    paddingTop: getTightPadding(),
     paddingBottom: '6%',
     paddingHorizontal: '5%',
     alignItems: 'center',
   },
-
   title: {
-    ...Platform.select({
-      ios: {
-        marginTop: '2%',
-      },
-    }),
+    marginTop: '2%',
   },
 });
 

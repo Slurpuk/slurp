@@ -5,12 +5,13 @@ const CoffeeShopSvg = props => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 421.601 421.601"
-    style={{
-      enableBackground: 'new 0 0 421.601 421.601',
-    }}
+    // style={{
+    //   // enableBackground: 'new 0 0 421.601 421.601',
+    // }}
     xmlSpace="preserve"
     {...props}
   >
+    <Circle cx="210.8" cy="210.8" r="210.8" fill="#C4C4C4" />
     <Path
       style={{
         fill: '#087562', //primary button color
