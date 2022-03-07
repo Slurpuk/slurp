@@ -81,8 +81,7 @@ const ShopPage = ({navigation, route}) => {
       {optionsVisible ? (
         <OptionsPopUp
           data={CoffeeOptionsData}
-          curr_price={currItem.Price}
-          product_name={currItem.Name}
+          item={currItem}
           renderer={renderers.renderOption}
         />
       ) : null}

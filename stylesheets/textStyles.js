@@ -131,8 +131,8 @@ const textStyles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   coffeePrice: {
-    fontFamily: 'JosefinSans-Regular',
-    fontSize: 16,
+    fontFamily: 'JosefinSans-SemiBold',
+    fontSize: 18,
     color: '#F4F4F4',
     letterSpacing: 0.4,
   },

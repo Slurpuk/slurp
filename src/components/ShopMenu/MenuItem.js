@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
@@ -21,6 +21,8 @@ const MenuItem = ({item}) => {
     context.setOptionsVisible(true);
   };
 
+  useEffect(() => {});
+
   return (
     <TouchableOpacity style={styles.item} onPress={() => showOptions()}>
       <ImageBackground
@@ -36,16 +38,29 @@ const MenuItem = ({item}) => {
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>{item.Price}</Text>
+            <Text style={textStyles.coffeePrice}>£{item.Price}</Text>
           </View>
 
           <Pressable
             onPress={() => {
+              showOptions();
               setCount(count + 1);
             }}
             style={styles.menuCardPopupTrigger}
           >
-            <Text style={[textStyles.iconText, {marginLeft: 0}]}>{count}</Text>
+            <Text
+              style={[
+                textStyles.iconText,
+                {
+                  marginLeft: 0,
+                  marginTop: 2,
+                  color: 'black',
+                  textAlign: 'center',
+                },
+              ]}
+            >
+              {count === 0 ? '+' : count}
+            </Text>
           </Pressable>
         </LinearGradient>
       </ImageBackground>
@@ -76,12 +91,15 @@ const styles = StyleSheet.create({
   },
 
   menuCardPopupTrigger: {
-    backgroundColor: '#046D66',
+    backgroundColor: 'white',
     position: 'absolute',
-    paddingHorizontal: 17,
-    paddingVertical: 7,
-    borderRadius: 5,
+    paddingRight: 7,
+    paddingLeft: 7,
+    // paddingVertical: 7,
+    borderRadius: 70,
     bottom: 10,
+    minWidth: 26,
+    minHeight: 26,
     right: 10,
   },
 
@@ -97,6 +115,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     fontSize: 17,
     justifyContent: 'center',
+    marginBottom: 3,
   },
 });
 
