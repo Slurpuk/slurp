@@ -207,19 +207,6 @@ export default function MapBackground() {
           />
         ))}
       </MapView>
-      {/*<View>*/}
-      {/*  <Pressable onPress={showShopsNearby}>*/}
-      {/*    <Text*/}
-      {/*      style={{*/}
-      {/*        fontFamily: 'Poppins-SemiBold',*/}
-      {/*        letterSpacing: 0.5,*/}
-      {/*        fontSize: 40,*/}
-      {/*        backgroundColor: 'red',*/}
-      {/*      }}>*/}
-      {/*      Show shops nearby{' '}*/}
-      {/*    </Text>*/}
-      {/*  </Pressable>*/}
-      {/*</View>*/}
     </View>
   );
 }
