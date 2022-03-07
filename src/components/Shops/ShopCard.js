@@ -13,6 +13,7 @@ import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 import textStyles from '../../../stylesheets/textStyles';
 import firebase from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
+import {BlurView} from '@react-native-community/blur';
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(OptionsContext);
   const [isShopPage, setShopPage] = useState(false);
@@ -32,14 +33,23 @@ const ShopCard = ({shop, navigation}) => {
     }
   }, [isShopPage]);
 
-  return (
+  return !shop.IsOpen ? (
+    <ImageBackground
+      style={styles.item}
+      imageStyle={styles.image}
+      source={{uri: shop.Image}}
+      resizeMode="cover"
+      blurRadius={4}>
+      <Text style={[textStyles.headingOne, styles.shopName]}>{shop.Name}</Text>
+      <Text style={[textStyles.bodyText]}> CLOSED </Text>
+    </ImageBackground>
+  ) : (
     <Pressable onPress={shopPageDetails}>
       <ImageBackground
         style={styles.item}
         imageStyle={styles.image}
         source={{uri: shop.Image}}
-        resizeMode="cover"
-      >
+        resizeMode="cover">
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
