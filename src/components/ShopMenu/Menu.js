@@ -6,10 +6,13 @@ import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
 import {OptionsContext} from '../../screens/LandingMapPage';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ShopContext} from '../Shops/ShopPage';
 
 const NumItemsContext = React.createContext(0);
 
-const Menu = ({DATA, renderSection, renderItem}) => {
+const Menu = ({DATA, renderSection, renderItem, navigation}) => {
+  const context = useContext(ShopContext);
   return (
     <>
       <NumItemsContext.Provider value="0">
@@ -30,14 +33,12 @@ const Menu = ({DATA, renderSection, renderItem}) => {
                 style={[
                   styles.tabContainer,
                   isActive ? styles.activeTabBar : null,
-                ]}
-              >
+                ]}>
                 <Text
                   style={[
                     [textStyles.poppinsTitle],
                     isActive ? styles.activeText : styles.sleepText,
-                  ]}
-                >
+                  ]}>
                   {title}
                 </Text>
               </View>
@@ -47,16 +48,20 @@ const Menu = ({DATA, renderSection, renderItem}) => {
           <View style={styles.absoluteArea}>
             <LinearGradient
               colors={['transparent', '#EDEBE7', '#EDEBE7']}
-              style={styles.linearGradient}
-            >
+              style={styles.linearGradient}>
               <NumItemsContext.Consumer>
                 {value => {
                   return (
-                    <CustomButton
-                      text="View Basket"
-                      priority="primary"
-                      optionalNumber={value}
-                    />
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('Basket page', context)
+                      }>
+                      <CustomButton
+                        text="View Basket"
+                        priority="primary"
+                        optionalNumber={value}
+                      />
+                    </TouchableOpacity>
                   );
                 }}
               </NumItemsContext.Consumer>

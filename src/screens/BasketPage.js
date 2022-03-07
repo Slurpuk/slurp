@@ -11,13 +11,15 @@ import {
   Platform,
   Pressable,
   StatusBar,
+  Alert,
 } from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const BasketPage = () => {
+const BasketPage = ({navigation, route}) => {
   const [Items] = useState([
     {
       key: 1,
@@ -57,8 +59,9 @@ const BasketPage = () => {
   ]);
 
   const [total, setTotal] = useState(0);
+  const context = route.params;
 
-  function sendOrder() {
+  function confirmOrder() {
     firestore()
       .collection('FakeOrder')
       .add({
@@ -71,35 +74,47 @@ const BasketPage = () => {
       .then(() => {
         console.log('Order added!');
       });
-
-    return (
-      <View style={styles.basket}>
-        <View style={styles.header}>
-          <GreenHeader headerText={'ETEN & DRIKEN'} />
-        </View>
-        <View style={styles.main_container}>
-          <BasketContents total={total} setTotal={setTotal} Items={Items} />
-        </View>
-        <View style={styles.buttons}>
-          <CustomButton
-            priority="primary"
-            style={styles.button}
-            text={'Apple/Google pay'}
-          />
-        </View>
-        <View style={[styles.lastButton, styles.buttons]}>
-          <CustomButton
-            priority="primary"
-            style={styles.button}
-            text={'Checkout with card'}
-          />
-          <Pressable onPress={sendOrder}>
-            <Text>Send Order</Text>
-          </Pressable>
-        </View>
-      </View>
+    Alert.alert(
+      'Order received.',
+      'Your order has been sent to the shop! Awaiting response.',
+      [
+        {
+          text: 'OK',
+        },
+      ],
     );
+    navigation.navigate('Order history');
   }
+
+  return (
+    <View style={styles.basket}>
+      <View style={styles.header}>
+        <GreenHeader
+          headerText={'My Basket - ' + context.shop.Name}
+          navigation={navigation}
+        />
+      </View>
+      <View style={styles.main_container}>
+        <BasketContents total={total} setTotal={setTotal} Items={Items} />
+      </View>
+      <TouchableOpacity onPress={confirmOrder} style={styles.buttons}>
+        <CustomButton
+          priority="primary"
+          style={styles.button}
+          text={'Apple/Google Pay'}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={confirmOrder}
+        style={[styles.lastButton, styles.buttons]}>
+        <CustomButton
+          priority="primary"
+          style={styles.button}
+          text={'Checkout with card'}
+        />
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

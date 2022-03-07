@@ -58,6 +58,7 @@ const ShopPage = ({navigation, route}) => {
             DATA={MENUDATA}
             renderItem={renderers.renderMenuItem}
             renderSection={renderers.renderMenuSection}
+            navigation={navigation}
           />
           {optionsVisible ? (
             <BlurView
