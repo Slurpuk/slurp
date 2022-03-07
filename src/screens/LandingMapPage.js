@@ -37,7 +37,6 @@ export default function LandingMapPage({navigation}) {
   const [currRef, setCurrRef] = useState(bottomSheetRef.current);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [currShop, setCurrShop] = useState([0]);
-  const [orderedShops, setOrderedShops] = useState([]);
 
   useFocusEffect(
       React.useCallback(() => {
@@ -48,10 +47,6 @@ export default function LandingMapPage({navigation}) {
         };
       }, []),
   );
-  //
-  // useEffect(() => {
-  //   setCurrShop(MapBackground.shopsData[0])
-  // }, []);
 
   useEffect(() => {
     const subscriber = firestore()

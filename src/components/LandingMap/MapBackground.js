@@ -12,13 +12,14 @@ import {
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import firestore from '@react-native-firebase/firestore';
 import {OptionsContext} from '../../screens/LandingMapPage';
 
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;
+
+
 
 export default function MapBackground() {
     const [
@@ -30,15 +31,7 @@ export default function MapBackground() {
         setCurrentLatitude
     ] = useState(0);
 
-    const [
-        latitude,
-        setLatitude
-    ] = useState(0);
 
-    const [
-        longitude,
-        setLongitude
-    ] = useState(0);
 
     const [
       markers,
@@ -65,7 +58,7 @@ export default function MapBackground() {
             }
         });
 
-        const finalShopsData = editedShopsData.map((item) => {
+        const finalShopsData = (editedShopsData.map((item) => {
             return {
                 name: item.name,
                 description: item.description,
@@ -74,8 +67,8 @@ export default function MapBackground() {
                 longitude: item.longitude,
                 d: calculateDistance(item),
             }
-        }).sort((a, b) => (a.d > b.d) ? 1 : -1)
-          .filter((item) => item.d > 2000)
+        }).filter((item) => item.d > 5)).sort((a, b) => { return a.d < b.d});
+        console.log(finalShopsData.map(item=>item.d))
 
         setMarkers(finalShopsData.map((item=> {
             return {
@@ -93,6 +86,7 @@ export default function MapBackground() {
     const calculateDistance = (coords) => {
 
         //TODO change defaultLocation for currentLocation (currentLatitude and currentLongitude)
+        //TODO Pascu is this working?
 
         const R = 6371e3; // metres
         const latitude1 = defaultLocation.latitude * Math.PI/180; // φ, λ in radians
@@ -112,7 +106,7 @@ export default function MapBackground() {
     };
 
     //hard-coded markers for the purposes of testing
-    //TODO remove these
+    //TODO remove these when currentLocation is actually used
     const defaultLocation = {
         latitude:  51.54817999763736,
         longitude: -0.10673900193854804,
