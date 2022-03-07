@@ -11,5 +11,6 @@ import testers from "./src/testers";
 import MapBackground from "./src/components/LandingMap/MapBackground";
 import PaymentPage from "./src/screens/PaymentPage";
 import PaymentScreen from "./src/components/PaymentCards/PaymentScreen";
+import OrderPage from "./src/screens/OrderPage";
 
 AppRegistry.registerComponent(appName, () => PaymentPage);
