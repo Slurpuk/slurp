@@ -1,37 +1,45 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Menu from '../ShopMenu/Menu';
-import renderers from '../../renderers';
-import {OptionsContext} from '../../screens/LandingMapPage';
+import Menu from '../components/ShopMenu/Menu';
+import renderers from '../renderers';
+import {OptionsContext} from './LandingMapPage';
 import {BlurView} from '@react-native-community/blur';
-import OptionsPopUp from '../ShopMenu/OptionsPopUp';
-import CoffeeOptionsData from '../../fake-data/CoffeeOptionsData';
-import ShopIntro from './ShopIntro';
+import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
+import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
+import ShopIntro from '../components/Shops/ShopIntro';
 
 export const ShopContext = React.createContext();
 const ShopPage = ({navigation, route}) => {
   const defaultContext = useContext(OptionsContext);
   const context = route === undefined ? defaultContext : route.params;
   const shop = context.currShop;
-  let MENUDATA = context.currShop.ItemsOffered;
+  const [menuData, setMenuData] = useState(null);
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
 
-  filterData()
+  useEffect(() => {
+    setMenuData(filterData());
+  }, [context.currShop]);
 
-  function filterData(){
-    let data = [{title: 'Coffee', data: [{key: 'Coffees', list: []}], key: 1},
+  function filterData() {
+    let data = [
+      {title: 'Coffees', data: [{key: 'Coffees', list: []}], key: 1},
       {title: 'Drinks', data: [{key: 'Cold Drinks', list: []}], key: 2},
-      {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3}]
-    context.currShop.ItemsOffered.forEach(item => {
-      data[0].data[0].list.push(item)
-    })
-    MENUDATA = data
+      {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3},
+    ];
+    shop.ItemsOffered.forEach(item => {
+      data[0].data[0].list.push(item);
+    });
+    return data;
+  }
+
+  function getMenuData() {
+    return menuData === null ? filterData() : menuData;
   }
 
   return (
@@ -55,7 +63,7 @@ const ShopPage = ({navigation, route}) => {
             shopIntroText={shop.Intro}
           />
           <Menu
-            DATA={MENUDATA}
+            DATA={getMenuData()}
             renderItem={renderers.renderMenuItem}
             renderSection={renderers.renderMenuSection}
           />
@@ -72,15 +80,14 @@ const ShopPage = ({navigation, route}) => {
       {optionsVisible ? (
         <OptionsPopUp
           data={CoffeeOptionsData}
-          curr_price={currItem.price}
-          product_name={currItem.name}
+          item={currItem}
           renderer={renderers.renderOption}
         />
       ) : null}
     </ShopContext.Provider>
   );
 };
-const screenWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -88,19 +95,6 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'relative',
   },
-  details: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    display: 'flex',
-    backgroundColor: '#36363677',
-    height: '100%',
-  },
-
-  back_button: {
-    top: 30,
-  },
-
   absolute: {
     position: 'absolute',
     top: 0,

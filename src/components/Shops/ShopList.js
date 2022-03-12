@@ -14,7 +14,7 @@ const ShopList = ({navigation}) => {
         data={DATA}
         numColums={1}
         nestedScrollEnabled={true}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.key}
         renderItem={({item}) => {
           return <ShopCard shop={item} navigation={navigation} />;
         }}

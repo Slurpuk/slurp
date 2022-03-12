@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
@@ -10,15 +10,15 @@ import {
   ImageBackground,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {ShopContext} from '../Shops/ShopPage';
+import {ShopContext} from '../../screens/ShopPage';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
-  const context = useContext(ShopContext);
+  const shopContext = useContext(ShopContext);
 
   const showOptions = () => {
-    context.setCurrItem(item);
-    context.setOptionsVisible(true);
+    shopContext.setCurrItem(item);
+    shopContext.setOptionsVisible(true);
   };
 
   return (
@@ -36,17 +36,31 @@ const MenuItem = ({item}) => {
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>{item.Price}</Text>
+            <Text style={textStyles.coffeePrice}>
+              £{item.Price.toPrecision(3)}
+            </Text>
           </View>
 
           <Pressable
             onPress={() => {
+              showOptions();
               setCount(count + 1);
-              console.log(count);
             }}
             style={styles.menuCardPopupTrigger}
           >
-            <Text style={[textStyles.iconText, {marginLeft: 0}]}>{count}</Text>
+            <Text
+              style={[
+                textStyles.iconText,
+                {
+                  marginLeft: 1,
+                  marginTop: 2,
+                  color: 'black',
+                  textAlign: 'center',
+                },
+              ]}
+            >
+              {count === 0 ? '+' : count}
+            </Text>
           </Pressable>
         </LinearGradient>
       </ImageBackground>
@@ -59,15 +73,13 @@ const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   item: {
     width: screenWidth * 0.43,
-    // backgroundColor: 'white',
     height: screenWidth * 0.43 * 0.74,
     borderRadius: 11,
     shadowOpacity: 0.2,
     marginVertical: '2%',
     marginHorizontal: '2%',
     display: 'flex',
-    flex: 1,
-    // backgroundColor: 'white',
+    // flex: 1,
     borderWidth: 1,
     position: 'relative',
   },
@@ -79,12 +91,15 @@ const styles = StyleSheet.create({
   },
 
   menuCardPopupTrigger: {
-    backgroundColor: '#046D66',
+    backgroundColor: 'white',
     position: 'absolute',
-    paddingHorizontal: 17,
-    paddingVertical: 7,
-    borderRadius: 5,
+    paddingRight: 7,
+    paddingLeft: 7,
+    // paddingVertical: 7,
+    borderRadius: 70,
     bottom: 10,
+    minWidth: 26,
+    minHeight: 26,
     right: 10,
   },
 
@@ -100,7 +115,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     fontSize: 17,
     justifyContent: 'center',
-    // alignSelf: 'center',
+    marginBottom: 3,
   },
 });
 

@@ -1,18 +1,17 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
 import SectionList from 'react-native-tabs-section-list';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
-import {OptionsContext} from '../../screens/LandingMapPage';
 
-const NumItemsContext = React.createContext(0);
-
+export const MenuContext = React.createContext();
 const Menu = ({DATA, renderSection, renderItem}) => {
+  const [numItems, setNumItems] = useState(0);
   return (
-    <>
-      <NumItemsContext.Provider value="0">
+    <MenuContext.Provider value={{setNumItems: setNumItems}}>
+      <>
         <SafeAreaView style={styles.container}>
           <SectionList
             sections={DATA}
@@ -49,22 +48,16 @@ const Menu = ({DATA, renderSection, renderItem}) => {
               colors={['transparent', '#EDEBE7', '#EDEBE7']}
               style={styles.linearGradient}
             >
-              <NumItemsContext.Consumer>
-                {value => {
-                  return (
-                    <CustomButton
-                      text="View Basket"
-                      priority="primary"
-                      optionalNumber={value}
-                    />
-                  );
-                }}
-              </NumItemsContext.Consumer>
+              <CustomButton
+                text="View Basket"
+                priority="primary"
+                optionalNumber={numItems}
+              />
             </LinearGradient>
           </View>
         </SafeAreaView>
-      </NumItemsContext.Provider>
-    </>
+      </>
+    </MenuContext.Provider>
   );
 };
 

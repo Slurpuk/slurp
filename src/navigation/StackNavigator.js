@@ -6,7 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ShopList from '../components/Shops/ShopList';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {TransitionPresets} from '@react-navigation/stack';
-import ShopPage from '../components/Shops/ShopPage';
+import ShopPage from '../screens/ShopPage';
 import ChangePasswordPage from '../screens/ChangePasswordPage';
 import OrderPage from '../screens/OrderPage';
 

@@ -8,7 +8,7 @@ import Menu from './components/ShopMenu/Menu';
 import ShopList from './components/Shops/ShopList';
 import {NavigationContainer} from '@react-navigation/native';
 import HamburgerSlideBarNavigator from './navigation/HamburgerSlideBarNavigator';
-import ShopPage from './components/Shops/ShopPage';
+import ShopPage from './screens/ShopPage';
 import AnimatedCard from './sub-components/AnimatedCard';
 
 const OptionPopUpTester = () => {

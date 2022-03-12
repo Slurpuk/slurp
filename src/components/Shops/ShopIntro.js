@@ -10,7 +10,7 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
-import {ShopContext} from './ShopPage';
+import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
 const ShopIntro = props => {

@@ -10,44 +10,42 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ShopContext} from '../Shops/ShopPage';
+import {ShopContext} from '../../screens/ShopPage';
 
-const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
+const OptionsPopUp = ({data, renderer, item}) => {
   const context = useContext(ShopContext);
-  const [totalPrice, setTotalPrice] = useState(curr_price); // Current total price in pennies
+  const [totalPrice, setTotalPrice] = useState(item.Price); // Current total price in pennies
   const [options, setOptions] = useState({}); // List of options currently selected
-  const [isVisible, setVisible] = useState(true); // State for tracking if the popup is currently visible
   const updateOptions = (name, price, isAdd) => {
     if (isAdd) {
-      setTotalPrice(price + totalPrice);
+      setTotalPrice(((price + totalPrice * 100) / 100).toPrecision(3));
       setOptions(prevState => ({
         ...prevState,
         [name]: price,
       }));
     } else {
-      setTotalPrice(totalPrice - price);
+      setTotalPrice(((100 * totalPrice - price) / 100).toPrecision(3));
       let newState = options;
       delete newState[name];
       setOptions(newState);
     }
   };
 
-  useEffect(() => {
-    if (isVisible === false) {
-      context.setOptionsVisible(isVisible);
-    }
-  }, [isVisible]);
+  function addToBasket() {
+    context.setOptionsVisible(false);
+    context.setCurrItem(null);
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={[textStyles.headingOne, styles.product_name]}>
-          {product_name}
+          {item.Name}
         </Text>
         <TouchableHighlight
           style={styles.icon}
           underlayColor={'white'}
-          onPress={() => setVisible(false)}
+          onPress={() => context.setOptionsVisible(false)}
         >
           <Icon size={30} color="black" name="close" />
         </TouchableHighlight>
@@ -60,10 +58,12 @@ const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
         />
       </View>
       <CustomButton
-        text={`Add To Order  £${(totalPrice / 100).toPrecision(3)}`}
+        text={`Add To Order  £${
+          totalPrice > 1 ? totalPrice : (totalPrice / 100).toPrecision(3)
+        }`}
         priority={'primary'}
         width={screenWidth * 0.79}
-        onPress={() => setVisible(false)}
+        onPress={() => addToBasket()}
       />
     </View>
   );
