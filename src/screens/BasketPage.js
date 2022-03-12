@@ -64,7 +64,6 @@ const BasketPage = ({navigation, route}) => {
   const context = route.params;
   console.log(context.basketContent);
 
-
   // function reduceBasketContent() {
   //   const reduced = context.basketContent.reduce((occurrences, item) => {
   //     occurrences[item] = (occurrences[item] || 0) + 1;
@@ -105,12 +104,10 @@ const BasketPage = ({navigation, route}) => {
 
   return (
     <View style={styles.basket}>
-      <View style={styles.header}>
-        <GreenHeader
-          headerText={'My Basket - ' + context.shop.Name}
-          navigation={navigation}
-        />
-      </View>
+      <GreenHeader
+        headerText={'My Basket - ' + context.shop.Name}
+        navigation={navigation}
+      />
       <View style={styles.main_container}>
         <BasketContents
           total={total}
@@ -149,9 +146,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#E5E5E5',
   },
-  header: {
-    flexShrink: 1,
-  },
+
   main_container: {
     flexShrink: 10,
     marginHorizontal: '5%',
