@@ -13,11 +13,13 @@ import ShopDetailIcons from './ShopDetailIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 import {GlobalContext} from '../../screens/LandingMapPage';
+import {DraggableContext} from './DraggableShopPage';
 
 const ShopIntro = ({shop}) => {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const context = shopContext === undefined ? globalContext : shopContext;
+  const draggable = useContext(DraggableContext);
   return (
     <ImageBackground
       imageStyle={styles.cardImgs}
@@ -41,7 +43,9 @@ const ShopIntro = ({shop}) => {
           <WhiteArrowButton
             direction={context.isShopIntro ? 'down' : 'left'}
             navigation={context.navigation}
-            onPressAction={context.isShopIntro ? context.currRef : null}
+            onPressAction={
+              context.isShopIntro ? draggable.bottomSheetRef : null
+            }
           />
         </View>
         <View style={styles.content}>

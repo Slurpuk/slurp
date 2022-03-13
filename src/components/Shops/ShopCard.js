@@ -9,14 +9,10 @@ import {
   ImageBackground,
 } from 'react-native';
 import {GlobalContext} from '../../screens/LandingMapPage';
-import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 import textStyles from '../../../stylesheets/textStyles';
-import firebase from '@react-native-firebase/app';
-import storage from '@react-native-firebase/storage';
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
   const [isShopPage, setShopPage] = useState(false);
-  const hamburgerVisible = useContext(VisibleContext);
 
   const shopPageDetails = () => {
     context.setCurrShop(shop);
@@ -25,9 +21,7 @@ const ShopCard = ({shop, navigation}) => {
 
   useEffect(() => {
     if (isShopPage) {
-      hamburgerVisible(false);
       setShopPage(false);
-      context.setFull;
       navigation.navigate('Shop page', context);
     }
   }, [isShopPage]);
@@ -71,7 +65,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-
   shopName: {
     fontFamily: 'JosefinSans-Bold',
     color: 'white',

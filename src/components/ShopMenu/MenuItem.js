@@ -9,7 +9,7 @@ import {
   Pressable,
   ImageBackground,
 } from 'react-native';
-import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
 

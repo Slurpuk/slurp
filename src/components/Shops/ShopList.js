@@ -35,9 +35,7 @@ const styles = StyleSheet.create({
 
   wrapper: {
     height:
-      Platform.OS === 'ios'
-        ? SHOP_LIST_HEIGHT_IOS
-        : SHOP_LIST_HEIGHT_ANDROID,
+      Platform.OS === 'ios' ? SHOP_LIST_HEIGHT_IOS : SHOP_LIST_HEIGHT_ANDROID,
   },
 });
 export default ShopList;
