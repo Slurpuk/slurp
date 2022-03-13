@@ -46,41 +46,41 @@ export default function LandingMapPage({navigation}) {
       return () => {
         setVisible(false);
       };
-    }, []),
+    }, [setVisible]),
   );
 
   useEffect(() => {
-    const subscriber = firestore()
-      .collection('CoffeeShop')
-      .onSnapshot(querySnapshot => {
-        const shops = [];
+    const fetchData = async () => {
+      firestore()
+        .collection('CoffeeShop')
+        .onSnapshot(querySnapshot => {
+          const shops = [];
 
-        querySnapshot.forEach(documentSnapshot => {
-          let shopData = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          };
+          querySnapshot.forEach(documentSnapshot => {
+            let shopData = {
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+            };
 
-          let items = [];
-          documentSnapshot.data().ItemsOffered.forEach(itemRef => {
-            firestore()
-              .doc(itemRef.path)
-              .onSnapshot(querySnapshot => {
-                items.push({
-                  ...querySnapshot.data(),
-                  key: querySnapshot.key,
+            let items = [];
+            documentSnapshot.data().ItemsOffered.forEach(itemRef => {
+              firestore()
+                .doc(itemRef.path)
+                .onSnapshot(querySnapshot => {
+                  items.push({
+                    ...querySnapshot.data(),
+                    key: querySnapshot.key,
+                  });
+                  shopData.ItemsOffered = items;
                 });
-                shopData.ItemsOffered = items;
-              });
+            });
+            shops.push(shopData);
+            setShopsData(shops);
+            setCurrShop(shops[0]);
           });
-          shops.push(shopData);
-          setShopsData(shops);
-          setCurrShop(shops[0]);
         });
-      });
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
+    };
+    fetchData().then();
   }, []);
 
   console.log(shopsData);

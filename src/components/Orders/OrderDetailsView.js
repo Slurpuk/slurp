@@ -10,7 +10,6 @@ import React, {useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 
 const OrderDetailsView = ({order}) => {
-  console.log(order.ShopID.Name);
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
   return (
     <View style={styles.container}>
@@ -41,12 +40,12 @@ const OrderDetailsView = ({order}) => {
 
 const getItemsText = order => {
   let itemsComponent = '';
-  if (order.Items.length === 1) {
-    let singleItem = order.Items[0];
+  if (order.data.length === 1) {
+    let singleItem = order.data[0];
     itemsComponent = singleItem.Quantity + ' ' + singleItem.Coffee.Name;
   } else {
     let numberOfItems = 0;
-    order.Items.forEach(item => (numberOfItems += item.Quantity));
+    order.data.forEach(item => (numberOfItems += item.Quantity));
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;

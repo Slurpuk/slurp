@@ -20,7 +20,7 @@ import firestore from '@react-native-firebase/firestore';
 const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = ({navigation}) => {
-  const [pastOrders2, setPastOrders] = useState();
+  const [pastOrders, setPastOrders] = useState();
   let [currentOrders, setCurrentOrders] = useState();
 
   useEffect(() => {
@@ -41,6 +41,26 @@ const OrderPage = ({navigation}) => {
             // de-reference items
             let items = [];
 
+            // make the structure suitable for section list
+            let months = [
+              'January',
+              'February',
+              'March',
+              'April',
+              'May',
+              'June',
+              'July',
+              'August',
+              'September',
+              'October',
+              'November',
+              'December',
+            ];
+            order.period =
+              months[order.DateTime.toDate().getMonth()] +
+              ' ' +
+              order.DateTime.toDate().getFullYear();
+
             order.Items.forEach(item => {
               firestore()
                 .doc(item.Coffee)
@@ -53,6 +73,10 @@ const OrderPage = ({navigation}) => {
                   order.Items = items;
                 });
             });
+
+            // make data suitable for section list
+            order.data = order.Items;
+            delete order.Items;
 
             // de-reference the shop
 
@@ -110,31 +134,42 @@ const OrderPage = ({navigation}) => {
               <CurrentOrders {...props} currentOrders={currentOrders} />
             )}
           </Tab.Screen>
-          {/*<Tab.Screen name="Past" component={PastOrders} />*/}
+          <Tab.Screen name="Past">
+            {props => <PastOrders {...props} pastOrders={pastOrders} />}
+          </Tab.Screen>
         </Tab.Navigator>
       </View>
     </NavigationContainer>
   );
 };
 
-// const PastOrders = () => {
-//   return (
-//     <SectionList
-//       contentContainerStyle={styles.mainContainer}
-//       sections={pastOrders}
-//       stickySectionHeadersEnabled={false}
-//       keyExtractor={(item, index) => item + index}
-//       renderItem={({item}) => <CollapsedOrder order={item} />}
-//       renderSectionHeader={({section: {period}}) => (
-//         <Text style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
-//           {period}
-//         </Text>
-//       )}
-//     />
-//   );
-// };
+const PastOrders = pastOrders => {
+  console.log('past data');
+  console.log(pastOrders.pastOrders);
+  return (
+    // <SectionList
+    //   contentContainerStyle={styles.mainContainer}
+    //   sections={pastOrders.pastOrders}
+    //   stickySectionHeadersEnabled={false}
+    //   keyExtractor={(item, index) => item + index}
+    //   renderItem={({item}) => <CollapsedOrder order={item} />}
+    //   renderSectionHeader={({section: {period}}) => (
+    //     <Text style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
+    //       {period}
+    //     </Text>
+    //   )}
+    // />
+    <FlatList
+      contentContainerStyle={styles.mainContainer}
+      data={pastOrders.pastOrders}
+      renderItem={({item}) => <CollapsedOrder order={item} />}
+    />
+  );
+};
 
 const CurrentOrders = currentOrders => {
+  console.log('current data');
+  console.log(currentOrders.currentOrders);
   return (
     <FlatList
       contentContainerStyle={styles.mainContainer}

@@ -45,7 +45,7 @@ const OrderItemsList = ({order}) => {
   return (
     <View>
       <FlatList
-        data={order.Items}
+        data={order.data}
         renderItem={({item}) => <Item item={item} />}
       />
       <EmptyItemLine />

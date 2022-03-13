@@ -13,10 +13,7 @@ import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
 
 const CollapsableOrder = ({order}) => {
-
-  console.log(order.Items)
-
-  const totalPrice = getTotalPrice(order.Items);
+  const totalPrice = getTotalPrice(order.data);
 
   return (
     <View style={styles.order}>
