@@ -5,7 +5,6 @@ import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {GlobalContext} from '../../screens/LandingMapPage';
 import renderers from '../../renderers';
-import MenuTab from '../ShopMenu/MenuTab';
 import {Tabs} from 'react-native-collapsible-tab-view';
 
 export const ShopContext = React.createContext();

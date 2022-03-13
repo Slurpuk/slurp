@@ -7,6 +7,8 @@ import {
   Button,
   LogBox,
   TextInput,
+  StatusBar,
+  Platform,
 } from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopPage from './ShopPage';
@@ -22,6 +24,11 @@ import renderers from '../renderers';
 import textStyles from '../../stylesheets/textStyles';
 import DraggableShopPage from '../components/Shops/DraggableShopPage';
 import Shit from '../components/Shops/Shit';
+
+// Height to render the ScrollBottomSheet in its retracted position.
+// Different on android due to bottom icon bar being considered part of the screen
+const RAISED_MAP_POSITION_IOS = '90.5%';
+const RAISED_MAP_POSITION_ANDROID = '98%';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -109,19 +116,16 @@ export default function LandingMapPage({navigation}) {
         isShopIntro: isShopIntro,
         shopsData: shopsData,
         isFullScreen: isFullScreen,
-      }}
-    >
+      }}>
       <View style={styles.container}>
+        <StatusBar translucent={true} backgroundColor="transparent" />
         <View style={styles.map}>
           <MapBackground />
-          <View style={{margin: '10%'}}>
-            <Button title={'Switch bottom sheet'} onPress={setLOL} />
-          </View>
-
           <TextInput
             style={{
               borderRadius: 10,
-              margin: 10,
+              marginTop: '15%',
+              margin: '5%',
               color: '#000',
               borderColor: '#666',
               backgroundColor: '#FFF',
@@ -134,12 +138,18 @@ export default function LandingMapPage({navigation}) {
             placeholder={'Search Location'}
             placeholderTextColor={'#666'}
           />
+          <Button title={'Switch bottom sheet'} onPress={setLOL} />
         </View>
         {isShopIntro ? <Shit /> : null}
         {isShopIntro === false ? (
           <ScrollBottomSheet
             componentType="FlatList"
-            snapPoints={['20%', '91%']}
+            snapPoints={[
+              '15%',
+              Platform.OS === 'ios'
+                ? RAISED_MAP_POSITION_IOS
+                : RAISED_MAP_POSITION_ANDROID,
+            ]}
             initialSnapIndex={1}
             renderHandle={() => (
               <View style={styles.header2}>

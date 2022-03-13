@@ -1,12 +1,14 @@
 import React, {useContext, useRef} from 'react';
-import {View, StyleSheet, ListRenderItem} from 'react-native';
-import {MaterialTabBar, Tabs} from 'react-native-collapsible-tab-view';
+import { View, StyleSheet, ListRenderItem, Dimensions, Text } from "react-native";
 import {GlobalContext} from '../../screens/LandingMapPage';
 import renderers from '../../renderers';
 import textStyles from '../../../stylesheets/textStyles';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import {FlatList} from 'react-native-gesture-handler';
-import ShopIntro from "./ShopIntro";
+import ShopIntro from './ShopIntro';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
+const Tab = createMaterialTopTabNavigator();
 
 const HEADER_HEIGHT = 200;
 
@@ -44,9 +46,7 @@ const Shit = () => {
   }
 
   const renderItem: ListRenderItem<number> = React.useCallback(({index}) => {
-    return (
-      <ShopIntro/>
-    );
+    return <ShopIntro />;
   }, []);
 
   function updatePage({index}) {
@@ -70,53 +70,68 @@ const Shit = () => {
               styles.white,
               // isFullScreen ? {opacity: 0} : {opacity: 1},
             ]}
-
           />
-
-          <Tabs.Container
-            renderHeader={() => <ShopIntro shop={context.currShop} />}
-            // headerContainerStyle={{paddingBottom: 100}}
-            // headerHeight={1000} // optional
-            renderTabBar={props => (
-              <MaterialTabBar
-                {...props}
-                activeColor={'#000000'}
-                inactiveColor={'#6D6D6D'}
-                labelStyle={textStyles.poppinsTitle}
-                indicatorStyle={styles.activeTabBar}
-              />
-            )}
+          <ShopIntro shop={shop} />
+          <Tab.Navigator
+            style={styles.navigatorContent}
+            screenOptions={{
+              tabBarLabelStyle: {
+                fontSize: 18,
+                fontFamily: 'Poppins-SemiBold',
+                letterSpacing: 0.3,
+                textTransform: 'capitalize',
+                transform: [{translateY: -7}],
+              },
+              tabBarActiveTintColor: '#000000',
+              tabBarInactiveTintColor: '#6D6D6D',
+              tabBarIndicatorStyle: {
+                backgroundColor: '#046D66',
+                height: 3,
+              },
+              tabBarStyle: {
+                height: 39,
+                backgroundColor: '#FFFFFF',
+                elevation: 0,
+              },
+            }}
             containerStyle={styles.container}>
-            <Tabs.Tab name="Coffee" label={'Coffees'}>
-              <View style={{height: '100%', width: 500, paddingTop: 245}}>
-              <FlatList
-                data={getCoffees()}
-                renderItem={({item}) => renderers.renderMenuItem({item})}
-                keyExtractor={identity}
-                numColumns={2}
-                style={styles.list}
-              />
-              </View>
-            </Tabs.Tab>
-            <Tabs.Tab name="Drinks" label={'Drinks'}>
-              <FlatList
-                data={getCoffees()}
-                renderItem={({item}) => renderers.renderMenuItem({item})}
-                keyExtractor={identity}
-                numColumns={2}
-                style={styles.list}
-              />
-            </Tabs.Tab>
-            <Tabs.Tab name="Snacks" label={'Snacks'}>
-              <FlatList
-                data={getCoffees()}
-                renderItem={({item}) => renderers.renderMenuItem({item})}
-                keyExtractor={identity}
-                numColumns={2}
-                style={styles.list}
-              />
-            </Tabs.Tab>
-          </Tabs.Container>
+            <Tab.Screen
+              name="Coffee"
+              component={() => (
+                <FlatList
+                  data={getCoffees()}
+                  renderItem={({item}) => renderers.renderMenuItem({item})}
+                  keyExtractor={identity}
+                  numColumns={2}
+                  contentContainerStyle={styles.content}
+                />
+              )}
+            />
+            <Tab.Screen
+              name="Drinks"
+              component={() => (
+                <FlatList
+                  data={getCoffees()}
+                  renderItem={({item}) => renderers.renderMenuItem({item})}
+                  keyExtractor={identity}
+                  numColumns={2}
+                  contentContainerStyle={styles.content}
+                />
+              )}
+            />
+            <Tab.Screen
+              name="Snacks"
+              component={() => (
+                <FlatList
+                  data={getCoffees()}
+                  renderItem={({item}) => renderers.renderMenuItem({item})}
+                  keyExtractor={identity}
+                  numColumns={2}
+                  contentContainerStyle={styles.content}
+                />
+              )}
+            />
+          </Tab.Navigator>
         </View>
       )}
       contentContainerStyle={styles.contentContainerStyle}
@@ -124,17 +139,10 @@ const Shit = () => {
   );
 };
 
+// An unusual bug causes the app to crash using a ScrollBottomSheet if no numerical width is used.
+const screenWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
-  box: {
-    height: 250,
-    width: '100%',
-  },
-  boxA: {
-    backgroundColor: 'white',
-  },
-  boxB: {
-    backgroundColor: '#D8D8D8',
-  },
   panelHandle: {
     width: '10%',
     height: 5,
@@ -146,6 +154,7 @@ const styles = StyleSheet.create({
     left: '45%',
   },
   header1: {
+    display: 'flex',
     alignItems: 'flex-start',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -155,28 +164,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDEBE7',
     width: '100%',
     height: '100%',
+    flex: 1,
   },
-  list: {
-    backgroundColor: '#EDEBE7',
-    paddingHorizontal: 10,
-    // marginTop: '50%',
-    // height: '100%',
-    width: 500,
+
+  content: {
+    flexGrow: 1,
+    alignItems: 'center',
   },
-  header: {
-    height: HEADER_HEIGHT,
-    width: '100%',
-    backgroundColor: '#2196f3',
-  },
-  activeTabBar: {
-    backgroundColor: '#046D66',
-    height: 3,
-  },
+
   container: {
-    display: 'flex',
+    flex: 1,
     minHeight: '100%',
     width: '100%',
     position: 'relative',
+  },
+
+  navigatorContent: {
+    width: '100%',
+    flex: 1,
   },
 });
 

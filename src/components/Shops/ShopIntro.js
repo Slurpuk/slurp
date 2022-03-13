@@ -13,7 +13,6 @@ import ShopDetailIcons from './ShopDetailIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 import {GlobalContext} from '../../screens/LandingMapPage';
-import MenuTab from '../ShopMenu/MenuTab';
 
 const ShopIntro = ({shop}) => {
   const shopContext = useContext(ShopContext);
