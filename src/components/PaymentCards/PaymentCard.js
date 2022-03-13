@@ -27,7 +27,7 @@ const PaymentCard = ({card}) => {
               {color: 'black', fontWeight: '600', fontSize: 14},
             ]}
           >
-            {card.type}
+            {card.brand}
           </Text>
         </View>
         <Pressable
@@ -38,7 +38,7 @@ const PaymentCard = ({card}) => {
           <Text style={[styles.text, {color: '#CD5160'}]}>Delete</Text>
         </Pressable>
       </View>
-      <Text>*** **** **** {card.number.slice(13, 19)}</Text>
+      <Text>*** **** **** {card.last4}</Text>
       {card.isDefault ? (
         <View
           style={{
