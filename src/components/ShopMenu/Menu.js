@@ -63,16 +63,17 @@ const Menu = ({DATA, renderSection, renderItem, navigation}) => {
               <NumItemsContext.Consumer>
                 {value => {
                   return (
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('Basket page', context)
-                      }>
+                    // <TouchableOpacity
+                    //   onPress={() =>
+                    //     navigation.navigate('Basket page', context)
+                    //   }>
                       <CustomButton
                         text="View Basket"
                         priority="primary"
                         optionalNumber={context.basketSize}
+                        onPress = {() => navigation.navigate('Basket page', context)}
                       />
-                    </TouchableOpacity>
+                    // </TouchableOpacity>
                   );
                 }}
               </NumItemsContext.Consumer>

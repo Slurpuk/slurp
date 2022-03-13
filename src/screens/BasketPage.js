@@ -62,9 +62,6 @@ const BasketPage = ({navigation, route}) => {
   ]);
   const context = route.params;
 
-  console.log(context.basketContent);
-
-
   function confirmOrder() {
     firestore()
       .collection('FakeOrder')
@@ -92,12 +89,10 @@ const BasketPage = ({navigation, route}) => {
 
   return (
     <View style={styles.basket}>
-      <View style={styles.header}>
-        <GreenHeader
-          headerText={'My Basket - ' + context.shop.Name}
-          navigation={navigation}
-        />
-      </View>
+      <GreenHeader
+        headerText={'My Basket - ' + context.shop.Name}
+        navigation={navigation}
+      />
       <View style={styles.main_container}>
         <BasketContents context={context} Items={context.basketContent} />
       </View>
@@ -137,9 +132,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#E5E5E5',
   },
-  header: {
-    flexShrink: 1,
-  },
+
   main_container: {
     flexShrink: 10,
     marginHorizontal: '5%',
