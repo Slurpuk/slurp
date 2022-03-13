@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
-import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
-import SectionList from 'react-native-tabs-section-list';
+import {SectionList, SectionListProps} from 'react-native-tabs-section-list';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
@@ -12,10 +11,10 @@ const Menu = ({DATA, renderSection, renderItem}) => {
   return (
     <MenuContext.Provider value={{setNumItems: setNumItems}}>
       <>
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
           <SectionList
             sections={DATA}
-            stickySectionHeadersEnabled={false}
+            stickySectionHeadersEnabled={true}
             scrollToLocationOffset={-20}
             tabBarStyle={styles.tabBar}
             renderItem={({item}) => renderSection({item, renderItem})} // Here, 'item' is actually a whole section
@@ -55,7 +54,7 @@ const Menu = ({DATA, renderSection, renderItem}) => {
               />
             </LinearGradient>
           </View>
-        </SafeAreaView>
+        </View>
       </>
     </MenuContext.Provider>
   );
@@ -91,8 +90,8 @@ const styles = StyleSheet.create({
   },
 
   tabBar: {
-    borderBottomColor: '#f4f4f4',
-    borderBottomWidth: 1,
+    borderBottomColor: 'red',
+    borderBottomWidth: 5,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',

@@ -12,14 +12,18 @@ import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
+import {GlobalContext} from '../../screens/LandingMapPage';
+import MenuTab from '../ShopMenu/MenuTab';
 
-const ShopIntro = props => {
+const ShopIntro = ({shop}) => {
   const shopContext = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
+  const context = shopContext === undefined ? globalContext : shopContext;
   return (
     <ImageBackground
       imageStyle={styles.cardImgs}
       style={styles.container}
-      source={{uri: shopContext.shop.Image}}
+      source={{uri: shop.Image}}
     >
       <LinearGradient
         colors={['transparent', 'black']}
@@ -28,30 +32,25 @@ const ShopIntro = props => {
         <View
           style={[
             styles.back_button,
-            shopContext.isFullScreen
+            context.isFullScreen
               ? {opacity: 1}
-              : shopContext.isShopIntro
+              : context.isShopIntro
               ? {opacity: 0}
               : {opacity: 1},
           ]}
         >
           <WhiteArrowButton
-            direction={shopContext.isShopIntro ? 'down' : 'left'}
-            navigation={shopContext.navigation}
-            onPressAction={shopContext.isShopIntro ? shopContext.currRef : null}
+            direction={context.isShopIntro ? 'down' : 'left'}
+            navigation={context.navigation}
+            onPressAction={context.isShopIntro ? context.currRef : null}
           />
         </View>
         <View style={styles.content}>
           <Text style={[textStyles.headingOne, styles.heading]}>
-            {props.shopName}
+            {shop.Name}
           </Text>
-          <ShopDetailIcons
-            likeness={props.likeness}
-            timeToOrder={props.timeToOrder}
-          />
-          <Text style={[textStyles.bodyText, styles.body]}>
-            {props.shopIntroText}
-          </Text>
+          <ShopDetailIcons likeness={shop.Likeness} timeToOrder={shop.Queue} />
+          <Text style={[textStyles.bodyText, styles.body]}>{shop.Intro}</Text>
         </View>
       </LinearGradient>
     </ImageBackground>
@@ -76,11 +75,12 @@ const styles = StyleSheet.create({
     height: screenWidth * 0.7,
     left: 0,
     borderRadius: 20,
+    overflow: 'hidden',
   },
 
   container: {
-    maxHeight: '35%',
-    minHeight: '30%',
+    height: screenWidth * 0.7,
+    width: '100%',
     position: 'relative',
     display: 'flex',
     justifyContent: 'space-between',

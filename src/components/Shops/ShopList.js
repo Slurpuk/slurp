@@ -2,10 +2,10 @@ import {StyleSheet, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import React, {useContext} from 'react';
 import ShopCard from './ShopCard';
-import {OptionsContext} from '../../screens/LandingMapPage';
+import {GlobalContext} from '../../screens/LandingMapPage';
 
 const ShopList = ({navigation}) => {
-  const context = useContext(OptionsContext);
+  const context = useContext(GlobalContext);
   const DATA = context.shopsData;
   return (
     <View style={styles.wrapper}>

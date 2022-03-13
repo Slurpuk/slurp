@@ -8,13 +8,13 @@ import {
   Platform,
   ImageBackground,
 } from 'react-native';
-import {OptionsContext} from '../../screens/LandingMapPage';
+import {GlobalContext} from '../../screens/LandingMapPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 import textStyles from '../../../stylesheets/textStyles';
 import firebase from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
 const ShopCard = ({shop, navigation}) => {
-  const context = useContext(OptionsContext);
+  const context = useContext(GlobalContext);
   const [isShopPage, setShopPage] = useState(false);
   const hamburgerVisible = useContext(VisibleContext);
 

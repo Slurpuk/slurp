@@ -9,6 +9,7 @@ import {
   Pressable,
   ImageBackground,
 } from 'react-native';
+import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
 
@@ -22,7 +23,7 @@ const MenuItem = ({item}) => {
   };
 
   return (
-    <TouchableOpacity style={styles.item} onPress={() => showOptions()}>
+    <RNGHTouchableOpacity style={styles.item} onPress={() => showOptions()}>
       <ImageBackground
         source={require('../../assets/images/coffeeUnsplash1.jpg')}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}
@@ -36,9 +37,7 @@ const MenuItem = ({item}) => {
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>
-              £{item.Price.toPrecision(3)}
-            </Text>
+            <Text style={textStyles.coffeePrice}>£{item.Price}</Text>
           </View>
 
           <Pressable
@@ -64,7 +63,7 @@ const MenuItem = ({item}) => {
           </Pressable>
         </LinearGradient>
       </ImageBackground>
-    </TouchableOpacity>
+    </RNGHTouchableOpacity>
   );
 };
 

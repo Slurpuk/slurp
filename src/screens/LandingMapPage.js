@@ -16,6 +16,12 @@ import firestore from '@react-native-firebase/firestore';
 import ShopList from '../components/Shops/ShopList';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
+import ShopIntro from '../components/Shops/ShopIntro';
+import Menu from '../components/ShopMenu/Menu';
+import renderers from '../renderers';
+import textStyles from '../../stylesheets/textStyles';
+import DraggableShopPage from '../components/Shops/DraggableShopPage';
+import Shit from '../components/Shops/Shit';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -23,15 +29,13 @@ LogBox.ignoreLogs([
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export const OptionsContext = React.createContext();
+export const GlobalContext = React.createContext();
 
 // well...
 
 export default function LandingMapPage({navigation}) {
   const setVisible = useContext(VisibleContext);
-  const bottomSheetRef = useRef(null);
   const [shopsData, setShopsData] = useState([]);
-  const [currRef, setCurrRef] = useState(bottomSheetRef.current);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [currShop, setCurrShop] = useState(shopsData[0]);
   const [isFullScreen, setFullScreen] = useState(false);
@@ -45,6 +49,18 @@ export default function LandingMapPage({navigation}) {
       };
     }, []),
   );
+
+  function filterData() {
+    let data = [
+      {title: 'Coffees', data: [{key: 'Coffees', list: []}], key: 1},
+      {title: 'Drinks', data: [{key: 'Cold Drinks', list: []}], key: 2},
+      {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3},
+    ];
+    currShop.ItemsOffered.forEach(item => {
+      data[0].data[0].list.push(item);
+    });
+    return data;
+  }
 
   // Subscribe to the Shops model
   useEffect(() => {
@@ -81,30 +97,16 @@ export default function LandingMapPage({navigation}) {
     return () => subscriber();
   }, []);
 
-  const updatePage = ({index}) => {
-    if (index === 0) {
-      setVisible(false);
-      setFullScreen(true);
-      setCurrRef(bottomSheetRef.current);
-    } else if (index === 2) {
-      setIsShopIntro(false);
-    } else {
-      setFullScreen(false);
-      setVisible(true);
-    }
-  };
-
   const setLOL = () => {
     setIsShopIntro(!isShopIntro);
   };
 
   return (
-    <OptionsContext.Provider
+    <GlobalContext.Provider
       value={{
         currShop: currShop,
         setCurrShop: setCurrShop,
         isShopIntro: isShopIntro,
-        currRef: currRef,
         shopsData: shopsData,
         isFullScreen: isFullScreen,
       }}
@@ -133,28 +135,7 @@ export default function LandingMapPage({navigation}) {
             placeholderTextColor={'#666'}
           />
         </View>
-        {isShopIntro ? (
-          <ScrollBottomSheet
-            componentType="ScrollView"
-            ref={bottomSheetRef}
-            snapPoints={['0%', '70%', '100%']}
-            onSettle={index => updatePage({index})}
-            initialSnapIndex={1}
-            renderHandle={() => (
-              <View style={styles.header1}>
-                <View
-                  style={[
-                    styles.panelHandle,
-                    styles.white,
-                    isFullScreen ? {opacity: 0} : {opacity: 1},
-                  ]}
-                />
-                <ShopPage navigation={navigation} shop={currShop} />
-              </View>
-            )}
-            contentContainerStyle={styles.contentContainerStyle}
-          />
-        ) : null}
+        {isShopIntro ? <Shit /> : null}
         {isShopIntro === false ? (
           <ScrollBottomSheet
             componentType="FlatList"
@@ -171,13 +152,21 @@ export default function LandingMapPage({navigation}) {
           />
         ) : null}
       </View>
-    </OptionsContext.Provider>
+    </GlobalContext.Provider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  container2: {
+    display: 'flex',
+    minHeight: '100%',
+    flex: 1,
+    width: '100%',
+    position: 'relative',
   },
   contentContainerStyle: {
     backgroundColor: '#EDEBE7',
@@ -197,13 +186,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   header1: {
-    alignItems: 'center',
-    // backgroundColor: '#EDEBE7',
-    // paddingVertical: '3%',
+    alignItems: 'flex-start',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    // overflow: 'visible',
-    height: '100%',
+    height: '30%',
   },
   panelHandle: {
     width: '10%',
@@ -213,6 +199,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '2%',
     zIndex: 2,
+    left: '45%',
   },
 
   white: {

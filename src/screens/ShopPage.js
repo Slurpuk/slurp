@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import Menu from '../components/ShopMenu/Menu';
 import renderers from '../renderers';
-import {OptionsContext} from './LandingMapPage';
+import {GlobalContext} from './LandingMapPage';
 import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
@@ -15,12 +15,12 @@ import ShopIntro from '../components/Shops/ShopIntro';
 
 export const ShopContext = React.createContext();
 const ShopPage = ({navigation, route}) => {
-  const defaultContext = useContext(OptionsContext);
+  const defaultContext = useContext(GlobalContext);
   const context = route === undefined ? defaultContext : route.params;
   const shop = context.currShop;
-  const [menuData, setMenuData] = useState(null);
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
+  const [menuData, setMenuData] = useState(null);
 
   useEffect(() => {
     setMenuData(filterData());
@@ -49,19 +49,14 @@ const ShopPage = ({navigation, route}) => {
         setCurrItem: setCurrItem,
         shop: shop,
         navigation: navigation,
-        currRef: context.currRef,
+        // currRef: context.currRef,
         isShopIntro: context.isShopIntro,
         isFullScreen: context.isFullScreen,
       }}
     >
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <View style={styles.container}>
-          <ShopIntro
-            likeness={shop.Likeness}
-            timeToOrder={shop.Queue}
-            shopName={shop.Name}
-            shopIntroText={shop.Intro}
-          />
+          <ShopIntro shop={shop} />
           <Menu
             DATA={getMenuData()}
             renderItem={renderers.renderMenuItem}
