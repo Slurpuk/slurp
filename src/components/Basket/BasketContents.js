@@ -1,17 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
+import BasketItem from './BasketItem';
 
-const BasketContents = ({total, setTotal, Items}) => {
-  const changeAmount = (item, amount) => {
-    if (!(item.amount < 1 && amount < 0)) {
-      item.amount += amount;
-      let add_value = Math.round(item.price * amount * 100) / 100;
-      setTotal(total + add_value);
-    }
-    // console.log(Items.find(i => i.key === item.key).amount);
-    // setItems((Items.find(i => i.key === item.key).amount += amount));
-  };
-
+const BasketContents = ({context, Items}) => {
 
 
   return (
@@ -19,38 +10,9 @@ const BasketContents = ({total, setTotal, Items}) => {
       <Text style={styles.my_order}>My Order</Text>
       <FlatList
         data={Items}
-        renderItem={({item}) => (
-          <View style={styles.item_container}>
-            <View style={styles.item_information}>
-              <Text style={styles.item_name}>{item.Name}</Text>
-              <FlatList
-                data={item.specifications}
-                renderItem={specification => (
-                  <Text style={styles.item_specification}>
-                    {specification.item}
-                  </Text>
-                )}
-                style={styles.item_specification_list}
-              />
-            </View>
-            <View style={styles.amount_selection_container}>
-              <Pressable onPress={() => changeAmount(item, -1)}>
-                <Text style={styles.change_amount_button}>-</Text>
-              </Pressable>
-              <Text style={styles.amount}>{item.count}</Text>
-              <Pressable onPress={() => changeAmount(item, 1)}>
-                <Text style={styles.change_amount_button}>+</Text>
-              </Pressable>
-            </View>
-            <Text style={styles.price}>£{item.Price * 1}</Text>
-          </View>
-        )}
+        renderItem={({item}) => <BasketItem item={item} context={context} />}
         style={styles.items_list}
       />
-      <View style={styles.order_summary}>
-        <Text style={styles.total_text}>TOTAL</Text>
-        <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
-      </View>
     </View>
   );
 };

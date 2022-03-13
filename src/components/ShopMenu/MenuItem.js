@@ -13,28 +13,31 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../Shops/ShopPage';
 
 const MenuItem = ({item}) => {
-  const [count, setCount] = useState(0);
   const context = useContext(ShopContext);
+  const [count, setCount] = useState(0);
 
   const showOptions = () => {
     context.setCurrItem(item);
     context.setOptionsVisible(true);
   };
 
-  function addToBasket(prev, item) {
-    let updated = [...prev, item];
-
-    // return updated.reduce(function (acc, curr) {
-    //   return acc[curr] ? ++acc[curr] : (acc[curr] = 1), acc;
-    // }, {});
-
-    return updated;
+  function remove(item) {
+    if (count > 0) {
+      context.removeFromBasket(item);
+      setCount(count - 1);
+    }
   }
+  function add(item) {
+    context.addToBasket(item);
+    setCount(count + 1);
+  }
+
+
 
   return (
     <TouchableOpacity style={styles.item} onPress={() => showOptions()}>
       <ImageBackground
-        source={require('../../assets/images/coffeeUnsplash1.jpg')}
+        source={{uri: item.Image}}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}
         style={{width: '100%', height: '100%'}}>
         <LinearGradient
@@ -46,15 +49,8 @@ const MenuItem = ({item}) => {
             </Text>
             <Text style={textStyles.coffeePrice}>{item.Price}</Text>
           </View>
-
           <Pressable
-            onPress={() => {
-              setCount(count + 1);
-              item.count = count;
-              // console.log(count);
-              // console.log(item.count);
-              context.setBasketContent(prev => addToBasket(prev, item));
-            }}
+            onPress={() => add(item)}
             style={styles.menuCardPopupTrigger}>
             <Text style={[textStyles.iconText, {marginLeft: 0}]}>{count}</Text>
           </Pressable>

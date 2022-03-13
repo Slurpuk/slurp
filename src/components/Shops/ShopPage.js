@@ -22,18 +22,61 @@ const ShopPage = ({navigation, route}) => {
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
   const [basketContent, setBasketContent] = useState([]);
+  const [basketSize, setBasketSize] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  // function getTotalPrice() {
+  //   return context.basketContent.reduce(
+  //     (totalCost, {Price: itemPrice, count: itemCount}) =>
+  //       totalCost + parseFloat(itemPrice * itemCount),
+  //     0,
+  //   );
+  // }
+
+  function addToBasket(item) {
+    const basket = basketContent;
+    const exist = basket.find(x => x.key === item.key);
+    if (exist) {
+      setBasketContent(
+        basket.map(x =>
+          x.key === item.key ? {...exist, count: exist.count + 1} : x,
+        ),
+      );
+    } else {
+      setBasketContent([...basket, {...item, count: 1}]);
+    }
+    setTotal(total + item.Price);
+    setBasketSize(basketSize + 1);
+  }
+
+  function removeFromBasket(item) {
+    const basket = basketContent;
+    const exist = basket.find(x => x.key === item.key);
+    if (exist.count === 1) {
+      setBasketContent(basket.filter(x => x.key !== item.key));
+    } else {
+      setBasketContent(
+        basket.map(x =>
+          x.key === item.key ? {...exist, count: exist.count - 1} : x,
+        ),
+      );
+    }
+    setTotal(total - item.Price);
+    setBasketSize(basketSize - 1);
+  }
 
   filterData();
 
   function filterData() {
     let data = [
-      {title: 'Coffee', data: [{key: 'Coffees', list: []}], key: 1},
-      {title: 'Drinks', data: [{key: 'Cold Drinks', list: []}], key: 2},
+      {title: 'Coffees', data: [{key: 'Coffees', list: []}], key: 1},
+      {title: 'Drinks', data: [{key: 'Drinks', list: []}], key: 2},
       {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3},
     ];
-    context.currShop.ItemsOffered.forEach(item => {
-      data[0].data[0].list.push(item);
-    });
+    const items = context.currShop.ItemsOffered;
+    data[0].data[0].list = items.Coffees;
+    data[1].data[0].list = items.Drinks;
+    data[2].data[0].list = items.Snacks;
     MENUDATA = data;
   }
 
@@ -49,6 +92,11 @@ const ShopPage = ({navigation, route}) => {
         isFullScreen: context.isFullScreen,
         setBasketContent: setBasketContent,
         basketContent: basketContent,
+        basketSize: basketSize,
+        total: total,
+        setTotal: setTotal,
+        addToBasket: addToBasket,
+        removeFromBasket: removeFromBasket,
       }}>
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <View style={styles.container}>

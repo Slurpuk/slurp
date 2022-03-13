@@ -14,6 +14,15 @@ const NumItemsContext = React.createContext(0);
 const Menu = ({DATA, renderSection, renderItem, navigation}) => {
   const context = useContext(ShopContext);
 
+  // function getTotalBasketItems() {
+  //   const initialValue = 0;
+  //   const totalItems = context.basketContent.reduce(
+  //     (accumulator, current) => accumulator + current.quantity,
+  //     initialValue,
+  //   );
+  //
+  //   return totalItems;
+  // }
 
   return (
     <>
@@ -61,7 +70,7 @@ const Menu = ({DATA, renderSection, renderItem, navigation}) => {
                       <CustomButton
                         text="View Basket"
                         priority="primary"
-                        optionalNumber={context.basketContent.length}
+                        optionalNumber={context.basketSize}
                       />
                     </TouchableOpacity>
                   );

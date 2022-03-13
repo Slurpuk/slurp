@@ -24,6 +24,7 @@ const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
         ...prevState,
         [name]: price,
       }));
+      console.log(options);
     } else {
       setTotalPrice(totalPrice - price);
       let newState = options;
