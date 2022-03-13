@@ -6,14 +6,17 @@ import {
   Text,
   ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
 
 const CollapsableOrder = ({order}) => {
-  const totalPrice = getTotalPrice(order);
+
+  console.log(order.Items)
+
+  const totalPrice = getTotalPrice(order.Items);
 
   return (
     <View style={styles.order}>
@@ -30,9 +33,9 @@ const CollapsableOrder = ({order}) => {
   );
 };
 
-const getTotalPrice = order => {
+const getTotalPrice = items => {
   let total = 0;
-  order.items.forEach(item => (total += item.amount * item.price));
+  items.forEach(item => (total += item.Quantity * item.Coffee.Price));
   return total;
 };
 

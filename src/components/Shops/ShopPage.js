@@ -27,16 +27,18 @@ const ShopPage = ({navigation, route}) => {
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
 
-  filterData()
+  filterData();
 
-  function filterData(){
-    let data = [{title: 'Coffee', data: [{key: 'Coffees', list: []}], key: 1},
+  function filterData() {
+    let data = [
+      {title: 'Coffee', data: [{key: 'Coffees', list: []}], key: 1},
       {title: 'Drinks', data: [{key: 'Cold Drinks', list: []}], key: 2},
-      {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3}]
+      {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3},
+    ];
     context.currShop.ItemsOffered.forEach(item => {
-      data[0].data[0].list.push(item)
-    })
-    MENUDATA = data
+      data[0].data[0].list.push(item);
+    });
+    MENUDATA = data;
   }
 
   return (

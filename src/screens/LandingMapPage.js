@@ -56,22 +56,23 @@ export default function LandingMapPage({navigation}) {
         const shops = [];
 
         querySnapshot.forEach(documentSnapshot => {
-
           let shopData = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
-          }
+          };
 
-          let items = []
+          let items = [];
           documentSnapshot.data().ItemsOffered.forEach(itemRef => {
-            firestore().doc(itemRef.path).onSnapshot(querySnapshot => {
-              items.push({
-                ...querySnapshot.data(),
-                key: querySnapshot.id,
-              })
-              shopData.ItemsOffered = items
-            })
-          })
+            firestore()
+              .doc(itemRef.path)
+              .onSnapshot(querySnapshot => {
+                items.push({
+                  ...querySnapshot.data(),
+                  key: querySnapshot.key,
+                });
+                shopData.ItemsOffered = items;
+              });
+          });
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
@@ -82,8 +83,7 @@ export default function LandingMapPage({navigation}) {
     return () => subscriber();
   }, []);
 
-  console.log(shopsData)
-
+  console.log(shopsData);
 
   const updatePage = ({index}) => {
     if (index === 0) {
