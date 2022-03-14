@@ -7,17 +7,17 @@ export default function BasketItem({item}) {
   const [count, setCount] = useState(item.count);
   const [itemTotal, setItemTotal] = useState(item.Price * item.count);
 
-  function remove(item) {
+  function remove(Item) {
     if (count > 0) {
       context.removeFromBasket(item);
       setCount(count - 1);
-      setItemTotal(itemTotal - item.Price);
+      setItemTotal(itemTotal - Item.Price);
     }
   }
-  function add(item) {
+  function add(Item) {
     context.addToBasket(item);
     setCount(count + 1);
-    setItemTotal(itemTotal + item.Price);
+    setItemTotal(itemTotal + Item.Price);
   }
   return (
     <View style={styles.item_container}>
@@ -59,10 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: '#C0C0C0',
     borderStyle: 'solid',
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    borderWidth: 1,
+    borderTopWidth: 1,
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: '5%',

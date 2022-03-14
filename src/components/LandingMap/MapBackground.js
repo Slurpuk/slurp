@@ -15,8 +15,6 @@ import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 
-// import {OptionsContext} from '../../screens/LandingMapPage';
-
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;

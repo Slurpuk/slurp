@@ -15,7 +15,6 @@ import {
 } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Close from 'react-native-vector-icons/AntDesign';
-import getUserInfo from '../../firebase/queries/getUserInfo';
 import BasketPage from '../../screens/BasketPage';
 
 LogBox.ignoreLogs([
@@ -126,8 +125,8 @@ function MyDrawer() {
       <Drawer.Screen name="Payment accounts" component={HomeScreen} />
       <Drawer.Screen name="Change name" component={HomeScreen} />
       <Drawer.Screen name="Change password" component={HomeScreen} />
+        <Drawer.Screen name="BasketPage" component={BasketPage} />
       <Drawer.Screen name="Logout the device" component={HomeScreen} />
-      <Drawer.Screen name="BasketPage" component={BasketPage} />
     </Drawer.Navigator>
   );
 }
