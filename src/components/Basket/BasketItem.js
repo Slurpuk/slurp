@@ -1,33 +1,51 @@
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
-import BasketItem from './BasketItem';
 
-const BasketContents = ({context, Items}) => {
+export default function BasketItem({item, context}) {
+  const [count, setCount] = useState(item.count);
+  const [itemTotal, setItemTotal] = useState(item.Price * item.count);
+  const [totalPrice, setTotalPrice] = useState(context.total);
 
 
+  function remove(item) {
+    if (count > 0) {
+      context.removeFromBasket(item);
+      setCount(count - 1);
+      setItemTotal(itemTotal - item.Price);
+    }
+  }
+  function add(item) {
+    context.addToBasket(item);
+    setCount(count + 1);
+    setItemTotal(itemTotal + item.Price);
+  }
   return (
-    <View style={styles.basket_content}>
-      <Text style={styles.my_order}>My Order</Text>
-      <FlatList
-        data={Items}
-        renderItem={({item}) => <BasketItem item={item} context={context} />}
-        style={styles.items_list}
-      />
+    <View style={styles.item_container}>
+      <View style={styles.item_information}>
+        <Text style={styles.item_name}>{item.Name}</Text>
+        <FlatList
+          data={item.specifications}
+          renderItem={specification => (
+            <Text style={styles.item_specification}>{specification.item}</Text>
+          )}
+          style={styles.item_specification_list}
+        />
+      </View>
+      <View style={styles.amount_selection_container}>
+        <Pressable onPress={() => remove(item)}>
+          <Text style={styles.change_amount_button}>-</Text>
+        </Pressable>
+        <Text style={styles.amount}>{count}</Text>
+        <Pressable onPress={() => add(item)}>
+          <Text style={styles.change_amount_button}>+</Text>
+        </Pressable>
+      </View>
+      <Text style={styles.price}>£{itemTotal.toFixed(2)}</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  basket_content: {
-    display: 'flex',
-    height: '100%',
-  },
-  my_order: {
-    fontWeight: '700',
-    fontSize: 26,
-    color: '#212121',
-    paddingBottom: '5%',
-  },
   items_list: {
     display: 'flex',
     flex: 2,
@@ -79,24 +97,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     color: '#434343',
   },
-  order_summary: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingTop: '5%',
-    alignItems: 'flex-end',
-    width: '100%',
-    justifyContent: 'space-between',
-  },
-  total_text: {
-    fontSize: 21,
-    color: '#173C4F',
-    fontWeight: '900',
-  },
-  total_amount: {
-    fontSize: 20,
-    color: '#173C4F',
-    fontWeight: '900',
-  },
   amount_selection_container: {
     display: 'flex',
     alignSelf: 'flex-start',
@@ -118,5 +118,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-export default BasketContents;

@@ -23,6 +23,7 @@ const OptionsPopUp = ({data, renderer, item}) => {
         ...prevState,
         [name]: price,
       }));
+      console.log(options);
     } else {
       setTotalPrice(((100 * totalPrice - price) / 100).toPrecision(3));
       let newState = options;

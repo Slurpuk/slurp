@@ -54,18 +54,32 @@ export default function LandingMapPage({navigation}) {
             key: documentSnapshot.id,
           };
 
-          let items = [];
+          let coffees = [];
+          let drinks = [];
+          let snacks = [];
           documentSnapshot.data().ItemsOffered.forEach(itemRef => {
             firestore()
               .doc(itemRef.path)
-              .onSnapshot(query => {
-                items.push({
-                  ...query.data(),
-                  key: query.id,
+              .onSnapshot(querySnapshot => {
+                let collection = '';
+                if (itemRef.path.includes('Coffees')) {
+                  collection = coffees;
+                } else if (itemRef.path.includes('Drinks')) {
+                  collection = drinks;
+                } else {
+                  collection = snacks;
+                }
+                collection.push({
+                  ...querySnapshot.data(),
+                  key: querySnapshot.id,
                 });
-                shopData.ItemsOffered = items;
               });
           });
+          shopData.ItemsOffered = {
+            Coffees: coffees,
+            Drinks: drinks,
+            Snacks: snacks,
+          };
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);

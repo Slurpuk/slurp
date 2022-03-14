@@ -26,14 +26,23 @@ const ShopCard = ({shop, navigation}) => {
     }
   }, [isShopPage]);
 
-  return (
+  return !shop.IsOpen ? (
+    <ImageBackground
+      style={styles.item}
+      imageStyle={styles.image}
+      source={{uri: shop.Image}}
+      resizeMode="cover"
+      blurRadius={4}>
+      <Text style={[textStyles.headingOne, styles.shopName]}>{shop.Name}</Text>
+      <Text style={[textStyles.bodyText]}> CLOSED </Text>
+    </ImageBackground>
+  ) : (
     <Pressable onPress={shopPageDetails}>
       <ImageBackground
         style={styles.item}
         imageStyle={styles.image}
         source={{uri: shop.Image}}
-        resizeMode="cover"
-      >
+        resizeMode="cover">
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
