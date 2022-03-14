@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     alignItems: 'flex-start',
-    marginRight: '3%',
+    marginLeft: '1.5%',
     paddingBottom: '15%',
   },
 
