@@ -1,4 +1,4 @@
-import CoffeeOptionsData from './fake-data/CoffeeOptionsData';
+/*import CoffeeOptionsData from './fake-data/CoffeeOptionsData';
 import ItemsData from './fake-data/ItemsData';
 import renderers from './renderers';
 import React from 'react';
@@ -104,3 +104,4 @@ export default {
   NavigableLandingPage,
   AnimatedCardTester,
 };
+*/
