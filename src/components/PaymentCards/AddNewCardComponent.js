@@ -22,7 +22,7 @@ import menuSection from "../ShopMenu/MenuSection";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-export default function PaymentScreen() {
+export default function AddNewCardComponent() {
   const [card, setCard] = useState(CardFieldInput.Details | null);
   const {confirmPayment} = useStripe();
   const API_URL = 'http://localhost:8000';
@@ -92,7 +92,7 @@ export default function PaymentScreen() {
 
   return (
     <View style={styles.container}>
-      <GreenHeader headerText={'PAYMENT PAGE'} />
+      <GreenHeader headerText={'ADD NEW CARD'} />
       <View style={{alignItems: 'center', backgroundColor: '#EDEBE7', flex: 1}}>
         <CardField
           postalCodeEnabled={true}
@@ -127,7 +127,7 @@ export default function PaymentScreen() {
           }}
           onPress={saveCard}
           >
-          <Text style={{color: 'white', fontWeight: 'bold'}}>Pay Now</Text>
+          <Text style={{color: 'white', fontWeight: 'bold'}}>Add Card</Text>
         </TouchableOpacity>
       </View>
     </View>

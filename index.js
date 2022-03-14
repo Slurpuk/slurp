@@ -11,7 +11,8 @@ import RegisterEmailPassword from "./src/firebase/authentication/registerEmailPa
 import LandingMapPage from "./src/screens/LandingMapPage";
 import MapBackground from "./src/components/LandingMap/MapBackground";
 // import Query from "./src/firebase/firestore/basicQuery";
-import PaymentPage from "./src/screens/PaymentPage";
+import AddNewCardPage from "./src/screens/AddNewCardPage";
+import PaymentCardsPage from "./src/screens/PaymentCardsPage";
 
-AppRegistry.registerComponent(appName, () => PaymentPage);
+AppRegistry.registerComponent(appName, () => PaymentCardsPage);
 // AppRegistry.registerComponent(appName, () => MapBackground);
