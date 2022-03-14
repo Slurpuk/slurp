@@ -56,7 +56,7 @@ const Menu = () => {
           name="Drinks"
           children={() => (
             <FlatList
-              data={shopContext.getCoffees()}
+              data={shopContext.getDrinks()}
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
@@ -68,7 +68,7 @@ const Menu = () => {
           name="Snacks"
           children={() => (
             <FlatList
-              data={shopContext.getCoffees()}
+              data={shopContext.getSnacks()}
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}

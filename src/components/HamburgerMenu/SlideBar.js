@@ -16,7 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Close from 'react-native-vector-icons/AntDesign';
 import getUserInfo from '../../firebase/queries/getUserInfo';
-import BasketPage from "../../screens/BasketPage";
+import BasketPage from '../../screens/BasketPage';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -86,7 +86,7 @@ function CustomDrawerContent(props) {
         style={styles.drawer_item}
         labelStyle={styles.drawer_item_label}
       />
-        <DrawerItem
+      <DrawerItem
         label="View Basket"
         onPress={() => props.navigation.navigate('BasketPage')}
         activeTintColor="#2196f3"

@@ -6,7 +6,6 @@ const Option = ({name, price, currency, updateOptions}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
-
   const update = newValue => {
     setToggleCheckBox(newValue);
     updateOptions(name, price, !toggleCheckBox);

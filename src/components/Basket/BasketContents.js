@@ -3,8 +3,6 @@ import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
 import BasketItem from './BasketItem';
 
 const BasketContents = ({context, Items}) => {
-
-
   return (
     <View style={styles.basket_content}>
       <Text style={styles.my_order}>My Order</Text>

@@ -27,9 +27,10 @@ const ShopPage = ({navigation, route}) => {
       {title: 'Drinks', list: [], key: 2},
       {title: 'Snacks', list: [], key: 3},
     ];
-    shop.ItemsOffered.forEach(item => {
-      data[0].list.push(item);
-    });
+    const items = shop.ItemsOffered;
+    data[0].list = items.Coffees;
+    data[1].list = items.Drinks;
+    data[2].list = items.Snacks;
     return data;
   }
 
@@ -53,6 +54,8 @@ const ShopPage = ({navigation, route}) => {
         setShopIntro: context.setShopIntro,
         isShopIntro: context.isShopIntro,
         getCoffees: getCoffees,
+        getSnacks: getSnacks,
+        getDrinks: getDrinks,
         isFullScreen: context.isFullScreen,
         setFullScreen: context.setFullScreen,
       }}

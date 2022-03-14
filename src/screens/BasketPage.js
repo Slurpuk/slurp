@@ -110,7 +110,8 @@ const BasketPage = ({navigation, route}) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={confirmOrder}
-        style={[styles.lastButton, styles.buttons]}>
+        style={[styles.lastButton, styles.buttons]}
+      >
         <CustomButton
           priority="primary"
           style={styles.button}

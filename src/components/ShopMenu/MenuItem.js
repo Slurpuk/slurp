@@ -24,26 +24,26 @@ const MenuItem = ({item}) => {
 
   function remove(item) {
     if (count > 0) {
-      context.removeFromBasket(item);
+      shopContext.removeFromBasket(item);
       setCount(count - 1);
     }
   }
   function add(item) {
-    context.addToBasket(item);
+    shopContext.addToBasket(item);
     setCount(count + 1);
   }
-
-
 
   return (
     <RNGHTouchableOpacity style={styles.item} onPress={() => showOptions()}>
       <ImageBackground
         source={{uri: item.Image}}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}
-        style={{width: '100%', height: '100%'}}>
+        style={{width: '100%', height: '100%'}}
+      >
         <LinearGradient
           colors={['transparent', 'black']}
-          style={styles.linearGradient}>
+          style={styles.linearGradient}
+        >
           <View style={styles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.Name}
@@ -52,11 +52,22 @@ const MenuItem = ({item}) => {
           </View>
           <Pressable
             onPress={() => add(item)}
-            style={styles.menuCardPopupTrigger}>
-            <Text style={[textStyles.iconText, {marginLeft: 1,
-              marginTop: 2,
-              color: 'black',
-              textAlign: 'center',}]}> {count === 0 ? '+' : count}</Text>
+            style={styles.menuCardPopupTrigger}
+          >
+            <Text
+              style={[
+                textStyles.iconText,
+                {
+                  marginLeft: 1,
+                  marginTop: 2,
+                  color: 'black',
+                  textAlign: 'center',
+                },
+              ]}
+            >
+              {' '}
+              {count === 0 ? '+' : count}
+            </Text>
           </Pressable>
         </LinearGradient>
       </ImageBackground>
