@@ -1,11 +1,16 @@
-import {StyleSheet, View} from 'react-native';
+import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import React, {useContext} from 'react';
 import ShopCard from './ShopCard';
-import {OptionsContext} from '../../screens/LandingMapPage';
+import {GlobalContext} from '../../../App';
+
+// Height to render the ScrollBottomSheet in its retracted position.
+// Different on android due to bottom icon bar being considered part of the screen
+const SHOP_LIST_HEIGHT_IOS = '75%';
+const SHOP_LIST_HEIGHT_ANDROID = '78%';
 
 const ShopList = ({navigation}) => {
-  const context = useContext(OptionsContext);
+  const context = useContext(GlobalContext);
   const DATA = context.shopsData;
   return (
     <View style={styles.wrapper}>
@@ -29,7 +34,8 @@ const styles = StyleSheet.create({
   },
 
   wrapper: {
-    height: '70%',
+    height:
+      Platform.OS === 'ios' ? SHOP_LIST_HEIGHT_IOS : SHOP_LIST_HEIGHT_ANDROID,
   },
 });
 export default ShopList;

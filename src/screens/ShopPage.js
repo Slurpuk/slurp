@@ -1,26 +1,21 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import Menu from '../components/ShopMenu/Menu';
+import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import renderers from '../renderers';
-import {OptionsContext} from './LandingMapPage';
+
 import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
-import ShopIntro from '../components/Shops/ShopIntro';
+import DraggableShopPage from '../components/Shops/DraggableShopPage';
+import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
+import {GlobalContext} from '../../App';
 
 export const ShopContext = React.createContext();
-const ShopPage = ({navigation, route}) => {
-  const defaultContext = useContext(OptionsContext);
-  const context = route === undefined ? defaultContext : route.params;
+const ShopPage = ({navigation}) => {
+  const context = useContext(GlobalContext);
   const shop = context.currShop;
-  const [menuData, setMenuData] = useState(null);
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
+  const [menuData, setMenuData] = useState(null);
 
   useEffect(() => {
     setMenuData(filterData());
@@ -28,18 +23,25 @@ const ShopPage = ({navigation, route}) => {
 
   function filterData() {
     let data = [
-      {title: 'Coffees', data: [{key: 'Coffees', list: []}], key: 1},
-      {title: 'Drinks', data: [{key: 'Cold Drinks', list: []}], key: 2},
-      {title: 'Snacks', data: [{key: 'Snacks', list: []}], key: 3},
+      {title: 'Coffees', list: [], key: 1},
+      {title: 'Drinks', list: [], key: 2},
+      {title: 'Snacks', list: [], key: 3},
     ];
-    shop.ItemsOffered.forEach(item => {
-      data[0].data[0].list.push(item);
-    });
+    const items = shop.ItemsOffered;
+    data[0].list = items.Coffees;
+    data[1].list = items.Drinks;
+    data[2].list = items.Snacks;
     return data;
   }
 
-  function getMenuData() {
-    return menuData === null ? filterData() : menuData;
+  function getCoffees() {
+    return filterData()[0].list;
+  }
+  function getDrinks() {
+    return filterData()[1].list;
+  }
+  function getSnacks() {
+    return filterData()[2].list;
   }
 
   return (
@@ -49,24 +51,22 @@ const ShopPage = ({navigation, route}) => {
         setCurrItem: setCurrItem,
         shop: shop,
         navigation: navigation,
-        currRef: context.currRef,
+        setShopIntro: context.setShopIntro,
         isShopIntro: context.isShopIntro,
+        getCoffees: getCoffees,
+        getSnacks: getSnacks,
+        getDrinks: getDrinks,
         isFullScreen: context.isFullScreen,
+        setFullScreen: context.setFullScreen,
       }}
     >
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
-        <View style={styles.container}>
-          <ShopIntro
-            likeness={shop.Likeness}
-            timeToOrder={shop.Queue}
-            shopName={shop.Name}
-            shopIntroText={shop.Intro}
-          />
-          <Menu
-            DATA={getMenuData()}
-            renderItem={renderers.renderMenuItem}
-            renderSection={renderers.renderMenuSection}
-          />
+        <>
+          {context.isShopIntro ? (
+            <DraggableShopPage shop={shop} navigation={navigation} />
+          ) : (
+            <NonDraggableShopPage shop={shop} navigation={navigation} />
+          )}
           {optionsVisible ? (
             <BlurView
               style={styles.absolute}
@@ -75,7 +75,7 @@ const ShopPage = ({navigation, route}) => {
               reducedTransparencyFallbackColor="white"
             />
           ) : null}
-        </View>
+        </>
       </TouchableWithoutFeedback>
       {optionsVisible ? (
         <OptionsPopUp
@@ -89,12 +89,6 @@ const ShopPage = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    minHeight: '100%',
-    width: '100%',
-    position: 'relative',
-  },
   absolute: {
     position: 'absolute',
     top: 0,

@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 
 const Option = ({name, price, currency, updateOptions}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const update = newValue => {
     setToggleCheckBox(newValue);
@@ -20,7 +21,7 @@ const Option = ({name, price, currency, updateOptions}) => {
         <CheckBox
           hideBox
           style={styles.checkBox}
-          disabled={false}
+          disabled={isDisabled}
           value={toggleCheckBox}
           onValueChange={newValue => update(newValue)}
           boxType="square"
