@@ -12,8 +12,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
-import {GlobalContext} from '../../screens/LandingMapPage';
+
 import {DraggableContext} from './DraggableShopPage';
+import {GlobalContext} from '../../../App';
 
 const ShopIntro = ({shop}) => {
   const shopContext = useContext(ShopContext);

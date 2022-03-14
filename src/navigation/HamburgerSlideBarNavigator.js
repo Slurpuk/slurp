@@ -12,7 +12,7 @@ import {
   OrderHistoryStackNavigator,
   PaymentAccountsNavigator,
 } from './StackNavigator';
-import {AppContext} from '../../App';
+import {GlobalContext} from '../../App';
 import textStyles from '../../stylesheets/textStyles';
 import auth from '@react-native-firebase/auth';
 

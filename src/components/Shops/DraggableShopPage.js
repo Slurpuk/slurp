@@ -7,7 +7,7 @@ import {ShopContext} from '../../screens/ShopPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 
 export const DraggableContext = React.createContext();
-const DraggableShopPage = ({shop}) => {
+const DraggableShopPage = ({shop, navigation}) => {
   const setHamburgerVisible = useContext(VisibleContext);
   const bottomSheetRef = useRef(null);
   const context = useContext(ShopContext);
@@ -41,7 +41,7 @@ const DraggableShopPage = ({shop}) => {
               ]}
             />
             <ShopIntro shop={shop} />
-            <Menu />
+            <Menu navigation={navigation} />
           </View>
         )}
         contentContainerStyle={styles.contentContainerStyle}

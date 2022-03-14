@@ -6,13 +6,15 @@ import {FlatList} from 'react-native-gesture-handler';
 import renderers from '../../renderers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ShopContext} from '../../screens/ShopPage';
+import {GlobalContext} from '../../../App';
 
 const Tab = createMaterialTopTabNavigator();
 
 export const MenuContext = React.createContext();
-const Menu = () => {
+const Menu = ({navigation}) => {
   const [numItems, setNumItems] = useState(0);
   const shopContext = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
 
   return (
     <MenuContext.Provider value={{setNumItems: setNumItems}}>
@@ -86,7 +88,8 @@ const Menu = () => {
           <CustomButton
             text="View Basket"
             priority="primary"
-            optionalNumber={numItems}
+            optionalNumber={globalContext.basketSize}
+            onPress={() => navigation.navigate('Basket page')}
           />
         </LinearGradient>
       </View>

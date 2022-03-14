@@ -1,14 +1,16 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
 import BasketItem from './BasketItem';
+import {GlobalContext} from '../../../App';
 
-const BasketContents = ({context, Items}) => {
+const BasketContents = ({Items}) => {
+  const context = useContext(GlobalContext);
   return (
     <View style={styles.basket_content}>
       <Text style={styles.my_order}>My Order</Text>
       <FlatList
         data={Items}
-        renderItem={({item}) => <BasketItem item={item} context={context} />}
+        renderItem={({item}) => <BasketItem item={item} />}
         style={styles.items_list}
       />
     </View>

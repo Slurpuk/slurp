@@ -13,7 +13,8 @@ import {
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {GlobalContext} from '../../screens/LandingMapPage';
+import {GlobalContext} from '../../../App';
+
 // import {OptionsContext} from '../../screens/LandingMapPage';
 
 const screenHeight = Dimensions.get('window').height;

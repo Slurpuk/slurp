@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -12,9 +12,9 @@ import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from '@react-native-firebase/firestore';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
-import DraggableShopPage from '../components/Shops/DraggableShopPage';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
+import {GlobalContext} from '../../App';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -22,14 +22,10 @@ LogBox.ignoreLogs([
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export const GlobalContext = React.createContext();
 
 export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
-  const [shopsData, setShopsData] = useState([]);
-  const [isShopIntro, setIsShopIntro] = useState(false);
-  const [currShop, setCurrShop] = useState(shopsData[0]);
-  const [isFullScreen, setFullScreen] = useState(false);
+  const context = useContext(GlobalContext);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -41,90 +37,25 @@ export default function LandingMapPage({navigation}) {
     }, []),
   );
 
-  // Subscribe to the Shops model
-  useEffect(() => {
-    const subscriber = firestore()
-      .collection('CoffeeShop')
-      .onSnapshot(querySnapshot => {
-        const shops = [];
-
-        querySnapshot.forEach(documentSnapshot => {
-          let shopData = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          };
-
-          let coffees = [];
-          let drinks = [];
-          let snacks = [];
-          documentSnapshot.data().ItemsOffered.forEach(itemRef => {
-            firestore()
-              .doc(itemRef.path)
-              .onSnapshot(querySnapshot => {
-                let collection = '';
-                if (itemRef.path.includes('Coffees')) {
-                  collection = coffees;
-                } else if (itemRef.path.includes('Drinks')) {
-                  collection = drinks;
-                } else {
-                  collection = snacks;
-                }
-                collection.push({
-                  ...querySnapshot.data(),
-                  key: querySnapshot.id,
-                });
-              });
-          });
-          shopData.ItemsOffered = {
-            Coffees: coffees,
-            Drinks: drinks,
-            Snacks: snacks,
-          };
-          shops.push(shopData);
-          setShopsData(shops);
-          setCurrShop(shops[0]);
-        });
-      });
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
-
-  const setShopIntro = () => {
-    setIsShopIntro(!isShopIntro);
-  };
-
   return (
-    <GlobalContext.Provider
-      value={{
-        currShop: currShop,
-        setCurrShop: setCurrShop,
-        isShopIntro: isShopIntro,
-        shopsData: shopsData,
-        setShopIntro: setShopIntro,
-        isFullScreen: isFullScreen,
-        setFullScreen: setFullScreen,
-      }}
-    >
-      <View style={styles.container}>
-        <StatusBar translucent={true} backgroundColor="transparent" />
-        <View style={styles.map}>
-          <MapBackground />
-          <TextInput
-            style={styles.searchBar}
-            placeholder={'Search Location'}
-            placeholderTextColor={'#666'}
-          />
-          <Button title={'Switch bottom sheet'} onPress={setShopIntro} />
-        </View>
-
-        {isShopIntro ? (
-          <ShopPage />
-        ) : (
-          <DraggableShopList navigation={navigation} />
-        )}
+    <View style={styles.container}>
+      <StatusBar translucent={true} backgroundColor="transparent" />
+      <View style={styles.map}>
+        <MapBackground />
+        <TextInput
+          style={styles.searchBar}
+          placeholder={'Search Location'}
+          placeholderTextColor={'#666'}
+        />
+        <Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />
       </View>
-    </GlobalContext.Provider>
+
+      {context.isShopIntro ? (
+        <ShopPage navigation={navigation} />
+      ) : (
+        <DraggableShopList navigation={navigation} />
+      )}
+    </View>
   );
 }
 

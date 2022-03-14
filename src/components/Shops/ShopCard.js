@@ -8,23 +8,17 @@ import {
   Platform,
   ImageBackground,
 } from 'react-native';
-import {GlobalContext} from '../../screens/LandingMapPage';
+
 import textStyles from '../../../stylesheets/textStyles';
+import {GlobalContext} from '../../../App';
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
-  const [isShopPage, setShopPage] = useState(false);
+  // const [isShopPage, setShopPage] = useState(false);
 
   const shopPageDetails = () => {
-    context.setCurrShop(shop);
-    setShopPage(true);
+    context.setCurrShop({shop, navigation});
   };
 
-  useEffect(() => {
-    if (isShopPage) {
-      setShopPage(false);
-      navigation.navigate('Shop page', context);
-    }
-  }, [isShopPage]);
 
   return !shop.IsOpen ? (
     <ImageBackground

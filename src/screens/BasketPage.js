@@ -20,8 +20,12 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useFocusEffect} from '@react-navigation/native';
 
-const BasketPage = ({navigation, route}) => {
+import {ShopContext} from './ShopPage';
+import {GlobalContext} from '../../App';
+
+const BasketPage = ({navigation}) => {
   // const basket = route.params.basket;
+  const context = useContext(GlobalContext);
 
   const [Items] = useState([
     {
@@ -60,7 +64,6 @@ const BasketPage = ({navigation, route}) => {
       specifications: ['Dairy', 'Caramel Syrup'],
     },
   ]);
-  const context = route.params;
 
   function confirmOrder() {
     firestore()
@@ -90,11 +93,11 @@ const BasketPage = ({navigation, route}) => {
   return (
     <View style={styles.basket}>
       <GreenHeader
-        headerText={'My Basket - ' + context.shop.Name}
+        headerText={'My Basket - ' + context.currShop.Name}
         navigation={navigation}
       />
       <View style={styles.main_container}>
-        <BasketContents context={context} Items={context.basketContent} />
+        <BasketContents Items={context.basketContent} />
       </View>
 
       <View style={styles.order_summary}>

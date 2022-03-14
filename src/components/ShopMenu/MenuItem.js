@@ -12,10 +12,24 @@ import {
 import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
+import {GlobalContext} from '../../../App';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
   const shopContext = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
+
+  useEffect(() => {
+    const basket = globalContext.basketContent;
+    let newCount = 0;
+    for (let it of basket) {
+      if (it.key === item.key) {
+        newCount = it.count;
+        break;
+      }
+    }
+    setCount(newCount);
+  }, [globalContext.basketContent]);
 
   const showOptions = () => {
     shopContext.setCurrItem(item);
@@ -24,13 +38,13 @@ const MenuItem = ({item}) => {
 
   function remove(item) {
     if (count > 0) {
-      shopContext.removeFromBasket(item);
-      setCount(count - 1);
+      globalContext.removeFromBasket(item);
+      // setCount(count - 1);
     }
   }
   function add(item) {
-    shopContext.addToBasket(item);
-    setCount(count + 1);
+    globalContext.addToBasket(item);
+    // setCount(count + 1);
   }
 
   return (

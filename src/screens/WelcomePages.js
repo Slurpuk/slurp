@@ -15,10 +15,10 @@ import CoffeeShopSvg from '../assets/svgs/CoffeeShopSvg';
 import CoffeeCupSvg from '../assets/svgs/CoffeeCupSvg';
 import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
 import {getTightPadding} from '../../stylesheets/StyleFunction';
-import {AppContext} from '../../App';
+import {GlobalContext} from '../../App';
 
 const WelcomePages = ({onDone, navigation}) => {
-  const appContext = useContext(AppContext);
+  const appContext = useContext(GlobalContext);
   const [sliderState, setSliderState] = useState({currentPage: 0});
   const {width, height} = Dimensions.get('window');
 

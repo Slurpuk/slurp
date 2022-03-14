@@ -1,10 +1,11 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
+import {GlobalContext} from '../../../App';
 
-export default function BasketItem({item, context}) {
+export default function BasketItem({item}) {
+  const context = useContext(GlobalContext);
   const [count, setCount] = useState(item.count);
   const [itemTotal, setItemTotal] = useState(item.Price * item.count);
-  const [totalPrice, setTotalPrice] = useState(context.total);
 
   function remove(item) {
     if (count > 0) {
