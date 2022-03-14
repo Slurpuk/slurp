@@ -23,8 +23,7 @@ const OrderDetailsView = ({order}) => {
         </View>
         <View>
           <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
-          >
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
             {order.ShopID.Name}
           </Text>
           {getStatusAndDateComponent(order)}
@@ -60,8 +59,7 @@ const getStatusAndDateComponent = order => {
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}
-      >
+        ]}>
         {order.Status} {dateAndTime}
       </Text>
     );
@@ -73,8 +71,7 @@ const getStatusAndDateComponent = order => {
           styles.textFlex,
           styles.finishedOrder,
           styles.cancelledOrder,
-        ]}
-      >
+        ]}>
         {order.Status} {dateAndTime}
       </Text>
     );

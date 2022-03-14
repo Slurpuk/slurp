@@ -20,23 +20,25 @@ import firestore from '@react-native-firebase/firestore';
 const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = ({navigation}) => {
-  const [pastOrders, setPastOrders] = useState();
-  let [currentOrders, setCurrentOrders] = useState();
+  const [pastOrders, setPastOrders] = useState([]);
+  const [currentOrders, setCurrentOrders] = useState([]);
 
   useEffect(() => {
-
     const fetchData = async () => {
       firestore()
         .collection('Orders')
         .onSnapshot(querySnapshot => {
-          const currentOrders = [];
-          const pastOrders = [];
+          let currentOrdersLocal = [];
+          let pastOrdersLocal = [];
           querySnapshot.forEach(documentSnapshot => {
+            let order = {};
             // get order data
-            let order = {
+            let firebaseOrder = {
               ...documentSnapshot.data(),
               key: documentSnapshot.key,
             };
+
+            order.fire = firebaseOrder;
 
             // de-reference items
             let items = [];
@@ -57,49 +59,57 @@ const OrderPage = ({navigation}) => {
               'December',
             ];
             order.period =
-              months[order.DateTime.toDate().getMonth()] +
+              months[firebaseOrder.DateTime.toDate().getMonth()] +
               ' ' +
-              order.DateTime.toDate().getFullYear();
+              firebaseOrder.DateTime.toDate().getFullYear();
 
-            order.Items.forEach(item => {
+            firebaseOrder.Items.forEach(item => {
+              let newItem = {};
+              newItem.quantity = item.Quantity;
               firestore()
                 .doc(item.Coffee)
-                .onSnapshot(querySnapshot => {
-                  item.Coffee = {
-                    ...querySnapshot.data(),
-                    key: querySnapshot.key,
+                .onSnapshot(query => {
+                  newItem.coffee = {
+                    ...query.data(),
+                    key: query.key,
                   };
-                  items.push(item);
-                  order.Items = items;
                 });
+              items.push(newItem);
             });
 
+            order.data = items;
+
             // make data suitable for section list
-            order.data = order.Items;
-            delete order.Items;
+            // order.data = order.Items;
+            // delete order.Items;
 
             // de-reference the shop
 
-            let shop;
+            // let shop;
             firestore()
-              .doc(order.ShopID)
-              .onSnapshot(querySnapshot => {
-                shop = {...querySnapshot.data()};
-                order.ShopID = shop;
+              .doc(firebaseOrder.ShopID)
+              .onSnapshot(query => {
+                order.shop = {...query.data()};
               });
 
             // de-reference the user (not yet feasible)
             // sort to current and past
-            if (order.Status === 'incoming' || order.Status === 'accepted') {
-              currentOrders.push(order);
+            // currentOrdersLocal.push(order);
+            if (firebaseOrder.Status === 'rejected') {
+              pastOrdersLocal.push(order);
             } else {
-              pastOrders.push(order);
+              currentOrdersLocal.push(order);
             }
           });
-          setCurrentOrders(currentOrders);
-          setPastOrders(pastOrders);
+          // console.log("CURRENT ORDERS")
+          // console.log(currentOrdersLocal);
+          // console.log("PAST ORDERS")
+          // console.log(pastOrdersLocal);
+          setCurrentOrders(currentOrdersLocal);
+          setPastOrders(pastOrdersLocal);
         });
-    }
+      console.log('LOOOL', currentOrders);
+    };
     fetchData().then(r => console.log('got data'));
   }, []);
 
@@ -143,9 +153,11 @@ const OrderPage = ({navigation}) => {
   );
 };
 
+
 const PastOrders = pastOrders => {
-  console.log('past data');
-  console.log(pastOrders.pastOrders);
+
+  // console.log('past data');
+  // console.log(pastOrders.pastOrders);
   return (
     // <SectionList
     //   contentContainerStyle={styles.mainContainer}
@@ -161,19 +173,19 @@ const PastOrders = pastOrders => {
     // />
     <FlatList
       contentContainerStyle={styles.mainContainer}
-      data={pastOrders.pastOrders}
+      data={pastOrders}
       renderItem={({item}) => <CollapsedOrder order={item} />}
     />
   );
 };
 
 const CurrentOrders = currentOrders => {
-  console.log('current data');
-  console.log(currentOrders.currentOrders);
+  // console.log('current data');
+  // console.log(currentOrders);
   return (
     <FlatList
       contentContainerStyle={styles.mainContainer}
-      data={currentOrders.currentOrders}
+      data={currentOrders}
       renderItem={({item}) => <CollapsedOrder order={item} />}
     />
   );
