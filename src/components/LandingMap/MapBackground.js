@@ -13,7 +13,8 @@ import {
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {OptionsContext} from '../../screens/LandingMapPage';
+import {GlobalContext} from "../../screens/LandingMapPage";
+// import {OptionsContext} from '../../screens/LandingMapPage';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -27,7 +28,7 @@ export default function MapBackground() {
   const [markers, setMarkers] = useState([]);
 
   const [shopsData, setShopsData] = useState([]);
-  const context = useContext(OptionsContext);
+  const context = useContext(GlobalContext);
 
 
 
