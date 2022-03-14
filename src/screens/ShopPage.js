@@ -16,10 +16,45 @@ const ShopPage = ({navigation, route}) => {
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
   const [menuData, setMenuData] = useState(null);
+  const [basketContent, setBasketContent] = useState([]);
+  const [basketSize, setBasketSize] = useState(0);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     setMenuData(filterData());
   }, [context.currShop]);
+
+  function addToBasket(item) {
+    const basket = basketContent;
+    const exist = basket.find(x => x.key === item.key);
+    if (exist) {
+      setBasketContent(
+        basket.map(x =>
+          x.key === item.key ? {...exist, count: exist.count + 1} : x,
+        ),
+      );
+    } else {
+      setBasketContent([...basket, {...item, count: 1}]);
+    }
+    setTotal(total + item.Price);
+    setBasketSize(basketSize + 1);
+  }
+
+  function removeFromBasket(item) {
+    const basket = basketContent;
+    const exist = basket.find(x => x.key === item.key);
+    if (exist.count === 1) {
+      setBasketContent(basket.filter(x => x.key !== item.key));
+    } else {
+      setBasketContent(
+        basket.map(x =>
+          x.key === item.key ? {...exist, count: exist.count - 1} : x,
+        ),
+      );
+    }
+    setTotal(total - item.Price);
+    setBasketSize(basketSize - 1);
+  }
 
   function filterData() {
     let data = [
@@ -58,8 +93,7 @@ const ShopPage = ({navigation, route}) => {
         getDrinks: getDrinks,
         isFullScreen: context.isFullScreen,
         setFullScreen: context.setFullScreen,
-      }}
-    >
+      }}>
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
           {context.isShopIntro ? (
