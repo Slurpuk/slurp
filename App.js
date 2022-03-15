@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import HamburgerSlideBarNavigator, {
   VisibleContext,
@@ -11,7 +11,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
-import {Alert} from 'react-native';
+import {Alert, Animated} from 'react-native';
 
 export const GlobalContext = React.createContext();
 export default function App() {
@@ -25,6 +25,12 @@ export default function App() {
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
+  const [currentCenterLocation, setCurrentCenterLocation] = useState({
+    latitude: 51.5140310233705,
+    longitude: -0.1164075624320158,
+  });
+
+  const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
   const checkForFirstTime = async () => {
     const result = await AsyncStorage.getItem('isFirstTime');
@@ -38,7 +44,6 @@ export default function App() {
   useEffect(() => {
     checkForFirstTime();
   }, []);
-
 
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(user => {
@@ -66,6 +71,12 @@ export default function App() {
     navigation.navigate('Shop page');
   }
 
+  function switchNewShop({shop}) {
+    setBasketContent([]);
+    setBasketSize(0);
+    setCurrShop(shop);
+  }
+
   function changeShop({shop, navigation}) {
     if (currShop !== shop && basketSize !== 0) {
       Alert.alert(
@@ -87,6 +98,29 @@ export default function App() {
     } else {
       setCurrShop(shop);
       navigation.navigate('Shop page');
+    }
+  }
+
+  function switchShop(shop) {
+    if (currShop !== shop && basketSize !== 0) {
+      Alert.alert(
+        'Are you sure ?',
+        'Changing shops will clear your basket.',
+        [
+          {
+            text: 'Yes',
+            onPress: () => switchNewShop({shop}),
+          },
+          {
+            text: 'No',
+            onPress: () => setIsShopIntro(true),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      setCurrShop(shop);
     }
   }
 
@@ -171,8 +205,8 @@ export default function App() {
     setBasketSize(basketSize - 1);
   }
 
-  const setShopIntro = () => {
-    setIsShopIntro(!isShopIntro);
+  const setShopIntro = shown => {
+    setIsShopIntro(shown);
   };
 
   const Stack = createNativeStackNavigator();
@@ -195,8 +229,11 @@ export default function App() {
         addToBasket: addToBasket,
         removeFromBasket: removeFromBasket,
         basketSize: basketSize,
-      }}
-    >
+        switchShop: switchShop,
+        currentCenterLocation: currentCenterLocation,
+        setCurrentCenterLocation: setCurrentCenterLocation,
+        adaptiveOpacity: adaptiveOpacity,
+      }}>
       <NavigationContainer>
         {isLoggedIn ? (
           <HamburgerSlideBarNavigator />
@@ -204,8 +241,7 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-            }}
-          >
+            }}>
             {isFirstTime ? (
               <Stack.Screen name="Welcome" component={WelcomePages} />
             ) : null}

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -23,9 +23,13 @@ LogBox.ignoreLogs([
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
+
+
 export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
+
+  const bottomSheetRef = useRef(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -37,21 +41,23 @@ export default function LandingMapPage({navigation}) {
     }, []),
   );
 
+
+  console.log('landing map page rerendered');
+
   return (
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground />
+        <MapBackground sheetRef={bottomSheetRef}/>
         <TextInput
           style={styles.searchBar}
           placeholder={'Search Location'}
           placeholderTextColor={'#666'}
         />
-        <Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />
       </View>
 
       {context.isShopIntro ? (
-        <ShopPage navigation={navigation} />
+        <ShopPage navigation={navigation} sheetRef={bottomSheetRef}/>
       ) : (
         <DraggableShopList navigation={navigation} />
       )}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 
 import {
   Alert,
@@ -9,17 +9,23 @@ import {
   Text,
   View,
   PermissionsAndroid,
+  Animated,
+  Image,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
+import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
+import textStyles from '../../../stylesheets/textStyles';
+import CoffeeBeanSvg from '../../assets/svgs/CoffeeBeanSvg';
+import CustomMapIcon from "../../assets/svgs/CustomMapIcon";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;
 
-export default function MapBackground() {
+export default function MapBackground({sheetRef}) {
   const [currentLongitude, setCurrentLongitude] = useState(0);
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLocation, setCurrentLocation] = useState();
@@ -29,6 +35,8 @@ export default function MapBackground() {
   const [shopsData, setShopsData] = useState([]);
   const context = useContext(GlobalContext);
 
+  console.log('map background rerendered');
+
   useEffect(() => {
     const editedShopsData = shopsData.map(item => {
       return {
@@ -37,6 +45,7 @@ export default function MapBackground() {
         latitude: item.Location._latitude,
         longitude: item.Location._longitude,
         image: item.Image,
+        isOpen: item.IsOpen,
       };
     });
 
@@ -49,6 +58,7 @@ export default function MapBackground() {
           latitude: item.latitude,
           longitude: item.longitude,
           d: calculateDistance(item),
+          isOpen: item.isOpen,
         };
       })
       .filter(item => item.d < 20000)
@@ -63,10 +73,11 @@ export default function MapBackground() {
           description: item.description,
           image: item.image,
           coords: {latitude: item.latitude, longitude: item.longitude},
+          isOpen: item.isOpen,
         };
       }),
     );
-  }, [shopsData, calculateDistance]);
+  }, [calculateDistance, shopsData]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateDistance = coords => {
@@ -97,7 +108,7 @@ export default function MapBackground() {
   //TODO remove these when currentLocation is actually used
   const defaultLocation = {
     latitude: 51.54817999763736,
-    longitude: -0.10673900193854804,
+    longitude: -0.30673900193854804,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -110,14 +121,54 @@ export default function MapBackground() {
     longitudeDelta: 0.01,
   };
 
+  let shopLocation = {
+    latitude: context.currentCenterLocation.latitude,
+    longitude: context.currentCenterLocation.longitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
   useEffect(() => {
     const temp = context.shopsData;
     setShopsData(temp);
   }, [context.shopsData]);
 
-  const locationPress = () => {
-    console.log('Function will be hre!!');
+  const locationPress = clickedMarker => {
+    console.log('Marker function triggered');
+
     //TODO takes you to the shop
+    // context.setShopIntro(true);
+    console.log('clicked marker shop:', clickedMarker);
+    let selectedShop = shopsData.find(shop => shop.Name === clickedMarker);
+    console.log('selected shop', selectedShop.Name);
+
+    //shrink
+    // if (sheetRef.current) {
+    //   console.log(sheetRef);
+    //   // sheetRef.current.snapTo(2);
+    // }
+
+    fadeOpacityOut(context.adaptiveOpacity, 170);
+
+    setTimeout(() => {
+      context.setCurrentCenterLocation({
+        latitude: selectedShop.Location._latitude,
+        longitude: selectedShop.Location._longitude,
+      });
+      context.switchShop(selectedShop);
+    }, 200);
+
+    //
+    // fadeOpacityIn(context.adaptiveOpacity, 500);
+
+    //switch while hidden
+
+    //show again
+    context.setShopIntro(true);
+
+    console.log(selectedShop);
+
+    console.log('shopsData: ', context.shopsData);
   };
 
   useEffect(() => {
@@ -140,8 +191,8 @@ export default function MapBackground() {
             subscribeLocationLocation();
           } else {
             //set a default location for the user to explore the app
-            setCurrentLongitude(defaultLocation.longitude);
-            setCurrentLatitude(defaultLocation.latitude);
+            setCurrentLongitude(context.currentCenterLocation.longitude);
+            setCurrentLatitude(context.currentCenterLocation.latitude);
           }
         } catch (err) {
           console.warn(err);
@@ -193,16 +244,34 @@ export default function MapBackground() {
 
   return (
     <View style={styles.container}>
-      <MapView provider={PROVIDER_GOOGLE} style={styles.map} region={bushHouse}>
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        region={shopLocation}>
         {markers.map((marker, index) => (
           <Marker
             key={index}
             coordinate={marker.coords}
             pinColor={'navy'}
-            title={marker.name}
-            description={marker.description}
-            onPress={locationPress}
-          />
+            // title={marker.name}
+            // description={marker.description}
+            onPress={() => {
+              if (marker.isOpen) {
+                locationPress(marker.name);
+              }
+
+            }}>
+            <View style={styles.markerStyle}>
+              <Text style={[textStyles.bluePoppinsSubHeading, styles.markerBg, marker.isOpen ? {color: 'black'} : [{color: 'grey' }, textStyles.lightGreyPoppins]]}>{marker.name}{marker.isOpen ? <Text style={textStyles.lightGreyPoppins}> -Open</Text> : <Text>-Closed</Text>}</Text>
+
+              {/*<Image*/}
+              {/*  source={require('../../assets/images/TealIcon.png')}*/}
+              {/*  width={50}*/}
+              {/*  height={50}*/}
+              {/*/>*/}
+              <CustomMapIcon isOpen={marker.isOpen} />
+            </View>
+          </Marker>
         ))}
       </MapView>
     </View>
@@ -221,5 +290,17 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     flex: 1,
   },
-  marker: {},
+
+  markerBg:{
+    backgroundColor: '#E4E4E4',
+    padding: 5,
+    marginBottom: 4,
+    borderRadius: 11,
+  },
+
+
+  markerStyle: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 });
