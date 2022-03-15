@@ -1,10 +1,11 @@
 import React from 'react';
 import {StyleSheet, View, Pressable, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import firebase from "@react-native-firebase/app";
 
 const PaymentCard = ({card}) => {
   function deleteCard() {
-    console.log('delete');
+    firebase.firestore().collection('Cards').doc('7cTBByUS0pvIJmR3fThp').delete().then(r =>console.log('card deleted') );
   }
 
   function setAsDefault() {

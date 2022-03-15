@@ -13,6 +13,13 @@ export const PaymentCardsContext = React.createContext();
 const PaymentCardsPage = ({navigation}) => {
   const [cards, setCards] = useState();
   const setVisible = useContext(VisibleContext);
+    const [brand, setBrand] = useState();
+    const [expiryMonth, setExpiryMonth] = useState();
+    const [expiryYear, setExpiryYear] = useState();
+    const [isDefault, setIsDefault] = useState();
+    const [last4, setLast4] = useState();
+    const [postalCode, setPostalCode] = useState();
+
 
 
     useEffect(() => {
@@ -29,7 +36,7 @@ const PaymentCardsPage = ({navigation}) => {
                 setCards(cards);
             });
         return () => subscriber();
-    }, []);
+    }, [brand,expiryMonth, expiryYear, isDefault, last4, postalCode]);
 
 
 
