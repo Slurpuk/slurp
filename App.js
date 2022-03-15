@@ -62,6 +62,7 @@ export default function App() {
   function newShop({shop, navigation}) {
     setBasketContent([]);
     setBasketSize(0);
+    setTotal(0);
     setCurrShop(shop);
     navigation.navigate('Shop page');
   }

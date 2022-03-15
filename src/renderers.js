@@ -2,12 +2,11 @@ import React from 'react';
 import Option from './components/ShopMenu/Option';
 import MenuSection from './components/ShopMenu/MenuSection';
 import MenuItem from './components/ShopMenu/MenuItem';
+import {Text} from "react-native";
 
 const renderOption = ({item, updateOptions}) => (
   <Option
-    name={item.name}
-    price={item.price}
-    currency={item.currency}
+    option={item}
     updateOptions={updateOptions}
   />
 );

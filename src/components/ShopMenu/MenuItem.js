@@ -1,11 +1,10 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
   StyleSheet,
   Text,
   Dimensions,
-  TouchableOpacity,
   Pressable,
   ImageBackground,
 } from 'react-native';
@@ -36,19 +35,14 @@ const MenuItem = ({item}) => {
     shopContext.setOptionsVisible(true);
   };
 
-  function remove(item) {
-    if (count > 0) {
-      globalContext.removeFromBasket(item);
-      // setCount(count - 1);
-    }
-  }
-  function add(item) {
-    globalContext.addToBasket(item);
-    // setCount(count + 1);
+  function add(newItem) {
+    newItem.hasOwnProperty('Bean')
+      ? showOptions()
+      : globalContext.addToBasket(newItem);
   }
 
   return (
-    <RNGHTouchableOpacity style={styles.item} onPress={() => showOptions()}>
+    <RNGHTouchableOpacity style={styles.item} onPress={() => add(item)}>
       <ImageBackground
         source={{uri: item.Image}}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}
@@ -97,9 +91,7 @@ const styles = StyleSheet.create({
     height: screenWidth * 0.43 * 0.74,
     borderRadius: 11,
     shadowOpacity: 0.2,
-    marginVertical: '2%',
-    marginLeft: '4%',
-    display: 'flex',
+    marginVertical: '2.5%',
     borderWidth: 1,
     position: 'relative',
   },
@@ -114,12 +106,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     position: 'absolute',
     paddingRight: 7,
-    paddingLeft: 7,
-    // paddingVertical: 7,
-    borderRadius: 70,
+    paddingLeft: 2,
+    borderRadius: 80,
     bottom: 10,
     minWidth: 26,
-    minHeight: 26,
+    height: 26,
     right: 10,
   },
 

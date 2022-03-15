@@ -1,42 +1,42 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {GlobalContext} from '../../../App';
+import renderers from "../../renderers";
 
 export default function BasketItem({item}) {
   const context = useContext(GlobalContext);
   const [count, setCount] = useState(item.count);
   const [itemTotal, setItemTotal] = useState(item.Price * item.count);
-
-  function remove(Item) {
+  console.log(item.options)
+  function remove() {
     if (count > 0) {
       context.removeFromBasket(item);
       setCount(count - 1);
-      setItemTotal(itemTotal - Item.Price);
+      setItemTotal(itemTotal - item.Price);
     }
   }
-  function add(Item) {
+  function add() {
     context.addToBasket(item);
     setCount(count + 1);
-    setItemTotal(itemTotal + Item.Price);
+    setItemTotal(itemTotal + item.Price);
   }
   return (
     <View style={styles.item_container}>
       <View style={styles.item_information}>
         <Text style={styles.item_name}>{item.Name}</Text>
         <FlatList
-          data={item.specifications}
-          renderItem={specification => (
-            <Text style={styles.item_specification}>{specification.item}</Text>
-          )}
+          data={item.options}
+          renderItem={(option) => <Text style={styles.item_specification}>{option.item.Name} {option.item.Type}</Text>}
           style={styles.item_specification_list}
+          keyExtractor={it => it.key}
         />
       </View>
       <View style={styles.amount_selection_container}>
-        <Pressable onPress={() => remove(item)}>
+        <Pressable onPress={() => remove()}>
           <Text style={styles.change_amount_button}>-</Text>
         </Pressable>
         <Text style={styles.amount}>{count}</Text>
-        <Pressable onPress={() => add(item)}>
+        <Pressable onPress={() => add()}>
           <Text style={styles.change_amount_button}>+</Text>
         </Pressable>
       </View>

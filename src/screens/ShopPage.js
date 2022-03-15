@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import renderers from '../renderers';
 
 import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
-import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
 import DraggableShopPage from '../components/Shops/DraggableShopPage';
 import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
 import {GlobalContext} from '../../App';
+import firestore from '@react-native-firebase/firestore';
 
 export const ShopContext = React.createContext();
 const ShopPage = ({navigation}) => {
@@ -15,11 +15,7 @@ const ShopPage = ({navigation}) => {
   const shop = context.currShop;
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
-  const [menuData, setMenuData] = useState(null);
-
-  useEffect(() => {
-    setMenuData(filterData());
-  }, [context.currShop]);
+  const [options, setOptions] = useState([]);
 
   function filterData() {
     let data = [
@@ -43,6 +39,33 @@ const ShopPage = ({navigation}) => {
   function getSnacks() {
     return filterData()[2].list;
   }
+
+  // Retrieves the options data from firebase
+  function getOptions() {
+    let initial = [
+      {title: 'Select Milk', data: []},
+      {title: 'Add Syrup', data: []},
+    ];
+    firestore()
+      .collection('Options')
+      .onSnapshot(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          let option = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          };
+          let index = 0;
+          option.Type === 'Syrup' ? (index = 1) : (index = 0);
+          initial[index].data.push(option);
+        });
+      });
+    setOptions(initial);
+  }
+
+  // Get the options on first render.
+  useEffect(() => {
+    getOptions();
+  }, []);
 
   return (
     <ShopContext.Provider
@@ -79,7 +102,7 @@ const ShopPage = ({navigation}) => {
       </TouchableWithoutFeedback>
       {optionsVisible ? (
         <OptionsPopUp
-          data={CoffeeOptionsData}
+          data={options}
           item={currItem}
           renderer={renderers.renderOption}
         />

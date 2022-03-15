@@ -2,13 +2,13 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import React, {useState} from 'react';
 
-const Option = ({name, price, currency, updateOptions}) => {
+const Option = ({option, updateOptions}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
   const update = newValue => {
     setToggleCheckBox(newValue);
-    updateOptions(name, price, !toggleCheckBox);
+    updateOptions(option, !toggleCheckBox);
   };
 
   return (
@@ -31,13 +31,13 @@ const Option = ({name, price, currency, updateOptions}) => {
       </View>
       <View style={[styles.container]}>
         <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
-          {name}
+          {option.Name}
         </Text>
-        {price !== 0 && (
+        {option.Price !== 0 && (
           <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
             {' '}
-            +{currency === 'p' ? price : price / 100}
-            {currency}
+            {option.Price < 1 ? option.Price * 100: option.Price}
+            p
           </Text>
         )}
       </View>
