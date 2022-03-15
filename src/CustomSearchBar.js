@@ -65,10 +65,11 @@ const CustomSearchBar: React.FunctionComponent<
         <FlatList
           data={shops}
           extraData={query}
+          styles={styles.flatList}
           renderItem={({item}) => (
             <View>
               {filterNames(item) ?
-              <Text style={styles.flatList}>
+              <Text style={styles.flatListItem}>
                 {filterNames(item)}
               </Text> : null}
             </View>
@@ -91,15 +92,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'white',
   },
-  flatList: {
-    paddingLeft: 15,
-    marginTop: 15,
-    paddingBottom: 15,
+  flatListItem: {
     fontSize: 20,
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    paddingVertical: 15,
+    borderRadius: 20,
+    fontFamily: 'Poppins',
     borderBottomColor: '#26a69a',
     borderBottomWidth: 1,
     backgroundColor: 'white',
   },
+  flatList: {
+    display: 'flex'
+  }
 });
 
 export default CustomSearchBar;
