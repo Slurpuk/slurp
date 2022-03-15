@@ -28,11 +28,6 @@ const screenWidth = Dimensions.get('window').width;
 export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
-  const [search, setSearch] = useState('');
-
-  const updateSearch = search => {
-    setSearch(search);
-  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -50,11 +45,6 @@ export default function LandingMapPage({navigation}) {
       <View style={styles.map}>
         <MapBackground />
         <CustomSearchBar />
-        {/*<TextInput*/}
-        {/*  style={styles.searchBar}*/}
-        {/*  placeholder={'Search Location'}*/}
-        {/*  placeholderTextColor={'#666'}*/}
-        {/*/>*/}
         <Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />
       </View>
 
