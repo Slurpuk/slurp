@@ -14,7 +14,7 @@ import textStyles from '../../stylesheets/textStyles';
 import CoffeeShopSvg from '../assets/svgs/CoffeeShopSvg';
 import CoffeeCupSvg from '../assets/svgs/CoffeeCupSvg';
 import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
-import {getTightPadding} from '../../stylesheets/StyleFunction';
+import {getTightPaddingTop} from '../../stylesheets/StyleFunction';
 import {AppContext} from '../../App';
 
 const WelcomePages = ({onDone, navigation}) => {
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     backgroundColor: '#E5E5E5',
-    paddingTop: getTightPadding(),
+    paddingTop: getTightPaddingTop(),
   },
   component: {
     width: screenWidth,
