@@ -19,6 +19,8 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;
 
+export const MapContext = React.createContext();
+
 export default function MapBackground() {
   const [currentLongitude, setCurrentLongitude] = useState(0);
   const [currentLatitude, setCurrentLatitude] = useState(0);
@@ -27,46 +29,57 @@ export default function MapBackground() {
   const [markers, setMarkers] = useState([]);
 
   const [shopsData, setShopsData] = useState([]);
+  const [orderedShops, setOrderedShops] = useState([]);
+
   const context = useContext(GlobalContext);
 
+  // useEffect(() => {
+  //   const editedShopsData = shopsData.map(item => {
+  //     return {
+  //       name: item.Name,
+  //       description: item.Intro,
+  //       latitude: item.Location._latitude,
+  //       longitude: item.Location._longitude,
+  //       image: item.Image,
+  //     };
+  //   });
+  //
+  //   const finalShopsData = editedShopsData
+  //     .map(item => {
+  //       return {
+  //         name: item.name,
+  //         description: item.description,
+  //         image: item.image,
+  //         latitude: item.latitude,
+  //         longitude: item.longitude,
+  //         d: calculateDistance(item),
+  //       };
+  //     })
+  //     .filter(item => item.d < 20000)
+  //     .sort((a, b) => {
+  //       return a.d < b.d;
+  //     });
+  //
+  //   setOrderedShops(finalShopsData);
+  //
+  //   setMarkers(
+  //     finalShopsData.map(item => {
+  //       return {
+  //         name: item.name,
+  //         description: item.description,
+  //         image: item.image,
+  //         coords: {latitude: item.latitude, longitude: item.longitude},
+  //       };
+  //     }),
+  //   );
+  // }, [shopsData, calculateDistance]);
+
+  //TODO rewrite the above to a single array to which you add the distanceTo field that tracks the shops -> send that over to database.
   useEffect(() => {
-    const editedShopsData = shopsData.map(item => {
-      return {
-        name: item.Name,
-        description: item.Intro,
-        latitude: item.Location._latitude,
-        longitude: item.Location._longitude,
-        image: item.Image,
-      };
-    });
-
-    const finalShopsData = editedShopsData
-      .map(item => {
-        return {
-          name: item.name,
-          description: item.description,
-          image: item.image,
-          latitude: item.latitude,
-          longitude: item.longitude,
-          d: calculateDistance(item),
-        };
-      })
-      .filter(item => item.d < 20000)
-      .sort((a, b) => {
-        return a.d < b.d;
-      });
-
-    setMarkers(
-      finalShopsData.map(item => {
-        return {
-          name: item.name,
-          description: item.description,
-          image: item.image,
-          coords: {latitude: item.latitude, longitude: item.longitude},
-        };
-      }),
-    );
-  }, [shopsData, calculateDistance]);
+    shopsData.map(item => {
+    })
+    shopsData: shopsData.concat(calculateDistance({}}
+  });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateDistance = coords => {

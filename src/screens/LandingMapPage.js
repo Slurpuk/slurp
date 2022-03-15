@@ -15,6 +15,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
+import {MapContext} from '../components/LandingMap/MapBackground';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -26,6 +27,7 @@ const screenWidth = Dimensions.get('window').width;
 export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
+  const orderedContext = useContext(MapContext);
 
   useFocusEffect(
     React.useCallback(() => {

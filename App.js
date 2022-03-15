@@ -90,6 +90,8 @@ export default function App() {
     }
   }
 
+
+
   // Subscribe to the Shops model
   useEffect(() => {
     const subscriber = firestore()
