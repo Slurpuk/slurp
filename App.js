@@ -152,7 +152,7 @@ export default function App() {
     } else {
       setBasketContent([...basket, {...item, count: 1}]);
     }
-    setTotal(total + item.Price);
+    setTotal(total + item.totalPrice);
     setBasketSize(basketSize + 1);
   }
 

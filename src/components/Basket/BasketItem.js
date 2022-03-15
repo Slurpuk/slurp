@@ -1,24 +1,24 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {GlobalContext} from '../../../App';
-import renderers from "../../renderers";
+import renderers from '../../renderers';
 
 export default function BasketItem({item}) {
   const context = useContext(GlobalContext);
   const [count, setCount] = useState(item.count);
-  const [itemTotal, setItemTotal] = useState(item.Price * item.count);
-  console.log(item.options)
+  const [itemTotal, setItemTotal] = useState(item.totalPrice * item.count);
+  console.log(item.options);
   function remove() {
     if (count > 0) {
       context.removeFromBasket(item);
       setCount(count - 1);
-      setItemTotal(itemTotal - item.Price);
+      setItemTotal(itemTotal - item.totalPrice);
     }
   }
   function add() {
     context.addToBasket(item);
     setCount(count + 1);
-    setItemTotal(itemTotal + item.Price);
+    setItemTotal(itemTotal + item.totalPrice);
   }
   return (
     <View style={styles.item_container}>
@@ -26,7 +26,11 @@ export default function BasketItem({item}) {
         <Text style={styles.item_name}>{item.Name}</Text>
         <FlatList
           data={item.options}
-          renderItem={(option) => <Text style={styles.item_specification}>{option.item.Name} {option.item.Type}</Text>}
+          renderItem={option => (
+            <Text style={styles.item_specification}>
+              {option.item.Name} {option.item.Type}
+            </Text>
+          )}
           style={styles.item_specification_list}
           keyExtractor={it => it.key}
         />

@@ -67,6 +67,12 @@ const ShopPage = ({navigation}) => {
     getOptions();
   }, []);
 
+  function getDefaultMilk() {
+    let def = options[0].data.find(el => el.Name === 'Dairy');
+    console.log(def);
+    return def;
+  }
+
   return (
     <ShopContext.Provider
       value={{
@@ -79,6 +85,7 @@ const ShopPage = ({navigation}) => {
         getCoffees: getCoffees,
         getSnacks: getSnacks,
         getDrinks: getDrinks,
+        getDefault: getDefaultMilk,
         isFullScreen: context.isFullScreen,
         setFullScreen: context.setFullScreen,
       }}

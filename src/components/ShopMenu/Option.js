@@ -1,15 +1,24 @@
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import {OptionsContext} from './OptionsPopUp';
 
 const Option = ({option, updateOptions}) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const context = useContext(OptionsContext);
+  const [toggleCheckBox, setToggleCheckBox] = useState(option.Name === 'Dairy');
   const [isDisabled, setIsDisabled] = useState(false);
 
   const update = newValue => {
     setToggleCheckBox(newValue);
     updateOptions(option, !toggleCheckBox);
   };
+
+  useEffect(() => {
+    if (option.Type === 'Milk' && context.milk !== option && toggleCheckBox) {
+      setToggleCheckBox(false);
+      updateOptions(option, !toggleCheckBox);
+    }
+  }, [context.milk]);
 
   return (
     <View style={styles.container}>
@@ -36,8 +45,7 @@ const Option = ({option, updateOptions}) => {
         {option.Price !== 0 && (
           <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
             {' '}
-            {option.Price < 1 ? option.Price * 100: option.Price}
-            p
+            {option.Price < 1 ? option.Price * 100 : option.Price}p
           </Text>
         )}
       </View>
