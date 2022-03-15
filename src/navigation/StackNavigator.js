@@ -9,8 +9,10 @@ import {TransitionPresets} from '@react-navigation/stack';
 import ShopPage from '../screens/ShopPage';
 import ChangePasswordPage from '../screens/ChangePasswordPage';
 import OrderPage from '../screens/OrderPage';
+import AddNewCardPage from '../screens/AddNewCardPage';
 
 const HomeStack = createSharedElementStackNavigator();
+
 const HomeStackNavigator = () => {
   return (
     <HomeStack.Navigator
@@ -33,6 +35,7 @@ const HomeStackNavigator = () => {
           return [];
         }}
       />
+      <HomeStack.Screen name="Add new card" component={AddNewCardPage} />
     </HomeStack.Navigator>
   );
 };
