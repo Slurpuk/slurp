@@ -49,8 +49,8 @@ const BasketPage = ({navigation}) => {
     },
   ]);
 
-  function confirmOrder() {
-    firestore()
+  async function confirmOrder() {
+    await firestore()
       .collection('FakeOrder')
       .add({
         customerName: 'Shaun the sheep',
@@ -61,6 +61,7 @@ const BasketPage = ({navigation}) => {
       })
       .then(() => {
         console.log('Order added!');
+        context.clearBasket();
       });
     Alert.alert(
       'Order received.',

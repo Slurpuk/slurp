@@ -45,7 +45,7 @@ const Option = ({option, updateOptions}) => {
         {option.Price !== 0 && (
           <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
             {' '}
-            {option.Price < 1 ? option.Price * 100 : option.Price}p
+            +{option.Price < 1 ? option.Price * 100 : option.Price}p
           </Text>
         )}
       </View>

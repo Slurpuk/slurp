@@ -18,15 +18,25 @@ const MenuItem = ({item}) => {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
 
+  // Dynamically update the menuItem counter based on the current basket content.
   useEffect(() => {
     const basket = globalContext.basketContent;
     let newCount = 0;
-    for (let it of basket) {
-      if (it.key === item.key) {
-        newCount = it.count;
-        break;
+    if (item.hasOwnProperty('Bean')) {
+      for (let it of basket) {
+        if (it.key === item.key) {
+          newCount += it.count;
+        }
+      }
+    } else {
+      for (let it of basket) {
+        if (it.key === item.key) {
+          newCount = it.count;
+          break;
+        }
       }
     }
+
     setCount(newCount);
   }, [globalContext.basketContent]);
 
@@ -56,7 +66,9 @@ const MenuItem = ({item}) => {
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>£{item.Price}</Text>
+            <Text style={textStyles.coffeePrice}>
+              £{Number(item.Price).toFixed(2)}
+            </Text>
           </View>
           <Pressable
             onPress={() => add(item)}

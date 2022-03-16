@@ -41,25 +41,34 @@ const ShopPage = ({navigation}) => {
   }
 
   // Retrieves the options data from firebase
-  function getOptions() {
+  async function getOptions() {
     let initial = [
       {title: 'Select Milk', data: []},
       {title: 'Add Syrup', data: []},
     ];
-    firestore()
+    let dairy;
+    await firestore()
       .collection('Options')
-      .onSnapshot(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
+      .get()
+      .then(querySnapShot => {
+        querySnapShot.forEach(documentSnapshot => {
           let option = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           };
           let index = 0;
           option.Type === 'Syrup' ? (index = 1) : (index = 0);
-          initial[index].data.push(option);
+          if (option.Name === 'Dairy') {
+            dairy = option;
+          } else {
+            initial[index].data.push(option);
+          }
         });
+        initial[1].data.sort((a, b) => a.Name.localeCompare(b.Name));
+        initial[0].data.sort((a, b) => a.Name.localeCompare(b.Name));
+        initial[0].data.unshift(dairy);
+        setOptions(initial);
       });
-    setOptions(initial);
   }
 
   // Get the options on first render.
@@ -69,7 +78,6 @@ const ShopPage = ({navigation}) => {
 
   function getDefaultMilk() {
     let def = options[0].data.find(el => el.Name === 'Dairy');
-    console.log(def);
     return def;
   }
 

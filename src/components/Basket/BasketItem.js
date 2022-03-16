@@ -1,24 +1,22 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {GlobalContext} from '../../../App';
-import renderers from '../../renderers';
 
 export default function BasketItem({item}) {
   const context = useContext(GlobalContext);
   const [count, setCount] = useState(item.count);
-  const [itemTotal, setItemTotal] = useState(item.totalPrice * item.count);
-  console.log(item.options);
+  const [itemTotal, setItemTotal] = useState(item.Price * item.count);
   function remove() {
     if (count > 0) {
       context.removeFromBasket(item);
       setCount(count - 1);
-      setItemTotal(itemTotal - item.totalPrice);
+      setItemTotal(itemTotal - item.Price);
     }
   }
   function add() {
     context.addToBasket(item);
     setCount(count + 1);
-    setItemTotal(itemTotal + item.totalPrice);
+    setItemTotal(itemTotal + item.Price);
   }
   return (
     <View style={styles.item_container}>
@@ -37,11 +35,11 @@ export default function BasketItem({item}) {
       </View>
       <View style={styles.amount_selection_container}>
         <Pressable onPress={() => remove()}>
-          <Text style={styles.change_amount_button}>-</Text>
+          <Text style={[styles.change_amount_button, styles.minus]}>-</Text>
         </Pressable>
         <Text style={styles.amount}>{count}</Text>
         <Pressable onPress={() => add()}>
-          <Text style={styles.change_amount_button}>+</Text>
+          <Text style={[styles.change_amount_button, styles.plus]}>+</Text>
         </Pressable>
       </View>
       <Text style={styles.price}>£{itemTotal.toFixed(2)}</Text>
@@ -50,15 +48,6 @@ export default function BasketItem({item}) {
 }
 
 const styles = StyleSheet.create({
-  items_list: {
-    display: 'flex',
-    flex: 2,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#C0C0C0',
-  },
   item_container: {
     flex: 1,
     borderColor: '#C0C0C0',
@@ -105,17 +94,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#1B947E',
     borderRadius: 3,
     paddingVertical: '2%',
-    paddingHorizontal: '3%',
-    flex: 0.15,
+    paddingHorizontal: '6%',
+    flex: 0.25,
     marginEnd: '5%',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   amount: {
     color: '#F1F1F1',
     fontWeight: '600',
-    fontSize: 13,
+    fontSize: 20,
   },
   change_amount_button: {
     color: '#FFFFFF',
+    fontSize: 20,
+  },
+
+  plus: {
+    paddingLeft: 12,
+  },
+
+  minus: {
+    paddingRight: 12,
   },
 });

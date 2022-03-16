@@ -60,13 +60,15 @@ const OptionsPopUp = ({data, renderer, item}) => {
         {cancelable: false},
       );
     } else {
+      // Sort syrups by alphabetical order
+      syrups.sort((a, b) => a.Name.localeCompare(b.Name));
+      // Add the selected at the start of the array
       syrups.unshift(milk);
       let newItem = {
         ...item,
         options: syrups,
-        totalPrice: totalPrice,
+        Price: totalPrice,
       };
-      console.log(newItem);
       globalContext.addToBasket(newItem);
       context.setOptionsVisible(false);
       context.setCurrItem(null);
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: '7%',
     width: 0.9128 * screenWidth,
-    height: 0.5723 * screenHeight,
+    height: 0.6 * screenHeight,
     backgroundColor: 'white',
     paddingVertical: '6%',
     position: 'absolute',
