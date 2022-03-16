@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopIntro from './ShopIntro';
@@ -16,7 +16,7 @@ const DraggableShopPage = ({shop, navigation, sheetRef}) => {
       setHamburgerVisible(false);
       context.setFullScreen(true);
     } else if (index === 2) {
-      // context.setShopIntro(false);
+      context.setShopIntro(false);
     } else {
       setHamburgerVisible(true);
       context.setFullScreen(false);

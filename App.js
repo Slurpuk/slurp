@@ -26,6 +26,8 @@ export default function App() {
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
   const [markers, setMarkers] = useState([]);
+  // const [currentLongitude, setCurrentLongitude] = useState(0);
+  // const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentCenterLocation, setCurrentCenterLocation] = useState({
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
