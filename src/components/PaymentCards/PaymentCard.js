@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {collection, getDocs} from 'firebase/firestore';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
-import {PaymentIcon} from 'react-native-payment-icons'
+import {PaymentIcon} from 'react-native-payment-icons';
 
 
 const PaymentCard = ({card, setDefault, defaultCard}) => {

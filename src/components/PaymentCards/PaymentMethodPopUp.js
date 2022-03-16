@@ -18,45 +18,33 @@ import AnimatedCard from "../../sub-components/AnimatedCard";
 const PaymentMethodPopUp = () => {
     const [cards, setCards] = useState();
     const [defaultCard, setDefaultCard] = useState([]);
-    const [brand, setBrand] = useState();
-    const [isDefault, setIsDefault] = useState();
-    const [last4, setLast4] = useState();
 
     const publishableKey =
         'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
 
 
-    function orderCardsFirstDefault(localCards) {
-        return localCards.sort(function (x, y) {
-            return x.isDefault === y.isDefault ? 0 : x.isDefault ? -1 : 1;
-        });
+    async function getCards(){
+        await firestore()
+            .collection('Cards')
+            .get()
+            .then((coll)=>{
+                //console.log(coll._docs.map(x => x._data ));
+                const myDefaultCard=coll._docs.map(x => x._data.isDefault ? x._data:null).filter(element => {
+                    return element !== null;
+                });
+                const myOtherCards=coll._docs.map(x => !x._data.isDefault ? x._data:null).filter(element => {
+                    return element !== null;
+                });;
+                console.log(myDefaultCard);
+                console.log(myOtherCards);
+                setCards(myOtherCards);
+                setDefaultCard(myDefaultCard);
+            });
     }
 
     useEffect(() => {
-        const subscriber = firestore()
-            .collection('Cards')
-            .onSnapshot(querySnapshot => {
-                const cards = [];
-                querySnapshot.forEach(documentSnapshot => {
-                    if (documentSnapshot._data.isDefault) {
-                        let temp = defaultCard;
-                        temp.push({
-                            ...documentSnapshot.data(),
-                            key: documentSnapshot.id,
-                        });
-                        setDefaultCard(temp);
-                    }
-                    else{
-                        cards.push({
-                            ...documentSnapshot.data(),
-                            key: documentSnapshot.id,
-                        });
-                    }
-                });
-                setCards(orderCardsFirstDefault(cards));
-            });
-        return () => subscriber();
-    }, [last4]);
+        getCards().then(() =>console.log("Updated cards") );
+    }, []);
 
 
     return (
@@ -72,15 +60,17 @@ const PaymentMethodPopUp = () => {
                         <Icon size={30} color="black" name="close" />
                     </TouchableHighlight>
                 </View>
-                <FlatList
-                    data={defaultCard}
-                    renderItem={({item}) => <AnimatedCard
-                        initialHeight={40}
-                        collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
-                        hidableContent={<UncollapsedPayMethCard cards={cards}/>}//this is the uncollapsed part
-                    />}
-                />
-
+                <View>
+                    <FlatList
+                        data={defaultCard}
+                        renderItem={({item}) => <AnimatedCard
+                            initialHeight={40}
+                            collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
+                            hidableContent={<UncollapsedPayMethCard cards={cards}/>}//this is the uncollapsed part
+                        />}
+                    />
+                    <Text>New Payment Card</Text>
+                </View>
                 <CustomButton
                     text={"Place Order " }
                     priority={'primary'}
@@ -115,11 +105,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-
-    product_name: {
-        color: 'black',
-        marginLeft: '2%',
     },
 
     list: {

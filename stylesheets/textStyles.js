@@ -33,6 +33,13 @@ const textStyles = StyleSheet.create({
     color: '#727272',
     includeFontPadding: false,
   },
+  smallLightGreyPoppins: {
+    fontSize: 10,
+    fontFamily: 'Poppins-Light',
+    letterSpacing: 0.3,
+    color: '#727272',
+    includeFontPadding: false,
+  },
   greyPoppins: {
     fontSize: 16,
     fontFamily: 'Poppins',

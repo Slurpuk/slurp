@@ -13,5 +13,5 @@ import AddNewCardPage from "./src/screens/AddNewCardPage";
 import PaymentCardsPage from "./src/screens/PaymentCardsPage";
 import ShopPage from "./src/screens/ShopPage";
 import PaymentMethodPopUp from "./src/components/PaymentCards/PaymentMethodPopUp";
-AppRegistry.registerComponent(appName, () => PaymentCardsPage);
+AppRegistry.registerComponent(appName, () => PaymentMethodPopUp);
 // AppRegistry.registerComponent(appName, () => MapBackground);
