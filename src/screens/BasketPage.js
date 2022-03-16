@@ -60,17 +60,17 @@ const BasketPage = () => {
 
   function sendOrder() {
     firestore()
-        .collection('FakeOrder')
-        .add({
-          customerName: 'Shaun the sheep',
-          status: 'incoming',
-          total: total.toFixed(2),
-          items: Items.filter(item => item.amount !== 0),
-          key: 3,
-        })
-        .then(() => {
-          console.log('Order added!');
-        });
+      .collection('FakeOrder')
+      .add({
+        customerName: 'Shaun the sheep',
+        status: 'incoming',
+        total: total.toFixed(2),
+        items: Items.filter(item => item.amount !== 0),
+        key: 3,
+      })
+      .then(() => {
+        console.log('Order added!');
+      });
 
     return (
       <View style={styles.basket}>

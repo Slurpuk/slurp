@@ -29,8 +29,6 @@ export default function MapBackground() {
   const [shopsData, setShopsData] = useState([]);
   const context = useContext(OptionsContext);
 
-
-
   useEffect(() => {
     const editedShopsData = shopsData.map(item => {
       return {
