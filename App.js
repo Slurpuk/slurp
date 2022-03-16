@@ -17,6 +17,8 @@ export default function App() {
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(auth().currentUser);
+  const [userRef, setUserRef] = useState(null);
+  const [userObj, setUserObj] = useState(null);
   const [shopsData, setShopsData] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [currShop, setCurrShop] = useState(shopsData[0]);
@@ -24,7 +26,6 @@ export default function App() {
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
-
 
   const checkForFirstTime = async () => {
     const result = await AsyncStorage.getItem('isFirstTime');
@@ -44,7 +45,7 @@ export default function App() {
       if (user) {
         setIsLoggedIn(true);
         setCurrentUser(user);
-        console.log(user);
+        setUser().then(r => console.log('user set'));
       } else {
         setIsLoggedIn(false);
         setCurrentUser(null);
@@ -59,7 +60,7 @@ export default function App() {
     AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
   };
 
-  function clearBasket(){
+  function clearBasket() {
     setBasketContent([]);
     setBasketSize(0);
     setTotal(0);
@@ -69,6 +70,33 @@ export default function App() {
     clearBasket();
     setCurrShop(shop);
     navigation.navigate('Shop page');
+  }
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Users')
+      .doc(userRef)
+      .onSnapshot(documentSnapshot => {
+        setUserObj(documentSnapshot.data());
+      });
+
+    // Stop listening for updates when no longer required
+    return () => subscriber();
+  }, [userRef]);
+
+  async function setUser() {
+    if (currentUser) {
+      await firestore()
+        .collection('Users')
+        .where('authID', '==', currentUser.uid)
+        .get()
+        .then(querySnapshot => {
+          console.log('YO');
+          querySnapshot.forEach(documentSnapshot => {
+            setUserRef(documentSnapshot.id);
+          });
+        });
+    }
   }
 
   function changeShop({shop, navigation}) {
@@ -189,6 +217,7 @@ export default function App() {
   }
 
   const setShopIntro = () => {
+    console.log(userObj);
     setIsShopIntro(!isShopIntro);
   };
 
@@ -197,7 +226,7 @@ export default function App() {
     <GlobalContext.Provider
       value={{
         enterApp: enterApp,
-        user: currentUser,
+        user: currentUser, // Returns the authentication object
         currShop: currShop,
         setCurrShop: changeShop,
         isShopIntro: isShopIntro,
@@ -213,6 +242,7 @@ export default function App() {
         removeFromBasket: removeFromBasket,
         basketSize: basketSize,
         clearBasket: clearBasket,
+        currentUser: userObj, // Returns the model object
       }}
     >
       <NavigationContainer>
