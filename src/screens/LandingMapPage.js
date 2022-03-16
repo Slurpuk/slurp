@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -6,7 +6,7 @@ import {
   Button,
   LogBox,
   TextInput,
-  StatusBar,
+  StatusBar, Text,
 } from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from '@react-native-firebase/firestore';
@@ -15,6 +15,8 @@ import {useFocusEffect} from '@react-navigation/native';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
+import {SearchBar} from '../sub-components/CustomSearchBar';
+import CustomSearchBar from '../CustomSearchBar';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -42,12 +44,8 @@ export default function LandingMapPage({navigation}) {
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
         <MapBackground />
-        <TextInput
-          style={styles.searchBar}
-          placeholder={'Search Location'}
-          placeholderTextColor={'#666'}
-        />
-        <Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />
+        <CustomSearchBar navigation={navigation} />
+        {/*<Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />*/}
       </View>
 
       {context.isShopIntro ? (
@@ -65,6 +63,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+    display: 'flex',
   },
   searchBar: {
     borderRadius: 10,
@@ -79,4 +78,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 18,
   },
+  inputContainerStyle:{
+    backgroundColor: 'yellow',
+  }
 });
