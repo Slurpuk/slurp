@@ -19,6 +19,8 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;
 
+export const MapContext = React.createContext();
+
 export default function MapBackground() {
   const [currentLongitude, setCurrentLongitude] = useState(0);
   const [currentLatitude, setCurrentLatitude] = useState(0);
@@ -27,34 +29,57 @@ export default function MapBackground() {
   const [markers, setMarkers] = useState([]);
 
   const [shopsData, setShopsData] = useState([]);
+  const [orderedShops, setOrderedShops] = useState([]);
+
   const context = useContext(GlobalContext);
+
+  useEffect(() => {
+    const temp = context.shopsData;
+    setShopsData(temp);
+  }, [context.shopsData]);
 
   useEffect(() => {
     const editedShopsData = shopsData.map(item => {
       return {
-        name: item.Name,
-        description: item.Intro,
-        latitude: item.Location._latitude,
-        longitude: item.Location._longitude,
-        image: item.Image,
+        Name: item.Name,
+        Intro: item.Intro,
+        Location: {
+          latitude: item.Location._latitude,
+          longitude: item.Location._longitude,
+        },
+        Image: item.Image,
+        Email: item.Email,
+        IsOpen: item.isOpen,
+        ItemsOffered: item.ItemsOffered,
+        Likeness: item.Likeness,
+        Queue: item.Queue,
       };
     });
 
     const finalShopsData = editedShopsData
       .map(item => {
         return {
-          name: item.name,
-          description: item.description,
-          image: item.image,
-          latitude: item.latitude,
-          longitude: item.longitude,
-          d: calculateDistance(item),
+          Name: item.name,
+          Intro: item.description,
+          Image: item.image,
+          Location: {
+            latitude: item.latitude,
+            longitude: item.longitude,
+          },
+          Email: item.Email,
+          IsOpen: item.IsOpen,
+          ItemsOffered: item.ItemsOffered,
+          Likeness: item.Likeness,
+          Queue: item.Queue,
+          DistanceToShop: calculateDistance(item.Location),
         };
       })
-      .filter(item => item.d < 20000)
+      .filter(item => item.d < 2000)
       .sort((a, b) => {
         return a.d < b.d;
       });
+
+    setOrderedShops(finalShopsData);
 
     setMarkers(
       finalShopsData.map(item => {
@@ -67,6 +92,10 @@ export default function MapBackground() {
       }),
     );
   }, [shopsData, calculateDistance]);
+
+  useEffect(() => {
+    context.setShopsOrdered(orderedShops);
+  });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateDistance = coords => {
@@ -109,11 +138,6 @@ export default function MapBackground() {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
-
-  useEffect(() => {
-    const temp = context.shopsData;
-    setShopsData(temp);
-  }, [context.shopsData]);
 
   const locationPress = () => {
     console.log('Function will be hre!!');

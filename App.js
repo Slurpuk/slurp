@@ -25,6 +25,7 @@ export default function App() {
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
+  const [shopsOrdered, setShopsOrdered] = useState([]);
 
   const checkForFirstTime = async () => {
     const result = await AsyncStorage.getItem('isFirstTime');
@@ -58,7 +59,7 @@ export default function App() {
     AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
   };
 
-  function clearBasket(){
+  function clearBasket() {
     setBasketContent([]);
     setBasketSize(0);
     setTotal(0);
@@ -212,8 +213,8 @@ export default function App() {
         removeFromBasket: removeFromBasket,
         basketSize: basketSize,
         clearBasket: clearBasket,
-      }}
-    >
+        shopsOrdered: shopsOrdered,
+      }}>
       <NavigationContainer>
         {isLoggedIn ? (
           <HamburgerSlideBarNavigator />
@@ -221,8 +222,7 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-            }}
-          >
+            }}>
             {isFirstTime ? (
               <Stack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
