@@ -81,14 +81,7 @@ export default function AddNewCardComponent({navigation}) {
   return (
     <View style={styles.container}>
       <GreenHeader headerText={'ADD NEW CARD'} navigation={navigation} />
-      <View
-        style={{
-          alignItems: 'center',
-          backgroundColor: '#EDEBE7',
-          display: 'flex',
-          flex: 1,
-        }}
-      >
+      <View style={styles.content}>
         <CardField
           postalCodeEnabled={true}
           placeholder={{
@@ -127,10 +120,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
-  basket: {
-    marginHorizontal: '5%',
-    marginTop: '5%',
-    fontFamily: 'Poppins-SemiBold',
+  content: {
+    alignItems: 'center',
+    backgroundColor: '#EDEBE7',
+    display: 'flex',
+    flex: 1,
   },
   periodHeader: {
     marginLeft: 7,
