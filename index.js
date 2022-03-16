@@ -13,6 +13,7 @@ import MapBackground from "./src/components/LandingMap/MapBackground";
 // import Query from "./src/firebase/firestore/basicQuery";
 import AddNewCardPage from "./src/screens/AddNewCardPage";
 import PaymentCardsPage from "./src/screens/PaymentCardsPage";
-
-AppRegistry.registerComponent(appName, () => PaymentCardsPage);
+import ShopPage from "./src/screens/ShopPage";
+import PaymentMethodPopUp from "./src/components/PaymentCards/PaymentMethodPopUp";
+AppRegistry.registerComponent(appName, () => PaymentMethodPopUp);
 // AppRegistry.registerComponent(appName, () => MapBackground);

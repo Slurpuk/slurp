@@ -25,8 +25,8 @@ const CollapsableOrder = ({order}) => {
     <View style={styles.order}>
       <AnimatedCard
         initialHeight={initialHeight}
-        collapsableContent={<OrderDetailsView order={order} />}
-        hidableContent={<OrderItemsList order={order} />}
+        collapsableContent={<OrderDetailsView order={order} />}//collapsed
+        hidableContent={<OrderItemsList order={order} />}//uncollapsed
         bottomFixed={
           <Text style={textStyles.darkGreyPoppinsHeading}>
             £{totalPrice.toFixed(2)}

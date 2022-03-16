@@ -14,8 +14,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const AnimatedCard = ({
   initialHeight,
-  collapsableContent,
-  hidableContent,
+  collapsableContent=null,
+  hidableContent=null,
   bottomFixed = null,
 }) => {
   // fadeAnim will be used as the value for opacity. Initial Value: 0
