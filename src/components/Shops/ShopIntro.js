@@ -123,5 +123,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 22,
     // backgroundColor: 'red',
+    width: screenWidth * 1,
   },
 });
