@@ -225,18 +225,13 @@ export default function MapBackground({sheetRef}) {
                 ]}
               >
                 {marker.name}
+
                 {marker.isOpen ? (
                   <Text style={textStyles.lightGreyPoppins}> -Open</Text>
                 ) : (
                   <Text>-Closed</Text>
                 )}
               </Text>
-
-              {/*<Image*/}
-              {/*  source={require('../../assets/images/TealIcon.png')}*/}
-              {/*  width={50}*/}
-              {/*  height={50}*/}
-              {/*/>*/}
               <CustomMapIcon isOpen={marker.isOpen} />
             </View>
           </Marker>
@@ -260,7 +255,7 @@ const styles = StyleSheet.create({
   },
 
   markerBg: {
-    backgroundColor: '#E4E4E4',
+    backgroundColor: '#FAFAFA',
     padding: 5,
     marginBottom: 4,
     borderRadius: 11,
@@ -269,5 +264,7 @@ const styles = StyleSheet.create({
   markerStyle: {
     display: 'flex',
     alignItems: 'center',
+    flexDirection: 'column',
+    maxWidth: 220,
   },
 });
