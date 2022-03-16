@@ -9,22 +9,48 @@ import {
   Pressable,
   ImageBackground,
 } from 'react-native';
+import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
+import {GlobalContext} from '../../../App';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
   const shopContext = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
+
+  useEffect(() => {
+    const basket = globalContext.basketContent;
+    let newCount = 0;
+    for (let it of basket) {
+      if (it.key === item.key) {
+        newCount = it.count;
+        break;
+      }
+    }
+    setCount(newCount);
+  }, [globalContext.basketContent]);
 
   const showOptions = () => {
     shopContext.setCurrItem(item);
     shopContext.setOptionsVisible(true);
   };
 
+  function remove(item) {
+    if (count > 0) {
+      globalContext.removeFromBasket(item);
+      // setCount(count - 1);
+    }
+  }
+  function add(item) {
+    globalContext.addToBasket(item);
+    // setCount(count + 1);
+  }
+
   return (
-    <TouchableOpacity style={styles.item} onPress={() => showOptions()}>
+    <RNGHTouchableOpacity style={styles.item} onPress={() => showOptions()}>
       <ImageBackground
-        source={require('../../assets/images/coffeeUnsplash1.jpg')}
+        source={{uri: item.Image}}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}
         style={{width: '100%', height: '100%'}}
       >
@@ -36,16 +62,10 @@ const MenuItem = ({item}) => {
             <Text style={[textStyles.headingOne, styles.title]}>
               {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>
-              £{item.Price.toPrecision(3)}
-            </Text>
+            <Text style={textStyles.coffeePrice}>£{item.Price}</Text>
           </View>
-
           <Pressable
-            onPress={() => {
-              showOptions();
-              setCount(count + 1);
-            }}
+            onPress={() => add(item)}
             style={styles.menuCardPopupTrigger}
           >
             <Text
@@ -59,12 +79,13 @@ const MenuItem = ({item}) => {
                 },
               ]}
             >
+              {' '}
               {count === 0 ? '+' : count}
             </Text>
           </Pressable>
         </LinearGradient>
       </ImageBackground>
-    </TouchableOpacity>
+    </RNGHTouchableOpacity>
   );
 };
 
@@ -77,9 +98,8 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     shadowOpacity: 0.2,
     marginVertical: '2%',
-    marginHorizontal: '2%',
+    marginLeft: '4%',
     display: 'flex',
-    // flex: 1,
     borderWidth: 1,
     position: 'relative',
   },

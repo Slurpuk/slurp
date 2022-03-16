@@ -1,114 +1,103 @@
 import React, {useContext, useState} from 'react';
-import {View, StyleSheet, Text, Dimensions} from 'react-native';
-import SafeAreaView from 'react-native/Libraries/Components/SafeAreaView/SafeAreaView';
-import SectionList from 'react-native-tabs-section-list';
-import textStyles from '../../../stylesheets/textStyles';
+import {View, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
+import {FlatList} from 'react-native-gesture-handler';
+import renderers from '../../renderers';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {ShopContext} from '../../screens/ShopPage';
+import {GlobalContext} from '../../../App';
+
+const Tab = createMaterialTopTabNavigator();
 
 export const MenuContext = React.createContext();
-const Menu = ({DATA, renderSection, renderItem}) => {
+const Menu = ({navigation}) => {
   const [numItems, setNumItems] = useState(0);
+  const shopContext = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
+
   return (
     <MenuContext.Provider value={{setNumItems: setNumItems}}>
-      <>
-        <SafeAreaView style={styles.container}>
-          <SectionList
-            sections={DATA}
-            stickySectionHeadersEnabled={false}
-            scrollToLocationOffset={-20}
-            tabBarStyle={styles.tabBar}
-            renderItem={({item}) => renderSection({item, renderItem})} // Here, 'item' is actually a whole section
-            renderSectionHeader={({section: {title}}) => (
-              <View style={[textStyles.sectionHeader, styles.sectionHeader]}>
-                <Text style={textStyles.poppinsTitle}>{title}</Text>
-              </View>
-            )}
-            renderTab={({title, isActive}) => (
-              <View
-                style={[
-                  styles.tabContainer,
-                  isActive ? styles.activeTabBar : null,
-                ]}
-              >
-                <Text
-                  style={[
-                    [textStyles.poppinsTitle],
-                    isActive ? styles.activeText : styles.sleepText,
-                  ]}
-                >
-                  {title}
-                </Text>
-              </View>
-            )}
-          />
+      <Tab.Navigator
+        style={styles.navigatorContent}
+        screenOptions={{
+          tabBarLabelStyle: {
+            fontSize: 18,
+            fontFamily: 'Poppins-SemiBold',
+            letterSpacing: 0.3,
+            textTransform: 'capitalize',
+            transform: [{translateY: -7}],
+          },
+          tabBarActiveTintColor: '#000000',
+          tabBarInactiveTintColor: '#6D6D6D',
+          tabBarIndicatorStyle: {
+            backgroundColor: '#046D66',
+            height: 3,
+          },
+          tabBarStyle: {
+            height: 39,
+            backgroundColor: '#FFFFFF',
+            elevation: 0,
+          },
+        }}
+        containerStyle={styles.container}
+      >
+        <Tab.Screen
+          name="Coffees"
+          children={() => (
+            <FlatList
+              data={shopContext.getCoffees()}
+              renderItem={({item}) => renderers.renderMenuItem({item})}
+              keyExtractor={item => item.key}
+              numColumns={2}
+              contentContainerStyle={styles.content}
+            />
+          )}
+        />
+        <Tab.Screen
+          name="Drinks"
+          children={() => (
+            <FlatList
+              data={shopContext.getDrinks()}
+              renderItem={({item}) => renderers.renderMenuItem({item})}
+              keyExtractor={item => item.key}
+              numColumns={2}
+              contentContainerStyle={styles.content}
+            />
+          )}
+        />
+        <Tab.Screen
+          name="Snacks"
+          children={() => (
+            <FlatList
+              data={shopContext.getSnacks()}
+              renderItem={({item}) => renderers.renderMenuItem({item})}
+              keyExtractor={item => item.key}
+              numColumns={2}
+              contentContainerStyle={styles.content}
+            />
+          )}
+        />
+      </Tab.Navigator>
 
-          <View style={styles.absoluteArea}>
-            <LinearGradient
-              colors={['transparent', '#EDEBE7', '#EDEBE7']}
-              style={styles.linearGradient}
-            >
-              <CustomButton
-                text="View Basket"
-                priority="primary"
-                optionalNumber={numItems}
-              />
-            </LinearGradient>
-          </View>
-        </SafeAreaView>
-      </>
+      <View style={styles.absoluteArea}>
+        <LinearGradient
+          colors={['transparent', '#EDEBE7', '#EDEBE7']}
+          style={styles.linearGradient}
+        >
+          <CustomButton
+            text="View Basket"
+            priority="primary"
+            optionalNumber={globalContext.basketSize}
+            onPress={() => navigation.navigate('Basket page')}
+          />
+        </LinearGradient>
+      </View>
     </MenuContext.Provider>
   );
 };
 
-const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'whitesmoke',
-  },
-
-  activeTabBar: {
-    borderBottomWidth: 3,
-    borderBottomColor: '#087562',
-  },
-
-  activeText: {
-    color: 'black',
-  },
-
-  sleepText: {
-    color: '#717171',
-  },
-
-  sectionHeader: {
-    marginHorizontal: '5%',
-    color: 'black',
-  },
-
-  tabBar: {
-    borderBottomColor: '#f4f4f4',
-    borderBottomWidth: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  tabContainer: {
-    borderBottomColor: '#090909',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    minWidth: screenWidth / 3,
-    paddingVertical: 6,
-    backgroundColor: '#F2F2F2',
-  },
-
   linearGradient: {
     width: '100%',
     height: '100%',
@@ -124,6 +113,49 @@ const styles = StyleSheet.create({
     backgroundColor: '',
     bottom: 0,
     width: '100%',
+  },
+
+  panelHandle: {
+    width: '10%',
+    height: 5,
+    backgroundColor: 'white',
+    borderRadius: 4,
+    position: 'absolute',
+    top: '2%',
+    zIndex: 2,
+    left: '45%',
+  },
+  header1: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    height: '100%',
+  },
+  contentContainerStyle: {
+    backgroundColor: '#EDEBE7',
+    width: '100%',
+    height: '100%',
+    flex: 1,
+  },
+
+  content: {
+    flexGrow: 1,
+    alignItems: 'flex-start',
+    marginLeft: '1.5%',
+    paddingBottom: '15%',
+  },
+
+  container: {
+    flex: 1,
+    minHeight: '100%',
+    width: '100%',
+    position: 'relative',
+  },
+
+  navigatorContent: {
+    width: '100%',
+    flex: 1,
   },
 });
 

@@ -8,31 +8,30 @@ import {
   Platform,
   ImageBackground,
 } from 'react-native';
-import {OptionsContext} from '../../screens/LandingMapPage';
-import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
+
 import textStyles from '../../../stylesheets/textStyles';
-import firebase from '@react-native-firebase/app';
-import storage from '@react-native-firebase/storage';
+import {GlobalContext} from '../../../App';
 const ShopCard = ({shop, navigation}) => {
-  const context = useContext(OptionsContext);
-  const [isShopPage, setShopPage] = useState(false);
-  const hamburgerVisible = useContext(VisibleContext);
+  const context = useContext(GlobalContext);
+  // const [isShopPage, setShopPage] = useState(false);
 
   const shopPageDetails = () => {
-    context.setCurrShop(shop);
-    setShopPage(true);
+    context.setCurrShop({shop, navigation});
   };
 
-  useEffect(() => {
-    if (isShopPage) {
-      hamburgerVisible(false);
-      setShopPage(false);
-      context.setFull;
-      navigation.navigate('Shop page', context);
-    }
-  }, [isShopPage]);
 
-  return (
+  return !shop.IsOpen ? (
+    <ImageBackground
+      style={styles.item}
+      imageStyle={styles.image}
+      source={{uri: shop.Image}}
+      resizeMode="cover"
+      blurRadius={4}
+    >
+      <Text style={[textStyles.headingOne, styles.shopName]}>{shop.Name}</Text>
+      <Text style={[textStyles.bodyText]}> CLOSED </Text>
+    </ImageBackground>
+  ) : (
     <Pressable onPress={shopPageDetails}>
       <ImageBackground
         style={styles.item}
@@ -71,7 +70,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-
   shopName: {
     fontFamily: 'JosefinSans-Bold',
     color: 'white',
