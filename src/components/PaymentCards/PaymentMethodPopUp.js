@@ -22,6 +22,10 @@ const PaymentMethodPopUp = () => {
     const [isDefault, setIsDefault] = useState();
     const [last4, setLast4] = useState();
 
+    const publishableKey =
+        'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
+
+
     function orderCardsFirstDefault(localCards) {
         return localCards.sort(function (x, y) {
             return x.isDefault === y.isDefault ? 0 : x.isDefault ? -1 : 1;
@@ -56,33 +60,33 @@ const PaymentMethodPopUp = () => {
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={[textStyles.headingOne, styles.product_name]}>
-                    PAYMENT METHOD
-                </Text>
-                <TouchableHighlight
-                    style={styles.icon}
-                    underlayColor={'white'}
-                >
-                    <Icon size={30} color="black" name="close" />
-                </TouchableHighlight>
-            </View>
-            <FlatList
-            data={defaultCard}
-            renderItem={({item}) => <AnimatedCard
-                initialHeight={40}
-                collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
-                hidableContent={<UncollapsedPayMethCard cards={cards.shift()}/>}//this is the uncollapsed part
-            />}
-        />
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text style={[textStyles.headingOne, styles.product_name]}>
+                        PAYMENT METHOD
+                    </Text>
+                    <TouchableHighlight
+                        style={styles.icon}
+                        underlayColor={'white'}
+                    >
+                        <Icon size={30} color="black" name="close" />
+                    </TouchableHighlight>
+                </View>
+                <FlatList
+                    data={defaultCard}
+                    renderItem={({item}) => <AnimatedCard
+                        initialHeight={40}
+                        collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
+                        hidableContent={<UncollapsedPayMethCard cards={cards}/>}//this is the uncollapsed part
+                    />}
+                />
 
-            <CustomButton
-                text={"Place Order " }
-                priority={'primary'}
-                width={screenWidth * 0.79}
-            />
-        </View>
+                <CustomButton
+                    text={"Place Order " }
+                    priority={'primary'}
+                    width={screenWidth * 0.79}
+                />
+            </View>
     );
 };
 

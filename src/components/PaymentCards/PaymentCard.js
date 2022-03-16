@@ -4,9 +4,21 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {collection, getDocs} from 'firebase/firestore';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import {PaymentIcon} from 'react-native-payment-icons'
+
 
 const PaymentCard = ({card, setDefault, defaultCard}) => {
   const [isChanged, setIsChanged] = useState(false)
+  let formattedCardBrand=card.brand.toLowerCase();
+  switch (formattedCardBrand) {
+    case 'american express':
+      formattedCardBrand = 'american-express';
+      break;
+    case 'diners club':
+      formattedCardBrand = 'diners-club';
+      break;
+  }
+
   function deleteCard() {
     firestore()
       .collection('Cards')
@@ -14,24 +26,6 @@ const PaymentCard = ({card, setDefault, defaultCard}) => {
       .delete()
       .then(r => console.log('card deleted'));
   }
-  // const querySnapshot = await getDocs(collection(db, 'Cards'));
-  // querySnapshot.forEach(doc => {
-  //   if (doc._data.isDefault && doc.id !== card.key) {
-  //     firebase
-  //       .firestore()
-  //       .collection('Cards')
-  //       .doc(doc.id)
-  //       .update({isDefault: false})
-  //       .then(() =>
-  //         firebase
-  //           .firestore()
-  //           .collection('Cards')
-  //           .doc(card.key)
-  //           .update({isDefault: true})
-  //           .then(() => console.log('Te quiero!')),
-  //       );
-  //   }
-  // });
 
   async function setCardAsDefault(){
     console.log(defaultCard);
@@ -65,31 +59,6 @@ const PaymentCard = ({card, setDefault, defaultCard}) => {
     }
   }, [isChanged])
 
-  // async function setAsDefault() {
-  //   await firestore()
-  //     .collection('Cards')
-  //     .onSnapshot(querySnapshot => {
-  //       querySnapshot.forEach(async documentSnapshot => {
-  //         if (
-  //           documentSnapshot._data.isDefault &&
-  //           documentSnapshot.id !== card.key
-  //         ) {
-  //           await firestore()
-  //             .collection('Cards')
-  //             .doc(documentSnapshot.id)
-  //             .update({isDefault: false})
-  //             .then(
-  //               async () =>
-  //                 await firestore()
-  //                   .collection('Cards')
-  //                   .doc(card.key)
-  //                   .update({isDefault: true})
-  //                   .then(() => console.log('Te quiero!')),
-  //             );
-  //         }
-  //       });
-  //     });
-  // }
 
   return (
     <View style={styles.rectangle}>
@@ -100,6 +69,7 @@ const PaymentCard = ({card, setDefault, defaultCard}) => {
           flexDirection: 'row',
         }}>
         <View style={{display: 'flex', flexDirection: 'row'}}>
+          <PaymentIcon style={{marginEnd:10}} type={formattedCardBrand}/>
           <Text
             style={[
               styles.text,
