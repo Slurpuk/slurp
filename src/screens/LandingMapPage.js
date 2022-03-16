@@ -44,8 +44,8 @@ export default function LandingMapPage({navigation}) {
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
         <MapBackground />
-        <CustomSearchBar />
-        <Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />
+        <CustomSearchBar navigation={navigation} />
+        {/*<Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />*/}
       </View>
 
       {context.isShopIntro ? (
