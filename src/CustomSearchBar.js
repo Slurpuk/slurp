@@ -36,12 +36,6 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
     setShops(shopsData.slice());
   };
 
-  // const formatNames = shop => {
-  //   let shopName = shop.Name.charAt(14).toUpperCase() + shop.Name.slice(15);
-  //   shopName = shopName.replace(/_/g, ' ');
-  //   return shopName;
-  // };
-
   const filterNames = shop => {
     let search = query;
     if (search.length === 0) {
@@ -60,7 +54,6 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
 
   const selectShop = shop => {
     context.setCurrShop({shop, navigation});
-    console.log('selected ' + shop.Name);
   };
 
   return (
