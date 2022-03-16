@@ -29,89 +29,34 @@ export default function MapBackground({sheetRef}) {
   const [currentLongitude, setCurrentLongitude] = useState(0);
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLocation, setCurrentLocation] = useState();
-
-  const [markers, setMarkers] = useState([]);
-
-  const [shopsData, setShopsData] = useState([]);
   const context = useContext(GlobalContext);
 
-  console.log('map background rerendered');
 
-  useEffect(() => {
-    const editedShopsData = shopsData.map(item => {
-      return {
-        name: item.Name,
-        description: item.Intro,
-        latitude: item.Location._latitude,
-        longitude: item.Location._longitude,
-        image: item.Image,
-        isOpen: item.IsOpen,
-      };
-    });
-
-    const finalShopsData = editedShopsData
-      .map(item => {
-        return {
-          name: item.name,
-          description: item.description,
-          image: item.image,
-          latitude: item.latitude,
-          longitude: item.longitude,
-          d: calculateDistance(item),
-          isOpen: item.isOpen,
-        };
-      })
-      .filter(item => item.d < 20000)
-      .sort((a, b) => {
-        return a.d < b.d;
-      });
-
-    setMarkers(
-      finalShopsData.map(item => {
-        return {
-          name: item.name,
-          description: item.description,
-          image: item.image,
-          coords: {latitude: item.latitude, longitude: item.longitude},
-          isOpen: item.isOpen,
-        };
-      }),
-    );
-  }, [calculateDistance, shopsData]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const calculateDistance = coords => {
-    //TODO change defaultLocation for currentLocation (currentLatitude and currentLongitude)
-
-    const R = 6371e3; // metres
-    const latitude1 = (defaultLocation.latitude * Math.PI) / 180; // φ, λ in radians
-    const latitude2 = (coords.latitude * Math.PI) / 180;
-    const diffLat =
-      ((coords.latitude - defaultLocation.latitude) * Math.PI) / 180;
-    const diffLon =
-      ((coords.longitude - defaultLocation.longitude) * Math.PI) / 180;
-
-    const aa =
-      Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-      Math.cos(latitude1) *
-        Math.cos(latitude2) *
-        Math.sin(diffLon / 2) *
-        Math.sin(diffLon / 2);
-    const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa));
-
-    const distance = parseInt(R * cc); // in metres
-
-    return distance;
-  };
-
-  //hard-coded markers for the purposes of testing
-  //TODO remove these when currentLocation is actually used
-  const defaultLocation = {
-    latitude: 51.54817999763736,
-    longitude: -0.30673900193854804,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // const calculateDistance = coords => {
+  //   //TODO change defaultLocation for currentLocation (currentLatitude and currentLongitude)
+  //
+  //   const R = 6371e3; // metres
+  //   const latitude1 = (defaultLocation.latitude * Math.PI) / 180; // φ, λ in radians
+  //   const latitude2 = (coords.latitude * Math.PI) / 180;
+  //   const diffLat =
+  //     ((coords.latitude - defaultLocation.latitude) * Math.PI) / 180;
+  //   const diffLon =
+  //     ((coords.longitude - defaultLocation.longitude) * Math.PI) / 180;
+  //
+  //   const aa =
+  //     Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+  //     Math.cos(latitude1) *
+  //       Math.cos(latitude2) *
+  //       Math.sin(diffLon / 2) *
+  //       Math.sin(diffLon / 2);
+  //   const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa));
+  //
+  //   const distance = parseInt(R * cc); // in metres
+  //
+  //   return distance;
+  // };
+  //
 
   const bushHouse = {
     //this corresponds to the bush house area = default area
@@ -127,11 +72,11 @@ export default function MapBackground({sheetRef}) {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
-
-  useEffect(() => {
-    const temp = context.shopsData;
-    setShopsData(temp);
-  }, [context.shopsData]);
+  //
+  // useEffect(() => {
+  //   const temp = context.shopsData;
+  //   setShopsData(temp);
+  // }, [context.shopsData]);
 
   const locationPress = clickedMarker => {
     console.log('Marker function triggered');
@@ -139,7 +84,9 @@ export default function MapBackground({sheetRef}) {
     //TODO takes you to the shop
     // context.setShopIntro(true);
     console.log('clicked marker shop:', clickedMarker);
-    let selectedShop = shopsData.find(shop => shop.Name === clickedMarker);
+    let selectedShop = context.shopsData.find(
+      shop => shop.Name === clickedMarker,
+    );
     console.log('selected shop', selectedShop.Name);
 
     //shrink
@@ -246,11 +193,15 @@ export default function MapBackground({sheetRef}) {
 
   return (
     <View style={styles.container}>
+      {/*<FlatList*/}
+      {/*    data={co}*/}
+      {/*/>*/}
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={shopLocation}>
-        {markers.map((marker, index) => (
+        region={shopLocation}
+      >
+        {context.markers.map((marker, index) => (
           <Marker
             key={index}
             coordinate={marker.coords}
@@ -261,7 +212,8 @@ export default function MapBackground({sheetRef}) {
               if (marker.isOpen) {
                 locationPress(marker.name);
               }
-            }}>
+            }}
+          >
             <View style={styles.markerStyle}>
               <Text
                 style={[
@@ -270,7 +222,8 @@ export default function MapBackground({sheetRef}) {
                   marker.isOpen
                     ? {color: 'black'}
                     : [{color: 'grey'}, textStyles.lightGreyPoppins],
-                ]}>
+                ]}
+              >
                 {marker.name}
                 {marker.isOpen ? (
                   <Text style={textStyles.lightGreyPoppins}> -Open</Text>

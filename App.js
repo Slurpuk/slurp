@@ -25,6 +25,7 @@ export default function App() {
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
+  const [markers, setMarkers] = useState([]);
   const [currentCenterLocation, setCurrentCenterLocation] = useState({
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
@@ -166,12 +167,31 @@ export default function App() {
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
+          let mark = markers;
+          mark.push({
+            name: shopData.Name,
+            description: shopData.Intro,
+              coords: {latitude: shopData.Location._latitude, longitude: shopData.Location._longitude},
+            image: shopData.Image,
+            isOpen: shopData.IsOpen,
+          });
+          setMarkers(mark);
         });
       });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
+
+
+  //hard-coded markers for the purposes of testing
+  //TODO remove these when currentLocation is actually used
+  const defaultLocation = {
+    latitude: 51.54817999763736,
+    longitude: -0.30673900193854804,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
 
   function addToBasket(item) {
     const basket = basketContent;
@@ -233,7 +253,9 @@ export default function App() {
         currentCenterLocation: currentCenterLocation,
         setCurrentCenterLocation: setCurrentCenterLocation,
         adaptiveOpacity: adaptiveOpacity,
-      }}>
+        markers: markers,
+      }}
+    >
       <NavigationContainer>
         {isLoggedIn ? (
           <HamburgerSlideBarNavigator />
@@ -241,7 +263,8 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-            }}>
+            }}
+          >
             {isFirstTime ? (
               <Stack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
