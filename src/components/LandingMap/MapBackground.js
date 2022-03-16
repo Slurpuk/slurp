@@ -19,7 +19,7 @@ import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 import textStyles from '../../../stylesheets/textStyles';
 import CoffeeBeanSvg from '../../assets/svgs/CoffeeBeanSvg';
-import CustomMapIcon from "../../assets/svgs/CustomMapIcon";
+import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -150,16 +150,18 @@ export default function MapBackground({sheetRef}) {
 
     fadeOpacityOut(context.adaptiveOpacity, 170);
 
-    setTimeout(() => {
+    let myTimeout = setTimeout(() => {
       context.setCurrentCenterLocation({
         latitude: selectedShop.Location._latitude,
         longitude: selectedShop.Location._longitude,
       });
       context.switchShop(selectedShop);
+      clearTimeout(myTimeout);
     }, 200);
 
-    //
-    // fadeOpacityIn(context.adaptiveOpacity, 500);
+    setTimeout(() => {
+      fadeOpacityIn(context.adaptiveOpacity, 200);
+    }, 210);
 
     //switch while hidden
 
@@ -259,10 +261,23 @@ export default function MapBackground({sheetRef}) {
               if (marker.isOpen) {
                 locationPress(marker.name);
               }
-
             }}>
             <View style={styles.markerStyle}>
-              <Text style={[textStyles.bluePoppinsSubHeading, styles.markerBg, marker.isOpen ? {color: 'black'} : [{color: 'grey' }, textStyles.lightGreyPoppins]]}>{marker.name}{marker.isOpen ? <Text style={textStyles.lightGreyPoppins}> -Open</Text> : <Text>-Closed</Text>}</Text>
+              <Text
+                style={[
+                  textStyles.bluePoppinsSubHeading,
+                  styles.markerBg,
+                  marker.isOpen
+                    ? {color: 'black'}
+                    : [{color: 'grey'}, textStyles.lightGreyPoppins],
+                ]}>
+                {marker.name}
+                {marker.isOpen ? (
+                  <Text style={textStyles.lightGreyPoppins}> -Open</Text>
+                ) : (
+                  <Text>-Closed</Text>
+                )}
+              </Text>
 
               {/*<Image*/}
               {/*  source={require('../../assets/images/TealIcon.png')}*/}
@@ -291,13 +306,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  markerBg:{
+  markerBg: {
     backgroundColor: '#E4E4E4',
     padding: 5,
     marginBottom: 4,
     borderRadius: 11,
   },
-
 
   markerStyle: {
     display: 'flex',
