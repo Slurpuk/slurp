@@ -171,7 +171,10 @@ export default function App() {
           mark.push({
             name: shopData.Name,
             description: shopData.Intro,
-              coords: {latitude: shopData.Location._latitude, longitude: shopData.Location._longitude},
+            coords: {
+              latitude: shopData.Location._latitude,
+              longitude: shopData.Location._longitude,
+            },
             image: shopData.Image,
             isOpen: shopData.IsOpen,
           });
@@ -182,7 +185,6 @@ export default function App() {
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
-
 
   //hard-coded markers for the purposes of testing
   //TODO remove these when currentLocation is actually used
@@ -254,8 +256,7 @@ export default function App() {
         setCurrentCenterLocation: setCurrentCenterLocation,
         adaptiveOpacity: adaptiveOpacity,
         markers: markers,
-      }}
-    >
+      }}>
       <NavigationContainer>
         {isLoggedIn ? (
           <HamburgerSlideBarNavigator />
@@ -263,8 +264,7 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-            }}
-          >
+            }}>
             {isFirstTime ? (
               <Stack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
