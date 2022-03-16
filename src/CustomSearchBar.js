@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
     marginRight: '3%',
     ...Platform.select({
       ios: {
-        marginTop: '32%',
+        marginTop: '20%',
       },
       android: {
-        marginTop: '31%',
+        marginTop: '20%',
       },
     }),
     width: '78%',
