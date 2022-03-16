@@ -9,8 +9,11 @@ import {TransitionPresets} from '@react-navigation/stack';
 import ShopPage from '../screens/ShopPage';
 import ChangePasswordPage from '../screens/ChangePasswordPage';
 import OrderPage from '../screens/OrderPage';
+import AddNewCardPage from '../screens/AddNewCardPage';
+import BasketPage from '../screens/BasketPage';
 
 const HomeStack = createSharedElementStackNavigator();
+
 const HomeStackNavigator = () => {
   return (
     <HomeStack.Navigator
@@ -23,6 +26,8 @@ const HomeStackNavigator = () => {
     >
       <HomeStack.Screen name="Landing map" component={LandingMapPage} />
       <HomeStack.Screen name="Shop list" component={ShopList} />
+      <HomeStack.Screen name="Basket page" component={BasketPage} />
+      <HomeStack.Screen name="Order history" component={OrderPage} />
       <HomeStack.Screen
         name="Shop page"
         component={ShopPage}
@@ -33,6 +38,7 @@ const HomeStackNavigator = () => {
           return [];
         }}
       />
+      <HomeStack.Screen name="Add new card" component={AddNewCardPage} />
     </HomeStack.Navigator>
   );
 };
@@ -50,6 +56,19 @@ const PaymentAccountsNavigator = () => {
         component={PaymentCardsPage}
       />
     </PaymentAccountsStack.Navigator>
+  );
+};
+
+const BasketPageStack = createNativeStackNavigator();
+const BasketPageNavigator = () => {
+  return (
+    <BasketPageStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <BasketPageStack.Screen name="BasketPage" component={BasketPage} />
+    </BasketPageStack.Navigator>
   );
 };
 
@@ -103,4 +122,5 @@ export {
   PaymentAccountsNavigator,
   ChangePasswordStackNavigator,
   OrderHistoryStackNavigator,
+  BasketPageNavigator,
 };

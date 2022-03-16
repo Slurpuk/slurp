@@ -1,11 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, FlatList} from 'react-native';
-import PaymentCardsData from '../fake-data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
-import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 
 export const PaymentCardsContext = React.createContext();
@@ -13,70 +11,98 @@ export const PaymentCardsContext = React.createContext();
 const PaymentCardsPage = ({navigation}) => {
   const [cards, setCards] = useState();
   const setVisible = useContext(VisibleContext);
-    const [brand, setBrand] = useState();
-    const [expiryMonth, setExpiryMonth] = useState();
-    const [expiryYear, setExpiryYear] = useState();
-    const [isDefault, setIsDefault] = useState();
-    const [last4, setLast4] = useState();
-    const [postalCode, setPostalCode] = useState();
+  const [brand, setBrand] = useState();
+  const [expiryMonth, setExpiryMonth] = useState();
+  const [expiryYear, setExpiryYear] = useState();
+  const [isDefault, setIsDefault] = useState();
+  const [last4, setLast4] = useState();
+  const [postalCode, setPostalCode] = useState();
+  const [defaultCard, setDefaultCard] = useState(null);
 
+  /*
+  Function to order the cards to have the default card first.
+   */
+  function orderCardsFirstDefault(localCards) {
+    return localCards.sort(function (x, y) {
+      return x.isDefault === y.isDefault ? 0 : x.isDefault ? -1 : 1;
+    });
+  }
 
+  function goToAddNewCard() {
+    navigation.navigate('Add new card');
+  }
 
-    useEffect(() => {
-        const subscriber = firestore()
-            .collection('Cards')
-            .onSnapshot(querySnapshot => {
-                const cards = [];
-                querySnapshot.forEach(documentSnapshot => {
-                    cards.push({
-                        ...documentSnapshot.data(),
-                        key: documentSnapshot.id,
-                    });
-                });
-                setCards(cards);
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Cards')
+      .onSnapshot(querySnapshot => {
+        const cards = [];
+        querySnapshot.forEach(documentSnapshot => {
+          cards.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+          if (documentSnapshot._data.isDefault) {
+            setDefaultCard({
+              ...documentSnapshot._data,
+              key: documentSnapshot.id,
             });
-        return () => subscriber();
-    }, [brand,expiryMonth, expiryYear, isDefault, last4, postalCode]);
-
-
+          }
+        });
+        setCards(orderCardsFirstDefault(cards));
+      });
+    return () => subscriber();
+  }, []);
 
   return (
-    <View style={styles.page}>
+    <View style={styles.container}>
       <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
-      <PaymentCardsContext.Provider
-        value={{
-          cards: cards,
-          setCards: setCards,
-        }}>
-        <FlatList
-          data={cards}
-          renderItem={({item}) => <PaymentCard card={item} />}
-          style={styles.list}
-        />
-      </PaymentCardsContext.Provider>
-      <View style={styles.button}>
-        <CustomButton text={'Add New Payment Card'} priority={'secondary'} />
+      <View style={styles.content}>
+        <PaymentCardsContext.Provider
+          value={{
+            cards: cards,
+            setCards: setCards,
+          }}>
+          <FlatList
+            data={cards}
+            renderItem={({item}) => (
+              <PaymentCard
+                card={item}
+                setDefault={setDefaultCard}
+                defaultCard={defaultCard}
+              />
+            )}
+            style={styles.list}
+          />
+        </PaymentCardsContext.Provider>
+        <View style={styles.button}>
+          <CustomButton
+            onPress={goToAddNewCard}
+            text={'Add New Payment Card'}
+            priority={'secondary'}
+          />
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  page: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    backgroundColor: '#E5E5E5',
+  container: {
     flex: 1,
+    backgroundColor: '#EDEBE7',
+  },
+  content: {
+    flex: 1,
+    marginHorizontal: '5%',
   },
   button: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
+    marginBottom: '8%',
   },
 
   list: {
-    padding: '5%',
-    flexGrow: 0,
+    marginVertical: '5%',
+    flex: 1,
   },
 });
 

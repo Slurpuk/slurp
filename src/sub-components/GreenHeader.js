@@ -3,7 +3,7 @@ import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import WhiteArrowButton from './WhiteArrowButton';
 import textStyles from '../../stylesheets/textStyles';
-import {getTightPadding} from '../../stylesheets/StyleFunction';
+import {getTightPaddingTop} from '../../stylesheets/StyleFunction';
 
 const GreenHeader = ({headerText, navigation}) => {
   return (
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     backgroundColor: '#046D66',
-    paddingTop: getTightPadding(),
+    paddingTop: getTightPaddingTop(),
     paddingBottom: '6%',
     paddingHorizontal: '5%',
     alignItems: 'center',

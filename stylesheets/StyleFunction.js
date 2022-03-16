@@ -2,7 +2,7 @@ import {Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {hasNotch} from 'react-native-device-info';
 
-export const getTightPadding = () => {
+export const getTightPaddingTop = () => {
   return Platform.OS === 'android' || hasNotch()
     ? getStatusBarHeight()
     : getStatusBarHeight() + 10;

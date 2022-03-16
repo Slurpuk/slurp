@@ -14,6 +14,7 @@ export default function CustomButton(props) {
     text,
     optionalNumber = null,
     width = screenWidth * 0.91,
+    onPress,
   } = props;
 
   return (
@@ -24,7 +25,7 @@ export default function CustomButton(props) {
           activeOpacity={1}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
-          onPress={props.onPress}
+          onPress={onPress}
         >
           <Text style={buttonStyles.buttonText}>{text}</Text>
           {optionalNumber === null ? null : (

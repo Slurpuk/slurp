@@ -14,11 +14,11 @@ import textStyles from '../../stylesheets/textStyles';
 import CoffeeShopSvg from '../assets/svgs/CoffeeShopSvg';
 import CoffeeCupSvg from '../assets/svgs/CoffeeCupSvg';
 import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
-import {getTightPadding} from '../../stylesheets/StyleFunction';
-import {AppContext} from '../../App';
+import {getTightPaddingTop} from '../../stylesheets/StyleFunction';
+import {GlobalContext} from '../../App';
 
 const WelcomePages = ({onDone, navigation}) => {
-  const appContext = useContext(AppContext);
+  const appContext = useContext(GlobalContext);
   const [sliderState, setSliderState] = useState({currentPage: 0});
   const {width, height} = Dimensions.get('window');
 
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     backgroundColor: '#E5E5E5',
-    paddingTop: getTightPadding(),
+    paddingTop: getTightPaddingTop(),
   },
   component: {
     width: screenWidth,

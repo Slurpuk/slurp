@@ -1,28 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  StatusBar,
-  Platform,
-  Button,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Alert} from 'react-native';
 import {
   CardField,
   useStripe,
   CardFieldInput,
 } from '@stripe/stripe-react-native';
 import GreenHeader from '../../sub-components/GreenHeader';
-import firestore from "@react-native-firebase/firestore";
-import firebase from "@react-native-firebase/app";
-import menuSection from "../ShopMenu/MenuSection";
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
+import firestore from '@react-native-firebase/firestore';
+import firebase from '@react-native-firebase/app';
+import CustomButton from '../../sub-components/CustomButton';
 
-export default function AddNewCardComponent() {
+export default function AddNewCardComponent({navigation}) {
   const [card, setCard] = useState(CardFieldInput.Details | null);
   const {confirmPayment} = useStripe();
   const API_URL = 'http://localhost:8000';
@@ -67,23 +55,23 @@ export default function AddNewCardComponent() {
   };
 
   const saveCard = () => {
-    firestore()
+    if (card.complete) {
+      firestore()
         .collection('Cards')
         .add({
+          isDefault: false,
           brand: card.brand,
-          complete: card.complete,
           expiryMonth: card.expiryMonth,
           expiryYear: card.expiryYear,
           last4: card.last4,
           postalCode: card.postalCode,
-          userID: "userIDIDIDID",
-          validCVC: card.validCVC,
-          validExpiryDate: card.validExpiryDate,
-          validNumber: card.validNumber,
+          userID: 'userIDIDIDID',
         })
         .then(() => {
-          console.log('Order added!');
+          console.log('Card added!');
         });
+    } else {
+    }
   };
 
   useEffect(() => {
@@ -92,8 +80,8 @@ export default function AddNewCardComponent() {
 
   return (
     <View style={styles.container}>
-      <GreenHeader headerText={'ADD NEW CARD'} />
-      <View style={{alignItems: 'center', backgroundColor: '#EDEBE7', flex: 1}}>
+      <GreenHeader headerText={'ADD NEW CARD'} navigation={navigation} />
+      <View style={styles.content}>
         <CardField
           postalCodeEnabled={true}
           placeholder={{
@@ -109,26 +97,18 @@ export default function AddNewCardComponent() {
             marginVertical: 30,
           }}
           onCardChange={cardDetails => {
-            console.log('cardDetails', cardDetails);
+            //console.log('cardDetails', cardDetails);
             setCard(cardDetails);
           }}
           onFocus={focusedField => {
-            console.log('focusField', focusedField);
+            //console.log('focusField', focusedField);
           }}
         />
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#087562',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: screenHeight / 18,
-            width: screenWidth / 1.1,
-            borderRadius: 13,
-          }}
+        <CustomButton
+          text={'Add Card'}
           onPress={saveCard}
-          >
-          <Text style={{color: 'white', fontWeight: 'bold'}}>Add Card</Text>
-        </TouchableOpacity>
+          priority={'secondary'}
+        />
       </View>
     </View>
   );
@@ -140,10 +120,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
-  basket: {
-    marginHorizontal: '5%',
-    marginTop: '5%',
-    fontFamily: 'Poppins-SemiBold',
+  content: {
+    alignItems: 'center',
+    backgroundColor: '#EDEBE7',
+    display: 'flex',
+    flex: 1,
   },
   periodHeader: {
     marginLeft: 7,
