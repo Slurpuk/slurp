@@ -1,20 +1,22 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, View, FlatList} from 'react-native';
+import {StyleSheet, View, FlatList, Text, SectionList} from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
 import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import firestore from '@react-native-firebase/firestore';
+import {GlobalContext} from "../../App";
 
 const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = ({navigation}) => {
-  // const context = useContext(GlobalContext)
+  const context = useContext(GlobalContext)
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
   const [fpastOrders, fsetPastOrders] = useState([]);
   const [fcurrentOrders, fsetCurrentOrders] = useState([]);
+
   useEffect(() => {
     const fetchData = firestore()
       .collection('Orders')
@@ -73,6 +75,14 @@ const OrderPage = ({navigation}) => {
 
   function formatOrders(formattedOrders, isCurrent) {
     let newOrders = [];
+    let periods = [];
+    if (!isCurrent) {
+      formattedOrders.forEach(order => {
+        if (!periods.find(x => x.period === order.period)) {
+          periods.push(order.period);
+        }
+      });
+    }
     formattedOrders.forEach(async order => {
       let temp = order;
       let newItems = [];
@@ -101,8 +111,15 @@ const OrderPage = ({navigation}) => {
         .get()
         .then(document => {
           temp.shop = {...document.data()};
-          newOrders.push(temp);
-          isCurrent ? setCurrentOrders(newOrders): setPastOrders(newOrders);
+          if (isCurrent) {
+            newOrders.push(temp);
+          } else {
+            let curr = newOrders.find(x => x.period === temp.period);
+            curr
+              ? curr.data.push(temp)
+              : newOrders.push({period: temp.period, data: [temp]});
+          }
+          isCurrent ? setCurrentOrders(newOrders) : setPastOrders(newOrders);
         });
     });
   }
@@ -135,8 +152,7 @@ const OrderPage = ({navigation}) => {
             elevation: 0,
             borderColor: '#919191',
           },
-        }}
-      >
+        }}>
         <Tab.Screen name="Current">
           {props => <CurrentOrders currentOrders={currentOrders} />}
         </Tab.Screen>
@@ -149,6 +165,7 @@ const OrderPage = ({navigation}) => {
 };
 
 const PastOrders = props => {
+  console.log(props.pastOrders);
   return (
     <SectionList
       contentContainerStyle={styles.mainContainer}
@@ -166,6 +183,7 @@ const PastOrders = props => {
 };
 
 const CurrentOrders = props => {
+  console.log(props.currentOrders);
   return (
     <FlatList
       contentContainerStyle={styles.mainContainer}
