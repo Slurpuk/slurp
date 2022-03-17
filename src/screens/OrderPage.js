@@ -165,7 +165,6 @@ const OrderPage = ({navigation}) => {
 };
 
 const PastOrders = props => {
-  console.log(props.pastOrders);
   return (
     <SectionList
       contentContainerStyle={styles.mainContainer}
@@ -183,7 +182,6 @@ const PastOrders = props => {
 };
 
 const CurrentOrders = props => {
-  console.log(props.currentOrders);
   return (
     <FlatList
       contentContainerStyle={styles.mainContainer}

@@ -16,9 +16,9 @@ import LinearGradient from 'react-native-linear-gradient';
 const CollapsableOrder = ({order}) => {
   const totalPrice = getTotalPrice(order.Items);
   const isOrderCurrent =
-    order.status === 'Ready' ||
-    order.status === 'Pending' ||
-    order.status === 'Accepted';
+    order.Status === 'ready' ||
+    order.Status === 'incoming' ||
+    order.Status === 'accepted';
   const initialHeight = isOrderCurrent ? 126 : 100;
 
   return (

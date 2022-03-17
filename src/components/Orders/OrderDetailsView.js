@@ -16,15 +16,14 @@ const OrderDetailsView = ({order}) => {
       <View style={styles.orderDetails}>
         <View>
           <ImageBackground
-            source={require('../../assets/images/ShopExterior.png')}
+            source={{uri: order.shop.Image}}
             imageStyle={{borderRadius: 7, overflow: 'hidden'}}
             style={styles.picture}
           />
         </View>
         <View>
           <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
-          >
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
             {order.shop.Name}
           </Text>
           {getStatusAndDateComponent(order)}
@@ -60,12 +59,11 @@ const getStatusAndDateComponent = order => {
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}
-      >
+        ]}>
         {order.Status} {dateAndTime}
       </Text>
     );
-  } else if (order.Status === 'rejected' || order.Status === 'cancelled') {
+  } else if (order.Status === 'rejected') {
     return (
       <Text
         style={[
@@ -73,9 +71,20 @@ const getStatusAndDateComponent = order => {
           styles.textFlex,
           styles.finishedOrder,
           styles.cancelledOrder,
-        ]}
-      >
-        {order.Status} {dateAndTime}
+        ]}>
+        Rejected {dateAndTime}
+      </Text>
+    );
+  } else if (order.Status === 'cancelled') {
+    return (
+      <Text
+        style={[
+          textStyles.lightGreyPoppins,
+          styles.textFlex,
+          styles.finishedOrder,
+          styles.cancelledOrder,
+        ]}>
+        Cancelled {dateAndTime}
       </Text>
     );
   } else {
