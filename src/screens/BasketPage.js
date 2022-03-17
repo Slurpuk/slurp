@@ -71,7 +71,7 @@ const BasketPage = ({navigation}) => {
       .add({
         customerName: 'Shaun the sheep',
         status: 'incoming',
-        total: total.toFixed(2),
+        total: context.total.toFixed(2),
         items: Items.filter(item => item.amount !== 0),
         key: 3,
       })
@@ -99,7 +99,6 @@ const BasketPage = ({navigation}) => {
       <View style={styles.main_container}>
         <BasketContents Items={context.basketContent} />
       </View>
-
       <View style={styles.order_summary}>
         <Text style={styles.total_text}>TOTAL</Text>
         <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
