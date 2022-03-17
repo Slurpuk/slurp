@@ -28,7 +28,7 @@ const WhiteArrowButton = ({
       onPressAction.snapTo(1);
     } else {
       console.log(onPressAction);
-      navigation.goBack();
+      navigation.navigate('Landing map');
     }
   }
 

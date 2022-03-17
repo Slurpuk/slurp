@@ -110,12 +110,7 @@ const styles = StyleSheet.create({
   },
 
   back_button: {
-    ...Platform.select({
-      ios: {
-        marginTop: '5%',
-      },
-      android: {},
-    }),
+    marginTop: '5%',
   },
 
   linearGradient: {

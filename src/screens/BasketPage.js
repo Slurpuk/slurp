@@ -1,32 +1,16 @@
 import firestore from '@react-native-firebase/firestore';
-import {firebase} from '@react-native-firebase/functions';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  Fragment,
-  SafeAreaView,
-  Platform,
-  Pressable,
-  StatusBar,
-  Alert,
-} from 'react-native';
+import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useFocusEffect} from '@react-navigation/native';
 
-import {ShopContext} from './ShopPage';
 import {GlobalContext} from '../../App';
 
 const BasketPage = ({navigation}) => {
-  // const basket = route.params.basket;
   const context = useContext(GlobalContext);
-
   const [Items] = useState([
     {
       key: 1,
@@ -65,18 +49,19 @@ const BasketPage = ({navigation}) => {
     },
   ]);
 
-  function confirmOrder() {
-    firestore()
+  async function confirmOrder() {
+    await firestore()
       .collection('FakeOrder')
       .add({
         customerName: 'Shaun the sheep',
         status: 'incoming',
-        total: total.toFixed(2),
+        total: context.total.toFixed(2),
         items: Items.filter(item => item.amount !== 0),
         key: 3,
       })
       .then(() => {
         console.log('Order added!');
+        context.clearBasket();
       });
     Alert.alert(
       'Order received.',
@@ -219,9 +204,10 @@ const styles = StyleSheet.create({
   order_summary: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: '5%',
-    alignItems: 'flex-end',
-    width: '100%',
+    alignItems: 'flex-start',
+    maxWidth: '100%',
+    paddingHorizontal: '5%',
+    paddingVertical: '5%',
     justifyContent: 'space-between',
   },
   total_text: {

@@ -65,9 +65,14 @@ export default function App() {
     AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
   };
 
-  function newShop({shop, navigation}) {
+  function clearBasket(){
     setBasketContent([]);
     setBasketSize(0);
+    setTotal(0);
+  }
+
+  function newShop({shop, navigation}) {
+    clearBasket();
     setCurrShop(shop);
     navigation.navigate('Shop page');
   }
@@ -186,14 +191,25 @@ export default function App() {
     return () => subscriber();
   }, []);
 
+  function isSameItem(it, currIt) {
+    if (currIt.hasOwnProperty('Bean') && it.hasOwnProperty('Bean')) {
+      let itOptions = '';
+      it.options.forEach(option => (itOptions += option.Name));
+      let currItOptions = '';
+      currIt.options.forEach(option => (currItOptions += option.Name));
+      return it.key === currIt.key && itOptions === currItOptions;
+    } else {
+      return it.key === currIt.key;
+    }
+  }
 
   function addToBasket(item) {
     const basket = basketContent;
-    const exist = basket.find(x => x.key === item.key);
+    const exist = basket.find(x => isSameItem(x, item));
     if (exist) {
       setBasketContent(
         basket.map(x =>
-          x.key === item.key ? {...exist, count: exist.count + 1} : x,
+          isSameItem(x, item) ? {...exist, count: exist.count + 1} : x,
         ),
       );
     } else {
@@ -205,13 +221,13 @@ export default function App() {
 
   function removeFromBasket(item) {
     const basket = basketContent;
-    const exist = basket.find(x => x.key === item.key);
+    const exist = basket.find(x => isSameItem(x, item));
     if (exist.count === 1) {
       setBasketContent(basket.filter(x => x.key !== item.key));
     } else {
       setBasketContent(
         basket.map(x =>
-          x.key === item.key ? {...exist, count: exist.count - 1} : x,
+          isSameItem(x, item) ? {...exist, count: exist.count - 1} : x,
         ),
       );
     }
@@ -248,6 +264,7 @@ export default function App() {
         setCurrentCenterLocation: setCurrentCenterLocation,
         adaptiveOpacity: adaptiveOpacity,
         markers: markers,
+          clearBasket: clearBasket,
       }}>
       <NavigationContainer>
         {isLoggedIn ? (
