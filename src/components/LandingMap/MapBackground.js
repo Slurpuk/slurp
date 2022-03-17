@@ -158,7 +158,14 @@ export default function MapBackground({sheetRef}) {
     <View style={styles.container}>
       <MapView
         onRegionChangeComplete={(region, isGesture) => {
-          if (isGesture) {
+          if (Platform.OS === 'ios') {
+            if (
+              region.latitude.toFixed(6) !== mapCenter.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !== mapCenter.longitude.toFixed(6)
+            ) {
+              setMapCenter(region);
+            }
+          } else {
             setMapCenter(region);
           }
         }}
@@ -177,7 +184,9 @@ export default function MapBackground({sheetRef}) {
               }
             }}>
             <View style={styles.markerStyle}>
-              <Text style={{color: 'red', fontWeight: 'bold'}}>{!marker.isOpen ? 'Closed': ''}</Text>
+              <Text style={{color: 'red', fontWeight: 'bold'}}>
+                {!marker.isOpen ? 'Closed' : ''}
+              </Text>
               <CustomMapIcon isOpen={marker.isOpen} />
             </View>
           </Marker>
