@@ -127,7 +127,9 @@ export default function App() {
       );
     } else {
       setCurrShop(shop);
+      if (!isShopIntro) setIsShopIntro(true);
     }
+
   }
 
   // Subscribe to the Shops model
