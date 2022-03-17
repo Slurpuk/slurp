@@ -214,6 +214,7 @@ export default function App() {
         basketSize: basketSize,
         clearBasket: clearBasket,
         shopsOrdered: shopsOrdered,
+          setShopsOrdered : setShopsOrdered,
       }}>
       <NavigationContainer>
         {isLoggedIn ? (

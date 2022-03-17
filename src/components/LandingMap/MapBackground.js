@@ -14,6 +14,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
+import {templateDir} from "react-native/template.config";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -53,49 +54,46 @@ export default function MapBackground() {
         ItemsOffered: item.ItemsOffered,
         Likeness: item.Likeness,
         Queue: item.Queue,
+        DistanceTo: calculateDistance(item.Location),
       };
     });
 
-    const finalShopsData = editedShopsData
-      .map(item => {
-        return {
-          Name: item.name,
-          Intro: item.description,
-          Image: item.image,
-          Location: {
-            latitude: item.latitude,
-            longitude: item.longitude,
-          },
-          Email: item.Email,
-          IsOpen: item.IsOpen,
-          ItemsOffered: item.ItemsOffered,
-          Likeness: item.Likeness,
-          Queue: item.Queue,
-          DistanceToShop: calculateDistance(item.Location),
-        };
-      })
-      .filter(item => item.d < 2000)
-      .sort((a, b) => {
-        return a.d < b.d;
-      });
+    //ordering the shops based on distance from user location
+    editedShopsData
+        .sort((a, b) => b.DistanceTo - a.DistanceTo).reverse();
 
-    setOrderedShops(finalShopsData);
+    //filtering the shops based on radius limitation (rn 20,000m)
+    const newEdited = editedShopsData
+        .filter((item)=> item.DistanceTo < 20000);
 
+    setOrderedShops(newEdited)
+    console.log('orderedshops')
+    console.log(orderedShops)
+
+    console.log('edited shops')
+    console.log(editedShopsData)
+    console.log('')
+
+    //setting up markers on the map
     setMarkers(
-      finalShopsData.map(item => {
+      editedShopsData.map(item => {
         return {
-          name: item.name,
-          description: item.description,
-          image: item.image,
-          coords: {latitude: item.latitude, longitude: item.longitude},
+          name: item.Name,
+          description: item.Intro,
+          image: item.Image,
+          coords: item.Location,
         };
       }),
     );
+
+    console.log('final list')
+    console.log(newEdited)
+
   }, [shopsData, calculateDistance]);
 
-  useEffect(() => {
-    context.setShopsOrdered(orderedShops);
-  });
+  //This updates the global context state.
+  context.setShopsOrdered(orderedShops);
+
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateDistance = coords => {
@@ -121,6 +119,9 @@ export default function MapBackground() {
 
     return distance;
   };
+
+
+
 
   //hard-coded markers for the purposes of testing
   //TODO remove these when currentLocation is actually used
