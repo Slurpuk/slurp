@@ -24,7 +24,7 @@ const DraggableShopPage = ({shop, navigation, sheetRef}) => {
   }
 
   return (
-    <DraggableContext.Provider value={{bottomSheetRef: sheetRef.current}}>
+    <DraggableContext.Provider value={{bottomSheetRef: sheetRef}}>
       <ScrollBottomSheet
         ref={sheetRef}
         componentType="FlatList"

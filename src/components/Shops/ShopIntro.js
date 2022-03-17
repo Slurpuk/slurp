@@ -56,7 +56,7 @@ const ShopIntro = ({shop}) => {
               direction={context.isShopIntro ? 'down' : 'left'}
               navigation={context.navigation}
               onPressAction={
-                context.isShopIntro ? draggable.bottomSheetRef : null
+                context.isShopIntro ? draggable.bottomSheetRef.current : null
               }
             />
           </View>
