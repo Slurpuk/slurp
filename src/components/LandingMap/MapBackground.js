@@ -14,13 +14,10 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
-import {templateDir} from "react-native/template.config";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 let watchID;
-
-export const MapContext = React.createContext();
 
 export default function MapBackground() {
   const [currentLongitude, setCurrentLongitude] = useState(0);
@@ -67,12 +64,7 @@ export default function MapBackground() {
         .filter((item)=> item.DistanceTo < 20000);
 
     setOrderedShops(newEdited)
-    console.log('orderedshops')
-    console.log(orderedShops)
 
-    console.log('edited shops')
-    console.log(editedShopsData)
-    console.log('')
 
     //setting up markers on the map
     setMarkers(
@@ -85,9 +77,6 @@ export default function MapBackground() {
         };
       }),
     );
-
-    console.log('final list')
-    console.log(newEdited)
 
   }, [shopsData, calculateDistance]);
 
