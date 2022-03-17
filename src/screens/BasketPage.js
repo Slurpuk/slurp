@@ -11,7 +11,7 @@ import {
   Platform,
   Pressable,
   StatusBar,
-  Alert,
+  Alert, TouchableWithoutFeedback,
 } from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
@@ -19,13 +19,21 @@ import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useFocusEffect} from '@react-navigation/native';
+import PaymentMethodPopUp from "../components/PaymentCards/PaymentMethodPopUp";
 
 import {ShopContext} from './ShopPage';
 import {GlobalContext} from '../../App';
+import DraggableShopPage from "../components/Shops/DraggableShopPage";
+import NonDraggableShopPage from "../components/Shops/NonDraggableShopPage";
+import {BlurView} from "@react-native-community/blur";
+import OptionsPopUp from "../components/ShopMenu/OptionsPopUp";
+import CoffeeOptionsData from "../fake-data/CoffeeOptionsData";
+import renderers from "../renderers";
 
 const BasketPage = ({navigation}) => {
   // const basket = route.params.basket;
   const context = useContext(GlobalContext);
+  const [payMethVisible, setPayMethVisible] = useState(false);
 
   const [Items] = useState([
     {
@@ -64,6 +72,7 @@ const BasketPage = ({navigation}) => {
       specifications: ['Dairy', 'Caramel Syrup'],
     },
   ]);
+
 
   function confirmOrder() {
     firestore()
@@ -112,9 +121,12 @@ const BasketPage = ({navigation}) => {
         />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={confirmOrder}
+          onPressIn={() => setPayMethVisible(false)}
         style={[styles.lastButton, styles.buttons]}
       >
+        {payMethVisible ? (
+            <PaymentMethodPopUp/>
+        ) : null}
         <CustomButton
           priority="primary"
           style={styles.button}

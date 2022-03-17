@@ -10,6 +10,7 @@ import ShopPage from '../screens/ShopPage';
 import ChangePasswordPage from '../screens/ChangePasswordPage';
 import OrderPage from '../screens/OrderPage';
 import AddNewCardPage from '../screens/AddNewCardPage';
+import PaymentMethodPopUp from "../components/PaymentCards/PaymentMethodPopUp";
 import BasketPage from '../screens/BasketPage';
 
 const HomeStack = createSharedElementStackNavigator();

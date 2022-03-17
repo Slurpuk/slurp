@@ -10,16 +10,17 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {VisibleContext} from "../../navigation/HamburgerSlideBarNavigator";
 import firestore from "@react-native-firebase/firestore";
 import UncollapsedPayMethCard from "./UncollapsedPayMethCard";
 import CollapsedPayMethCard from "./CollapsedPayMethCard";
 import AnimatedCard from "../../sub-components/AnimatedCard";
 import PayMethPaymentCard from "./PayMethPaymentCard";
+import {GlobalContext} from "../../../App";
 
 const PaymentMethodPopUp = () => {
     const [cards, setCards] = useState([]);
     const [defaultCard, setDefaultCard] = useState([]);
+    const context = useContext(GlobalContext);
 
     const publishableKey =
         'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
@@ -110,7 +111,7 @@ const PaymentMethodPopUp = () => {
                         </TouchableOpacity>
                     </Animated.View>
                     <CustomButton
-                        text={"Place Order " }
+                        text={`Place Order  £${context.total.toFixed(2)}`}
                         priority={'primary'}
                         width={screenWidth * 0.79}
                         style={styles.button}
