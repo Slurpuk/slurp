@@ -17,13 +17,11 @@ const UncollapsedPayMethCard = ({cards}) => {
         <View >
             <FlatList
                 data={cards}
-                renderItem={({item}) => <PayMethPaymentCard card={item} />}
-            />
+                renderItem={({item}) => <PayMethPaymentCard card={item} />}/>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-
 });
 export default UncollapsedPayMethCard;

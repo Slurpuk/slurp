@@ -34,7 +34,7 @@ const textStyles = StyleSheet.create({
     includeFontPadding: false,
   },
   smallLightGreyPoppins: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: 'Poppins-Light',
     letterSpacing: 0.3,
     color: '#727272',

@@ -59,23 +59,25 @@ const PaymentMethodPopUp = () => {
                     >
                         <Icon size={30} color="black" name="close" />
                     </TouchableHighlight>
-                </View>
-                <View>
+                </View >
+                <View  style={styles.body}>
                     <FlatList
                         data={defaultCard}
                         renderItem={({item}) => <AnimatedCard
                             initialHeight={40}
                             collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
                             hidableContent={<UncollapsedPayMethCard cards={cards}/>}//this is the uncollapsed part
-                        />}
+                            />}
+                            style={styles.items_list}
                     />
-                    <Text>New Payment Card</Text>
+                    <Text  style={styles.text}>+New Payment Card</Text>
+                    <CustomButton
+                        text={"Place Order " }
+                        priority={'primary'}
+                        width={screenWidth * 0.79}
+                        style={styles.button}
+                    />
                 </View>
-                <CustomButton
-                    text={"Place Order " }
-                    priority={'primary'}
-                    width={screenWidth * 0.79}
-                />
             </View>
     );
 };
@@ -85,19 +87,31 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         paddingLeft: '7%',
         width: 0.9128 * screenWidth,
-        height: 0.5723 * screenHeight,
+        height: 0.3723 * screenHeight,
         backgroundColor: 'white',
         paddingVertical: '6%',
         position: 'absolute',
-        top: '20%',
+        top: '30%',
         bottom: '23%',
         left: '4%',
         right: '4%',
         elevation: 200,
         zIndex: 100,
+    },
+    product_name: {
+        color: 'black',
+        marginLeft: '2%',
+    },
+    items_list: {
+    },
+
+    text: {
+    },
+
+    button: {
     },
 
     header: {
@@ -105,12 +119,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingBottom:'4%',
     },
 
-    list: {
-        flex: 1,
-        height: '60%',
+    body: {
+        display: 'flex',
+        flex:1,
+        marginRight: '6%',
     },
+
 
     icon: {
         marginRight: '7%',

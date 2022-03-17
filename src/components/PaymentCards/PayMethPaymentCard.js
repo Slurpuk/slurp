@@ -22,15 +22,20 @@ const PayMethPaymentCard = ({card}) => {
     }
 
     return (
-            <View style={{display: 'flex', flexDirection: 'row', alignItems:'center'}}>
+        <View>
+            <View style={{display: 'flex', flexDirection: 'row', alignItems:'center',marginBottom:9,
+            }}>
                 <PaymentIcon style={{marginEnd:10}} type={formattedCardBrand}/>
                 <Text style={[textStyles.greyPoppins, {marginEnd:10}]}>*** **** **** {card.last4}</Text>
                 {card.isDefault ? (
-                    <Text style={[textStyles.smallLightGreyPoppins, {marginLeft:40}]} >Default</Text>
+                    <Text style={[textStyles.smallLightGreyPoppins, {marginLeft:'8%'}]} >Default</Text>
                 ) : (
-                    <Text style={[textStyles.smallLightGreyPoppins, {marginLeft:40}]}>Secondary</Text>
+                    <Text style={[textStyles.smallLightGreyPoppins, {marginLeft:'7%'}]}>Secondary</Text>
                 )}
             </View>
+        </View>
+
+
     );
 };
 
