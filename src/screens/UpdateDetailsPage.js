@@ -1,27 +1,89 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 import FormField from '../sub-components/FormField';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
-
-const changeDetailsConfirm = () => {
-  Alert.alert('Done.', 'Your details have been updated.', [
-    {
-      text: 'OK',
-    },
-  ]);
-};
-
-//Update user details in the database
-const changeUserDetails = () => {
-  changeDetailsConfirm();
-};
+import firebase from '@react-native-firebase/app';
 
 const UpdateDetailsPage = ({navigation}) => {
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
+  const [placeholder_first, setPlaceholderFirst] = useState();
+  const [placeholder_last, setPlaceholderLast] = useState();
+  const [placeholder_email, setPlaceholderEmail] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const currentUser = firebase.auth().currentUser.uid;
+  const userDocument = firebase
+    .firestore()
+    .collection('Users')
+    .doc(currentUser);
+
+  useEffect(() => {
+    userDocument
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          setPlaceholderFirst(doc.data().FirstName);
+          setPlaceholderLast(doc.data().LastName);
+          setPlaceholderEmail(doc.data().Email);
+        } else {
+          console.log('No such document!');
+        }
+      })
+      .catch(function (error) {
+        console.log('Error getting document:', error);
+      });
+  });
+
+  function changeDetailsConfirm() {
+    Alert.alert('Done.', 'Your details have been updated.', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
+
+  function invalidCredentialsMessage() {
+    Alert.alert(
+      'Cannot Authenticate',
+      'Please try entering your password again.',
+      [
+        {
+          text: 'OK',
+        },
+      ],
+    );
+  }
+
+  function reauthenticate() {
+    let user = firebase.auth().currentUser;
+    let cred = firebase.auth.EmailAuthProvider.credential(user.email, password);
+    return user.reauthenticateWithCredential(cred);
+  }
+  //Update user details in the database
+  function changeUserDetails() {
+    const updated = {
+      FirstName: first_name,
+      LastName: last_name,
+      Email: email,
+    };
+    reauthenticate()
+      .then(() => {
+        firebase
+          .firestore()
+          .collection('Users')
+          .doc(currentUser)
+          .update(updated)
+          .then(() => {
+            changeDetailsConfirm();
+            navigation.goBack();
+          });
+      })
+      .catch(error => {
+        invalidCredentialsMessage();
+      });
+  }
 
   return (
     <View>
@@ -32,21 +94,21 @@ const UpdateDetailsPage = ({navigation}) => {
             style={[styles.subDetails, styles.spaceRight]}
             title={'First Name'}
             setField={setFirstName}
-            placeholder={'Your current forename'}
+            placeholder={placeholder_first}
             type={'name'}
           />
           <FormField
             style={[styles.subDetails, styles.spaceLeft]}
             title={'Last Name'}
             setField={setLastName}
-            placeholder={'Your current surname'}
+            placeholder={placeholder_last}
             type={'name'}
           />
         </View>
         <FormField
           title={'Email'}
           setField={setEmail}
-          placeholder={'Your current email'}
+          placeholder={placeholder_email}
           type={'email'}
         />
         <FormField

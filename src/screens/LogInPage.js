@@ -77,8 +77,7 @@ const LogInPage = ({navigation}) => {
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={null}
-          >
+            onPress={null}>
             Forgot your password?
           </Text>
         </View>

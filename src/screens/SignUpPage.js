@@ -20,6 +20,7 @@ import FormField from '../sub-components/FormField';
 import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
+import firebase from '@react-native-firebase/app';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -82,11 +83,15 @@ const SignUpPage = ({navigation}) => {
   // Register the user to the database after checking their credentials
   const registerUser = () => {
     if (password == password_confirmation) {
-      auth()
+      firebase
+        .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(re => {
-          console.log(re);
-          console.log(x);
+          firebase.firestore().collection('Users').doc(re.user.uid).set({
+            FirstName: first_name,
+            LastName: last_name,
+            Email: email,
+          });
         })
         .catch(re => {
           console.log(re);
@@ -163,8 +168,7 @@ const SignUpPage = ({navigation}) => {
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-            onPress={switchToLogIn}
-          >
+            onPress={switchToLogIn}>
             Already have an account? Log in
           </Text>
         </View>

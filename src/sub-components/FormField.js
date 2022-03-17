@@ -18,6 +18,7 @@ const FormField = ({
   switch (type) {
     case 'name':
       autoCapitalize = 'words';
+      autoCorrect = false;
       autoCompleteType = 'name';
       break;
     case 'email':
