@@ -13,7 +13,7 @@ import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
 
 const CollapsableOrder = ({order}) => {
-  const totalPrice = getTotalPrice(order.data);
+  const totalPrice = getTotalPrice(order.Items);
 
   return (
     <View style={styles.order}>
@@ -32,7 +32,7 @@ const CollapsableOrder = ({order}) => {
 
 const getTotalPrice = items => {
   let total = 0;
-  items.forEach(item => (total += item.Quantity * item.Coffee.Price));
+  items.forEach(item => (total += item.quantity * item.Price));
   return total;
 };
 

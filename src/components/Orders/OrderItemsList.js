@@ -10,7 +10,7 @@ const Item = ({item}) => {
       <View style={styles.singleElement}>
         <View style={styles.elementDetails}>
           <Text style={textStyles.bluePoppinsSubHeading}>
-            {item.Quantity} {item.Coffee.Name}
+            {item.quantity} {item.Name}
           </Text>
           <Text style={textStyles.lightGreyPoppins}>
             {item.milk}
@@ -19,7 +19,7 @@ const Item = ({item}) => {
         </View>
         <View style={styles.elementPrice}>
           <Text style={textStyles.darkGreyPoppinsSubHeading}>
-            £{(item.Coffee.Price * item.Quantity).toFixed(2)}
+            £{(item.Price * item.quantity).toFixed(2)}
           </Text>
         </View>
       </View>
@@ -45,7 +45,7 @@ const OrderItemsList = ({order}) => {
   return (
     <View>
       <FlatList
-        data={order.data}
+        data={order.Items}
         renderItem={({item}) => <Item item={item} />}
       />
       <EmptyItemLine />

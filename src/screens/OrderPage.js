@@ -1,117 +1,110 @@
-import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  SectionList,
-  FlatList,
-  Dimensions,
-} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {StyleSheet, View, FlatList} from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
-import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
-//import pastOrders from '../fake-data/PastOrderData';
-// import currentOrders from '../fake-data/CurrentOrderData';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 
 const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = ({navigation}) => {
+  // const context = useContext(GlobalContext)
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
+  const [fpastOrders, fsetPastOrders] = useState([]);
+  const [fcurrentOrders, fsetCurrentOrders] = useState([]);
+  useEffect(() => {
+    const fetchData = firestore()
+      .collection('Orders')
+      // .where('UserID', '==', context.userRef)
+      .onSnapshot(querySnapshot => {
+        let currentOrdersLocal = [];
+        let pastOrdersLocal = [];
+        querySnapshot.forEach(documentSnapshot => {
+          let firebaseOrder = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          };
+
+          let months = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+          ];
+          firebaseOrder.period =
+            months[firebaseOrder.DateTime.toDate().getMonth()] +
+            ' ' +
+            firebaseOrder.DateTime.toDate().getFullYear();
+
+          if (
+            firebaseOrder.Status === 'rejected' ||
+            firebaseOrder.Status === 'collected'
+          ) {
+            pastOrdersLocal.push(firebaseOrder);
+          } else {
+            currentOrdersLocal.push(firebaseOrder);
+          }
+          fsetCurrentOrders(currentOrdersLocal);
+          fsetPastOrders(pastOrdersLocal);
+        });
+      });
+
+    return () => fetchData();
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      firestore()
-        .collection('Orders')
-        .onSnapshot(querySnapshot => {
-          let currentOrdersLocal = [];
-          let pastOrdersLocal = [];
-          querySnapshot.forEach(documentSnapshot => {
-            let order = {};
-            // get order data
-            let firebaseOrder = {
-              ...documentSnapshot.data(),
-              key: documentSnapshot.key,
-            };
+    formatOrders(fcurrentOrders, true);
+  }, [fcurrentOrders]);
 
-            order.fire = firebaseOrder;
+  useEffect(() => {
+    formatOrders(fpastOrders, false);
+  }, [fpastOrders]);
 
-            // de-reference items
-            let items = [];
-
-            // make the structure suitable for section list
-            let months = [
-              'January',
-              'February',
-              'March',
-              'April',
-              'May',
-              'June',
-              'July',
-              'August',
-              'September',
-              'October',
-              'November',
-              'December',
-            ];
-            order.period =
-              months[firebaseOrder.DateTime.toDate().getMonth()] +
-              ' ' +
-              firebaseOrder.DateTime.toDate().getFullYear();
-
-            firebaseOrder.Items.forEach(item => {
-              let newItem = {};
-              newItem.quantity = item.Quantity;
-              firestore()
-                .doc(item.Coffee)
-                .onSnapshot(query => {
-                  newItem.coffee = {
-                    ...query.data(),
-                    key: query.key,
-                  };
-                });
-              items.push(newItem);
+  function formatOrders(formattedOrders, isCurrent) {
+    let newOrders = [];
+    formattedOrders.forEach(async order => {
+      let temp = order;
+      let newItems = [];
+      for (let item of temp.Items) {
+        let newItem;
+        if (item.Type === 'Coffee') {
+          await firestore()
+            .collection('Coffees')
+            .doc(item.ItemRef)
+            .get()
+            .then(doc => {
+              newItem = {
+                ...doc.data(),
+                type: item.Type,
+                key: doc.id,
+                quantity: item.Quantity,
+              };
+              newItems.push(newItem);
             });
-
-            order.data = items;
-
-            // make data suitable for section list
-            // order.data = order.Items;
-            // delete order.Items;
-
-            // de-reference the shop
-
-            // let shop;
-            firestore()
-              .doc(firebaseOrder.ShopID)
-              .onSnapshot(query => {
-                order.shop = {...query.data()};
-              });
-
-            // de-reference the user (not yet feasible)
-            // sort to current and past
-            // currentOrdersLocal.push(order);
-            if (firebaseOrder.Status === 'rejected') {
-              pastOrdersLocal.push(order);
-            } else {
-              currentOrdersLocal.push(order);
-            }
-          });
-          // console.log("CURRENT ORDERS")
-          // console.log(currentOrdersLocal);
-          // console.log("PAST ORDERS")
-          // console.log(pastOrdersLocal);
-          setCurrentOrders(currentOrdersLocal);
-          setPastOrders(pastOrdersLocal);
+        }
+      }
+      temp.Items = newItems;
+      await firestore()
+        .collection('CoffeeShop')
+        .doc(order.ShopID)
+        .get()
+        .then(document => {
+          temp.shop = {...document.data()};
+          newOrders.push(temp);
+          isCurrent ? setCurrentOrders(newOrders): setPastOrders(newOrders);
         });
-      console.log('LOOOL', currentOrders);
-    };
-    fetchData().then(r => console.log('got data'));
-  }, []);
+    });
+  }
 
   return (
     <NavigationContainer independent={true}>
@@ -140,12 +133,10 @@ const OrderPage = ({navigation}) => {
             },
           }}>
           <Tab.Screen name="Current">
-            {props => (
-              <CurrentOrders {...props} currentOrders={currentOrders} />
-            )}
+            {props => <CurrentOrders currentOrders={currentOrders} />}
           </Tab.Screen>
           <Tab.Screen name="Past">
-            {props => <PastOrders {...props} pastOrders={pastOrders} />}
+            {props => <PastOrders pastOrders={pastOrders} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>
@@ -153,39 +144,21 @@ const OrderPage = ({navigation}) => {
   );
 };
 
-
-const PastOrders = pastOrders => {
-
-  // console.log('past data');
-  // console.log(pastOrders.pastOrders);
+const PastOrders = props => {
   return (
-    // <SectionList
-    //   contentContainerStyle={styles.mainContainer}
-    //   sections={pastOrders.pastOrders}
-    //   stickySectionHeadersEnabled={false}
-    //   keyExtractor={(item, index) => item + index}
-    //   renderItem={({item}) => <CollapsedOrder order={item} />}
-    //   renderSectionHeader={({section: {period}}) => (
-    //     <Text style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
-    //       {period}
-    //     </Text>
-    //   )}
-    // />
     <FlatList
       contentContainerStyle={styles.mainContainer}
-      data={pastOrders}
+      data={props.pastOrders}
       renderItem={({item}) => <CollapsedOrder order={item} />}
     />
   );
 };
 
-const CurrentOrders = currentOrders => {
-  // console.log('current data');
-  // console.log(currentOrders);
+const CurrentOrders = props => {
   return (
     <FlatList
       contentContainerStyle={styles.mainContainer}
-      data={currentOrders}
+      data={props.currentOrders}
       renderItem={({item}) => <CollapsedOrder order={item} />}
     />
   );

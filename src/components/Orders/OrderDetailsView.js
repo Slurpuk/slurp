@@ -23,8 +23,9 @@ const OrderDetailsView = ({order}) => {
         </View>
         <View>
           <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
-            {order.ShopID.Name}
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
+          >
+            {order.shop.Name}
           </Text>
           {getStatusAndDateComponent(order)}
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
@@ -39,12 +40,12 @@ const OrderDetailsView = ({order}) => {
 
 const getItemsText = order => {
   let itemsComponent = '';
-  if (order.data.length === 1) {
-    let singleItem = order.data[0];
-    itemsComponent = singleItem.Quantity + ' ' + singleItem.Coffee.Name;
+  if (order.Items.length === 1) {
+    let singleItem = order.Items[0];
+    itemsComponent = singleItem.quantity + ' ' + singleItem.Name;
   } else {
     let numberOfItems = 0;
-    order.data.forEach(item => (numberOfItems += item.Quantity));
+    order.Items.forEach(item => (numberOfItems += item.quantity));
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
@@ -52,18 +53,19 @@ const getItemsText = order => {
 
 const getStatusAndDateComponent = order => {
   let dateAndTime = order.DateTime.toDate().toDateString();
-  if (order.status === 'collected') {
+  if (order.Status === 'collected') {
     return (
       <Text
         style={[
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}>
+        ]}
+      >
         {order.Status} {dateAndTime}
       </Text>
     );
-  } else if (order.status === 'rejected' || order.status === 'cancelled') {
+  } else if (order.Status === 'rejected' || order.Status === 'cancelled') {
     return (
       <Text
         style={[
@@ -71,7 +73,8 @@ const getStatusAndDateComponent = order => {
           styles.textFlex,
           styles.finishedOrder,
           styles.cancelledOrder,
-        ]}>
+        ]}
+      >
         {order.Status} {dateAndTime}
       </Text>
     );
