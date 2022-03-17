@@ -14,7 +14,7 @@ import PayMethPaymentCard from "./PayMethPaymentCard";
 const UncollapsedPayMethCard = ({cards}) => {
 
     return (
-        <View >
+        <View style={{}}>
             <FlatList
                 data={cards}
                 renderItem={({item}) => <PayMethPaymentCard card={item} />}/>

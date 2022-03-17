@@ -9,7 +9,6 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {VisibleContext} from "../../navigation/HamburgerSlideBarNavigator";
 import firestore from "@react-native-firebase/firestore";
 import UncollapsedPayMethCard from "./UncollapsedPayMethCard";
 import CollapsedPayMethCard from "./CollapsedPayMethCard";
@@ -18,10 +17,6 @@ import AnimatedCard from "../../sub-components/AnimatedCard";
 const PaymentMethodPopUp = () => {
     const [cards, setCards] = useState();
     const [defaultCard, setDefaultCard] = useState([]);
-
-    const publishableKey =
-        'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
-
 
     async function getCards(){
         await firestore()
@@ -64,7 +59,7 @@ const PaymentMethodPopUp = () => {
                     <FlatList
                         data={defaultCard}
                         renderItem={({item}) => <AnimatedCard
-                            initialHeight={40}
+                            initialHeight={50}
                             collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
                             hidableContent={<UncollapsedPayMethCard cards={cards}/>}//this is the uncollapsed part
                             />}
@@ -90,7 +85,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         paddingLeft: '7%',
         width: 0.9128 * screenWidth,
-        height: 0.3723 * screenHeight,
+        height: 0.4723 * screenHeight,
         backgroundColor: 'white',
         paddingVertical: '6%',
         position: 'absolute',
@@ -106,12 +101,18 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
     },
     items_list: {
+        flex: 0,
+        maxHeight:'70%',
     },
 
     text: {
+        flex: 600,
+        paddingTop:'4%',
     },
 
     button: {
+        flex: 1,
+        paddingTop:'10%',
     },
 
     header: {

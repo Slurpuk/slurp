@@ -14,8 +14,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 const CollapsedPayMethCard = ({defaultCard}) => {
 
     return (
-        <View >
-            <PayMethPaymentCard card={defaultCard} />
+        <View style={{backgroundColor:'red'}}>
+            <PayMethPaymentCard card={defaultCard} isFirst={true} />
         </View>
     );
 };
