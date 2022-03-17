@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import Svg, {Path, Circle} from 'react-native-svg';
 
 const CoffeeCupSvg = props => (
   <Svg
@@ -11,6 +11,7 @@ const CoffeeCupSvg = props => (
     xmlSpace="preserve"
     {...props}
   >
+    <Circle cx="145" cy="133" r="145" fill="#C4C4C4" />
     <Path
       style={{
         fill: '#E5E5E5', //white part

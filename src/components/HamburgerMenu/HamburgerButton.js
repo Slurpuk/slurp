@@ -16,9 +16,10 @@ const HamburgerButton = ({navigation}) => {
           onPress={() => navigation.openDrawer()}
           name="bars"
           color={'#046D66'}
-          underlayColor={'transparent'}
           backgroundColor={'transparent'}
-          size={25}
+          underlayColor={'white'}
+          size={0.04 * screenHeight}
+          borderRadius={10}
         />
       </TouchableHighlight>
     </View>
@@ -30,25 +31,26 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   header: {
     height: 0,
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   floating_button: {
     ...Platform.select({
       ios: {
-        marginTop: '32%',
+        marginTop: '20%',
       },
       android: {
-        marginTop: '31%',
+        marginTop: '20%',
       },
     }),
-    backgroundColor: '#ffffff',
-    borderRadius: 11,
-    paddingTop: '0.5%',
-    paddingLeft: '2.5%',
-    height: 0.055 * screenHeight,
-    marginRight: '3%',
+    backgroundColor: 'transparent',
+    underlayColor: 'white',
+    borderRadius: 20,
+    height: 0.07 * screenHeight,
+    margin: '3%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
 });
 

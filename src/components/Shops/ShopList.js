@@ -1,103 +1,41 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  Platform,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import React, {useContext} from 'react';
 import ShopCard from './ShopCard';
-import {OptionsContext} from '../../screens/LandingMapPage';
+import {GlobalContext} from '../../../App';
+
+// Height to render the ScrollBottomSheet in its retracted position.
+// Different on android due to bottom icon bar being considered part of the screen
+const SHOP_LIST_HEIGHT_IOS = '75%';
+const SHOP_LIST_HEIGHT_ANDROID = '78%';
 
 const ShopList = ({navigation}) => {
-  const context = useContext(OptionsContext);
+  const context = useContext(GlobalContext);
   const DATA = context.shopsData;
   return (
-    <View>
+    <View style={styles.wrapper}>
       <FlatList
         style={styles.container}
         data={DATA}
         numColums={1}
-        keyExtractor={item => item.id}
+        nestedScrollEnabled={true}
+        keyExtractor={item => item.key}
         renderItem={({item}) => {
-          return (
-            <View>
-              <Pressable>
-                <ShopCard shop={item} navigation={navigation} />
-              </Pressable>
-            </View>
-          );
+          return <ShopCard shop={item} navigation={navigation} />;
         }}
       />
     </View>
   );
 };
-const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: '2%',
   },
 
-  cardHeading: {
-    position: 'absolute',
-    // borderWidth: 4,
-    width: '100%',
-    textAlign: 'center',
-    marginTop: '6%',
-  },
-
-  item: {
-    overflow: 'hidden',
-    maxWidth: screenWidth * 1,
-    minWidth: screenWidth * 1,
-    height: screenWidth * 0.37,
-    marginVertical: '1.8%',
-    // marginHorizontal: '2%',
-    display: 'flex',
-    alignItems: 'flex-start',
-
-    flex: 1,
-    position: 'relative',
-    ...Platform.select({
-      ios: {
-        shadowOpacity: 0.2,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
-  },
-
-  title: {
-    letterSpacing: 0.5,
-    fontSize: 17,
-    justifyContent: 'center',
-  },
-
-  shopName: {
-    fontFamily: 'JosefinSans-Bold',
-    color: 'white',
-    fontWeight: '700',
-    paddingBottom: 10,
-  },
-
-  cardImgs: {
-    position: 'absolute',
-    width: '100%',
-    height: '50%',
-    left: 0,
-  },
-
-  details: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    display: 'flex',
-    backgroundColor: '#36363677',
-    height: '100%',
+  wrapper: {
+    height:
+      Platform.OS === 'ios' ? SHOP_LIST_HEIGHT_IOS : SHOP_LIST_HEIGHT_ANDROID,
   },
 });
 export default ShopList;

@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, FlatList} from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
+import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -107,49 +108,59 @@ const OrderPage = ({navigation}) => {
   }
 
   return (
-    <NavigationContainer independent={true}>
-      <View style={styles.container}>
-        <GreenHeader headerText={'ORDERS'} navigation={navigation} />
-        <Tab.Navigator
-          style={styles.basket}
-          screenOptions={{
-            tabBarLabelStyle: {
-              fontSize: 17,
-              fontFamily: 'Poppins-SemiBold',
-              textTransform: 'capitalize',
-            },
-            tabBarIndicatorStyle: {
-              top: 0,
-              height: null,
-              backgroundColor: '#046D66',
-              borderRadius: 13,
-            },
-            tabBarActiveTintColor: '#fff',
-            tabBarInactiveTintColor: '#6D6D6D',
-            tabBarStyle: {
-              borderRadius: 13,
-              height: 50,
-              backgroundColor: '#E5E5E5',
-            },
-          }}>
-          <Tab.Screen name="Current">
-            {props => <CurrentOrders currentOrders={currentOrders} />}
-          </Tab.Screen>
-          <Tab.Screen name="Past">
-            {props => <PastOrders pastOrders={pastOrders} />}
-          </Tab.Screen>
-        </Tab.Navigator>
-      </View>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <GreenHeader headerText={'ORDERS'} navigation={navigation} />
+      <Tab.Navigator
+        style={styles.navigatorContent}
+        screenOptions={{
+          tabBarLabelStyle: {
+            fontSize: 18,
+            fontFamily: 'Poppins-SemiBold',
+            letterSpacing: 0.3,
+            textTransform: 'capitalize',
+            transform: [{translateY: -7}],
+          },
+          tabBarIndicatorStyle: {
+            top: 0,
+            height: null,
+            backgroundColor: '#046D66',
+            borderRadius: 13,
+          },
+          tabBarActiveTintColor: '#FFFFFF',
+          tabBarInactiveTintColor: '#6D6D6D',
+          tabBarStyle: {
+            borderRadius: 13,
+            height: 42,
+            backgroundColor: '#E5E5E5',
+            elevation: 0,
+            borderColor: '#919191',
+          },
+        }}
+      >
+        <Tab.Screen name="Current">
+          {props => <CurrentOrders currentOrders={currentOrders} />}
+        </Tab.Screen>
+        <Tab.Screen name="Past">
+          {props => <PastOrders pastOrders={pastOrders} />}
+        </Tab.Screen>
+      </Tab.Navigator>
+    </View>
   );
 };
 
 const PastOrders = props => {
   return (
-    <FlatList
+    <SectionList
       contentContainerStyle={styles.mainContainer}
-      data={props.pastOrders}
+      sections={props.pastOrders}
+      stickySectionHeadersEnabled={false}
+      keyExtractor={(item, index) => item + index}
       renderItem={({item}) => <CollapsedOrder order={item} />}
+      renderSectionHeader={({section: {period}}) => (
+        <Text style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
+          {period}
+        </Text>
+      )}
     />
   );
 };
@@ -167,20 +178,19 @@ const CurrentOrders = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
+    backgroundColor: '#EDEBE7',
   },
-  basket: {
-    marginHorizontal: '5%',
+  navigatorContent: {
+    paddingHorizontal: '5%',
     marginTop: '5%',
-    fontFamily: 'Poppins-SemiBold',
   },
   periodHeader: {
-    marginLeft: 7,
+    marginLeft: 6,
     marginTop: 20,
   },
   mainContainer: {
-    paddingBottom: '5%',
+    backgroundColor: '#EDEBE7',
+    flexGrow: 1,
   },
 });
 

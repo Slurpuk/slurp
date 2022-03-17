@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -14,9 +14,11 @@ import textStyles from '../../stylesheets/textStyles';
 import CoffeeShopSvg from '../assets/svgs/CoffeeShopSvg';
 import CoffeeCupSvg from '../assets/svgs/CoffeeCupSvg';
 import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {getTightPadding} from '../../stylesheets/StyleFunction';
+import {GlobalContext} from '../../App';
 
-const WelcomePages = ({onDone}) => {
+const WelcomePages = ({onDone, navigation}) => {
+  const appContext = useContext(GlobalContext);
   const [sliderState, setSliderState] = useState({currentPage: 0});
   const {width, height} = Dimensions.get('window');
 
@@ -32,92 +34,101 @@ const WelcomePages = ({onDone}) => {
     }
   };
 
+  function proceedToLogIn() {
+    appContext.enterApp();
+    navigation.navigate('LogIn');
+  }
+
+  function proceedToSignUp() {
+    appContext.enterApp();
+    navigation.navigate('SignUp');
+  }
+
   const {currentPage: pageIndex} = sliderState;
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <View style={styles.safeSpace}>
-        <SafeAreaView
-          style={{display: 'flex', height: '100%', backgroundColor: '#E5E5E5'}}
-        >
-          <ScrollView
-            style={{display: 'flex'}}
-            horizontal={true}
-            scrollEventThrottle={16}
-            pagingEnabled={true}
-            showsHorizontalScrollIndicator={false}
-            onScroll={(event: any) => {
-              setSliderPage(event);
-            }}
+      <ScrollView
+        style={{display: 'flex'}}
+        horizontal={true}
+        scrollEventThrottle={16}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        onScroll={(event: any) => {
+          setSliderPage(event);
+        }}
+      >
+        <View style={styles.component}>
+          <Text style={[textStyles.blueJosefinHeading, styles.title]}>
+            Welcome to Slurp
+          </Text>
+          <CoffeeShopSvg style={[styles.circle]} />
+          <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
+            We dont even sell coffee but me make a commission from every
+            purchase you make, because we can and we want.
+          </Text>
+        </View>
+        <View style={styles.component}>
+          <Text style={[textStyles.blueJosefinHeading, styles.title]}>
+            Why Slurp?
+          </Text>
+          <CoffeeCupSvg style={[styles.circle]} />
+          <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
+            Please use this platform because we need the money to cover all the
+            costs of the platform to make the svgs above.
+          </Text>
+        </View>
+        <View style={styles.component}>
+          <Text style={[textStyles.blueJosefinHeading, styles.title]}>
+            Why Slurp?
+          </Text>
+          <CoffeeBeanSvg style={[styles.circle, {marginTop: 5}]} />
+          <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
+            Slurp allows you to find unique, independent, sustainable coffee
+            shops nearby.
+          </Text>
+          <CustomButton
+            text={'Sign Up'}
+            priority={'primary'}
+            onPress={proceedToSignUp}
+          />
+          <Text
+            style={[textStyles.bluePoppinsBody, styles.footer]}
+            onPress={proceedToLogIn}
           >
-            <View style={{width, height, display: 'flex'}}>
-              <View style={{alignItems: 'center'}}>
-                <Text style={[textStyles.blueJosefinHeading, styles.title]}>
-                  Welcome to CoffeeGems
-                </Text>
-                <CoffeeShopSvg style={[styles.circle]} />
-                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-                  We dont even sell coffee but me make a commission from every
-                  purchase you make, because we can and we want.
-                </Text>
-              </View>
-            </View>
-            <View style={{width, height}}>
-              <View style={{alignItems: 'center'}}>
-                <Text style={[textStyles.blueJosefinHeading, styles.title]}>
-                  Why CoffeeGems?
-                </Text>
-                <CoffeeCupSvg style={[styles.circle]} />
-                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-                  Please use this platform because we need the money to cover
-                  all the costs of the platform to make the svgs above.
-                </Text>
-              </View>
-            </View>
-            <View style={{width, height}}>
-              <View style={{alignItems: 'center'}}>
-                <Text style={[textStyles.blueJosefinHeading, styles.title]}>
-                  Why CoffeeGems?
-                </Text>
-                <CoffeeBeanSvg style={[styles.circle, {marginTop: 5}]} />
-                <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-                  We are not going to explain you how it works, we just want you
-                  to click the sign up button below, in fact if you dont we will
-                  hack your device.{' '}
-                </Text>
-                <CustomButton
-                  text={'Sign Up'}
-                  priority={'primary'}
-                  onPress={onDone}
-                ></CustomButton>
-                <View>
-                  <Text style={[textStyles.bluePoppinsBody, styles.footer]}>
-                    Already have an account? Log in here
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-          <View style={styles.paginationWrapper}>
-            {Array.from(Array(3).keys()).map((key, index) => (
-              <View
-                style={[
-                  styles.paginationDots,
-                  {opacity: pageIndex === index ? 1 : 0.7},
-                ]}
-                key={index}
-              />
-            ))}
-          </View>
-        </SafeAreaView>
+            Already have an account? Log in
+          </Text>
+        </View>
+      </ScrollView>
+      <View style={styles.paginationWrapper}>
+        {Array.from(Array(3).keys()).map((key, index) => (
+          <View
+            style={[
+              styles.paginationDots,
+              {opacity: pageIndex === index ? 1 : 0.7},
+            ]}
+            key={index}
+          />
+        ))}
       </View>
     </View>
   );
 };
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   wrapper: {
+    display: 'flex',
     flex: 1,
+    backgroundColor: '#E5E5E5',
+    paddingTop: getTightPadding(),
+  },
+  component: {
+    width: screenWidth,
+    height: '40%',
+    alignItems: 'center',
+    paddingHorizontal: '2%',
   },
   footer: {
     textAlign: 'center',
@@ -127,39 +138,25 @@ const styles = StyleSheet.create({
   },
   title: {
     minHeight: '12%',
-    marginTop: '12%',
-    paddingHorizontal: 20,
+    paddingTop: '12%',
+    paddingBottom: '8%',
     textAlign: 'center',
-  },
-  text: {
-    paddingTop: '6%',
-    paddingBottom: '6%',
-    textAlign: 'center',
-    paddingHorizontal: 20,
-  },
-  safeSpace: {
-    flex: 1,
-    backgroundColor: '#EDEBE7',
-    paddingTop:
-      Platform.OS === 'android'
-        ? getStatusBarHeight() / 3
-        : getStatusBarHeight(),
   },
   circle: {
-    width: 320,
-    height: 320,
-    borderRadius: 320 / 2,
-    backgroundColor: '#DADADA',
     marginBottom: '6%',
-    marginTop: '8%',
-    marginHorizontal: 20,
+    marginTop: '15%',
+  },
+  text: {
+    paddingVertical: '4%',
+    textAlign: 'center',
+    overflow: 'hidden',
   },
   paginationWrapper: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     minHeight: 40,
-    paddingBottom: 40,
+    paddingBottom: 10,
   },
   paginationDots: {
     height: 10,
