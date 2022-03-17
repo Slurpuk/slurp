@@ -1,22 +1,29 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
+    Animated,
     Dimensions, FlatList,
     StyleSheet,
     Text,
-    TouchableHighlight,
+    TouchableHighlight, TouchableOpacity,
     View,
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {VisibleContext} from "../../navigation/HamburgerSlideBarNavigator";
 import firestore from "@react-native-firebase/firestore";
 import UncollapsedPayMethCard from "./UncollapsedPayMethCard";
 import CollapsedPayMethCard from "./CollapsedPayMethCard";
 import AnimatedCard from "../../sub-components/AnimatedCard";
+import PayMethPaymentCard from "./PayMethPaymentCard";
 
 const PaymentMethodPopUp = () => {
-    const [cards, setCards] = useState();
+    const [cards, setCards] = useState([]);
     const [defaultCard, setDefaultCard] = useState([]);
+
+    const publishableKey =
+        'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
+
 
     async function getCards(){
         await firestore()
@@ -41,6 +48,28 @@ const PaymentMethodPopUp = () => {
         getCards().then(() =>console.log("Updated cards") );
     }, []);
 
+    const animation = new Animated.Value(0);
+    const inputRange = [0, 1];
+    const outputRange = [1, 0.8];
+    const scale = animation.interpolate({inputRange, outputRange});
+    const onPressIn = () => {
+        Animated.spring(animation, {
+            toValue: 0.095,
+            speed: 100,
+            useNativeDriver: true,
+        }).start();
+    };
+    const onPressOut = () => {
+        Animated.spring(animation, {
+            toValue: 0,
+            speed: 70,
+            useNativeDriver: true,
+        }).start();
+    };
+    const addNewCardRedirection = () => {
+        console.log("hello");
+    };
+
 
     return (
             <View style={styles.container}>
@@ -56,16 +85,30 @@ const PaymentMethodPopUp = () => {
                     </TouchableHighlight>
                 </View >
                 <View  style={styles.body}>
-                    <FlatList
-                        data={defaultCard}
-                        renderItem={({item}) => <AnimatedCard
-                            initialHeight={50}
-                            collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
-                            hidableContent={<UncollapsedPayMethCard cards={cards}/>}//this is the uncollapsed part
+                    {cards.length!==0 ? (
+                        <FlatList
+                            data={defaultCard}
+                            renderItem={({item}) => <AnimatedCard
+                                initialHeight={100}
+                                collapsableContent={<CollapsedPayMethCard defaultCard={item}/>}//this is the collapsed part
+                                hidableContent={<UncollapsedPayMethCard cards={cards}/>}//this is the uncollapsed part
                             />}
                             style={styles.items_list}
-                    />
-                    <Text  style={styles.text}>+New Payment Card</Text>
+                        />
+                    ) : (
+                        <PayMethPaymentCard  isFirst={true} />
+                    )}
+                    <Animated.View style={{transform: [{scale}], flex:10}}>
+                        <TouchableOpacity
+                            style={[textStyles.smallLightGreyPoppins, styles.text]}
+                            activeOpacity={1}
+                            onPress={addNewCardRedirection}
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                        >
+                            <Text  style={[textStyles.smallLightGreyPoppins, styles.text]} >+New Payment Card</Text>
+                        </TouchableOpacity>
+                    </Animated.View>
                     <CustomButton
                         text={"Place Order " }
                         priority={'primary'}
@@ -76,7 +119,6 @@ const PaymentMethodPopUp = () => {
             </View>
     );
 };
-
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
@@ -98,7 +140,7 @@ const styles = StyleSheet.create({
     },
     product_name: {
         color: 'black',
-        marginLeft: '2%',
+        marginLeft: '1%',
     },
     items_list: {
         flex: 0,
@@ -107,7 +149,8 @@ const styles = StyleSheet.create({
 
     text: {
         flex: 600,
-        paddingTop:'4%',
+        paddingTop:'1.5%',
+        color: '#2D466B',
     },
 
     button: {
