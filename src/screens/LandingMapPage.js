@@ -11,7 +11,7 @@ import {
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from '@react-native-firebase/firestore';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
-import {useFocusEffect} from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
