@@ -23,8 +23,6 @@ LogBox.ignoreLogs([
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-
-
 export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
@@ -41,14 +39,13 @@ export default function LandingMapPage({navigation}) {
     }, []),
   );
 
-
   console.log('landing map page rerendered');
 
   return (
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground sheetRef={bottomSheetRef}/>
+        <MapBackground sheetRef={bottomSheetRef} />
         <TextInput
           style={styles.searchBar}
           placeholder={'Search Location'}
@@ -57,7 +54,7 @@ export default function LandingMapPage({navigation}) {
       </View>
 
       {context.isShopIntro ? (
-        <ShopPage navigation={navigation} sheetRef={bottomSheetRef}/>
+        <ShopPage navigation={navigation} sheetRef={bottomSheetRef} />
       ) : (
         <DraggableShopList navigation={navigation} />
       )}

@@ -125,7 +125,7 @@ function MyDrawer() {
       <Drawer.Screen name="Payment accounts" component={HomeScreen} />
       <Drawer.Screen name="Change name" component={HomeScreen} />
       <Drawer.Screen name="Change password" component={HomeScreen} />
-        <Drawer.Screen name="BasketPage" component={BasketPage} />
+      <Drawer.Screen name="BasketPage" component={BasketPage} />
       <Drawer.Screen name="Logout the device" component={HomeScreen} />
     </Drawer.Navigator>
   );

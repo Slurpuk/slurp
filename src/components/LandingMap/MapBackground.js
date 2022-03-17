@@ -23,7 +23,7 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 export default function MapBackground({sheetRef}) {
   const context = useContext(GlobalContext);
-
+  let watchID;
   const [mapCenter, setMapCenter] = useState({
     latitude: context.currentCenterLocation.latitude,
     longitude: context.currentCenterLocation.longitude,
@@ -40,16 +40,16 @@ export default function MapBackground({sheetRef}) {
       fadeOpacityOut(context.adaptiveOpacity, 170);
 
       let myTimeout = setTimeout(() => {
+        context.setCurrentCenterLocation({
+          latitude: selectedShop.Location._latitude,
+          longitude: selectedShop.Location._longitude,
+        });
         setMapCenter(prevState => ({
           latitude: selectedShop.Location._latitude,
           longitude: selectedShop.Location._longitude,
           latitudeDelta: prevState.latitudeDelta,
           longitudeDelta: prevState.longitudeDelta,
         }));
-        context.setCurrentCenterLocation({
-          latitude: selectedShop.Location._latitude,
-          longitude: selectedShop.Location._longitude,
-        });
         context.switchShop(selectedShop);
         clearTimeout(myTimeout);
       }, 200);
@@ -58,23 +58,20 @@ export default function MapBackground({sheetRef}) {
         fadeOpacityIn(context.adaptiveOpacity, 200);
       }, 210);
     } else {
+      context.setCurrentCenterLocation({
+        latitude: selectedShop.Location._latitude,
+        longitude: selectedShop.Location._longitude,
+      });
       setMapCenter(prevState => ({
         latitude: selectedShop.Location._latitude,
         longitude: selectedShop.Location._longitude,
         latitudeDelta: prevState.latitudeDelta,
         longitudeDelta: prevState.longitudeDelta,
       }));
-      context.setCurrentCenterLocation({
-        latitude: selectedShop.Location._latitude,
-        longitude: selectedShop.Location._longitude,
-      });
       context.switchShop(selectedShop);
       context.setShopIntro(true);
     }
   };
-  const screenWidth = Dimensions.get('window').width;
-
-  let watchID;
 
   useEffect(() => {
     const requestLocationPermission = async () => {
@@ -118,7 +115,7 @@ export default function MapBackground({sheetRef}) {
           latitudeDelta: prevState.latitudeDelta,
           longitudeDelta: prevState.longitudeDelta,
         }));
-        //Setting new current location
+        // Setting new current location
         context.setCurrentCenterLocation({
           latitude: latitude,
           longitude: longitude,
@@ -160,9 +157,11 @@ export default function MapBackground({sheetRef}) {
   return (
     <View style={styles.container}>
       <MapView
-        onRegionChangeComplete={(region, isGesture: false) =>
-          setMapCenter(region)
-        }
+        onRegionChangeComplete={(region, isGesture) => {
+          if (isGesture) {
+            setMapCenter(region);
+          }
+        }}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={mapCenter}>
@@ -178,6 +177,7 @@ export default function MapBackground({sheetRef}) {
               }
             }}>
             <View style={styles.markerStyle}>
+              <Text style={{color: 'red', fontWeight: 'bold'}}>{!marker.isOpen ? 'Closed': ''}</Text>
               <CustomMapIcon isOpen={marker.isOpen} />
             </View>
           </Marker>

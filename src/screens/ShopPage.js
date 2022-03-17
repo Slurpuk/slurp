@@ -63,7 +63,11 @@ const ShopPage = ({navigation, sheetRef}) => {
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
           {context.isShopIntro ? (
-            <DraggableShopPage shop={shop} navigation={navigation} sheetRef={sheetRef}/>
+            <DraggableShopPage
+              shop={shop}
+              navigation={navigation}
+              sheetRef={sheetRef}
+            />
           ) : (
             <NonDraggableShopPage shop={shop} navigation={navigation} />
           )}

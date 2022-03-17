@@ -26,8 +26,6 @@ export default function App() {
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
   const [markers, setMarkers] = useState([]);
-  // const [currentLongitude, setCurrentLongitude] = useState(0);
-  // const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentCenterLocation, setCurrentCenterLocation] = useState({
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
@@ -188,14 +186,6 @@ export default function App() {
     return () => subscriber();
   }, []);
 
-  //hard-coded markers for the purposes of testing
-  //TODO remove these when currentLocation is actually used
-  const defaultLocation = {
-    latitude: 51.54817999763736,
-    longitude: -0.30673900193854804,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
 
   function addToBasket(item) {
     const basket = basketContent;
