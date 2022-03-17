@@ -85,7 +85,6 @@ const SignUpPage = ({navigation}) => {
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
           let newUser = auth().currentUser;
-          console.log(newUser);
           addUser(newUser);
           registeredMessage();
         })
@@ -114,7 +113,6 @@ const SignUpPage = ({navigation}) => {
         Basket: [],
         TotalPrice: 0,
       })
-      .then(r => console.log('New user created'))
       .catch(error => {
         console.log(error);
       });

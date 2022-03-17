@@ -45,7 +45,7 @@ export default function App() {
       if (user) {
         setIsLoggedIn(true);
         setCurrentUser(user);
-        setUser().then(r => console.log('user set'));
+        setUser();
       } else {
         setIsLoggedIn(false);
         setCurrentUser(null);
@@ -91,7 +91,6 @@ export default function App() {
         .where('authID', '==', currentUser.uid)
         .get()
         .then(querySnapshot => {
-          console.log('YO');
           querySnapshot.forEach(documentSnapshot => {
             setUserRef(documentSnapshot.id);
           });
@@ -217,7 +216,6 @@ export default function App() {
   }
 
   const setShopIntro = () => {
-    console.log(userObj);
     setIsShopIntro(!isShopIntro);
   };
 
