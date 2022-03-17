@@ -3,20 +3,12 @@ import {StyleSheet, View, FlatList} from 'react-native';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
-import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import firestore from '@react-native-firebase/firestore';
 
 export const PaymentCardsContext = React.createContext();
 
 const PaymentCardsPage = ({navigation}) => {
   const [cards, setCards] = useState();
-  const setVisible = useContext(VisibleContext);
-  const [brand, setBrand] = useState();
-  const [expiryMonth, setExpiryMonth] = useState();
-  const [expiryYear, setExpiryYear] = useState();
-  const [isDefault, setIsDefault] = useState();
-  const [last4, setLast4] = useState();
-  const [postalCode, setPostalCode] = useState();
   const [defaultCard, setDefaultCard] = useState(null);
 
   /*
@@ -26,6 +18,10 @@ const PaymentCardsPage = ({navigation}) => {
     return localCards.sort(function (x, y) {
       return x.isDefault === y.isDefault ? 0 : x.isDefault ? -1 : 1;
     });
+  }
+
+  function assignNewDefualt(){
+    console.log(defaultCard);
   }
 
   function goToAddNewCard() {
@@ -70,6 +66,7 @@ const PaymentCardsPage = ({navigation}) => {
                 card={item}
                 setDefault={setDefaultCard}
                 defaultCard={defaultCard}
+                assignNewDefault={assignNewDefualt}
               />
             )}
             style={styles.list}
