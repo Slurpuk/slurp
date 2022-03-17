@@ -1,41 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Pressable, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {collection, getDocs} from 'firebase/firestore';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 
-const PaymentCard = ({card, setDefault, defaultCard}) => {
-  const [isChanged, setIsChanged] = useState(false)
+const PaymentCard = ({card, setDefault, defaultCard, assignNewDefault}) => {
+  const [isChanged, setIsChanged] = useState(false);
+
   function deleteCard() {
+    if (card.isDefault) {
+      assignNewDefault();
+    }
     firestore()
       .collection('Cards')
       .doc(card.key)
       .delete()
       .then(r => console.log('card deleted'));
   }
-  // const querySnapshot = await getDocs(collection(db, 'Cards'));
-  // querySnapshot.forEach(doc => {
-  //   if (doc._data.isDefault && doc.id !== card.key) {
-  //     firebase
-  //       .firestore()
-  //       .collection('Cards')
-  //       .doc(doc.id)
-  //       .update({isDefault: false})
-  //       .then(() =>
-  //         firebase
-  //           .firestore()
-  //           .collection('Cards')
-  //           .doc(card.key)
-  //           .update({isDefault: true})
-  //           .then(() => console.log('Te quiero!')),
-  //       );
-  //   }
-  // });
 
-  async function setCardAsDefault(){
+  async function setCardAsDefault() {
     console.log(defaultCard);
-    if (defaultCard){
+    if (defaultCard) {
       await firestore()
         .collection('Cards')
         .doc(defaultCard.key)
@@ -44,52 +29,25 @@ const PaymentCard = ({card, setDefault, defaultCard}) => {
           setIsChanged(true);
           console.log('old card is now secondary');
         });
-    }
-    else{
+    } else {
       setDefault(card);
       setIsChanged(true);
     }
   }
 
-  useEffect(  () => {
-    async function update(){
+  useEffect(() => {
+    async function update() {
       await firestore()
         .collection('Cards')
         .doc(card.key)
         .update({isDefault: true})
         .then(r => console.log('new card is default'));
     }
-    if(isChanged){
+    if (isChanged) {
       update();
       setIsChanged(false);
     }
-  }, [isChanged])
-
-  // async function setAsDefault() {
-  //   await firestore()
-  //     .collection('Cards')
-  //     .onSnapshot(querySnapshot => {
-  //       querySnapshot.forEach(async documentSnapshot => {
-  //         if (
-  //           documentSnapshot._data.isDefault &&
-  //           documentSnapshot.id !== card.key
-  //         ) {
-  //           await firestore()
-  //             .collection('Cards')
-  //             .doc(documentSnapshot.id)
-  //             .update({isDefault: false})
-  //             .then(
-  //               async () =>
-  //                 await firestore()
-  //                   .collection('Cards')
-  //                   .doc(card.key)
-  //                   .update({isDefault: true})
-  //                   .then(() => console.log('Te quiero!')),
-  //             );
-  //         }
-  //       });
-  //     });
-  // }
+  }, [isChanged]);
 
   return (
     <View style={styles.rectangle}>
