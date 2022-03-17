@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -20,12 +20,11 @@ import FormField from '../sub-components/FormField';
 import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
-
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
+import firestore from '@react-native-firebase/firestore';
+import {GlobalContext} from '../../App';
 
 const SignUpPage = ({navigation}) => {
-  // const usersCollection = firestore().collection('Users');
+  const globalContext = useContext(GlobalContext);
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -80,28 +79,44 @@ const SignUpPage = ({navigation}) => {
   };
 
   // Register the user to the database after checking their credentials
-  const registerUser = () => {
-    if (password == password_confirmation) {
-      auth()
+  async function registerUser() {
+    if (password === password_confirmation) {
+      await auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(re => {
-          console.log(re);
-          console.log(x);
-        })
-        .catch(re => {
-          console.log(re);
+        .then(() => {
+          let newUser = auth().currentUser;
+          addUser(newUser);
+          registeredMessage();
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
             warningUserAlreadyExists();
           }
+        })
+        .catch(re => {
+          console.log(re);
         });
-      registeredMessage();
     } else {
       warningPassword();
       resetFLEFields();
     }
-  };
+  }
+
+  async function addUser(user) {
+    await firestore()
+      .collection('Users')
+      .add({
+        Email: email,
+        FirstName: first_name,
+        LastName: last_name,
+        authID: user.uid,
+        Basket: [],
+        TotalPrice: 0,
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
   return (
     <View style={styles.wrapper}>
