@@ -10,14 +10,12 @@ import {GlobalContext} from '../../../App';
 
 const Tab = createMaterialTopTabNavigator();
 
-export const MenuContext = React.createContext();
 const Menu = ({navigation}) => {
-  const [numItems, setNumItems] = useState(0);
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
 
   return (
-    <MenuContext.Provider value={{setNumItems: setNumItems}}>
+    <>
       <Tab.Navigator
         style={styles.navigatorContent}
         screenOptions={{
@@ -50,6 +48,7 @@ const Menu = ({navigation}) => {
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
+              columnWrapperStyle={styles.row}
               contentContainerStyle={styles.content}
             />
           )}
@@ -62,6 +61,7 @@ const Menu = ({navigation}) => {
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
+              columnWrapperStyle={styles.row}
               contentContainerStyle={styles.content}
             />
           )}
@@ -74,6 +74,7 @@ const Menu = ({navigation}) => {
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
+              columnWrapperStyle={styles.row}
               contentContainerStyle={styles.content}
             />
           )}
@@ -93,7 +94,7 @@ const Menu = ({navigation}) => {
           />
         </LinearGradient>
       </View>
-    </MenuContext.Provider>
+    </>
   );
 };
 
@@ -105,6 +106,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20,
+  },
+
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   absoluteArea: {
@@ -141,8 +147,7 @@ const styles = StyleSheet.create({
 
   content: {
     flexGrow: 1,
-    alignItems: 'flex-start',
-    marginLeft: '1.5%',
+    marginHorizontal: '5%',
     paddingBottom: '15%',
   },
 

@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import renderers from '../renderers';
 
 import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
-import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
 import DraggableShopPage from '../components/Shops/DraggableShopPage';
 import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
 import {GlobalContext} from '../../App';
+import firestore from '@react-native-firebase/firestore';
 
 export const ShopContext = React.createContext();
 const ShopPage = ({navigation}) => {
@@ -15,11 +15,7 @@ const ShopPage = ({navigation}) => {
   const shop = context.currShop;
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [currItem, setCurrItem] = useState(null);
-  const [menuData, setMenuData] = useState(null);
-
-  useEffect(() => {
-    setMenuData(filterData());
-  }, [context.currShop]);
+  const [options, setOptions] = useState([]);
 
   function filterData() {
     let data = [
@@ -44,6 +40,47 @@ const ShopPage = ({navigation}) => {
     return filterData()[2].list;
   }
 
+  // Retrieves the options data from firebase
+  async function getOptions() {
+    let initial = [
+      {title: 'Select Milk', data: []},
+      {title: 'Add Syrup', data: []},
+    ];
+    let dairy;
+    await firestore()
+      .collection('Options')
+      .get()
+      .then(querySnapShot => {
+        querySnapShot.forEach(documentSnapshot => {
+          let option = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          };
+          let index = 0;
+          option.Type === 'Syrup' ? (index = 1) : (index = 0);
+          if (option.Name === 'Dairy') {
+            dairy = option;
+          } else {
+            initial[index].data.push(option);
+          }
+        });
+        initial[1].data.sort((a, b) => a.Name.localeCompare(b.Name));
+        initial[0].data.sort((a, b) => a.Name.localeCompare(b.Name));
+        initial[0].data.unshift(dairy);
+        setOptions(initial);
+      });
+  }
+
+  // Get the options on first render.
+  useEffect(() => {
+    getOptions();
+  }, []);
+
+  function getDefaultMilk() {
+    let def = options[0].data.find(el => el.Name === 'Dairy');
+    return def;
+  }
+
   return (
     <ShopContext.Provider
       value={{
@@ -56,6 +93,7 @@ const ShopPage = ({navigation}) => {
         getCoffees: getCoffees,
         getSnacks: getSnacks,
         getDrinks: getDrinks,
+        getDefault: getDefaultMilk,
         isFullScreen: context.isFullScreen,
         setFullScreen: context.setFullScreen,
       }}
@@ -79,7 +117,7 @@ const ShopPage = ({navigation}) => {
       </TouchableWithoutFeedback>
       {optionsVisible ? (
         <OptionsPopUp
-          data={CoffeeOptionsData}
+          data={options}
           item={currItem}
           renderer={renderers.renderOption}
         />

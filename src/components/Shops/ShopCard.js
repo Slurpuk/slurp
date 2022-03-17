@@ -19,7 +19,6 @@ const ShopCard = ({shop, navigation}) => {
     context.setCurrShop({shop, navigation});
   };
 
-
   return !shop.IsOpen ? (
     <ImageBackground
       style={styles.item}
