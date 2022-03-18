@@ -13,50 +13,7 @@ import {GlobalContext} from '../../../App';
 
 export default function AddNewCardComponent({navigation}) {
   const [card, setCard] = useState(CardFieldInput.Details | null);
-  const {confirmPayment} = useStripe();
-  const API_URL = 'http://localhost:8000';
-  const {initPaymentSheet, presentPaymentSheet} = useStripe();
-  const [loading, setLoading] = useState(false);
   const globalContext = useContext(GlobalContext);
-
-  //const user = firebase.auth().currentUser;
-
-  const fetchPaymentSheetParams = async () => {
-    const response = await fetch(`${API_URL}/checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const {paymentIntent, ephemeralKey, customer} = await response.json();
-    return {
-      paymentIntent,
-      ephemeralKey,
-      customer,
-    };
-  };
-
-  const initializePaymentSheet = async () => {
-    const {paymentIntent, ephemeralKey, customer} =
-      await fetchPaymentSheetParams();
-    const {error} = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-    });
-    if (!error) {
-      setLoading(true);
-    }
-  };
-
-  const openPaymentSheet = async () => {
-    const {error} = await presentPaymentSheet({clientSecret});
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
-    } else {
-      Alert.alert('Success', 'Your order is confirmed!');
-    }
-  };
 
   const saveCard = () => {
     if (card.complete) {
@@ -79,9 +36,6 @@ export default function AddNewCardComponent({navigation}) {
     }
   };
 
-  useEffect(() => {
-    initializePaymentSheet();
-  }, []);
 
   return (
     <View style={styles.container}>
