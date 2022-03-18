@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 import {
   CardField,
@@ -9,6 +9,7 @@ import GreenHeader from '../../sub-components/GreenHeader';
 import firestore from '@react-native-firebase/firestore';
 import firebase from '@react-native-firebase/app';
 import CustomButton from '../../sub-components/CustomButton';
+import {GlobalContext} from '../../../App';
 
 export default function AddNewCardComponent({navigation}) {
   const [card, setCard] = useState(CardFieldInput.Details | null);
@@ -16,6 +17,8 @@ export default function AddNewCardComponent({navigation}) {
   const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
+  const globalContext = useContext(GlobalContext);
+
   //const user = firebase.auth().currentUser;
 
   const fetchPaymentSheetParams = async () => {
@@ -66,10 +69,11 @@ export default function AddNewCardComponent({navigation}) {
           expiryYear: card.expiryYear,
           last4: card.last4,
           postalCode: card.postalCode,
-          userID: 'user.userID', //Must be the current users id
+          userID: globalContext.currentUser.uid, //Must be the current users id
         })
         .then(() => {
           console.log('Card added!');
+          Alert.alert('Success', 'Your card has been added!');
         });
     } else {
     }

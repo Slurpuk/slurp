@@ -225,6 +225,7 @@ export default function App() {
       value={{
         enterApp: enterApp,
         user: currentUser, // Returns the authentication object
+        userRef: userRef, //Returns the reference to the User object
         currShop: currShop,
         setCurrShop: changeShop,
         isShopIntro: isShopIntro,
