@@ -1,7 +1,9 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
+import HamburgerSlideBarNavigator, {
+  VisibleContext,
+} from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
 import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
@@ -9,7 +11,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
-import {Alert} from 'react-native';
+import {Alert, Animated} from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 export const GlobalContext = React.createContext();
@@ -26,6 +28,13 @@ export default function App() {
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
+  const [markers, setMarkers] = useState([]);
+  const [currentCenterLocation, setCurrentCenterLocation] = useState({
+    latitude: 51.5140310233705,
+    longitude: -0.1164075624320158,
+  });
+
+  const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
   const checkForFirstTime = async () => {
     const result = await AsyncStorage.getItem('isFirstTime');
@@ -70,6 +79,12 @@ export default function App() {
     clearBasket();
     setCurrShop(shop);
     navigation.navigate('Shop page');
+  }
+
+  function switchNewShop({shop}) {
+    setBasketContent([]);
+    setBasketSize(0);
+    setCurrShop(shop);
   }
 
   useEffect(() => {
@@ -122,6 +137,31 @@ export default function App() {
     }
   }
 
+  function switchShop(shop) {
+    if (currShop !== shop && basketSize !== 0) {
+      Alert.alert(
+        'Are you sure ?',
+        'Changing shops will clear your basket.',
+        [
+          {
+            text: 'Yes',
+            onPress: () => switchNewShop({shop}),
+          },
+          {
+            text: 'No',
+            onPress: () => setIsShopIntro(true),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      setCurrShop(shop);
+      if (!isShopIntro) setIsShopIntro(true);
+    }
+
+  }
+
   // Subscribe to the Shops model
   useEffect(() => {
     const subscriber = firestore()
@@ -164,6 +204,18 @@ export default function App() {
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
+          let mark = markers;
+          mark.push({
+            name: shopData.Name,
+            description: shopData.Intro,
+            coords: {
+              latitude: shopData.Location._latitude,
+              longitude: shopData.Location._longitude,
+            },
+            image: shopData.Image,
+            isOpen: shopData.IsOpen,
+          });
+          setMarkers(mark);
         });
       });
 
@@ -215,8 +267,8 @@ export default function App() {
     setBasketSize(basketSize - 1);
   }
 
-  const setShopIntro = () => {
-    setIsShopIntro(!isShopIntro);
+  const setShopIntro = shown => {
+    setIsShopIntro(shown);
   };
 
   const Stack = createNativeStackNavigator();
@@ -239,6 +291,11 @@ export default function App() {
         addToBasket: addToBasket,
         removeFromBasket: removeFromBasket,
         basketSize: basketSize,
+        switchShop: switchShop,
+        currentCenterLocation: currentCenterLocation,
+        setCurrentCenterLocation: setCurrentCenterLocation,
+        adaptiveOpacity: adaptiveOpacity,
+        markers: markers,
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
         userRef: userRef,
@@ -251,8 +308,7 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-            }}
-          >
+            }}>
             {isFirstTime ? (
               <Stack.Screen name="Welcome" component={WelcomePages} />
             ) : null}

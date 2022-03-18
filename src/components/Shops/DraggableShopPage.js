@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopIntro from './ShopIntro';
@@ -7,9 +7,8 @@ import {ShopContext} from '../../screens/ShopPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 
 export const DraggableContext = React.createContext();
-const DraggableShopPage = ({shop, navigation}) => {
+const DraggableShopPage = ({shop, navigation, sheetRef}) => {
   const setHamburgerVisible = useContext(VisibleContext);
-  const bottomSheetRef = useRef(null);
   const context = useContext(ShopContext);
 
   function updatePage({index}) {
@@ -25,9 +24,9 @@ const DraggableShopPage = ({shop, navigation}) => {
   }
 
   return (
-    <DraggableContext.Provider value={{bottomSheetRef: bottomSheetRef.current}}>
+    <DraggableContext.Provider value={{bottomSheetRef: sheetRef}}>
       <ScrollBottomSheet
-        ref={bottomSheetRef}
+        ref={sheetRef}
         componentType="FlatList"
         snapPoints={['0%', '70%', '100%']}
         onSettle={index => updatePage({index})}
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
+    opacity: 0,
   },
 });
 
