@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useRef, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -29,6 +29,8 @@ export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
 
+  const bottomSheetRef = useRef(null);
+
   useFocusEffect(
     React.useCallback(() => {
       setHamburgerVisible(true);
@@ -43,13 +45,12 @@ export default function LandingMapPage({navigation}) {
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground />
+        <MapBackground sheetRef={bottomSheetRef}/>
         <CustomSearchBar navigation={navigation} />
-        {/*<Button title={'Switch bottom sheet'} onPress={context.setShopIntro} />*/}
       </View>
 
       {context.isShopIntro ? (
-        <ShopPage navigation={navigation} />
+        <ShopPage navigation={navigation} sheetRef={bottomSheetRef} />
       ) : (
         <DraggableShopList navigation={navigation} />
       )}
