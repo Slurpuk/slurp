@@ -1,16 +1,12 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
 
 import {
-  Alert,
   Dimensions,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   View,
   PermissionsAndroid,
-  Animated,
-  Image,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
@@ -18,6 +14,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
+import firestore from '@react-native-firebase/firestore';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -143,6 +140,10 @@ export default function MapBackground({sheetRef}) {
           longitudeDelta: prevState.longitudeDelta,
         }));
         context.setCurrentCenterLocation({
+          latitude: latitude,
+          longitude: longitude,
+        });
+        firestore().collection('Users').doc(context.userRef).update({
           latitude: latitude,
           longitude: longitude,
         });

@@ -3,7 +3,6 @@ import {StyleSheet, View, FlatList, Text, SectionList} from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
 import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import firestore from '@react-native-firebase/firestore';
 import {GlobalContext} from '../../App';
@@ -57,9 +56,9 @@ const OrderPage = ({navigation}) => {
           } else {
             currentOrdersLocal.push(firebaseOrder);
           }
+        });
           fsetCurrentOrders(currentOrdersLocal);
           fsetPastOrders(pastOrdersLocal);
-        });
       });
 
     return () => fetchData();
@@ -91,6 +90,34 @@ const OrderPage = ({navigation}) => {
         if (item.Type === 'Coffee') {
           await firestore()
             .collection('Coffees')
+            .doc(item.ItemRef)
+            .get()
+            .then(doc => {
+              newItem = {
+                ...doc.data(),
+                type: item.Type,
+                key: doc.id,
+                quantity: item.Quantity,
+              };
+              newItems.push(newItem);
+            });
+        } else if (item.Type === 'Drink') {
+          await firestore()
+            .collection('Drinks')
+            .doc(item.ItemRef)
+            .get()
+            .then(doc => {
+              newItem = {
+                ...doc.data(),
+                type: item.Type,
+                key: doc.id,
+                quantity: item.Quantity,
+              };
+              newItems.push(newItem);
+            });
+        } else if (item.Type === 'Snack') {
+          await firestore()
+            .collection('Snacks')
             .doc(item.ItemRef)
             .get()
             .then(doc => {

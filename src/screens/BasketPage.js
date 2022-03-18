@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 
 import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
@@ -11,68 +11,44 @@ import {GlobalContext} from '../../App';
 
 const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
-  const [Items] = useState([
-    {
-      key: 1,
-      name: 'Latte',
-      amount: 0,
-      price: '2.40',
-      specifications: ['Oat Milk'],
-    },
-    {
-      key: 2,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 3,
-      name: 'Americano',
-      amount: 0,
-      price: '2.10',
-      specifications: [],
-    },
-    {
-      key: 4,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 5,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-  ]);
 
   async function confirmOrder() {
     await firestore()
-      .collection('FakeOrder')
+      .collection('Orders')
       .add({
-        customerName: 'Shaun the sheep',
-        status: 'incoming',
-        total: context.total.toFixed(2),
-        items: Items.filter(item => item.amount !== 0),
-        key: 3,
+        DateTime: new Date(),
+        Items: formatBasket(),
+        Status: 'incoming',
+        ShopID: context.currShop.key,
+        UserID: context.userRef,
+        Total: Number(context.total.toPrecision(2)),
       })
       .then(() => {
         console.log('Order added!');
         context.clearBasket();
+        Alert.alert(
+          'Order received.',
+          'Your order has been sent to the shop! Awaiting response.',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Order history'),
+            },
+          ],
+        );
       });
-    Alert.alert(
-      'Order received.',
-      'Your order has been sent to the shop! Awaiting response.',
-      [
-        {
-          text: 'OK',
-        },
-      ],
-    );
-    navigation.navigate('Order history');
+  }
+
+  function formatBasket() {
+    let items = context.basketContent.map(item => {
+      return {
+        ItemRef: item.key,
+        Quantity: item.count,
+        Price: Number(item.Price.toPrecision(2)),
+        Type: item.type,
+      };
+    });
+    return items;
   }
 
   return (
@@ -91,18 +67,14 @@ const BasketPage = ({navigation}) => {
       </View>
       <TouchableOpacity onPress={confirmOrder} style={styles.buttons}>
         <CustomButton
-          priority="primary"
-          style={styles.button}
+          priority={'primary'}
           text={'Apple/Google Pay'}
+          onPress={confirmOrder}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={confirmOrder}
-        style={[styles.lastButton, styles.buttons]}
-      >
+      </View>
+      <View style={[styles.lastButton, styles.buttons]}>
         <CustomButton
-          priority="primary"
-          style={styles.button}
+          priority={'primary'}
           text={'Checkout with card'}
         />
       </TouchableOpacity>

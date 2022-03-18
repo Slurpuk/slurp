@@ -181,7 +181,7 @@ export default function App() {
           documentSnapshot.data().ItemsOffered.forEach(itemRef => {
             firestore()
               .doc(itemRef.path)
-              .onSnapshot(querySnapshot => {
+              .onSnapshot(query => {
                 let collection = '';
                 if (itemRef.path.includes('Coffees')) {
                   collection = coffees;
@@ -191,8 +191,8 @@ export default function App() {
                   collection = snacks;
                 }
                 collection.push({
-                  ...querySnapshot.data(),
-                  key: querySnapshot.id,
+                  ...query.data(),
+                  key: query.id,
                 });
               });
           });
@@ -238,6 +238,16 @@ export default function App() {
   function addToBasket(item) {
     const basket = basketContent;
     const exist = basket.find(x => isSameItem(x, item));
+    let type;
+    if (item.hasOwnProperty('Bean')){
+      type = 'Coffee';
+    } else if (
+      currShop.ItemsOffered.Drinks.filter(x => x.Name === item.Name).length !== 0
+    ) {
+      type = 'Drink';
+    } else {
+      type = 'Snack';
+    }
     if (exist) {
       setBasketContent(
         basket.map(x =>
@@ -245,7 +255,7 @@ export default function App() {
         ),
       );
     } else {
-      setBasketContent([...basket, {...item, count: 1}]);
+      setBasketContent([...basket, {...item, count: 1, type: type}]);
     }
     setTotal(total + item.Price);
     setBasketSize(basketSize + 1);
