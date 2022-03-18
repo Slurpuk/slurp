@@ -65,7 +65,7 @@ export default function App() {
     AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
   };
 
-  function clearBasket(){
+  function clearBasket() {
     setBasketContent([]);
     setBasketSize(0);
     setTotal(0);
@@ -127,6 +127,9 @@ export default function App() {
       );
     } else {
       setCurrShop(shop);
+      if (!isShopIntro) {
+        setIsShopIntro(true);
+      }
     }
   }
 
@@ -264,7 +267,7 @@ export default function App() {
         setCurrentCenterLocation: setCurrentCenterLocation,
         adaptiveOpacity: adaptiveOpacity,
         markers: markers,
-          clearBasket: clearBasket,
+        clearBasket: clearBasket,
       }}>
       <NavigationContainer>
         {isLoggedIn ? (

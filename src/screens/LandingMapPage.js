@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {createContext, useContext, useRef, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -6,7 +6,8 @@ import {
   Button,
   LogBox,
   TextInput,
-  StatusBar, Text,
+  StatusBar,
+  Text, Pressable,
 } from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from '@react-native-firebase/firestore';
@@ -25,9 +26,13 @@ LogBox.ignoreLogs([
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
+export const searchBarContext = React.createContext(false);
+
 export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
+
+  const [searchBarFocused, setSearchBarFocused] = useState(false);
 
   const bottomSheetRef = useRef(null);
 
@@ -45,8 +50,16 @@ export default function LandingMapPage({navigation}) {
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground sheetRef={bottomSheetRef}/>
-        <CustomSearchBar navigation={navigation} />
+        <MapBackground
+          sheetRef={bottomSheetRef}
+          searchBarFocused={searchBarFocused}
+          setSearchBarFocussed={setSearchBarFocused}
+        />
+        <CustomSearchBar
+          navigation={navigation}
+          searchBarFocused={searchBarFocused}
+          setSearchBarFocussed={setSearchBarFocused}
+        />
       </View>
 
       {context.isShopIntro ? (
@@ -79,7 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 18,
   },
-  inputContainerStyle:{
+  inputContainerStyle: {
     backgroundColor: 'yellow',
-  }
+  },
 });

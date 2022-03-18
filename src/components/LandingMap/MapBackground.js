@@ -18,10 +18,15 @@ import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
+import pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export default function MapBackground({sheetRef}) {
+export default function MapBackground({
+  sheetRef,
+  searchBarFocused,
+  setSearchBarFocussed,
+}) {
   const context = useContext(GlobalContext);
   let watchID;
   const [mapCenter, setMapCenter] = useState({
@@ -129,6 +134,11 @@ export default function MapBackground({sheetRef}) {
     );
   };
 
+  const mapPressed = () => {
+    setSearchBarFocussed(false);
+    console.log('peekaboo', searchBarFocused);
+  };
+
   const subscribeLocationLocation = () => {
     watchID = Geolocation.watchPosition(
       position => {
@@ -177,7 +187,9 @@ export default function MapBackground({sheetRef}) {
               }
             }}>
             <View style={styles.markerStyle}>
-              <Text style={{color: 'red', fontWeight: 'bold'}}>{!marker.isOpen ? 'Closed': ''}</Text>
+              <Text style={{color: 'red', fontWeight: 'bold'}}>
+                {!marker.isOpen ? 'Closed' : ''}
+              </Text>
               <CustomMapIcon isOpen={marker.isOpen} />
             </View>
           </Marker>
@@ -193,6 +205,7 @@ const styles = StyleSheet.create({
     height: screenHeight,
     width: screenWidth,
     justifyContent: 'flex-end',
+    zIndex: -3,
   },
   map: {
     ...StyleSheet.absoluteFillObject,
