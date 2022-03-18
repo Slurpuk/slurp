@@ -27,6 +27,7 @@ export default function App() {
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
 
+
   const checkForFirstTime = async () => {
     const result = await AsyncStorage.getItem('isFirstTime');
     //if what we get from the Async is null we are opening the app for the first time
@@ -218,6 +219,10 @@ export default function App() {
   const setShopIntro = () => {
     setIsShopIntro(!isShopIntro);
   };
+
+  console.log("current user: "+currentUser);
+  console.log("user ref: "+userRef);
+  console.log("user obj: "+userObj);
 
   const Stack = createNativeStackNavigator();
   return (

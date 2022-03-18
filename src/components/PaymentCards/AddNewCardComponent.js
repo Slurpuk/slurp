@@ -69,7 +69,7 @@ export default function AddNewCardComponent({navigation}) {
           expiryYear: card.expiryYear,
           last4: card.last4,
           postalCode: card.postalCode,
-          userID: globalContext.currentUser.uid, //Must be the current users id
+          userID: globalContext.userRef, //Must be the current users id
         })
         .then(() => {
           console.log('Card added!');

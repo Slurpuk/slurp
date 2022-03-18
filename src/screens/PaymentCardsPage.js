@@ -5,6 +5,7 @@ import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import firestore from '@react-native-firebase/firestore';
+import {GlobalContext} from "../../App";
 
 export const PaymentCardsContext = React.createContext();
 
@@ -18,6 +19,7 @@ const PaymentCardsPage = ({navigation}) => {
   const [last4, setLast4] = useState();
   const [postalCode, setPostalCode] = useState();
   const [defaultCard, setDefaultCard] = useState(null);
+  const globalContext = useContext(GlobalContext);
 
   /*
   Function to order the cards to have the default card first.
@@ -35,6 +37,7 @@ const PaymentCardsPage = ({navigation}) => {
   useEffect(() => {
     const subscriber = firestore()
       .collection('Cards')
+      .where('userID', '==', globalContext.userRef)
       .onSnapshot(querySnapshot => {
         const cards = [];
         querySnapshot.forEach(documentSnapshot => {
