@@ -24,7 +24,6 @@ const BasketPage = ({navigation}) => {
         Total: Number(context.total.toPrecision(2)),
       })
       .then(() => {
-        console.log('Order added!');
         context.clearBasket();
         Alert.alert(
           'Order received.',
@@ -65,7 +64,7 @@ const BasketPage = ({navigation}) => {
         <Text style={styles.total_text}>TOTAL</Text>
         <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
       </View>
-      <TouchableOpacity onPress={confirmOrder} style={styles.buttons}>
+      <View style={styles.buttons}>
         <CustomButton
           priority={'primary'}
           text={'Apple/Google Pay'}
@@ -76,8 +75,9 @@ const BasketPage = ({navigation}) => {
         <CustomButton
           priority={'primary'}
           text={'Checkout with card'}
+          onPress={confirmOrder}
         />
-      </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -104,9 +104,6 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  button: {
-    flex: 1,
   },
 
   lastButton: {
