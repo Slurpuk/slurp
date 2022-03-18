@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import HamburgerSlideBarNavigator, {
   VisibleContext,
@@ -11,13 +11,16 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
-import {Alert} from 'react-native';
+import {Alert, Animated} from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 export const GlobalContext = React.createContext();
 export default function App() {
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
+  const [currentUser, setCurrentUser] = useState(auth().currentUser);
+  const [userRef, setUserRef] = useState(null);
+  const [userObj, setUserObj] = useState(null);
   const [shopsData, setShopsData] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [currShop, setCurrShop] = useState(shopsData[0]);
@@ -25,6 +28,13 @@ export default function App() {
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
+  const [markers, setMarkers] = useState([]);
+  const [currentCenterLocation, setCurrentCenterLocation] = useState({
+    latitude: 51.5140310233705,
+    longitude: -0.1164075624320158,
+  });
+
+  const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
   const checkForFirstTime = async () => {
     const result = await AsyncStorage.getItem('isFirstTime');
@@ -44,6 +54,7 @@ export default function App() {
       if (user) {
         setIsLoggedIn(true);
         setCurrentUser(user);
+        setUser();
       } else {
         setIsLoggedIn(false);
         setCurrentUser(null);
@@ -58,7 +69,7 @@ export default function App() {
     AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
   };
 
-  function clearBasket(){
+  function clearBasket() {
     setBasketContent([]);
     setBasketSize(0);
     setTotal(0);
@@ -68,6 +79,38 @@ export default function App() {
     clearBasket();
     setCurrShop(shop);
     navigation.navigate('Shop page');
+  }
+
+  function switchNewShop({shop}) {
+    setBasketContent([]);
+    setBasketSize(0);
+    setCurrShop(shop);
+  }
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Users')
+      .doc(userRef)
+      .onSnapshot(documentSnapshot => {
+        setUserObj(documentSnapshot.data());
+      });
+
+    // Stop listening for updates when no longer required
+    return () => subscriber();
+  }, [userRef]);
+
+  async function setUser() {
+    if (currentUser) {
+      await firestore()
+        .collection('Users')
+        .where('authID', '==', currentUser.uid)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(documentSnapshot => {
+            setUserRef(documentSnapshot.id);
+          });
+        });
+    }
   }
 
   function changeShop({shop, navigation}) {
@@ -92,6 +135,31 @@ export default function App() {
       setCurrShop(shop);
       navigation.navigate('Shop page');
     }
+  }
+
+  function switchShop(shop) {
+    if (currShop !== shop && basketSize !== 0) {
+      Alert.alert(
+        'Are you sure ?',
+        'Changing shops will clear your basket.',
+        [
+          {
+            text: 'Yes',
+            onPress: () => switchNewShop({shop}),
+          },
+          {
+            text: 'No',
+            onPress: () => setIsShopIntro(true),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      setCurrShop(shop);
+      if (!isShopIntro) setIsShopIntro(true);
+    }
+
   }
 
   // Subscribe to the Shops model
@@ -136,6 +204,18 @@ export default function App() {
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
+          let mark = markers;
+          mark.push({
+            name: shopData.Name,
+            description: shopData.Intro,
+            coords: {
+              latitude: shopData.Location._latitude,
+              longitude: shopData.Location._longitude,
+            },
+            image: shopData.Image,
+            isOpen: shopData.IsOpen,
+          });
+          setMarkers(mark);
         });
       });
 
@@ -187,8 +267,8 @@ export default function App() {
     setBasketSize(basketSize - 1);
   }
 
-  const setShopIntro = () => {
-    setIsShopIntro(!isShopIntro);
+  const setShopIntro = shown => {
+    setIsShopIntro(shown);
   };
 
   const Stack = createNativeStackNavigator();
@@ -196,7 +276,7 @@ export default function App() {
     <GlobalContext.Provider
       value={{
         enterApp: enterApp,
-        user: currentUser,
+        user: currentUser, // Returns the authentication object
         currShop: currShop,
         setCurrShop: changeShop,
         isShopIntro: isShopIntro,
@@ -211,7 +291,14 @@ export default function App() {
         addToBasket: addToBasket,
         removeFromBasket: removeFromBasket,
         basketSize: basketSize,
+        switchShop: switchShop,
+        currentCenterLocation: currentCenterLocation,
+        setCurrentCenterLocation: setCurrentCenterLocation,
+        adaptiveOpacity: adaptiveOpacity,
+        markers: markers,
         clearBasket: clearBasket,
+        currentUser: userObj, // Returns the model object
+        userRef: userRef,
       }}
     >
       <NavigationContainer>
@@ -221,8 +308,7 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-            }}
-          >
+            }}>
             {isFirstTime ? (
               <Stack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
