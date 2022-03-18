@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 import FormField from '../sub-components/FormField';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
 import firebase from '@react-native-firebase/app';
-import { GlobalContext } from "../../App";
+import {GlobalContext} from '../../App';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const UpdateDetailsPage = ({navigation}) => {
   const [first_name, setFirstName] = useState();
@@ -13,31 +15,15 @@ const UpdateDetailsPage = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const context = useContext(GlobalContext);
+  const currentUser = context.currentUser;
+  const user = context.user;
+
   const resetFields = () => {
     setFirstName('');
     setLastName('');
     setEmail('');
     setPassword('');
   };
-
-  useEffect(() => {
-    firebase
-      .firestore()
-      .collection('Users')
-      .doc(context.use)
-      .get()
-      .then(function (doc) {
-        if (doc.exists) {
-          setUserDoc(doc.data());
-          console.log(userDoc);
-        } else {
-          console.log('No such document!');
-        }
-      })
-      .catch(function (error) {
-        console.log('Error getting document:', error);
-      });
-  }, []);
 
   function changeDetailsConfirm() {
     Alert.alert('Done.', 'Your details have been updated.', [
@@ -58,14 +44,16 @@ const UpdateDetailsPage = ({navigation}) => {
         },
       ],
     );
-    resetFields();
   }
 
-  function reauthenticate() {
-    let user = firebase.auth().currentUser;
-    let cred = firebase.auth.EmailAuthProvider.credential(email, password);
-    return user.reauthenticateWithCredential(cred);
-  }
+  const invalidMessage = error => {
+    Alert.alert('Invalid', 'Please enter your blah blah correctly', [
+      {
+        text: 'OK',
+      },
+    ]);
+  };
+
 
   //Update user details in the database
   function changeUserDetails() {
@@ -73,17 +61,21 @@ const UpdateDetailsPage = ({navigation}) => {
       FirstName: first_name,
       LastName: last_name,
     };
-    reauthenticate()
+    auth()
+      .signInWithEmailAndPassword(email, password)
       .then(() => {
-        firebase
-          .firestore()
+        console.log('Lol');
+        firestore()
           .collection('Users')
-          .doc(firebase.auth().currentUser.uid)
+          .doc(context.userRef)
           .update(updated)
           .then(() => {
             changeDetailsConfirm();
             resetFields();
             navigation.goBack();
+          })
+          .catch(error => {
+            invalidMessage(error);
           });
       })
       .catch(error => {
