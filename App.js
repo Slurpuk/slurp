@@ -17,7 +17,9 @@ export const GlobalContext = React.createContext();
 export default function App() {
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
+  const [currentUser, setCurrentUser] = useState(auth().currentUser);
+  const [userRef, setUserRef] = useState(null);
+  const [userObj, setUserObj] = useState(null);
   const [shopsData, setShopsData] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [currShop, setCurrShop] = useState(shopsData[0]);
@@ -51,6 +53,7 @@ export default function App() {
       if (user) {
         setIsLoggedIn(true);
         setCurrentUser(user);
+        setUser();
       } else {
         setIsLoggedIn(false);
         setCurrentUser(null);
@@ -81,6 +84,32 @@ export default function App() {
     setBasketContent([]);
     setBasketSize(0);
     setCurrShop(shop);
+  }
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Users')
+      .doc(userRef)
+      .onSnapshot(documentSnapshot => {
+        setUserObj(documentSnapshot.data());
+      });
+
+    // Stop listening for updates when no longer required
+    return () => subscriber();
+  }, [userRef]);
+
+  async function setUser() {
+    if (currentUser) {
+      await firestore()
+        .collection('Users')
+        .where('authID', '==', currentUser.uid)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(documentSnapshot => {
+            setUserRef(documentSnapshot.id);
+          });
+        });
+    }
   }
 
   function changeShop({shop, navigation}) {
@@ -131,6 +160,7 @@ export default function App() {
         setIsShopIntro(true);
       }
     }
+
   }
 
   // Subscribe to the Shops model
@@ -247,7 +277,7 @@ export default function App() {
     <GlobalContext.Provider
       value={{
         enterApp: enterApp,
-        user: currentUser,
+        user: currentUser, // Returns the authentication object
         currShop: currShop,
         setCurrShop: changeShop,
         isShopIntro: isShopIntro,
@@ -268,6 +298,7 @@ export default function App() {
         adaptiveOpacity: adaptiveOpacity,
         markers: markers,
         clearBasket: clearBasket,
+        currentUser: userObj, // Returns the model object
       }}>
       <NavigationContainer>
         {isLoggedIn ? (

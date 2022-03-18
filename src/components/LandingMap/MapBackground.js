@@ -169,7 +169,14 @@ export default function MapBackground({
     <View style={styles.container}>
       <MapView
         onRegionChangeComplete={(region, isGesture) => {
-          if (isGesture) {
+          if (Platform.OS === 'ios') {
+            if (
+              region.latitude.toFixed(6) !== mapCenter.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !== mapCenter.longitude.toFixed(6)
+            ) {
+              setMapCenter(region);
+            }
+          } else {
             setMapCenter(region);
           }
         }}
