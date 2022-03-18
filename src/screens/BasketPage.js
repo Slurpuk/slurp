@@ -8,6 +8,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import PaymentMethodPopUp from '../components/PaymentCards/PaymentMethodPopUp';
 
 import {GlobalContext} from '../../App';
+import {BlurView} from '@react-native-community/blur';
 export const BasketContext = React.createContext();
 
 const BasketPage = ({navigation}) => {
@@ -124,6 +125,14 @@ const styles = StyleSheet.create({
   safe_header: {
     flex: 0,
     backgroundColor: '#046D66',
+  },
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderRadius: 20,
   },
   basket: {
     flex: 1,
