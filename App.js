@@ -241,6 +241,7 @@ export default function App() {
         basketSize: basketSize,
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
+        userRef: userRef,
       }}
     >
       <NavigationContainer>

@@ -6,12 +6,12 @@ import GreenHeader from '../sub-components/GreenHeader';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import firestore from '@react-native-firebase/firestore';
-import {GlobalContext} from "../../App";
+import {GlobalContext} from '../../App';
 
 const Tab = createMaterialTopTabNavigator();
 
 const OrderPage = ({navigation}) => {
-  const context = useContext(GlobalContext)
+  const context = useContext(GlobalContext);
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
   const [fpastOrders, fsetPastOrders] = useState([]);
@@ -20,7 +20,7 @@ const OrderPage = ({navigation}) => {
   useEffect(() => {
     const fetchData = firestore()
       .collection('Orders')
-      // .where('UserID', '==', context.userRef)
+      .where('UserID', '==', context.userRef)
       .onSnapshot(querySnapshot => {
         let currentOrdersLocal = [];
         let pastOrdersLocal = [];
@@ -165,29 +165,58 @@ const OrderPage = ({navigation}) => {
 };
 
 const PastOrders = props => {
+  const numOrders = props.pastOrders.length;
   return (
-    <SectionList
-      contentContainerStyle={styles.mainContainer}
-      sections={props.pastOrders}
-      stickySectionHeadersEnabled={false}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <CollapsedOrder order={item} />}
-      renderSectionHeader={({section: {period}}) => (
-        <Text style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
-          {period}
-        </Text>
+    <>
+      {numOrders !== 0 ? (
+        <SectionList
+          contentContainerStyle={styles.mainContainer}
+          sections={props.pastOrders}
+          stickySectionHeadersEnabled={false}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({item}) => <CollapsedOrder order={item} />}
+          renderSectionHeader={({section: {period}}) => (
+            <Text
+              style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
+              {period}
+            </Text>
+          )}
+        />
+      ) : (
+        <EmptyText />
       )}
-    />
+    </>
   );
 };
 
 const CurrentOrders = props => {
+  const numOrders = props.currentOrders.length;
   return (
-    <FlatList
-      contentContainerStyle={styles.mainContainer}
-      data={props.currentOrders}
-      renderItem={({item}) => <CollapsedOrder order={item} />}
-    />
+    <>
+      {numOrders !== 0 ? (
+        <FlatList
+          contentContainerStyle={styles.mainContainer}
+          data={props.currentOrders}
+          renderItem={({item}) => <CollapsedOrder order={item} />}
+        />
+      ) : (
+        <EmptyText />
+      )}
+    </>
+  );
+};
+
+const EmptyText = () => {
+  return (
+    <Text
+      style={[
+        styles.mainContainer,
+        styles.emptyText,
+        textStyles.darkGreyPoppinsSubHeading,
+      ]}>
+      Looks like you haven't made any orders yet... {'\n \n'} Head over to the
+      home page to get started!
+    </Text>
   );
 };
 
@@ -207,6 +236,12 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: '#EDEBE7',
     flexGrow: 1,
+  },
+
+  emptyText: {
+    paddingTop: '15%',
+    paddingHorizontal: '2%',
+    textAlign: 'center',
   },
 });
 
