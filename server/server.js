@@ -23,13 +23,14 @@ app.post('/checkout', async (req, res) => {
     customer: customer.id, //Must be linked to the userId
   });
 
-  // Send the object keys to the client
-  res.send({
-    publishableKey: process.env.publishable_key, // https://stripe.com/docs/keys#obtain-api-keys
-    paymentIntent: paymentIntent.client_secret,
-    customer: customer.id,
-    ephemeralKey: ephemeralKey.secret,
-  });
+    // Send the object keys to the client
+    res.send({
+      publishableKey: process.env.publishable_key, // https://stripe.com/docs/keys#obtain-api-keys
+      paymentIntent: paymentIntent.client_secret,
+      customer: customer.id,
+      ephemeralKey: ephemeralKey.secret,
+    });
+
 });
 
 app.listen(process.env.PORT, () =>

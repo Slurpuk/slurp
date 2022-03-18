@@ -28,9 +28,10 @@ const PaymentMethodPopUp = ({navigation}) => {
   const globalContext = useContext(GlobalContext);
   const basketContext = useContext(BasketContext);
   const {confirmPayment} = useStripe();
-  const API_URL = 'http://localhost:8000';
+  const API_URL = 'http://localhost:8081';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
+  const [key, setKey] = useState('');
 
   const fetchPaymentSheetParams = async () => {
     const response = await fetch(`${API_URL}/checkout`, {
@@ -102,6 +103,18 @@ const PaymentMethodPopUp = ({navigation}) => {
 
   useEffect(() => {
     getCards().then(() => console.log('Updated cards'));
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:8081/checkout', {
+      method: 'POST',
+    })
+        .then(res => res.json())
+        .then(res => {
+          console.log('intent', res);
+          setKey(res.clientSecret);
+        })
+        .catch(e => Alert.alert(e.message));
   }, []);
 
   const animation = new Animated.Value(0);
