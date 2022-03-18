@@ -45,8 +45,7 @@ const OrderPage = ({navigation}) => {
             elevation: 0,
             borderColor: '#919191',
           },
-        }}
-      >
+        }}>
         <Tab.Screen
           name="Current"
           component={CurrentOrders}

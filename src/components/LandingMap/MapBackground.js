@@ -11,6 +11,7 @@ import {
   PermissionsAndroid,
   Animated,
   Image,
+  Keyboard,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
@@ -18,7 +19,6 @@ import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
-import pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -137,6 +137,7 @@ export default function MapBackground({
   const mapPressed = () => {
     setSearchBarFocussed(false);
     console.log('peekaboo', searchBarFocused);
+    Keyboard.dismiss();
   };
 
   const subscribeLocationLocation = () => {
@@ -172,6 +173,8 @@ export default function MapBackground({
             setMapCenter(region);
           }
         }}
+        onPress={event => mapPressed()}
+        onPanDrag={event => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={mapCenter}>
@@ -185,6 +188,7 @@ export default function MapBackground({
               if (marker.isOpen) {
                 locationPress(marker.name);
               }
+              mapPressed();
             }}>
             <View style={styles.markerStyle}>
               <Text style={{color: 'red', fontWeight: 'bold'}}>
