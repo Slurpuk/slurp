@@ -9,7 +9,7 @@ app.use(express.json());
 app.post('/checkout', async (req, res) => {
   // This creates a new customer and it should be linked to the user model id.
   let customer = await stripe.customers.create(); // This example just creates a new Customer every time
-                                                  //Must be assigned to user model.
+  //Must be assigned to user model.
   // This allows the app to display saved payment methods and save new ones and must be linked to firebase
   const ephemeralKey = await stripe.ephemeralKeys.create(
     {customer: customer.id}, //There should be one more param which assigns customer id to user id in user model
@@ -35,3 +35,4 @@ app.post('/checkout', async (req, res) => {
 app.listen(process.env.PORT, () =>
   console.log(`Node server listening on port ${process.env.PORT}!`),
 );
+

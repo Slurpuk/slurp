@@ -106,15 +106,25 @@ const BasketPage = ({navigation}) => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
           onPressIn={() => setPayMethVisible(true)}
-          style={[styles.lastButton, styles.buttons]}>
+          style={[
+            styles.lastButton,
+            styles.buttons,
+          ]}>
           <CustomButton
             priority="primary"
             style={styles.button}
             text={'Checkout with card'}
           />
         </TouchableOpacity>
+        {payMethVisible ? (
+          <BlurView
+            style={styles.absolute}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="white"
+          />
+        ) : null}
         {payMethVisible ? <PaymentMethodPopUp /> : null}
       </View>
     </BasketContext.Provider>

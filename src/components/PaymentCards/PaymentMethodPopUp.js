@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
+  Alert,
   Animated,
   Dimensions,
   FlatList,
@@ -19,6 +20,7 @@ import AnimatedCard from '../../sub-components/AnimatedCard';
 import PayMethPaymentCard from './PayMethPaymentCard';
 import {GlobalContext} from '../../../App';
 import {BasketContext} from '../../screens/BasketPage';
+import {StripeProvider, useStripe} from '@stripe/stripe-react-native';
 
 const PaymentMethodPopUp = ({navigation}) => {
   const [cards, setCards] = useState([]);
@@ -77,6 +79,7 @@ const PaymentMethodPopUp = ({navigation}) => {
   async function getCards() {
     await firestore()
       .collection('Cards')
+      .where('userID', '==', globalContext.userRef)
       .get()
       .then(coll => {
         //console.log(coll._docs.map(x => x._data ));
@@ -124,54 +127,59 @@ const PaymentMethodPopUp = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={[textStyles.headingOne, styles.product_name]}>
-          PAYMENT METHOD
-        </Text>
-        <TouchableHighlight
-          style={styles.icon}
-          underlayColor={'white'}
-          onPress={() => basketContext.setPayMethVisible(false)}>
-          <Icon size={30} color="black" name="close" />
-        </TouchableHighlight>
-      </View>
-      <View style={styles.body}>
-        {cards.length !== 0 ? (
-          <FlatList
-            data={defaultCard}
-            renderItem={({item}) => (
-              <AnimatedCard
-                initialHeight={100}
-                collapsableContent={<CollapsedPayMethCard defaultCard={item} />} //this is the collapsed part
-                hidableContent={<UncollapsedPayMethCard cards={cards} />} //this is the uncollapsed part
-              />
-            )}
-            style={styles.items_list}
+    <StripeProvider publishableKey={publishableKey}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={[textStyles.headingOne, styles.product_name]}>
+            PAYMENT METHOD
+          </Text>
+          <TouchableHighlight
+            style={styles.icon}
+            underlayColor={'white'}
+            onPress={() => basketContext.setPayMethVisible(false)}>
+            <Icon size={30} color="black" name="close" />
+          </TouchableHighlight>
+        </View>
+        <View style={styles.body}>
+          {cards.length !== 0 ? (
+            <FlatList
+              data={defaultCard}
+              renderItem={({item}) => (
+                <AnimatedCard
+                  initialHeight={100}
+                  collapsableContent={
+                    <CollapsedPayMethCard defaultCard={item} />
+                  } //this is the collapsed part
+                  hidableContent={<UncollapsedPayMethCard cards={cards} />} //this is the uncollapsed part
+                />
+              )}
+              style={styles.items_list}
+            />
+          ) : (
+            <PayMethPaymentCard isFirst={true} />
+          )}
+          <Animated.View style={{transform: [{scale}], flex: 10}}>
+            <TouchableOpacity
+              style={[textStyles.smallLightGreyPoppins, styles.text]}
+              activeOpacity={1}
+              onPress={addNewCardRedirection}
+              onPressIn={onPressIn}
+              onPressOut={onPressOut}>
+              <Text style={[textStyles.smallLightGreyPoppins, styles.text]}>
+                +New Payment Card
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+          <CustomButton
+            text={`Place Order  £${globalContext.total.toFixed(2)}`}
+            priority={'primary'}
+            width={screenWidth * 0.79}
+            style={styles.button}
+            onPress={openPaymentSheet()}
           />
-        ) : (
-          <PayMethPaymentCard isFirst={true} />
-        )}
-        <Animated.View style={{transform: [{scale}], flex: 10}}>
-          <TouchableOpacity
-            style={[textStyles.smallLightGreyPoppins, styles.text]}
-            activeOpacity={1}
-            onPress={addNewCardRedirection}
-            onPressIn={onPressIn}
-            onPressOut={onPressOut}>
-            <Text style={[textStyles.smallLightGreyPoppins, styles.text]}>
-              +New Payment Card
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-        <CustomButton
-          text={`Place Order  £${globalContext.total.toFixed(2)}`}
-          priority={'primary'}
-          width={screenWidth * 0.79}
-          style={styles.button}
-        />
+        </View>
       </View>
-    </View>
+    </StripeProvider>
   );
 };
 const screenWidth = Dimensions.get('window').width;
