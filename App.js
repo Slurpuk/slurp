@@ -26,6 +26,8 @@ export default function App() {
   const [basketSize, setBasketSize] = useState(0);
   const [total, setTotal] = useState(0);
   const [markers, setMarkers] = useState([]);
+  const [orderedShops, setOrderedShops] = useState([]);
+
   const [currentCenterLocation, setCurrentCenterLocation] = useState({
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
@@ -266,6 +268,8 @@ export default function App() {
         setCurrentCenterLocation: setCurrentCenterLocation,
         adaptiveOpacity: adaptiveOpacity,
         markers: markers,
+        orderedShops : orderedShops,
+        setOrderedShops: setOrderedShops,
           clearBasket: clearBasket,
       }}>
       <NavigationContainer>

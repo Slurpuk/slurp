@@ -48,9 +48,9 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
     }
   };
 
-  const clear = () => {
-    setSearchBarIsUsed(false);
-  };
+  const clear= () => {
+      setSearchBarIsUsed(false);
+    };
 
   const selectShop = shop => {
     context.switchShop(shop);

@@ -17,6 +17,7 @@ import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
 import {SearchBar} from '../sub-components/CustomSearchBar';
 import CustomSearchBar from '../CustomSearchBar';
+import OrderedShops from "../components/LandingMap/OrderedShops";
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -24,6 +25,7 @@ LogBox.ignoreLogs([
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+
 
 export default function LandingMapPage({navigation}) {
   const setHamburgerVisible = useContext(VisibleContext);
@@ -45,6 +47,7 @@ export default function LandingMapPage({navigation}) {
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
+        {/*//<OrderedShops/>*/}
         <MapBackground sheetRef={bottomSheetRef}/>
         <CustomSearchBar navigation={navigation} />
       </View>
