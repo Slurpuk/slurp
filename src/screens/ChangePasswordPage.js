@@ -56,7 +56,7 @@ const ChangePasswordPage = ({navigation}) => {
     resetFLEFields();
   }
 
-  function reauthenticate() {
+  function reauthenticate(oldPassword) {
     let user = firebase.auth().currentUser;
     let cred = firebase.auth.EmailAuthProvider.credential(
       user.email,
@@ -67,14 +67,14 @@ const ChangePasswordPage = ({navigation}) => {
 
   function changePassword() {
     if (newPassword === passwordConfirmation) {
-      reauthenticate()
+      reauthenticate(oldPassword)
         .then(() => {
           let user = firebase.auth().currentUser;
           user
             .updatePassword(newPassword)
             .then(() => {
               successMessage();
-              navigation.navigate('Landing map');
+              navigation.goBack();
             })
             .catch(error => {
               invalidUpdateMessage();
