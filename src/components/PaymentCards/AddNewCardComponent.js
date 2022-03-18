@@ -16,6 +16,7 @@ export default function AddNewCardComponent({navigation}) {
   const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
+  //const user = firebase.auth().currentUser;
 
   const fetchPaymentSheetParams = async () => {
     const response = await fetch(`${API_URL}/checkout`, {
@@ -65,7 +66,7 @@ export default function AddNewCardComponent({navigation}) {
           expiryYear: card.expiryYear,
           last4: card.last4,
           postalCode: card.postalCode,
-          userID: 'userIDIDIDID',
+          userID: 'user.userID', //Must be the current users id
         })
         .then(() => {
           console.log('Card added!');

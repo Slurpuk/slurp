@@ -11,7 +11,8 @@ import {
   Platform,
   Pressable,
   StatusBar,
-  Alert, TouchableWithoutFeedback,
+  Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
@@ -19,16 +20,17 @@ import CustomButton from '../sub-components/CustomButton';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useFocusEffect} from '@react-navigation/native';
-import PaymentMethodPopUp from "../components/PaymentCards/PaymentMethodPopUp";
+import PaymentMethodPopUp from '../components/PaymentCards/PaymentMethodPopUp';
 
 import {ShopContext} from './ShopPage';
 import {GlobalContext} from '../../App';
-import DraggableShopPage from "../components/Shops/DraggableShopPage";
-import NonDraggableShopPage from "../components/Shops/NonDraggableShopPage";
-import {BlurView} from "@react-native-community/blur";
-import OptionsPopUp from "../components/ShopMenu/OptionsPopUp";
-import CoffeeOptionsData from "../fake-data/CoffeeOptionsData";
-import renderers from "../renderers";
+import DraggableShopPage from '../components/Shops/DraggableShopPage';
+import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
+import {BlurView} from '@react-native-community/blur';
+import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
+import CoffeeOptionsData from '../fake-data/CoffeeOptionsData';
+import renderers from '../renderers';
+export const BasketContext = React.createContext();
 
 const BasketPage = ({navigation}) => {
   // const basket = route.params.basket;
@@ -73,14 +75,13 @@ const BasketPage = ({navigation}) => {
     },
   ]);
 
-
   function confirmOrder() {
     firestore()
       .collection('FakeOrder')
       .add({
         customerName: 'Shaun the sheep',
         status: 'incoming',
-        total: total.toFixed(2),
+        total: context.total.toFixed(2),
         items: Items.filter(item => item.amount !== 0),
         key: 3,
       })
@@ -100,40 +101,44 @@ const BasketPage = ({navigation}) => {
   }
 
   return (
-    <View style={styles.basket}>
-      <GreenHeader
-        headerText={'My Basket - ' + context.currShop.Name}
-        navigation={navigation}
-      />
-      <View style={styles.main_container}>
-        <BasketContents Items={context.basketContent} />
-      </View>
+    <BasketContext.Provider
+      value={{
+        setPayMethVisible: setPayMethVisible,
+        navigation: navigation,
+      }}>
+      <View style={styles.basket}>
+        <GreenHeader
+          headerText={'My Basket - ' + context.currShop.Name}
+          navigation={navigation}
+        />
+        <View style={styles.main_container}>
+          <BasketContents Items={context.basketContent} />
+        </View>
 
-      <View style={styles.order_summary}>
-        <Text style={styles.total_text}>TOTAL</Text>
-        <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
+        <View style={styles.order_summary}>
+          <Text style={styles.total_text}>TOTAL</Text>
+          <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
+        </View>
+        <TouchableOpacity style={styles.buttons}>
+          <CustomButton
+            priority="primary"
+            style={styles.button}
+            text={'Apple/Google Pay'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+          onPressIn={() => setPayMethVisible(true)}
+          style={[styles.lastButton, styles.buttons]}>
+          <CustomButton
+            priority="primary"
+            style={styles.button}
+            text={'Checkout with card'}
+          />
+        </TouchableOpacity>
+        {payMethVisible ? <PaymentMethodPopUp /> : null}
       </View>
-      <TouchableOpacity onPress={confirmOrder} style={styles.buttons}>
-        <CustomButton
-          priority="primary"
-          style={styles.button}
-          text={'Apple/Google Pay'}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-          onPressIn={() => setPayMethVisible(false)}
-        style={[styles.lastButton, styles.buttons]}
-      >
-        {payMethVisible ? (
-            <PaymentMethodPopUp/>
-        ) : null}
-        <CustomButton
-          priority="primary"
-          style={styles.button}
-          text={'Checkout with card'}
-        />
-      </TouchableOpacity>
-    </View>
+    </BasketContext.Provider>
   );
 };
 
