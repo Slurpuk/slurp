@@ -15,7 +15,9 @@ import {GlobalContext} from '../App';
 type SearchBarComponentProps = {};
 
 const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
-  navigation, searchBarFocused, setSearchBarFocussed
+  navigation,
+  searchBarFocused,
+  setSearchBarFocussed,
 }) => {
   const context = useContext(GlobalContext);
   const [shopsData, setShopsData] = useState(context.shopsData);
@@ -41,8 +43,10 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
     if (search.length === 0) {
       clear();
     }
-    if (shop.Name.toLowerCase().startsWith(search.toLowerCase())) {
-      return shop.Name;
+    if (shop.Name.toLowerCase().includes(search.toLowerCase())) {
+      let open;
+      shop.IsOpen ? (open = 'Open') : (open = 'Closed');
+      return `${shop.Name} - ${open}`;
     } else {
       return null;
     }
@@ -53,7 +57,9 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
   };
 
   const selectShop = shop => {
-    context.switchShop(shop);
+    if (shop.IsOpen) {
+      context.switchShop(shop);
+    }
   };
 
   return (
@@ -74,7 +80,7 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
       />
       {searchBarFocused ? (
         <>
-          <View style={styles.cover}></View>
+          <View style={styles.cover} />
           <FlatList
             data={shops}
             extraData={query}
@@ -89,13 +95,23 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
                   <Pressable
                     onPress={() => selectShop(item)}
                     style={({pressed}) => [
-                      {backgroundColor: pressed ? 'teal' : 'white'},
+                      {backgroundColor: item.IsOpen ? 'white' : 'lightgrey'},
+                      {
+                        backgroundColor:
+                          pressed && item.IsOpen
+                            ? 'teal'
+                            : item.IsOpen
+                            ? 'white'
+                            : 'grey',
+                      },
+
                       styles.searchResult,
                     ]}>
                     {({pressed}) => (
                       <Text
                         style={[
-                          {color: pressed ? 'white' : 'black'},
+                          {color: pressed && item.IsOpen ? 'white' : 'black'},
+
                           styles.flatListItem,
                         ]}>
                         {filterNames(item)}

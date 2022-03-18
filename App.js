@@ -17,7 +17,7 @@ export const GlobalContext = React.createContext();
 export default function App() {
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(auth().currentUser);
+  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
   const [userRef, setUserRef] = useState(null);
   const [userObj, setUserObj] = useState(null);
   const [shopsData, setShopsData] = useState([]);
