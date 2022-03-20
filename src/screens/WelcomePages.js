@@ -60,12 +60,12 @@ const WelcomePages = ({onDone, navigation}) => {
       >
         <View style={styles.component}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
-            Welcome to Slurp
+            Welcome to Slurp!
           </Text>
           <CoffeeShopSvg style={[styles.circle]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            We dont even sell coffee but me make a commission from every
-            purchase you make, because we can and we want.
+            All your favourite local coffee shops in one place.
+            Order ahead and skip the line!
           </Text>
         </View>
         <View style={styles.component}>
@@ -74,18 +74,19 @@ const WelcomePages = ({onDone, navigation}) => {
           </Text>
           <CoffeeCupSvg style={[styles.circle]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            Please use this platform because we need the money to cover all the
-            costs of the platform to make the svgs above.
+            Our mission is to support independent, sustainable coffee shops in your area.
+            In a rush? Don't head into a standard chain store just yet.
+            Let us find the perfect coffee shop for your needs.
+            Order now and enjoy your favourite drink as soon as you walk in!
           </Text>
         </View>
         <View style={styles.component}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
-            Why Slurp?
+            Become a Slurpy today!
           </Text>
           <CoffeeBeanSvg style={[styles.circle, {marginTop: 5}]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            Slurp allows you to find unique, independent, sustainable coffee
-            shops nearby.
+            Enjoy the best coffee from the best places. Explore your tastes with us
           </Text>
           <CustomButton
             text={'Sign Up'}

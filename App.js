@@ -299,7 +299,9 @@ export default function App() {
         markers: markers,
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
-      }}>
+        userRef: userRef,
+      }}
+    >
       <NavigationContainer>
         {isLoggedIn ? (
           <HamburgerSlideBarNavigator />
