@@ -143,10 +143,15 @@ export default function MapBackground({sheetRef}) {
           latitude: latitude,
           longitude: longitude,
         });
-        firestore().collection('Users').doc(context.userRef).update({
-          latitude: latitude,
-          longitude: longitude,
-        });
+        firestore()
+          .collection('Users')
+          .doc(context.userRef)
+          .update({
+            latitude: latitude,
+            longitude: longitude,
+          })
+          .then(r => console.log('position updated'))
+          .catch(error => console.log(error));
       },
       error => {},
       {

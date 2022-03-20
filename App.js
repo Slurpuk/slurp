@@ -75,15 +75,16 @@ export default function App() {
     setTotal(0);
   }
 
+  // When coming from the shop list
   function newShop({shop, navigation}) {
     clearBasket();
     setCurrShop(shop);
     navigation.navigate('Shop page');
   }
 
+  // When coming from the markers
   function switchNewShop({shop}) {
-    setBasketContent([]);
-    setBasketSize(0);
+    clearBasket();
     setCurrShop(shop);
   }
 
