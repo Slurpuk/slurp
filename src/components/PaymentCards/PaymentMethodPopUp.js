@@ -20,7 +20,11 @@ import AnimatedCard from '../../sub-components/AnimatedCard';
 import PayMethPaymentCard from './PayMethPaymentCard';
 import {GlobalContext} from '../../../App';
 import {BasketContext} from '../../screens/BasketPage';
-import {StripeProvider, useStripe} from '@stripe/stripe-react-native';
+import {
+  CardField,
+  StripeProvider,
+  useStripe,
+} from '@stripe/stripe-react-native';
 
 const PaymentMethodPopUp = ({navigation}) => {
   const [cards, setCards] = useState([]);
@@ -28,51 +32,53 @@ const PaymentMethodPopUp = ({navigation}) => {
   const globalContext = useContext(GlobalContext);
   const basketContext = useContext(BasketContext);
   const {confirmPayment} = useStripe();
-  const API_URL = 'http://localhost:8081';
+  const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
   const [key, setKey] = useState('');
 
-  const fetchPaymentSheetParams = async () => {
-    const response = await fetch(`${API_URL}/checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const {paymentIntent, ephemeralKey, customer} = await response.json();
-    return {
-      paymentIntent,
-      ephemeralKey,
-      customer,
-    };
-  };
-
-  const initializePaymentSheet = async () => {
-    const {paymentIntent, ephemeralKey, customer} =
-      await fetchPaymentSheetParams();
-    const {error} = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-    });
-    if (!error) {
-      setLoading(true);
-    }
-  };
-
-  const openPaymentSheet = async () => {
-    const {error} = await presentPaymentSheet();
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
-    } else {
-      Alert.alert('Success', 'Your order is confirmed!');
-    }
-  };
-
+  //comment
   useEffect(() => {
-    initializePaymentSheet().then(r => console.log("it worked"));
+    fetch('http://localhost:8000/create-payment-intent', {
+      method: 'POST',
+    })
+      .then(res => res.json())
+      .then(res => {
+        //res.paymentIntent.amount = globalContext.total;
+        console.log('payment intent:' + res.paymentIntent);
+        console.log('intent', res);
+        setKey(res.clientSecret);
+      })
+      .catch(e => Alert.alert(e.message));
   }, []);
+
+  const handleConfirmation = async () => {
+    if (key) {
+      const {paymentIntent, error} = await confirmPayment(key, {
+        type: 'Card',
+        card: {
+          brand: 'Visa',
+          number: '4242424242424242',
+          complete: true,
+          expiryMonth: 4,
+          expiryYear: 24,
+          cvc: '444',
+          validCVC: 'Complete',
+          validExpiryDate: 'Valid',
+          validNumber: 'Valid',
+        },
+        billingDetails: {
+          email: 'John@email.com',
+        },
+      });
+
+      if (!error) {
+        Alert.alert('Received payment', `Billed for ${paymentIntent?.amount}`);
+      } else {
+        Alert.alert('Error', error.message);
+      }
+    }
+  };
 
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
@@ -105,17 +111,17 @@ const PaymentMethodPopUp = ({navigation}) => {
     getCards().then(() => console.log('Updated cards'));
   }, []);
 
-  useEffect(() => {
-    fetch('http://localhost:8081/checkout', {
+  /*  useEffect(() => {
+    fetch('http://localhost:8000/checkout', {
       method: 'POST',
     })
-        .then(res => res.json())
-        .then(res => {
-          console.log('intent', res);
-          setKey(res.clientSecret);
-        })
-        .catch(e => Alert.alert(e.message));
-  }, []);
+      .then(res => res.json())
+      .then(res => {
+        console.log('intent', res);
+        setKey(res.clientSecret);
+      })
+      .catch(e => Alert.alert(e.message));
+  }, []);*/
 
   const animation = new Animated.Value(0);
   const inputRange = [0, 1];
@@ -140,7 +146,9 @@ const PaymentMethodPopUp = ({navigation}) => {
   };
 
   return (
-    <StripeProvider publishableKey={publishableKey}>
+    <StripeProvider
+      publishableKey={publishableKey}
+      merchantIdentifier={'merchant.identifier'}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={[textStyles.headingOne, styles.product_name]}>
@@ -183,12 +191,35 @@ const PaymentMethodPopUp = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </Animated.View>
+
+          <CardField
+            postalCodeEnabled={false}
+            placeholder={{
+              number: '4242 4242 4242 4242',
+            }}
+            cardStyle={{
+              backgroundColor: '#FFFFFF',
+              textColor: '#000000',
+            }}
+            style={{
+              width: '100%',
+              height: 50,
+              marginVertical: 30,
+            }}
+            onCardChange={cardDetails => {
+              console.log('cardDetails', cardDetails);
+            }}
+            onFocus={focusedField => {
+              console.log('focusField', focusedField);
+            }}
+          />
+
           <CustomButton
             text={`Place Order  £${globalContext.total.toFixed(2)}`}
             priority={'primary'}
             width={screenWidth * 0.79}
             style={styles.button}
-            onPress={openPaymentSheet()}
+            onPress={handleConfirmation}
           />
         </View>
       </View>
