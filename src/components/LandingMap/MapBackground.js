@@ -55,7 +55,7 @@ export default function MapBackground({sheetRef}) {
   //       DistanceTo: calculateDistance(item.Location),
   //     };
   //   });
-  //
+
   //   //ordering the shops based on distance from user location
   //   editedShopsData
   //       .sort((a, b) => a.DistanceTo - b.DistanceTo);
