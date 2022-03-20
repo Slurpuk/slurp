@@ -41,7 +41,7 @@ const ShopCard = ({shop, navigation}) => {
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-        <ShopDetailIcons likeness={shop.Likeness} timeToOrder={shop.Queue} />
+        <ShopDetailIcons timeToOrder={shop.Queue} />
       </ImageBackground>
     </Pressable>
   );

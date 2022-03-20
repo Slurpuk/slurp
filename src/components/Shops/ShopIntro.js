@@ -65,7 +65,6 @@ const ShopIntro = ({shop}) => {
               {shop.Name}
             </Text>
             <ShopDetailIcons
-              likeness={shop.Likeness}
               timeToOrder={shop.Queue}
             />
             <Text style={[textStyles.bodyText, styles.body]}>{shop.Intro}</Text>
