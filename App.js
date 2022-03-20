@@ -88,7 +88,7 @@ export default function App() {
     });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  });
+  }, []);
 
   const enterApp = () => {
     setIsFirstTime(false);
@@ -242,8 +242,37 @@ export default function App() {
             isOpen: shopData.IsOpen,
           });
           setMarkers(mark);
+
+          const editedShopsData = shops.map(item => {
+            return {
+              Name: item.Name,
+              Intro: item.Intro,
+              Location: {
+                latitude: item.Location._latitude,
+                longitude: item.Location._longitude,
+              },
+              Image: item.Image,
+              Email: item.Email,
+              IsOpen: item.isOpen,
+              ItemsOffered: item.ItemsOffered,
+              Likeness: item.Likeness,
+              Queue: item.Queue,
+              DistanceTo: calculateDistance(item.Location),
+            };
+          });
+
+          //ordering the shops based on distance from user location
+          editedShopsData
+              .sort((a, b) => a.DistanceTo - b.DistanceTo);
+
+          //filtering the shops based on radius limitation (rn 20,000m)
+          const newEdited = editedShopsData
+              .filter((item) => item.DistanceTo < 20000);
+
+          setOrderedShops(newEdited);
         });
-      });
+
+      }, []);
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
@@ -297,36 +326,7 @@ export default function App() {
     setIsShopIntro(shown);
   };
 
-  useEffect(() => {
-    const editedShopsData = shopsData.map(item => {
-      return {
-        Name: item.Name,
-        Intro: item.Intro,
-        Location: {
-          latitude: item.Location._latitude,
-          longitude: item.Location._longitude,
-        },
-        Image: item.Image,
-        Email: item.Email,
-        IsOpen: item.isOpen,
-        ItemsOffered: item.ItemsOffered,
-        Likeness: item.Likeness,
-        Queue: item.Queue,
-        DistanceTo: calculateDistance(item.Location),
-      };
-    });
 
-    //ordering the shops based on distance from user location
-    editedShopsData
-        .sort((a, b) => a.DistanceTo - b.DistanceTo);
-
-    //filtering the shops based on radius limitation (rn 20,000m)
-    const newEdited = editedShopsData
-        .filter((item)=> item.DistanceTo < 20000);
-
-    setOrderedShops(newEdited);
-
-  });
 
   const Stack = createNativeStackNavigator();
   return (
@@ -356,7 +356,7 @@ export default function App() {
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
         userRef: userRef,
-        orderedShops: setOrderedShops,
+        orderedShops: orderedShops,
         setOrderedShops: setOrderedShops,
       }}
     >
