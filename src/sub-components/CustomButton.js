@@ -3,28 +3,32 @@ import {
   Text,
   View,
   StyleSheet,
-  Pressable,
   Animated,
-  Image,
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
 
 export default function CustomButton(props) {
-  const {priority, text, optionalNumber = null} = props;
+  const {
+    priority,
+    text,
+    optionalNumber = null,
+    width = screenWidth * 0.91,
+    onPress,
+  } = props;
+
   return (
     <View>
       <Animated.View style={{transform: [{scale}]}}>
         <TouchableOpacity
-          style={[buttonStyles.outer, buttonStyles[priority]]}
+          style={[buttonStyles.outer, buttonStyles[priority], {width: width}]}
           activeOpacity={1}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
+          onPress={onPress}
         >
           <Text style={buttonStyles.buttonText}>{text}</Text>
-          {optionalNumber == null ? (
-            <></>
-          ) : (
+          {optionalNumber === null ? null : (
             <Text
               style={[
                 buttonStyles.optionalNumber,
@@ -58,6 +62,7 @@ const onPressOut = () => {
     useNativeDriver: true,
   }).start();
 };
+
 const screenWidth = Dimensions.get('window').width;
 
 const buttonStyles = StyleSheet.create({
@@ -70,7 +75,8 @@ const buttonStyles = StyleSheet.create({
   },
 
   optionalNumber: {
-    borderRadius: 30,
+    borderRadius: 10,
+    overflow: 'hidden',
     width: 20,
     height: 20,
     textAlign: 'center',
@@ -80,6 +86,8 @@ const buttonStyles = StyleSheet.create({
 
   bubbleprimary: {
     backgroundColor: '#183342',
+    color: '#E9E5D8',
+    fontFamily: 'Poppins-SemiBold',
   },
 
   bubblesecondary: {
@@ -100,9 +108,7 @@ const buttonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 13,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     height: 43,
-    width: screenWidth * 0.91,
-    // borderWidth: 2,
   },
 });

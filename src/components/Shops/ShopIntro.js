@@ -1,79 +1,125 @@
-import React, {Component} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
+  Animated,
   View,
-  FlatList,
   StyleSheet,
   Text,
-  Dimensions,
   ImageBackground,
-  Pressable,
+  Dimensions,
+  Platform,
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
+import {ShopContext} from '../../screens/ShopPage';
+import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
-const ShopIntro = props => {
+import {DraggableContext} from './DraggableShopPage';
+import {GlobalContext} from '../../../App';
+import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
+
+const ShopIntro = ({shop}) => {
+  const shopContext = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
+  const context = shopContext === undefined ? globalContext : shopContext;
+  const draggable = useContext(DraggableContext);
+
   return (
-    <View style={intro.wrapper}>
+    <Animated.View
+      style={{
+        opacity: globalContext.adaptiveOpacity,
+      }}
+      onLayout={event => {
+        fadeOpacityIn(globalContext.adaptiveOpacity, 140);
+      }}
+    >
       <ImageBackground
-        source={require('../../assets/images/ShopExterior.png')}
-        style={{width: '100%', height: '100%'}}
+        imageStyle={styles.cardImgs}
+        style={styles.container}
+        source={{uri: shop.Image}}
       >
         <LinearGradient
           colors={['transparent', 'black']}
-          style={intro.linearGradient}
+          style={styles.linearGradient}
         >
-          <View style={intro.content}>
-            <Text style={[textStyles.headingOne, intro.heading]}>
-              {props.shopName}
+          <View
+            style={[
+              styles.back_button,
+              context.isFullScreen
+                ? {opacity: 1}
+                : context.isShopIntro
+                ? {opacity: 0}
+                : {opacity: 1},
+            ]}
+          >
+            <WhiteArrowButton
+              direction={context.isShopIntro ? 'down' : 'left'}
+              navigation={context.navigation}
+              onPressAction={
+                context.isShopIntro ? draggable.bottomSheetRef.current : null
+              }
+            />
+          </View>
+          <View style={styles.content}>
+            <Text style={[textStyles.headingOne, styles.heading]}>
+              {shop.Name}
             </Text>
             <ShopDetailIcons
-              likeness={props.likeness}
-              timeToOrder={props.timeToOrder}
+              likeness={shop.Likeness}
+              timeToOrder={shop.Queue}
             />
-            <Text style={[textStyles.bodyText, intro.body]}>
-              {props.shopIntroText}
-            </Text>
+            <Text style={[textStyles.bodyText, styles.body]}>{shop.Intro}</Text>
           </View>
         </LinearGradient>
       </ImageBackground>
-    </View>
+    </Animated.View>
   );
 };
 
 export default ShopIntro;
 
-const intro = StyleSheet.create({
-  content: {
-    textAlign: 'left',
-  },
-
-  wrapper: {
-    height: 270,
-    maxHeight: '30%',
-    // minHeight: 270,
-    maxWidth: '100%',
-    // width: 100,
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
+const screenWidth = Dimensions.get('window').width;
+const styles = StyleSheet.create({
   heading: {
     paddingVertical: 7,
+  },
+
+  content: {
+    marginLeft: '2%',
+  },
+
+  cardImgs: {
+    position: 'absolute',
+    width: screenWidth * 1,
+    height: screenWidth * 0.7,
+    left: 0,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+
+  container: {
+    height: screenWidth * 0.7,
+    width: '100%',
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 
   body: {
     paddingVertical: 7,
   },
 
+  back_button: {
+    marginTop: '5%',
+  },
+
   linearGradient: {
     flex: 1,
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     paddingVertical: 15,
-    paddingHorizontal: 15,
+    paddingHorizontal: 22,
+    // backgroundColor: 'red',
+    width: screenWidth * 1,
   },
 });

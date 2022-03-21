@@ -1,8 +1,12 @@
-import React from 'react';
-import {Pressable} from 'react-native';
+import React, {useEffect} from 'react';
+import {BackHandler, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const WhiteArrowButton = ({direction = 'back', onPress}) => {
+const WhiteArrowButton = ({
+  direction = 'back',
+  navigation,
+  onPressAction = null,
+}) => {
   let iconName;
   switch (direction) {
     case 'left':
@@ -18,10 +22,20 @@ const WhiteArrowButton = ({direction = 'back', onPress}) => {
       iconName = 'md-chevron-down-circle';
       break;
   }
+
+  function handleBackButtonClick() {
+    if (onPressAction != null) {
+      onPressAction.snapTo(1);
+    } else {
+      console.log(onPressAction);
+      navigation.navigate('Landing map');
+    }
+  }
+
   return (
     <Pressable
       underlayColor={'transparent'}
-      onPress={onPress}
+      onPress={handleBackButtonClick}
       style={({pressed}) => [
         {
           underlayColor: 'gray',

@@ -1,40 +1,47 @@
-import React, {Component} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import ShopDetailIcons from './ShopDetailIcons';
 import {
-  View,
   StyleSheet,
   Text,
   Dimensions,
-  TouchableOpacity,
   Pressable,
-  ImageBackground,
   Platform,
+  ImageBackground,
 } from 'react-native';
-import textStyles from '../../../stylesheets/textStyles';
 
-const ShopCard = ({name, likeness, queue, image}) => {
-  return (
-    <Pressable style={styles.item}>
+import textStyles from '../../../stylesheets/textStyles';
+import {GlobalContext} from '../../../App';
+const ShopCard = ({shop, navigation}) => {
+  const context = useContext(GlobalContext);
+  // const [isShopPage, setShopPage] = useState(false);
+
+  const shopPageDetails = () => {
+    context.setCurrShop({shop, navigation});
+  };
+
+  return !shop.IsOpen ? (
+    <ImageBackground
+      style={styles.item}
+      imageStyle={styles.image}
+      source={{uri: shop.Image}}
+      resizeMode="cover"
+      blurRadius={4}
+    >
+      <Text style={[textStyles.headingOne, styles.shopName]}>{shop.Name}</Text>
+      <Text style={[textStyles.bodyText]}> CLOSED </Text>
+    </ImageBackground>
+  ) : (
+    <Pressable onPress={shopPageDetails}>
       <ImageBackground
-        source={image}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
+        style={styles.item}
+        imageStyle={styles.image}
+        source={{uri: shop.Image}}
+        resizeMode="cover"
       >
-        <View style={styles.details}>
-          <Text
-            style={[
-              textStyles.headingOne,
-              {
-                marginBottom: '3%',
-              },
-            ]}
-          >
-            {name}
-          </Text>
-          <ShopDetailIcons likeness={likeness} timeToOrder={queue} />
-        </View>
+        <Text style={[textStyles.headingOne, styles.shopName]}>
+          {shop.Name}
+        </Text>
+        <ShopDetailIcons likeness={shop.Likeness} timeToOrder={shop.Queue} />
       </ImageBackground>
     </Pressable>
   );
@@ -44,12 +51,13 @@ const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   item: {
-    maxWidth: screenWidth,
+    overflow: 'hidden',
+    width: screenWidth,
     height: screenWidth * 0.37,
     marginVertical: '1.8%',
-    // marginHorizontal: '2%',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
     position: 'relative',
     ...Platform.select({
@@ -61,27 +69,18 @@ const styles = StyleSheet.create({
       },
     }),
   },
-
-  title: {
-    letterSpacing: 0.5,
-    fontSize: 17,
-    justifyContent: 'center',
-  },
-
   shopName: {
     fontFamily: 'JosefinSans-Bold',
     color: 'white',
     fontWeight: '700',
-    paddingBottom: 10,
+    paddingBottom: '2%',
   },
 
-  details: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    display: 'flex',
-    backgroundColor: '#36363677',
-    height: '100%',
+  image: {
+    position: 'absolute',
+    width: screenWidth,
+    height: screenWidth * 0.37,
+    opacity: 0.7,
   },
 });
 

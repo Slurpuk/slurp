@@ -1,30 +1,60 @@
-//to do
-import React, {Component, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {
   View,
-  FlatList,
   StyleSheet,
   Text,
   Dimensions,
-  TouchableOpacity,
   Pressable,
-  Image,
   ImageBackground,
 } from 'react-native';
+import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {ShopContext} from '../../screens/ShopPage';
+import {GlobalContext} from '../../../App';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
-  return (
-    <TouchableOpacity style={styles.item}>
-      {/*<Image*/}
-      {/*  style={{width: '100%', height: 100, zIndex: -1}}*/}
-      {/*  source={require('../assets/images/coffeeUnsplash1.jpg')}*/}
-      {/*/>*/}
+  const shopContext = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
 
+  // Dynamically update the menuItem counter based on the current basket content.
+  useEffect(() => {
+    const basket = globalContext.basketContent;
+    let newCount = 0;
+    if (item.hasOwnProperty('Bean')) {
+      for (let it of basket) {
+        if (it.key === item.key) {
+          newCount += it.count;
+        }
+      }
+    } else {
+      for (let it of basket) {
+        if (it.key === item.key) {
+          newCount = it.count;
+          break;
+        }
+      }
+    }
+
+    setCount(newCount);
+  }, [globalContext.basketContent]);
+
+  const showOptions = () => {
+    shopContext.setCurrItem(item);
+    shopContext.setOptionsVisible(true);
+  };
+
+  function add(newItem) {
+    newItem.hasOwnProperty('Bean')
+      ? showOptions()
+      : globalContext.addToBasket(newItem);
+  }
+
+  return (
+    <RNGHTouchableOpacity style={styles.item} onPress={() => add(item)}>
       <ImageBackground
-        source={require('../../assets/images/coffeeUnsplash1.jpg')}
+        source={{uri: item.Image}}
         imageStyle={{borderRadius: 10, overflow: 'hidden'}}
         style={{width: '100%', height: '100%'}}
       >
@@ -34,23 +64,34 @@ const MenuItem = ({item}) => {
         >
           <View style={styles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, styles.title]}>
-              {item.name}
+              {item.Name}
             </Text>
-            <Text style={textStyles.coffeePrice}>{item.price}</Text>
+            <Text style={textStyles.coffeePrice}>
+              £{Number(item.Price).toFixed(2)}
+            </Text>
           </View>
-
           <Pressable
-            onPress={() => {
-              setCount(count + 1);
-              console.log(count);
-            }}
+            onPress={() => add(item)}
             style={styles.menuCardPopupTrigger}
           >
-            <Text style={[textStyles.iconText, {marginLeft: 0}]}>{count}</Text>
+            <Text
+              style={[
+                textStyles.iconText,
+                {
+                  marginLeft: 1,
+                  marginTop: 2,
+                  color: 'black',
+                  textAlign: 'center',
+                },
+              ]}
+            >
+              {' '}
+              {count === 0 ? '+' : count}
+            </Text>
           </Pressable>
         </LinearGradient>
       </ImageBackground>
-    </TouchableOpacity>
+    </RNGHTouchableOpacity>
   );
 };
 
@@ -59,15 +100,10 @@ const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   item: {
     width: screenWidth * 0.43,
-    // backgroundColor: 'white',
     height: screenWidth * 0.43 * 0.74,
     borderRadius: 11,
     shadowOpacity: 0.2,
-    marginVertical: '2%',
-    marginHorizontal: '2%',
-    display: 'flex',
-    flex: 1,
-    // backgroundColor: 'white',
+    marginVertical: '2.5%',
     borderWidth: 1,
     position: 'relative',
   },
@@ -79,12 +115,14 @@ const styles = StyleSheet.create({
   },
 
   menuCardPopupTrigger: {
-    backgroundColor: '#046D66',
+    backgroundColor: 'white',
     position: 'absolute',
-    paddingHorizontal: 17,
-    paddingVertical: 7,
-    borderRadius: 5,
+    paddingRight: 7,
+    paddingLeft: 2,
+    borderRadius: 80,
     bottom: 10,
+    minWidth: 26,
+    height: 26,
     right: 10,
   },
 
@@ -100,7 +138,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     fontSize: 17,
     justifyContent: 'center',
-    // alignSelf: 'center',
+    marginBottom: 3,
   },
 });
 

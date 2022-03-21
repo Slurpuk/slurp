@@ -1,47 +1,24 @@
 import React from 'react';
 import Option from './components/ShopMenu/Option';
 import MenuSection from './components/ShopMenu/MenuSection';
-import ItemCard from './components/ShopMenu/ItemCard';
-import ShopCard from './components/Shops/ShopCard';
-import ShopList from './components/Shops/ShopList';
-import ShopIntro from './components/Shops/ShopIntro';
-import Menu from './components/ShopMenu/Menu';
-import ItemsData from './fake-data/ItemsData';
+import MenuItem from './components/ShopMenu/MenuItem';
+import {Text} from 'react-native';
 
 const renderOption = ({item, updateOptions}) => (
-  <Option
-    name={item.name}
-    price={item.price}
-    currency={item.currency}
-    updateOptions={updateOptions}
-  />
+  <Option option={item} updateOptions={updateOptions} />
 );
 
 const renderMenu = menu => menu;
 
-const renderMenuSection = ({item, renderItem}) => (
-  <MenuSection section={item} renderItem={renderItem} />
-);
+const renderMenuSection = ({item, renderItem}) => {
+  return <MenuSection section={item} renderItem={renderItem} />;
+};
 
-const renderItemCard = ({item}) => <ItemCard item={item} />;
-
-const renderShopCard = ({item}) => (
-  <ShopCard
-    name={item.name}
-    likeness={item.likeness}
-    queue={item.queue}
-    image={item.image}
-  />
-);
-const renderShopList = ({item, renderItem}) => (
-  <ShopList DATA={item.data} renderItem={renderItem} />
-);
+const renderMenuItem = ({item}) => <MenuItem item={item} />;
 
 export default {
   renderOption,
   renderMenuSection,
-  renderItemCard,
-  renderShopCard,
-  renderShopList,
+  renderMenuItem,
   renderMenu,
 };

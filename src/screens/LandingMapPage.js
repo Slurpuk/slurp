@@ -1,123 +1,85 @@
-import React, {useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
-  Text,
   View,
   Button,
   LogBox,
-  SafeAreaView,
+  TextInput,
+  StatusBar, Text,
 } from 'react-native';
-import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
-import renderers from '../renderers';
-import ShopPage from '../components/Shops/ShopPage';
-import shopData from '../fake-data/ShopData';
-import ItemsData from '../fake-data/ItemsData';
 import MapBackground from '../components/LandingMap/MapBackground';
-import ShopsData from '../fake-data/ShopsData';
+import firestore from '@react-native-firebase/firestore';
+import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
+import {useFocusEffect} from '@react-navigation/native';
+import DraggableShopList from '../components/Shops/DraggableShopList';
+import ShopPage from './ShopPage';
+import {GlobalContext} from '../../App';
+import {SearchBar} from '../sub-components/CustomSearchBar';
+import CustomSearchBar from '../CustomSearchBar';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
 
-export default function LandingMapPage({setVisible}) {
-  const [isShopIntro, setIsShopIntro] = useState(false);
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
-  const updatePage = ({index}) => {
-    if (index === 0) {
-      setVisible(false);
-    } else {
-      setVisible(true);
-    }
-  };
+export default function LandingMapPage({navigation}) {
+  const setHamburgerVisible = useContext(VisibleContext);
+  const context = useContext(GlobalContext);
 
-  const defaultShopData = shopData[0];
+  const bottomSheetRef = useRef(null);
 
-  const setLOL = () => {
-    setIsShopIntro(!isShopIntro);
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      setHamburgerVisible(true);
+
+      return () => {
+        setHamburgerVisible(false);
+      };
+    }, []),
+  );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground />
-        <Button title={'Switch bottom sheet'} onPress={setLOL} />
+        <MapBackground sheetRef={bottomSheetRef}/>
+        <CustomSearchBar navigation={navigation} />
       </View>
 
-      {isShopIntro ? (
-        <ScrollBottomSheet
-          componentType="FlatList"
-          snapPoints={['0%', '70%', '100%']}
-          onSettle={index => updatePage({index})}
-          initialSnapIndex={1}
-          renderHandle={() => (
-            <View style={styles.header1}>
-              <ShopPage
-                shopName={defaultShopData.name}
-                shopIntroText={defaultShopData.intro}
-                DATA={ItemsData}
-                renderSection={renderers.renderMenuSection}
-                renderItem={renderers.renderItemCard}
-              />
-            </View>
-          )}
-          contentContainerStyle={styles.contentContainerStyle}
-        />
-      ) : null}
-      {isShopIntro === false ? (
-        <ScrollBottomSheet
-          componentType="FlatList"
-          snapPoints={['20%', '91.5%']}
-          initialSnapIndex={1}
-          renderHandle={() => (
-            <View style={styles.header2}>
-              <View style={styles.panelHandle} />
-              <Text style={styles.headerText}>Top Picks Nearby</Text>
-            </View>
-          )}
-          data={ShopsData}
-          keyExtractor={item => item.key}
-          renderItem={renderers.renderShopCard}
-          contentContainerStyle={styles.contentContainerStyle}
-        />
-      ) : null}
-    </SafeAreaView>
+      {context.isShopIntro ? (
+        <ShopPage navigation={navigation} sheetRef={bottomSheetRef} />
+      ) : (
+        <DraggableShopList navigation={navigation} />
+      )}
+    </View>
   );
 }
 
-const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  contentContainerStyle: {
-    backgroundColor: '#EDEBE7',
-  },
-  header1: {
-    height: windowHeight,
-  },
-  header2: {
-    alignItems: 'center',
-    backgroundColor: '#EDEBE7',
-    paddingVertical: '3%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  panelHandle: {
-    width: '10%',
-    height: '7%',
-    backgroundColor: 'green',
-    borderRadius: 4,
-    position: 'absolute',
-    top: '15%',
-  },
-  headerText: {
-    padding: '2%',
-    fontWeight: 'bold',
-    fontSize: 25,
-    color: 'black',
-  },
   map: {
     flex: 1,
+    display: 'flex',
   },
+  searchBar: {
+    borderRadius: 10,
+    marginTop: '15%',
+    margin: '5%',
+    color: '#000',
+    borderColor: '#666',
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    height: screenHeight / 19,
+    width: screenWidth / 1.4,
+    paddingHorizontal: 10,
+    fontSize: 18,
+  },
+  inputContainerStyle:{
+    backgroundColor: 'yellow',
+  }
 });

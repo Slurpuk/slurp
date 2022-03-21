@@ -1,46 +1,110 @@
 import CheckboxSectionList from './CheckboxSectionList';
-import React, {useState} from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  Alert,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
-import PrimaryButton from '../../sub-components/PrimaryButton';
+import CustomButton from '../../sub-components/CustomButton';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ShopContext} from '../../screens/ShopPage';
+import {GlobalContext} from '../../../App';
 
-const OptionsPopUp = ({data, renderer, product_name, curr_price}) => {
-  const [totalPrice, setTotalPrice] = useState(curr_price); // Current total price in pennies
-  const [options, setOptions] = useState({}); // List of options currently selected
+export const OptionsContext = React.createContext();
+const OptionsPopUp = ({data, renderer, item}) => {
+  const context = useContext(ShopContext);
+  const globalContext = useContext(GlobalContext);
+  const [totalPrice, setTotalPrice] = useState(item.Price);
+  const [milk, setMilk] = useState(context.getDefault()); // List of options currently selected
+  const [syrups, setSyrups] = useState([]);
 
-  const updateOptions = (name, price, isAdd) => {
+  const updateOptions = (option, isAdd) => {
     if (isAdd) {
-      setTotalPrice(price + totalPrice);
-      setOptions(prevState => ({
-        ...prevState,
-        [name]: price,
-      }));
+      const newPrice = totalPrice + option.Price;
+      setTotalPrice(newPrice);
+      if (option.Type === 'Milk') {
+        setMilk(option);
+      } else {
+        let temp = syrups;
+        temp.push(option);
+        setSyrups(temp);
+      }
     } else {
-      setTotalPrice(totalPrice - price);
-      let newState = options;
-      delete newState[name];
-      setOptions(newState);
+      const newPrice = totalPrice - option.Price;
+      setTotalPrice(newPrice);
+      if (option.Type === 'Milk') {
+        milk === option ? setMilk(null) : setMilk(milk);
+      } else {
+        const index = syrups.findIndex(obj => obj.key === option.key);
+        let newState = syrups;
+        newState.splice(index, 1);
+        setSyrups(newState);
+      }
     }
   };
 
+  function addToBasket() {
+    if (milk === null) {
+      Alert.alert(
+        'No milk selected.',
+        'Please select a milk',
+        [
+          {
+            text: 'OK',
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      // Sort syrups by alphabetical order
+      syrups.sort((a, b) => a.Name.localeCompare(b.Name));
+      // Add the selected at the start of the array
+      syrups.unshift(milk);
+      let newItem = {
+        ...item,
+        options: syrups,
+        Price: totalPrice,
+      };
+      globalContext.addToBasket(newItem);
+      context.setOptionsVisible(false);
+      context.setCurrItem(null);
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={[textStyles.headingOne, styles.product_name]}>
-        {product_name}
-      </Text>
-      <View style={styles.list}>
-        <CheckboxSectionList
-          updateOptions={updateOptions}
-          DATA={data}
-          renderItem={renderer}
+    <OptionsContext.Provider value={{milk: milk}}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={[textStyles.headingOne, styles.product_name]}>
+            {item.Name}
+          </Text>
+          <TouchableHighlight
+            style={styles.icon}
+            underlayColor={'white'}
+            onPress={() => context.setOptionsVisible(false)}
+          >
+            <Icon size={30} color="black" name="close" />
+          </TouchableHighlight>
+        </View>
+        <View style={styles.list}>
+          <CheckboxSectionList
+            updateOptions={updateOptions}
+            DATA={data}
+            renderItem={renderer}
+          />
+        </View>
+        <CustomButton
+          text={`Add To Order  £${totalPrice.toPrecision(3)}`}
+          priority={'primary'}
+          width={screenWidth * 0.79}
+          onPress={() => addToBasket()}
         />
       </View>
-      <View style={styles.button}>
-        <PrimaryButton
-          text={`Add To Order  £${(totalPrice / 100).toPrecision(3)}`}
-        />
-      </View>
-    </View>
+    </OptionsContext.Provider>
   );
 };
 
@@ -48,18 +112,32 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: '3%',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingLeft: '7%',
     width: 0.9128 * screenWidth,
-    height: 0.5723 * screenHeight,
+    height: 0.6 * screenHeight,
     backgroundColor: 'white',
-    paddingVertical: '4%',
-    position: 'relative',
+    paddingVertical: '6%',
+    position: 'absolute',
+    top: '20%',
+    bottom: '23%',
+    left: '4%',
+    right: '4%',
+    elevation: 200,
+    zIndex: 100,
+  },
+
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
   product_name: {
     color: 'black',
     marginLeft: '2%',
-    marginBottom: '1%',
   },
 
   list: {
@@ -67,8 +145,9 @@ const styles = StyleSheet.create({
     height: '60%',
   },
 
-  button: {
-    marginLeft: '-3%',
+  icon: {
+    marginRight: '7%',
+    marginBottom: '2%',
   },
 });
 
