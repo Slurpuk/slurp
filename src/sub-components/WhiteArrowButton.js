@@ -6,6 +6,7 @@ const WhiteArrowButton = ({
   direction = 'back',
   navigation,
   onPressAction = null,
+    customStyle = {}
 }) => {
   let iconName;
   switch (direction) {
@@ -24,10 +25,9 @@ const WhiteArrowButton = ({
   }
 
   function handleBackButtonClick() {
-    if (onPressAction != null) {
-      onPressAction.snapTo(1);
+    if (onPressAction !== null) {
+      onPressAction();
     } else {
-      console.log(onPressAction);
       navigation.navigate('Landing map');
     }
   }
@@ -40,7 +40,7 @@ const WhiteArrowButton = ({
         {
           underlayColor: 'gray',
           opacity: pressed ? 0.6 : 1,
-        },
+        }, customStyle
       ]}
     >
       <Icon name={iconName} color={'white'} size={34} />
