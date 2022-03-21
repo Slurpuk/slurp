@@ -62,7 +62,7 @@ export default function App() {
     });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  });
+  }, []);
 
   const enterApp = () => {
     setIsFirstTime(false);
