@@ -29,6 +29,7 @@ const UpdateDetailsPage = ({navigation}) => {
     Alert.alert('Done.', 'Your details have been updated.', [
       {
         text: 'OK',
+        onPress: () => navigation.goBack(),
       },
     ]);
     resetFields();
@@ -69,9 +70,8 @@ const UpdateDetailsPage = ({navigation}) => {
           .doc(context.userRef)
           .update(updated)
           .then(() => {
-            changeDetailsConfirm();
             resetFields();
-            navigation.goBack();
+            changeDetailsConfirm();
           })
           .catch(error => {
             invalidMessage(error);
@@ -91,6 +91,7 @@ const UpdateDetailsPage = ({navigation}) => {
             style={[styles.subDetails, styles.spaceRight]}
             title={'First Name'}
             setField={setFirstName}
+            value={first_name}
             placeholder={currentUser.FirstName}
             type={'name'}
           />
@@ -98,6 +99,7 @@ const UpdateDetailsPage = ({navigation}) => {
             style={[styles.subDetails, styles.spaceLeft]}
             title={'Last Name'}
             setField={setLastName}
+            value={last_name}
             placeholder={currentUser.LastName}
             type={'name'}
           />
@@ -113,6 +115,7 @@ const UpdateDetailsPage = ({navigation}) => {
           setField={setPassword}
           type={'password'}
           placeholder={''}
+          value={password}
         />
       </View>
       <View style={styles.button}>

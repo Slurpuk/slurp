@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 const FormField = ({
@@ -65,7 +65,9 @@ const FormField = ({
         style={styles.input}
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
+        placeholderTextColor={'#D3D3D3'}
         onChangeText={text => setField(text)}
+        value={value}
         autoCapitalize={autoCapitalize}
         autoCompleteType={autoCompleteType}
         autoCorrect={autoCorrect}
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: '3.5%',
+    color: 'black',
   },
 });
 

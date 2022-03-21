@@ -23,9 +23,9 @@ const ChangePasswordPage = ({navigation}) => {
     Alert.alert('Success!', 'Password Updated', [
       {
         text: 'OK',
+        onPress: () => navigation.goBack(),
       },
     ]);
-    resetFields();
   }
 
   function invalidUpdateMessage() {
@@ -56,7 +56,7 @@ const ChangePasswordPage = ({navigation}) => {
         },
       ],
     );
-    resetFields();
+
   }
 
 
@@ -68,8 +68,8 @@ const ChangePasswordPage = ({navigation}) => {
           context.user
             .updatePassword(newPassword)
             .then(() => {
+              resetFields();
               successMessage();
-              navigation.goBack();
             })
             .catch(error => {
               invalidUpdateMessage();
@@ -89,16 +89,19 @@ const ChangePasswordPage = ({navigation}) => {
         <FormField
           title={'Old Password'}
           setField={setOldPassword}
+          value={oldPassword}
           type={'password'}
         />
         <FormField
           title={'New Password'}
           setField={setNewPassword}
+          value={newPassword}
           type={'password'}
         />
         <FormField
           title={'Confirm Password'}
           setField={setPasswordConfirmation}
+          value={passwordConfirmation}
           type={'password'}
         />
       </View>
