@@ -13,7 +13,7 @@ import textStyles from '../../stylesheets/textStyles';
 import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
-import {reset} from "react-native-svg/lib/typescript/lib/Matrix2D";
+import {reset} from 'react-native-svg/lib/typescript/lib/Matrix2D';
 
 const LogInPage = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -42,16 +42,19 @@ const LogInPage = ({navigation}) => {
   const resetFields = () => {
     setEmail(' ');
     setPassword(' ');
-  }
+  };
 
   const authenticateUser = async () => {
     try {
-      let response = await auth().signInWithEmailAndPassword(email, password);
-      if (response && response.user) {
-        resetFields();
-      } else {
-        invalidUserMessage();
-      }
+      await auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(response => {
+          if (response && response.user) {
+            resetFields();
+          } else {
+            invalidUserMessage();
+          }
+        });
     } catch (e) {
       invalidMessage(e.message);
     }
@@ -78,16 +81,14 @@ const LogInPage = ({navigation}) => {
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={null}
-          >
+            onPress={null}>
             Forgot your password?
           </Text>
         </View>
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={switchToSignUp}
-          >
+            onPress={switchToSignUp}>
             New? Create an account
           </Text>
         </View>

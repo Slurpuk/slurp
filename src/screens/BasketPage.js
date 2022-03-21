@@ -13,29 +13,37 @@ const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
 
   async function confirmOrder() {
-    await firestore()
-      .collection('Orders')
-      .add({
-        DateTime: firestore.Timestamp.now(),
-        Items: formatBasket(),
-        Status: 'incoming',
-        ShopID: context.currShop.key,
-        UserID: context.userRef,
-        Total: Number(context.total.toPrecision(2)),
-      })
-      .then(() => {
-        context.clearBasket();
-        Alert.alert(
-          'Order received.',
-          'Your order has been sent to the shop! Awaiting response.',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('Order history'),
-            },
-          ],
-        );
-      });
+    if (context.basketSize === 0) {
+      Alert.alert('Empty basket.', 'Please add items to your basket.', [
+        {
+          text: 'OK',
+        },
+      ]);
+    } else {
+      await firestore()
+        .collection('Orders')
+        .add({
+          DateTime: firestore.Timestamp.now(),
+          Items: formatBasket(),
+          Status: 'incoming',
+          ShopID: context.currShop.key,
+          UserID: context.userRef,
+          Total: Number(context.total.toPrecision(2)),
+        })
+        .then(() => {
+          context.clearBasket();
+          Alert.alert(
+            'Order received.',
+            'Your order has been sent to the shop! Awaiting response.',
+            [
+              {
+                text: 'OK',
+                onPress: () => navigation.navigate('Order history'),
+              },
+            ],
+          );
+        });
+    }
   }
 
   function formatBasket() {

@@ -75,7 +75,6 @@ const SignUpPage = ({navigation}) => {
         text: 'OK',
       },
     ]);
-    resetFields();
   };
 
   // Register the user to the database after checking their credentials
@@ -84,6 +83,7 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
+          resetFields();
           let newUser = auth().currentUser;
           addUser(newUser);
           registeredMessage();
