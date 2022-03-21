@@ -16,7 +16,7 @@ const BasketPage = ({navigation}) => {
     await firestore()
       .collection('Orders')
       .add({
-        DateTime: new Date(),
+        DateTime: firestore.Timestamp.now(),
         Items: formatBasket(),
         Status: 'incoming',
         ShopID: context.currShop.key,
@@ -40,11 +40,13 @@ const BasketPage = ({navigation}) => {
 
   function formatBasket() {
     let items = context.basketContent.map(item => {
+      console.log(item);
       return {
         ItemRef: item.key,
         Quantity: item.count,
         Price: Number(item.Price.toPrecision(2)),
         Type: item.type,
+        Options: item.options,
       };
     });
     return items;

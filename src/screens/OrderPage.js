@@ -57,8 +57,8 @@ const OrderPage = ({navigation}) => {
             currentOrdersLocal.push(firebaseOrder);
           }
         });
-          fsetCurrentOrders(currentOrdersLocal);
-          fsetPastOrders(pastOrdersLocal);
+        fsetCurrentOrders(currentOrdersLocal);
+        fsetPastOrders(pastOrdersLocal);
       });
 
     return () => fetchData();
@@ -87,49 +87,21 @@ const OrderPage = ({navigation}) => {
       let newItems = [];
       for (let item of temp.Items) {
         let newItem;
-        if (item.Type === 'Coffee') {
-          await firestore()
-            .collection('Coffees')
-            .doc(item.ItemRef)
-            .get()
-            .then(doc => {
-              newItem = {
-                ...doc.data(),
-                type: item.Type,
-                key: doc.id,
-                quantity: item.Quantity,
-              };
-              newItems.push(newItem);
-            });
-        } else if (item.Type === 'Drink') {
-          await firestore()
-            .collection('Drinks')
-            .doc(item.ItemRef)
-            .get()
-            .then(doc => {
-              newItem = {
-                ...doc.data(),
-                type: item.Type,
-                key: doc.id,
-                quantity: item.Quantity,
-              };
-              newItems.push(newItem);
-            });
-        } else if (item.Type === 'Snack') {
-          await firestore()
-            .collection('Snacks')
-            .doc(item.ItemRef)
-            .get()
-            .then(doc => {
-              newItem = {
-                ...doc.data(),
-                type: item.Type,
-                key: doc.id,
-                quantity: item.Quantity,
-              };
-              newItems.push(newItem);
-            });
-        }
+        await firestore()
+          .collection(item.Type + 's')
+          .doc(item.ItemRef)
+          .get()
+          .then(doc => {
+            newItem = {
+              ...doc.data(),
+              type: item.Type,
+              key: doc.id,
+              quantity: item.Quantity,
+              options: item.Options,
+            };
+            newItems.push(newItem);
+          })
+          .catch(error => console.log(error));
       }
       temp.Items = newItems;
       await firestore()
@@ -147,7 +119,8 @@ const OrderPage = ({navigation}) => {
               : newOrders.push({period: temp.period, data: [temp]});
           }
           isCurrent ? setCurrentOrders(newOrders) : setPastOrders(newOrders);
-        });
+        })
+        .catch(error => console.log(error));
     });
   }
 
