@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 
 import {
   Dimensions,
@@ -21,7 +21,6 @@ const screenWidth = Dimensions.get('window').width;
 export default function MapBackground() {
   const context = useContext(GlobalContext);
   const watchID = useRef();
-  console.log('LOLdvasdvsad')
   const mapCenter = useRef({
     latitude: context.currentCenterLocation.latitude,
     longitude: context.currentCenterLocation.longitude,
@@ -103,8 +102,6 @@ export default function MapBackground() {
     };
   }, []);
 
-
-
   const getOneTimeLocation = () => {
     Geolocation.getCurrentPosition(
       //Will give you the current location
@@ -124,7 +121,7 @@ export default function MapBackground() {
           longitude: longitude,
         });
       },
-            error => console.log(error),
+      error => console.log(error),
       {
         enableHighAccuracy: true,
         timeout: 30000,
@@ -135,7 +132,6 @@ export default function MapBackground() {
   const subscribeLocationLocation = () => {
     watchID.current = Geolocation.watchPosition(
       async position => {
-        console.log('scwqefwqe');
         //Will give you the location on location change
         const longitude = position.coords.longitude;
         const latitude = position.coords.latitude;

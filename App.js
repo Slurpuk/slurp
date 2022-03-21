@@ -258,6 +258,7 @@ export default function App() {
               ItemsOffered: item.ItemsOffered,
               Likeness: item.Likeness,
               Queue: item.Queue,
+              key: item.key,
               DistanceTo: calculateDistance(item.Location),
             };
           });
