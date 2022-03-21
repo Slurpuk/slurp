@@ -11,7 +11,7 @@ const SHOP_LIST_HEIGHT_ANDROID = '78%';
 
 const ShopList = ({navigation}) => {
   const context = useContext(GlobalContext);
-  const DATA = context.shopsData;
+  const DATA = context.orderedShops;
   return (
     <View style={styles.wrapper}>
       <FlatList
