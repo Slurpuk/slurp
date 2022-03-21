@@ -11,8 +11,6 @@ import firestore from '@react-native-firebase/firestore';
 const UpdateDetailsPage = ({navigation}) => {
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
-  const [userDoc, setUserDoc] = useState([]);
-  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const context = useContext(GlobalContext);
   const currentUser = context.currentUser;
@@ -21,7 +19,6 @@ const UpdateDetailsPage = ({navigation}) => {
   const resetFields = () => {
     setFirstName('');
     setLastName('');
-    setEmail('');
     setPassword('');
   };
 
@@ -48,13 +45,16 @@ const UpdateDetailsPage = ({navigation}) => {
   }
 
   const invalidMessage = error => {
-    Alert.alert('Invalid', 'Please enter your blah blah correctly', [
-      {
-        text: 'OK',
-      },
-    ]);
+    Alert.alert(
+      'Invalid',
+      'Something went wrong. Please renter your credentials.',
+      [
+        {
+          text: 'OK',
+        },
+      ],
+    );
   };
-
 
   //Update user details in the database
   function changeUserDetails() {
@@ -63,7 +63,7 @@ const UpdateDetailsPage = ({navigation}) => {
       LastName: last_name,
     };
     auth()
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(user.email, password)
       .then(() => {
         firestore()
           .collection('Users')
@@ -104,12 +104,6 @@ const UpdateDetailsPage = ({navigation}) => {
             type={'name'}
           />
         </View>
-        <FormField
-          title={'Email'}
-          setField={setEmail}
-          placeholder={''}
-          type={'email'}
-        />
         <FormField
           title={'Password'}
           setField={setPassword}
