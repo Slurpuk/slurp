@@ -1,16 +1,13 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 import {
-  Alert,
   Dimensions,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   View,
   PermissionsAndroid,
-  Animated,
-  Image,
+
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
