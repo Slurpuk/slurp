@@ -46,12 +46,15 @@ const LogInPage = ({navigation}) => {
 
   const authenticateUser = async () => {
     try {
-      let response = await auth().signInWithEmailAndPassword(email, password);
-      if (response && response.user) {
-        resetFields();
-      } else {
-        invalidUserMessage();
-      }
+      await auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(response => {
+          if (response && response.user) {
+            resetFields();
+          } else {
+            invalidUserMessage();
+          }
+        });
     } catch (e) {
       invalidMessage(e.message);
     }
@@ -78,16 +81,14 @@ const LogInPage = ({navigation}) => {
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={null}
-          >
+            onPress={null}>
             Forgot your password?
           </Text>
         </View>
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={switchToSignUp}
-          >
+            onPress={switchToSignUp}>
             New? Create an account
           </Text>
         </View>
