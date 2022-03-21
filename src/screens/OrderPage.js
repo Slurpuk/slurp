@@ -3,7 +3,6 @@ import {StyleSheet, View, FlatList, Text, SectionList} from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
 import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import firestore from '@react-native-firebase/firestore';
 import {GlobalContext} from '../../App';
@@ -57,9 +56,9 @@ const OrderPage = ({navigation}) => {
           } else {
             currentOrdersLocal.push(firebaseOrder);
           }
-          fsetCurrentOrders(currentOrdersLocal);
-          fsetPastOrders(pastOrdersLocal);
         });
+        fsetCurrentOrders(currentOrdersLocal);
+        fsetPastOrders(pastOrdersLocal);
       });
 
     return () => fetchData();
@@ -88,21 +87,21 @@ const OrderPage = ({navigation}) => {
       let newItems = [];
       for (let item of temp.Items) {
         let newItem;
-        if (item.Type === 'Coffee') {
-          await firestore()
-            .collection('Coffees')
-            .doc(item.ItemRef)
-            .get()
-            .then(doc => {
-              newItem = {
-                ...doc.data(),
-                type: item.Type,
-                key: doc.id,
-                quantity: item.Quantity,
-              };
-              newItems.push(newItem);
-            });
-        }
+        await firestore()
+          .collection(item.Type + 's')
+          .doc(item.ItemRef)
+          .get()
+          .then(doc => {
+            newItem = {
+              ...doc.data(),
+              type: item.Type,
+              key: doc.id,
+              quantity: item.Quantity,
+              options: item.Options,
+            };
+            newItems.push(newItem);
+          })
+          .catch(error => console.log(error));
       }
       temp.Items = newItems;
       await firestore()
@@ -120,7 +119,8 @@ const OrderPage = ({navigation}) => {
               : newOrders.push({period: temp.period, data: [temp]});
           }
           isCurrent ? setCurrentOrders(newOrders) : setPastOrders(newOrders);
-        });
+        })
+        .catch(error => console.log(error));
     });
   }
 

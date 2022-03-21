@@ -100,15 +100,16 @@ export default function App() {
     setTotal(0);
   }
 
+  // When coming from the shop list
   function newShop({shop, navigation}) {
     clearBasket();
     setCurrShop(shop);
     navigation.navigate('Shop page');
   }
 
+  // When coming from the markers
   function switchNewShop({shop}) {
-    setBasketContent([]);
-    setBasketSize(0);
+    clearBasket();
     setCurrShop(shop);
   }
 
@@ -206,7 +207,7 @@ export default function App() {
           documentSnapshot.data().ItemsOffered.forEach(itemRef => {
             firestore()
               .doc(itemRef.path)
-              .onSnapshot(querySnapshot => {
+              .onSnapshot(query => {
                 let collection = '';
                 if (itemRef.path.includes('Coffees')) {
                   collection = coffees;
@@ -216,8 +217,8 @@ export default function App() {
                   collection = snacks;
                 }
                 collection.push({
-                  ...querySnapshot.data(),
-                  key: querySnapshot.id,
+                  ...query.data(),
+                  key: query.id,
                 });
               });
           });
@@ -256,6 +257,7 @@ export default function App() {
               ItemsOffered: item.ItemsOffered,
               Likeness: item.Likeness,
               Queue: item.Queue,
+              key: item.key,
               DistanceTo: calculateDistance(item.Location),
             };
           });
@@ -292,6 +294,16 @@ export default function App() {
   function addToBasket(item) {
     const basket = basketContent;
     const exist = basket.find(x => isSameItem(x, item));
+    let type;
+    if (item.hasOwnProperty('Bean')){
+      type = 'Coffee';
+    } else if (
+      currShop.ItemsOffered.Drinks.filter(x => x.Name === item.Name).length !== 0
+    ) {
+      type = 'Drink';
+    } else {
+      type = 'Snack';
+    }
     if (exist) {
       setBasketContent(
         basket.map(x =>
@@ -299,7 +311,7 @@ export default function App() {
         ),
       );
     } else {
-      setBasketContent([...basket, {...item, count: 1}]);
+      setBasketContent([...basket, {...item, count: 1, type: type}]);
     }
     setTotal(total + item.Price);
     setBasketSize(basketSize + 1);
@@ -354,7 +366,7 @@ export default function App() {
         markers: markers,
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
-        userRef: userRef,
+        userRef: userRef, // Returns ID of the model object
         orderedShops: orderedShops,
         setOrderedShops: setOrderedShops,
       }}
