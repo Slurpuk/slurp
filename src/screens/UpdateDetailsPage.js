@@ -64,7 +64,6 @@ const UpdateDetailsPage = ({navigation}) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        console.log('Lol');
         firestore()
           .collection('Users')
           .doc(context.userRef)
@@ -92,14 +91,14 @@ const UpdateDetailsPage = ({navigation}) => {
             style={[styles.subDetails, styles.spaceRight]}
             title={'First Name'}
             setField={setFirstName}
-            placeholder={userDoc.FirstName}
+            placeholder={currentUser.FirstName}
             type={'name'}
           />
           <FormField
             style={[styles.subDetails, styles.spaceLeft]}
             title={'Last Name'}
             setField={setLastName}
-            placeholder={userDoc.LastName}
+            placeholder={currentUser.LastName}
             type={'name'}
           />
         </View>
