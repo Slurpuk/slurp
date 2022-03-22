@@ -13,10 +13,19 @@ import {GlobalContext} from '../../App';
 export const BasketContext = React.createContext();
 
 const BasketPage = ({navigation}) => {
+
   const context = useContext(GlobalContext);
+  const [payMethVisible, setPayMethVisible] = useState(false);
+  const [cards, setCards] = useState([]);
+  const [defaultCard, setDefaultCard] = useState([]);
+  const globalContext = useContext(GlobalContext);
+  const basketContext = useContext(BasketContext);
   const {confirmPayment} = useStripe();
+  const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
+  const [key, setKey] = useState('');
+
 
   async function confirmOrder() {
     if (context.basketSize === 0) {

@@ -4,13 +4,11 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useState} from 'react';
 import SideDrawerContent from '../components/HamburgerMenu/SideDrawerContent';
 import HamburgerButton from '../components/HamburgerMenu/HamburgerButton';
-import LogInPage from '../screens/LogInPage';
 import {
   ChangeDetailsStackNavigator,
   ChangePasswordStackNavigator,
   HomeStackNavigator,
   OrderHistoryStackNavigator,
-  PaymentAccountsNavigator,
 } from './StackNavigator';
 import {GlobalContext} from '../../App';
 import textStyles from '../../stylesheets/textStyles';
@@ -39,10 +37,6 @@ function HamburgerSlideBarNavigator() {
         <Drawer.Screen
           name="View order history"
           children={() => <OrderHistoryStackNavigator />}
-        />
-        <Drawer.Screen
-          name="Payment accounts"
-          children={() => <PaymentAccountsNavigator />}
         />
         <Drawer.Screen
           name="Change name"
