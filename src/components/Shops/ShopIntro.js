@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
+  Animated,
   View,
   StyleSheet,
   Text,
@@ -15,49 +16,62 @@ import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
 import {DraggableContext} from './DraggableShopPage';
 import {GlobalContext} from '../../../App';
+import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 
 const ShopIntro = ({shop}) => {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const context = shopContext === undefined ? globalContext : shopContext;
   const draggable = useContext(DraggableContext);
+
   return (
-    <ImageBackground
-      imageStyle={styles.cardImgs}
-      style={styles.container}
-      source={{uri: shop.Image}}
+    <Animated.View
+      style={{
+        opacity: globalContext.adaptiveOpacity,
+      }}
+      onLayout={event => {
+        fadeOpacityIn(globalContext.adaptiveOpacity, 140);
+      }}
     >
-      <LinearGradient
-        colors={['transparent', 'black']}
-        style={styles.linearGradient}
+      <ImageBackground
+        imageStyle={styles.cardImgs}
+        style={styles.container}
+        source={{uri: shop.Image}}
       >
-        <View
-          style={[
-            styles.back_button,
-            context.isFullScreen
-              ? {opacity: 1}
-              : context.isShopIntro
-              ? {opacity: 0}
-              : {opacity: 1},
-          ]}
+        <LinearGradient
+          colors={['transparent', 'black']}
+          style={styles.linearGradient}
         >
-          <WhiteArrowButton
-            direction={context.isShopIntro ? 'down' : 'left'}
-            navigation={context.navigation}
-            onPressAction={
-              context.isShopIntro ? draggable.bottomSheetRef : null
-            }
-          />
-        </View>
-        <View style={styles.content}>
-          <Text style={[textStyles.headingOne, styles.heading]}>
-            {shop.Name}
-          </Text>
-          <ShopDetailIcons likeness={shop.Likeness} timeToOrder={shop.Queue} />
-          <Text style={[textStyles.bodyText, styles.body]}>{shop.Intro}</Text>
-        </View>
-      </LinearGradient>
-    </ImageBackground>
+          <View
+            style={[
+              styles.back_button,
+              context.isFullScreen
+                ? {opacity: 1}
+                : context.isShopIntro
+                ? {opacity: 0}
+                : {opacity: 1},
+            ]}
+          >
+            <WhiteArrowButton
+              direction={context.isShopIntro ? 'down' : 'left'}
+              navigation={context.navigation}
+              onPressAction={
+                context.isShopIntro ? draggable.bottomSheetRef.current : null
+              }
+            />
+          </View>
+          <View style={styles.content}>
+            <Text style={[textStyles.headingOne, styles.heading]}>
+              {shop.Name}
+            </Text>
+            <ShopDetailIcons
+              timeToOrder={shop.Queue}
+            />
+            <Text style={[textStyles.bodyText, styles.body]}>{shop.Intro}</Text>
+          </View>
+        </LinearGradient>
+      </ImageBackground>
+    </Animated.View>
   );
 };
 
@@ -75,7 +89,7 @@ const styles = StyleSheet.create({
 
   cardImgs: {
     position: 'absolute',
-    width: screenWidth,
+    width: screenWidth * 1,
     height: screenWidth * 0.7,
     left: 0,
     borderRadius: 20,
@@ -103,6 +117,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     paddingVertical: 15,
-    paddingHorizontal: 15,
+    paddingHorizontal: 22,
+    // backgroundColor: 'red',
+    width: screenWidth * 1,
   },
 });

@@ -6,7 +6,7 @@ import {
   Text,
   ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';
@@ -14,11 +14,11 @@ import AnimatedCard from '../../sub-components/AnimatedCard';
 import LinearGradient from 'react-native-linear-gradient';
 
 const CollapsableOrder = ({order}) => {
-  const totalPrice = getTotalPrice(order);
+  const totalPrice = getTotalPrice(order.Items);
   const isOrderCurrent =
-    order.status === 'Ready' ||
-    order.status === 'Pending' ||
-    order.status === 'Accepted';
+    order.Status === 'ready' ||
+    order.Status === 'incoming' ||
+    order.Status === 'accepted';
   const initialHeight = isOrderCurrent ? 126 : 100;
 
   return (
@@ -37,9 +37,9 @@ const CollapsableOrder = ({order}) => {
   );
 };
 
-const getTotalPrice = order => {
+const getTotalPrice = items => {
   let total = 0;
-  order.items.forEach(item => (total += item.quantity * item.price));
+  items.forEach(item => (total += item.quantity * item.Price));
   return total;
 };
 

@@ -6,13 +6,14 @@
  * @flow strict-local
  */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import FormField from '../sub-components/FormField';
 import textStyles from '../../stylesheets/textStyles';
 import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
+import {reset} from "react-native-svg/lib/typescript/lib/Matrix2D";
 
 const LogInPage = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -39,9 +40,9 @@ const LogInPage = ({navigation}) => {
   };
 
   const resetFields = () => {
-    setEmail('');
-    setPassword('');
-  };
+    setEmail(' ');
+    setPassword(' ');
+  }
 
   const authenticateUser = async () => {
     try {

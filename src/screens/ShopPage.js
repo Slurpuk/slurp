@@ -10,7 +10,7 @@ import {GlobalContext} from '../../App';
 import firestore from '@react-native-firebase/firestore';
 
 export const ShopContext = React.createContext();
-const ShopPage = ({navigation}) => {
+const ShopPage = ({navigation, sheetRef}) => {
   const context = useContext(GlobalContext);
   const shop = context.currShop;
   const [optionsVisible, setOptionsVisible] = useState(false);
@@ -101,7 +101,11 @@ const ShopPage = ({navigation}) => {
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
           {context.isShopIntro ? (
-            <DraggableShopPage shop={shop} navigation={navigation} />
+            <DraggableShopPage
+              shop={shop}
+              navigation={navigation}
+              sheetRef={sheetRef}
+            />
           ) : (
             <NonDraggableShopPage shop={shop} navigation={navigation} />
           )}

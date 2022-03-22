@@ -53,7 +53,7 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
   };
 
   const selectShop = shop => {
-    context.setCurrShop({shop, navigation});
+    context.switchShop(shop);
   };
 
   return (
