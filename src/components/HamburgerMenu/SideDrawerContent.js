@@ -1,7 +1,7 @@
 import React from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
-import {Dimensions, Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 function SideDrawerContent(props) {
@@ -9,7 +9,7 @@ function SideDrawerContent(props) {
     try {
       await auth().signOut();
     } catch (e) {
-      alert(e.message);
+      console.log(e)
     }
   }
   return (
@@ -34,6 +34,16 @@ function SideDrawerContent(props) {
         labelStyle={styles.drawer_item_label}
       />
       <DrawerItem
+        label="View basket"
+        onPress={() => props.navigation.navigate('Basket page')}
+        activeTintColor="#2196f3"
+        activeBackgroundColor="rgba(0, 0, 0, .04)"
+        inactiveTintColor="rgba(0, 0, 0, .87)"
+        inactiveBackgroundColor="transparent"
+        style={styles.drawer_item}
+        labelStyle={styles.drawer_item_label}
+      />
+      <DrawerItem
         label="Payment accounts"
         onPress={() => props.navigation.navigate('Payment accounts')}
         activeTintColor="#2196f3"
@@ -44,7 +54,7 @@ function SideDrawerContent(props) {
         labelStyle={styles.drawer_item_label}
       />
       <DrawerItem
-        label="Change name"
+        label="Change details"
         onPress={() => props.navigation.navigate('Change name')}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"

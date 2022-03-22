@@ -16,16 +16,15 @@ const OrderDetailsView = ({order}) => {
       <View style={styles.orderDetails}>
         <View>
           <ImageBackground
-            source={require('../../assets/images/ShopExterior.png')}
+            source={{uri: order.shop.Image}}
             imageStyle={{borderRadius: 7, overflow: 'hidden'}}
             style={styles.picture}
           />
         </View>
         <View>
           <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
-          >
-            {order.coffeeShopName}
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
+            {order.shop.Name}
           </Text>
           {getStatusAndDateComponent(order)}
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
@@ -40,32 +39,31 @@ const OrderDetailsView = ({order}) => {
 
 const getItemsText = order => {
   let itemsComponent = '';
-  if (order.items.length === 1) {
-    let singleItem = order.items[0];
-    itemsComponent = singleItem.quantity + ' ' + singleItem.name;
+  if (order.Items.length === 1) {
+    let singleItem = order.Items[0];
+    itemsComponent = singleItem.quantity + ' ' + singleItem.Name;
   } else {
     let numberOfItems = 0;
-    order.items.forEach(item => (numberOfItems += item.quantity));
+    order.Items.forEach(item => (numberOfItems += item.quantity));
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
 };
 
 const getStatusAndDateComponent = order => {
-  let dateAndTime = order.date + ' • ' + order.time;
-  if (order.status === 'Collected') {
+  let dateAndTime = order.DateTime.toDate().toDateString();
+  if (order.Status === 'collected') {
     return (
       <Text
         style={[
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}
-      >
-        {order.status} {dateAndTime}
+        ]}>
+        {order.Status} {dateAndTime}
       </Text>
     );
-  } else if (order.status === 'Rejected' || order.status === 'Cancelled') {
+  } else if (order.Status === 'rejected') {
     return (
       <Text
         style={[
@@ -73,9 +71,20 @@ const getStatusAndDateComponent = order => {
           styles.textFlex,
           styles.finishedOrder,
           styles.cancelledOrder,
-        ]}
-      >
-        {order.status} {dateAndTime}
+        ]}>
+        Rejected {dateAndTime}
+      </Text>
+    );
+  } else if (order.Status === 'cancelled') {
+    return (
+      <Text
+        style={[
+          textStyles.lightGreyPoppins,
+          styles.textFlex,
+          styles.finishedOrder,
+          styles.cancelledOrder,
+        ]}>
+        Cancelled {dateAndTime}
       </Text>
     );
   } else {
@@ -88,11 +97,11 @@ const getStatusAndDateComponent = order => {
 };
 
 const getCurrentOrderStatusComponent = order => {
-  if (order.status === 'Pending') {
+  if (order.Status === 'incoming') {
     return <Text style={textStyles.pendingBluePoppins}>Pending</Text>;
-  } else if (order.status === 'Accepted') {
+  } else if (order.Status === 'accepted') {
     return <Text style={textStyles.pendingBluePoppins}>Accepted</Text>;
-  } else if (order.status === 'Ready') {
+  } else if (order.Status === 'ready') {
     return <Text style={textStyles.readyGreenPoppins}>Ready to Collect</Text>;
   }
 };

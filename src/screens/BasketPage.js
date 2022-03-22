@@ -29,68 +29,53 @@ const BasketPage = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [key, setKey] = useState('');
 
-  const [Items] = useState([
-    {
-      key: 1,
-      name: 'Latte',
-      amount: 0,
-      price: '2.40',
-      specifications: ['Oat Milk'],
-    },
-    {
-      key: 2,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 3,
-      name: 'Americano',
-      amount: 0,
-      price: '2.10',
-      specifications: [],
-    },
-    {
-      key: 4,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 5,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-  ]);
 
   async function confirmOrder() {
-    await firestore()
-      .collection('FakeOrder')
-      .add({
-        customerName: 'Shaun the sheep',
-        status: 'incoming',
-        total: context.total.toFixed(2),
-        items: Items.filter(item => item.amount !== 0),
-        key: 3,
-      })
-      .then(() => {
-        console.log('Order added!');
-        context.clearBasket();
-      });
-    Alert.alert(
-      'Order received.',
-      'Your order has been sent to the shop! Awaiting response.',
-      [
+    if (context.basketSize === 0) {
+      Alert.alert('Empty basket.', 'Please add items to your basket.', [
         {
           text: 'OK',
         },
-      ],
-    );
-    navigation.navigate('Order history');
+      ]);
+    } else {
+      await firestore()
+        .collection('Orders')
+        .add({
+          DateTime: firestore.Timestamp.now(),
+          Items: formatBasket(),
+          Status: 'incoming',
+          ShopID: context.currShop.key,
+          UserID: context.userRef,
+          Total: Number(context.total.toPrecision(2)),
+        })
+        .then(() => {
+          context.clearBasket();
+          Alert.alert(
+            'Order received.',
+            'Your order has been sent to the shop! Awaiting response.',
+            [
+              {
+                text: 'OK',
+                onPress: () => navigation.navigate('Order history'),
+              },
+            ],
+          );
+        });
+    }
+  }
+
+  function formatBasket() {
+    let items = context.basketContent.map(item => {
+      console.log(item);
+      return {
+        ItemRef: item.key,
+        Quantity: item.count,
+        Price: Number(item.Price.toPrecision(2)),
+        Type: item.type,
+        Options: item.options,
+      };
+    });
+    return items;
   }
 
   const fetchPaymentSheetParams = async () => {
@@ -209,9 +194,6 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  button: {
-    flex: 1,
   },
 
   lastButton: {

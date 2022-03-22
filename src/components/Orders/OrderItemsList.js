@@ -3,32 +3,24 @@ import {FlatList, View, StyleSheet, Text} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 
 const Item = ({item}) => {
-  const syrupText = item.syrup ? ' • ' + item.syrup : '';
-
   return (
     <View>
       <View style={styles.singleElement}>
         <View style={styles.elementDetails}>
           <Text style={textStyles.bluePoppinsSubHeading}>
-            {item.quantity} {item.name}
+            {item.quantity} {item.Name}
           </Text>
-          <Text style={textStyles.lightGreyPoppins}>
-            {item.milk}
-            {syrupText}
+          <Text style={[textStyles.lightGreyPoppins, styles.options]}>
+            {getOptionsText(item)}
           </Text>
         </View>
         <View style={styles.elementPrice}>
           <Text style={textStyles.darkGreyPoppinsSubHeading}>
-            £{(item.price * item.quantity).toFixed(2)}
+            £{(item.Price * item.quantity + getOptionsPrice(item)).toFixed(2)}
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          borderBottomColor: '#E2E2E2',
-          borderBottomWidth: 1.5,
-        }}
-      />
+      <View style={styles.greyBottomLine} />
     </View>
   );
 };
@@ -41,11 +33,30 @@ const EmptyItemLine = () => {
   );
 };
 
+function getOptionsPrice(item) {
+  let totalPrice = 0;
+  item.options.forEach(option => {
+    totalPrice += option.Price;
+  });
+
+  return totalPrice;
+}
+
+function getOptionsText(item) {
+  let optionsText = '';
+  item.options.forEach(option => {
+    optionsText += option.Name + ' ' + option.Type + ', ';
+  });
+  return optionsText !== ''
+    ? optionsText.substring(0, optionsText.length - 2)
+    : optionsText;
+}
+
 const OrderItemsList = ({order}) => {
   return (
     <View>
       <FlatList
-        data={order.items}
+        data={order.Items}
         renderItem={({item}) => <Item item={item} />}
       />
       <EmptyItemLine />
@@ -72,6 +83,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  options: {
+    marginRight: '15%',
+  },
+  greyBottomLine: {
+    borderBottomColor: '#E2E2E2',
+    borderBottomWidth: 1.5,
   },
 });
 

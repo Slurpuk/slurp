@@ -9,7 +9,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../../../App';
 
 type SearchBarComponentProps = {};
 
@@ -53,7 +53,7 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
   };
 
   const selectShop = shop => {
-    context.setCurrShop({shop, navigation});
+    context.switchShop(shop);
   };
 
   return (

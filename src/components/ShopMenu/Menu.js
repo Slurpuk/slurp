@@ -7,13 +7,14 @@ import renderers from '../../renderers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
+import EmptyListText from "../../sub-components/EmptyListText";
 
 const Tab = createMaterialTopTabNavigator();
 
 const Menu = ({navigation}) => {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
-
+  const emptyText = 'There are currently no items in this section, check again later.';
   return (
     <>
       <Tab.Navigator
@@ -48,6 +49,7 @@ const Menu = ({navigation}) => {
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
+              ListEmptyComponent={EmptyListText(emptyText)}
               columnWrapperStyle={styles.row}
               contentContainerStyle={styles.content}
             />
@@ -61,6 +63,7 @@ const Menu = ({navigation}) => {
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
+              ListEmptyComponent={EmptyListText(emptyText)}
               columnWrapperStyle={styles.row}
               contentContainerStyle={styles.content}
             />
@@ -74,6 +77,7 @@ const Menu = ({navigation}) => {
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
+              ListEmptyComponent={EmptyListText(emptyText)}
               columnWrapperStyle={styles.row}
               contentContainerStyle={styles.content}
             />
