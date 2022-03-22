@@ -70,6 +70,13 @@
     "react-test-renderer": "17.0.2"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transform": {
+      "node_modules/variables/.+\\.(j|t)sx?$": "react-native"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!@react-native|react-native)"
+    ],
+    "setupFiles": ["<rootDir>/__testingAid__/jest.setup.js"]
   }
 }
