@@ -47,7 +47,6 @@ export default function App() {
   }, []);
 
   const calculateDistance = coords => {
-    //TODO change defaultLocation for currentLocation (currentLatitude and currentLongitude)
 
     const R = 6371e3; // metres
     const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
@@ -260,10 +259,9 @@ export default function App() {
           //ordering the shops based on distance from user location
           editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
 
-          //filtering the shops based on radius limitation (rn 20,000m)
-          const newEdited = editedShopsData.filter(
-            item => item.DistanceTo < 20000,
-          );
+          //filtering the shops based on radius limitation (rn 1500)
+          const newEdited = editedShopsData
+              .filter((item) => item.DistanceTo < 1500);
 
           setOrderedShops(newEdited);
         });

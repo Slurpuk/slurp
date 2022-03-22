@@ -54,7 +54,7 @@ function SideDrawerContent(props) {
         labelStyle={styles.drawer_item_label}
       />
       <DrawerItem
-        label="Change name"
+        label="Change details"
         onPress={() => props.navigation.navigate('Change name')}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
