@@ -1,11 +1,16 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import PaymentMethodPopUp from '../components/PaymentCards/PaymentMethodPopUp';
+import {
+  CardField,
+  StripeProvider,
+  useStripe,
+} from '@stripe/stripe-react-native';
 
 import {GlobalContext} from '../../App';
 import {BlurView} from '@react-native-community/blur';
@@ -14,6 +19,15 @@ export const BasketContext = React.createContext();
 const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const [payMethVisible, setPayMethVisible] = useState(false);
+  const [cards, setCards] = useState([]);
+  const [defaultCard, setDefaultCard] = useState([]);
+  const globalContext = useContext(GlobalContext);
+  const basketContext = useContext(BasketContext);
+  const {confirmPayment} = useStripe();
+  const API_URL = 'http://localhost:8000';
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
+  const [loading, setLoading] = useState(false);
+  const [key, setKey] = useState('');
 
   const [Items] = useState([
     {
@@ -79,6 +93,52 @@ const BasketPage = ({navigation}) => {
     navigation.navigate('Order history');
   }
 
+  const fetchPaymentSheetParams = async () => {
+    const response = await fetch(
+      'http://localhost:8000/create-payment-intent',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const {paymentIntent, ephemeralKey, customer} = await response.json();
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initializePaymentSheet = async () => {
+    const {paymentIntent, ephemeralKey, customer} =
+      await fetchPaymentSheetParams();
+    const {error} = await initPaymentSheet({
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+    });
+    if (!error) {
+      setLoading(true);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    const {error} = await presentPaymentSheet();
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      Alert.alert('Success', 'Your order is confirmed!');
+      await confirmOrder();
+    }
+  };
+
+  useEffect(() => {
+    initializePaymentSheet().then(r => console.log('Working!!'));
+  }, [initializePaymentSheet]);
+
   return (
     <BasketContext.Provider
       value={{
@@ -106,26 +166,14 @@ const BasketPage = ({navigation}) => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPressIn={() => setPayMethVisible(true)}
-          style={[
-            styles.lastButton,
-            styles.buttons,
-          ]}>
+          onPressIn={openPaymentSheet}
+          style={[styles.lastButton, styles.buttons]}>
           <CustomButton
             priority="primary"
             style={styles.button}
             text={'Checkout with card'}
           />
         </TouchableOpacity>
-        {payMethVisible ? (
-          <BlurView
-            style={styles.absolute}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="white"
-          />
-        ) : null}
-        {payMethVisible ? <PaymentMethodPopUp /> : null}
       </View>
     </BasketContext.Provider>
   );
