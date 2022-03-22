@@ -247,7 +247,7 @@ export default function App() {
               },
               Image: item.Image,
               Email: item.Email,
-              IsOpen: item.isOpen,
+              IsOpen: item.IsOpen,
               ItemsOffered: item.ItemsOffered,
               Likeness: item.Likeness,
               Queue: item.Queue,
