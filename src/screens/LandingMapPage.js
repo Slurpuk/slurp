@@ -15,8 +15,8 @@ import {useFocusEffect} from '@react-navigation/native';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
-import {SearchBar} from '../sub-components/CustomSearchBar';
-import CustomSearchBar from '../CustomSearchBar';
+import {SearchBar} from '../components/LandingMap/CustomSearchBar';
+import CustomSearchBar from '../components/LandingMap/CustomSearchBar';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
