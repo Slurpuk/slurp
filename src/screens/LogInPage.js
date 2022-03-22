@@ -6,16 +6,19 @@
  * @flow strict-local
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import FormField from '../sub-components/FormField';
 import textStyles from '../../stylesheets/textStyles';
 import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
-import {reset} from "react-native-svg/lib/typescript/lib/Matrix2D";
+import {reset} from 'react-native-svg/lib/typescript/lib/Matrix2D';
+import WhiteArrowButton from "../sub-components/WhiteArrowButton";
+import {GlobalContext} from "../../App";
 
 const LogInPage = ({navigation}) => {
+  const context = useContext(GlobalContext)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -39,19 +42,22 @@ const LogInPage = ({navigation}) => {
     ]);
   };
 
-  const resetFields = () => {
-    setEmail(' ');
-    setPassword(' ');
-  }
+  // const resetFields = () => {
+  //   setEmail(' ');
+  //   setPassword(' ');
+  // };
 
   const authenticateUser = async () => {
     try {
-      let response = await auth().signInWithEmailAndPassword(email, password);
-      if (response && response.user) {
-        resetFields();
-      } else {
-        invalidUserMessage();
-      }
+      await auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(response => {
+          if (response && response.user) {
+            context.enterApp();
+          } else {
+            invalidUserMessage();
+          }
+        });
     } catch (e) {
       invalidMessage(e.message);
     }
@@ -60,7 +66,10 @@ const LogInPage = ({navigation}) => {
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        {context.isFirstTime ? <WhiteArrowButton navigation={navigation} direction={'left'} onPressAction={() => navigation.navigate('Welcome')} customStyle={{marginRight: '26%'}}/>: null}
+        <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
+      </View>
       <View style={styles.form}>
         <FormField
           title={'Email'}
@@ -78,16 +87,14 @@ const LogInPage = ({navigation}) => {
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={null}
-          >
+            onPress={null}>
             Forgot your password?
           </Text>
         </View>
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={switchToSignUp}
-          >
+            onPress={switchToSignUp}>
             New? Create an account
           </Text>
         </View>

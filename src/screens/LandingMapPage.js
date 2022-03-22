@@ -45,7 +45,7 @@ export default function LandingMapPage({navigation}) {
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground sheetRef={bottomSheetRef}/>
+        <MapBackground/>
         <CustomSearchBar navigation={navigation} />
       </View>
 

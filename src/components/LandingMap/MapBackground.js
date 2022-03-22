@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 
 import {
   Dimensions,
@@ -7,7 +7,6 @@ import {
   Text,
   View,
   PermissionsAndroid,
-
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
@@ -15,13 +14,14 @@ import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
+import firestore from '@react-native-firebase/firestore';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export default function MapBackground({sheetRef}) {
+export default function MapBackground() {
   const context = useContext(GlobalContext);
-  let watchID;
-  const [mapCenter, setMapCenter] = useState({
+  const watchID = useRef();
+  const mapCenter = useRef({
     latitude: context.currentCenterLocation.latitude,
     longitude: context.currentCenterLocation.longitude,
     latitudeDelta: 0.01,
@@ -41,12 +41,13 @@ export default function MapBackground({sheetRef}) {
           latitude: selectedShop.Location._latitude,
           longitude: selectedShop.Location._longitude,
         });
-        setMapCenter(prevState => ({
+        let old = mapCenter.current;
+        mapCenter.current = {
           latitude: selectedShop.Location._latitude,
           longitude: selectedShop.Location._longitude,
-          latitudeDelta: prevState.latitudeDelta,
-          longitudeDelta: prevState.longitudeDelta,
-        }));
+          latitudeDelta: old.latitudeDelta,
+          longitudeDelta: old.longitudeDelta,
+        };
         context.switchShop(selectedShop);
         clearTimeout(myTimeout);
       }, 200);
@@ -59,12 +60,13 @@ export default function MapBackground({sheetRef}) {
         latitude: selectedShop.Location._latitude,
         longitude: selectedShop.Location._longitude,
       });
-      setMapCenter(prevState => ({
+      let old = mapCenter.current;
+      mapCenter.current = {
         latitude: selectedShop.Location._latitude,
         longitude: selectedShop.Location._longitude,
-        latitudeDelta: prevState.latitudeDelta,
-        longitudeDelta: prevState.longitudeDelta,
-      }));
+        latitudeDelta: old.latitudeDelta,
+        longitudeDelta: old.longitudeDelta,
+      };
       context.switchShop(selectedShop);
       context.setShopIntro(true);
     }
@@ -96,7 +98,7 @@ export default function MapBackground({sheetRef}) {
     };
     requestLocationPermission().then(r => console.log('permission granted'));
     return () => {
-      Geolocation.clearWatch(watchID);
+      Geolocation.clearWatch(watchID.current);
     };
   }, []);
 
@@ -106,19 +108,20 @@ export default function MapBackground({sheetRef}) {
       position => {
         const longitude = position.coords.longitude;
         const latitude = position.coords.latitude;
-        setMapCenter(prevState => ({
+        let old = mapCenter.current;
+        mapCenter.current = {
           latitude: latitude,
           longitude: longitude,
-          latitudeDelta: prevState.latitudeDelta,
-          longitudeDelta: prevState.longitudeDelta,
-        }));
+          latitudeDelta: old.latitudeDelta,
+          longitudeDelta: old.longitudeDelta,
+        };
         // Setting new current location
         context.setCurrentCenterLocation({
           latitude: latitude,
           longitude: longitude,
         });
       },
-      error => {},
+      error => console.log(error),
       {
         enableHighAccuracy: true,
         timeout: 30000,
@@ -127,24 +130,36 @@ export default function MapBackground({sheetRef}) {
   };
 
   const subscribeLocationLocation = () => {
-    watchID = Geolocation.watchPosition(
-      position => {
+    watchID.current = Geolocation.watchPosition(
+      async position => {
         //Will give you the location on location change
         const longitude = position.coords.longitude;
         const latitude = position.coords.latitude;
         //Setting Longitude state
-        setMapCenter(prevState => ({
+        let old = mapCenter.current;
+        mapCenter.current = {
           latitude: latitude,
           longitude: longitude,
-          latitudeDelta: prevState.latitudeDelta,
-          longitudeDelta: prevState.longitudeDelta,
-        }));
+          latitudeDelta: old.latitudeDelta,
+          longitudeDelta: old.longitudeDelta,
+        };
         context.setCurrentCenterLocation({
           latitude: latitude,
           longitude: longitude,
         });
+        if (context.userRef) {
+          await firestore()
+            .collection('Users')
+            .doc(context.userRef)
+            .update({
+              latitude: latitude,
+              longitude: longitude,
+            })
+            .then(r => console.log('position updated'))
+            .catch(error => console.log(error));
+        }
       },
-      error => {},
+      error => console.log(error),
       {
         enableHighAccuracy: true,
       },
@@ -157,18 +172,18 @@ export default function MapBackground({sheetRef}) {
         onRegionChangeComplete={(region, isGesture) => {
           if (Platform.OS === 'ios') {
             if (
-              region.latitude.toFixed(6) !== mapCenter.latitude.toFixed(6) &&
-              region.longitude.toFixed(6) !== mapCenter.longitude.toFixed(6)
+              region.latitude.toFixed(6) !== mapCenter.current.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !== mapCenter.current.longitude.toFixed(6)
             ) {
-              setMapCenter(region);
+              mapCenter.current = region;
             }
           } else {
-            setMapCenter(region);
+            mapCenter.current = region;
           }
         }}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter}>
+        region={mapCenter.current}>
         {context.markers.map((marker, index) => (
           <Marker
             key={index}

@@ -18,44 +18,6 @@ const BasketPage = ({navigation}) => {
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
 
-  const [Items] = useState([
-    {
-      key: 1,
-      name: 'Latte',
-      amount: 0,
-      price: '2.40',
-      specifications: ['Oat Milk'],
-    },
-    {
-      key: 2,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 3,
-      name: 'Americano',
-      amount: 0,
-      price: '2.10',
-      specifications: [],
-    },
-    {
-      key: 4,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-    {
-      key: 5,
-      name: 'Cappuccino',
-      amount: 0,
-      price: '2.30',
-      specifications: ['Dairy', 'Caramel Syrup'],
-    },
-  ]);
-
   async function confirmOrder() {
     if (context.basketSize === 0) {
       Alert.alert('Empty basket.', 'Please add items to your basket.', [
@@ -153,7 +115,6 @@ const BasketPage = ({navigation}) => {
   return (
     <BasketContext.Provider
       value={{
-        setPayMethVisible: setPayMethVisible,
         navigation: navigation,
       }}>
       <View style={styles.basket}>
@@ -220,9 +181,6 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  button: {
-    flex: 1,
   },
 
   lastButton: {
