@@ -1,3 +1,6 @@
+//import {GlobalContext} from '../App';
+//import react, {useContext} from 'react';
+//const globalContext = react.useContext(GlobalContext);
 const express = require('express');
 const {Stripe} = require('stripe');
 const stripe = new Stripe(
@@ -11,13 +14,23 @@ const app = express();
 app.use(express.json());
 
 app.post('/create-payment-intent', async (req, res) => {
+  let customer = await stripe.customers.create();
+
+  const ephemeralKey = await stripe.ephemeralKeys.create(
+    {customer: customer.id},
+    {apiVersion: '2020-08-27'},
+  );
+
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: '3000',
     currency: 'gbp',
+    amount: '300',
+    customer: customer.id,
   });
   res.send({
-    clientSecret: paymentIntent.client_secret,
-    paymentIntent: paymentIntent,
+    publishableKey: process.env.publishable_key,
+    paymentIntent: paymentIntent.client_secret,
+    customer: customer.id,
+    ephemeralKey: ephemeralKey.secret,
   });
 });
 

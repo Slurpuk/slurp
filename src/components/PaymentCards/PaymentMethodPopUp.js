@@ -36,7 +36,7 @@ const PaymentMethodPopUp = ({navigation}) => {
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
   const [key, setKey] = useState('');
-
+  /*
   //comment
   useEffect(() => {
     fetch('http://localhost:8000/create-payment-intent', {
@@ -44,35 +44,90 @@ const PaymentMethodPopUp = ({navigation}) => {
     })
       .then(res => res.json())
       .then(res => {
-        //res.paymentIntent.amount = globalContext.total;
+        res.paymentIntent.amount = globalContext.total; //Test
+        res.paymentIntent.amount_capturable = globalContext.total; //Test
+        res.paymentIntent.amount_received = globalContext.total; //Test
+        res.paymentIntent.description = 'Test Payment';
         console.log('payment intent:' + res.paymentIntent);
         console.log('intent', res);
+        console.log('amount', res.paymentIntent.amount);
         setKey(res.clientSecret);
       })
       .catch(e => Alert.alert(e.message));
-  }, []);
+  }, []);*/
+///////////////////////////////New Added///////////////////////////
+  const fetchPaymentSheetParams = async () => {
+    const response = await fetch(
+      'http://localhost:8000/create-payment-intent',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const {paymentIntent, ephemeralKey, customer} = await response.json();
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initializePaymentSheet = async () => {
+    const {paymentIntent, ephemeralKey, customer} =
+      await fetchPaymentSheetParams();
+    const {error} = await initPaymentSheet({
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+    });
+    if (!error) {
+      setLoading(true);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    const {error} = await presentPaymentSheet();
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      Alert.alert('Success', 'Your order is confirmed!');
+    }
+  };
+
+  useEffect(() => {
+    initializePaymentSheet().then(r => console.log('Working!!'));
+  }, [initializePaymentSheet]);
+
+  //////////////////////////////New Added//////////////////////////////
 
   const handleConfirmation = async () => {
     if (key) {
+      console.log('Handle');
       const {paymentIntent, error} = await confirmPayment(key, {
         type: 'Card',
-        card: {
-          brand: 'Visa',
-          number: '4242424242424242',
-          complete: true,
-          expiryMonth: 4,
-          expiryYear: 24,
-          cvc: '444',
-          validCVC: 'Complete',
-          validExpiryDate: 'Valid',
-          validNumber: 'Valid',
-        },
         billingDetails: {
-          email: 'John@email.com',
+          email: 'ardan@gmail.com',
+        },
+        data: {
+          object: 'payment_intent',
+          amount: globalContext.total,
+        },
+        event: {
+          object: 'payment_intent',
+          amount: globalContext.total,
+        },
+        eventData: {
+          object: 'payment_intent',
+          amount: globalContext.total,
         },
       });
 
       if (!error) {
+        paymentIntent.amount = globalContext.total; //Added as a test
+        console.log(paymentIntent.amount); //Added as a test
         Alert.alert('Received payment', `Billed for ${paymentIntent?.amount}`);
       } else {
         Alert.alert('Error', error.message);
@@ -219,7 +274,7 @@ const PaymentMethodPopUp = ({navigation}) => {
             priority={'primary'}
             width={screenWidth * 0.79}
             style={styles.button}
-            onPress={handleConfirmation}
+            onPress={openPaymentSheet}
           />
         </View>
       </View>
