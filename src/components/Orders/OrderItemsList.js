@@ -20,12 +20,7 @@ const Item = ({item}) => {
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          borderBottomColor: '#E2E2E2',
-          borderBottomWidth: 1.5,
-        }}
-      />
+      <View style={styles.greyBottomLine} />
     </View>
   );
 };
@@ -89,9 +84,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   options: {
     marginRight: '15%',
+  },
+  greyBottomLine: {
+    borderBottomColor: '#E2E2E2',
+    borderBottomWidth: 1.5,
   },
 });
 
