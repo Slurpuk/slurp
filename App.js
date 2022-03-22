@@ -1,9 +1,7 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
-import HamburgerSlideBarNavigator, {
-  VisibleContext,
-} from './src/navigation/HamburgerSlideBarNavigator';
+import React, {useEffect, useRef, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
 import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
@@ -48,27 +46,26 @@ export default function App() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateDistance = coords => {
-
     const R = 6371e3; // metres
     const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
     const latitude2 = (coords.latitude * Math.PI) / 180;
     const diffLat =
-        ((coords.latitude - currentCenterLocation.latitude) * Math.PI) / 180;
+      ((coords.latitude - currentCenterLocation.latitude) * Math.PI) / 180;
     const diffLon =
-        ((coords.longitude - currentCenterLocation.longitude) * Math.PI) / 180;
+      ((coords.longitude - currentCenterLocation.longitude) * Math.PI) / 180;
 
     const aa =
-        Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-        Math.cos(latitude1) *
+      Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+      Math.cos(latitude1) *
         Math.cos(latitude2) *
         Math.sin(diffLon / 2) *
         Math.sin(diffLon / 2);
     const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa));
 
-  // in metres
+    // in metres
+    // eslint-disable-next-line radix
     return parseInt(R * cc);
   };
-
 
   useEffect(() => {
     checkForFirstTime();
@@ -87,7 +84,7 @@ export default function App() {
     });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, []);
+  }, [setUser]);
 
   const enterApp = () => {
     setIsFirstTime(false);
@@ -183,9 +180,10 @@ export default function App() {
       );
     } else {
       setCurrShop(shop);
-      if (!isShopIntro) setIsShopIntro(true);
+      if (!isShopIntro) {
+        setIsShopIntro(true);
+      }
     }
-
   }
 
   // Subscribe to the Shops model
@@ -253,7 +251,7 @@ export default function App() {
               },
               Image: item.Image,
               Email: item.Email,
-              IsOpen: item.isOpen,
+              IsOpen: item.IsOpen,
               ItemsOffered: item.ItemsOffered,
               Likeness: item.Likeness,
               Queue: item.Queue,
@@ -263,21 +261,20 @@ export default function App() {
           });
 
           //ordering the shops based on distance from user location
-          editedShopsData
-              .sort((a, b) => a.DistanceTo - b.DistanceTo);
+          editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
 
           //filtering the shops based on radius limitation (rn 1500)
-          const newEdited = editedShopsData
-              .filter((item) => item.DistanceTo < 1500);
+          const newEdited = editedShopsData.filter(
+            item => item.DistanceTo < 1500,
+          );
 
           setOrderedShops(newEdited);
         });
-
       }, []);
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, []);
+  }, [calculateDistance, markers]);
 
   function isSameItem(it, currIt) {
     if (currIt.hasOwnProperty('Bean') && it.hasOwnProperty('Bean')) {
@@ -295,10 +292,11 @@ export default function App() {
     const basket = basketContent;
     const exist = basket.find(x => isSameItem(x, item));
     let type;
-    if (item.hasOwnProperty('Bean')){
+    if (item.hasOwnProperty('Bean')) {
       type = 'Coffee';
     } else if (
-      currShop.ItemsOffered.Drinks.filter(x => x.Name === item.Name).length !== 0
+      currShop.ItemsOffered.Drinks.filter(x => x.Name === item.Name).length !==
+      0
     ) {
       type = 'Drink';
     } else {
@@ -337,8 +335,6 @@ export default function App() {
     setIsShopIntro(shown);
   };
 
-
-
   const Stack = createNativeStackNavigator();
   return (
     <GlobalContext.Provider
@@ -369,8 +365,7 @@ export default function App() {
         userRef: userRef, // Returns ID of the model object
         orderedShops: orderedShops,
         setOrderedShops: setOrderedShops,
-      }}
-    >
+      }}>
       <NavigationContainer>
         {isLoggedIn ? (
           <HamburgerSlideBarNavigator />
