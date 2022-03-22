@@ -220,9 +220,6 @@ export default function App() {
     setIsShopIntro(!isShopIntro);
   };
 
-  console.log("current user: "+currentUser);
-  console.log("user ref: "+userRef);
-  console.log("user obj: "+userObj);
 
   const Stack = createNativeStackNavigator();
   return (

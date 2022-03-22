@@ -14,8 +14,6 @@ import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
-import UncollapsedPayMethCard from './UncollapsedPayMethCard';
-import CollapsedPayMethCard from './CollapsedPayMethCard';
 import AnimatedCard from '../../sub-components/AnimatedCard';
 import PayMethPaymentCard from './PayMethPaymentCard';
 import {GlobalContext} from '../../../App';
@@ -166,17 +164,6 @@ const PaymentMethodPopUp = ({navigation}) => {
     getCards().then(() => console.log('Updated cards'));
   }, []);
 
-  /*  useEffect(() => {
-    fetch('http://localhost:8000/checkout', {
-      method: 'POST',
-    })
-      .then(res => res.json())
-      .then(res => {
-        console.log('intent', res);
-        setKey(res.clientSecret);
-      })
-      .catch(e => Alert.alert(e.message));
-  }, []);*/
 
   const animation = new Animated.Value(0);
   const inputRange = [0, 1];
@@ -281,6 +268,29 @@ const PaymentMethodPopUp = ({navigation}) => {
     </StripeProvider>
   );
 };
+
+const UncollapsedPayMethCard = ({cards}) => {
+
+  return (
+      <View style={{}}>
+        <FlatList
+            data={cards}
+            renderItem={({item}) => <PayMethPaymentCard card={item} />}/>
+      </View>
+  );
+};
+
+const CollapsedPayMethCard = ({defaultCard}) => {
+
+  return (
+      <View style={{}}>
+        <PayMethPaymentCard card={defaultCard} isFirst={true} />
+      </View>
+  );
+};
+
+
+
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({

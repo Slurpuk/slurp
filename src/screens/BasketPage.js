@@ -5,29 +5,18 @@ import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import PaymentMethodPopUp from '../components/PaymentCards/PaymentMethodPopUp';
 import {
-  CardField,
-  StripeProvider,
   useStripe,
 } from '@stripe/stripe-react-native';
 
 import {GlobalContext} from '../../App';
-import {BlurView} from '@react-native-community/blur';
 export const BasketContext = React.createContext();
 
 const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
-  const [payMethVisible, setPayMethVisible] = useState(false);
-  const [cards, setCards] = useState([]);
-  const [defaultCard, setDefaultCard] = useState([]);
-  const globalContext = useContext(GlobalContext);
-  const basketContext = useContext(BasketContext);
   const {confirmPayment} = useStripe();
-  const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
-  const [key, setKey] = useState('');
 
   const [Items] = useState([
     {
@@ -68,29 +57,51 @@ const BasketPage = ({navigation}) => {
   ]);
 
   async function confirmOrder() {
-    await firestore()
-      .collection('FakeOrder')
-      .add({
-        customerName: 'Shaun the sheep',
-        status: 'incoming',
-        total: context.total.toFixed(2),
-        items: Items.filter(item => item.amount !== 0),
-        key: 3,
-      })
-      .then(() => {
-        console.log('Order added!');
-        context.clearBasket();
-      });
-    Alert.alert(
-      'Order received.',
-      'Your order has been sent to the shop! Awaiting response.',
-      [
+    if (context.basketSize === 0) {
+      Alert.alert('Empty basket.', 'Please add items to your basket.', [
         {
           text: 'OK',
         },
-      ],
-    );
-    navigation.navigate('Order history');
+      ]);
+    } else {
+      await firestore()
+          .collection('Orders')
+          .add({
+            DateTime: firestore.Timestamp.now(),
+            Items: formatBasket(),
+            Status: 'incoming',
+            ShopID: context.currShop.key,
+            UserID: context.userRef,
+            Total: Number(context.total.toPrecision(2)),
+          })
+          .then(() => {
+            context.clearBasket();
+            Alert.alert(
+                'Order received.',
+                'Your order has been sent to the shop! Awaiting response.',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => navigation.navigate('Order history'),
+                  },
+                ],
+            );
+          });
+    }
+  }
+
+  function formatBasket() {
+    let items = context.basketContent.map(item => {
+      console.log(item);
+      return {
+        ItemRef: item.key,
+        Quantity: item.count,
+        Price: Number(item.Price.toPrecision(2)),
+        Type: item.type,
+        Options: item.options,
+      };
+    });
+    return items;
   }
 
   const fetchPaymentSheetParams = async () => {
