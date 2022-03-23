@@ -6,7 +6,9 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --updateSnapshot && jest",
+    "testCoverage": "jest --updateSnapshot && jest --coverage",
+    "coverage": "jest --updateSnapshot && jest --coverage",
     "lint": "eslint .",
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",
     "softRefresh": "npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd .."
