@@ -7,6 +7,9 @@ import {
   Text,
   View,
   PermissionsAndroid,
+  Animated,
+  Image,
+  Keyboard,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
@@ -19,7 +22,10 @@ import {locationPress, requestLocationPermission} from './locationHelpers';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export default function MapBackground() {
+export default function MapBackground({
+  searchBarFocused,
+  setSearchBarFocussed,
+}) {
   const context = useContext(GlobalContext);
   const watchID = useRef();
   const mapCenter = useRef({
@@ -28,6 +34,50 @@ export default function MapBackground() {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
+
+  const locationPress = clickedMarker => {
+    let selectedShop = context.shopsData.find(
+      shop => shop.Name === clickedMarker,
+    );
+
+    if (context.isShopIntro) {
+      fadeOpacityOut(context.adaptiveOpacity, 170);
+
+      let myTimeout = setTimeout(() => {
+        context.setCurrentCenterLocation({
+          latitude: selectedShop.Location._latitude,
+          longitude: selectedShop.Location._longitude,
+        });
+        let old = mapCenter.current;
+        mapCenter.current = {
+          latitude: selectedShop.Location._latitude,
+          longitude: selectedShop.Location._longitude,
+          latitudeDelta: old.latitudeDelta,
+          longitudeDelta: old.longitudeDelta,
+        };
+        context.switchShop(selectedShop);
+        clearTimeout(myTimeout);
+      }, 200);
+
+      setTimeout(() => {
+        fadeOpacityIn(context.adaptiveOpacity, 200);
+      }, 210);
+    } else {
+      context.setCurrentCenterLocation({
+        latitude: selectedShop.Location._latitude,
+        longitude: selectedShop.Location._longitude,
+      });
+      let old = mapCenter.current;
+      mapCenter.current = {
+        latitude: selectedShop.Location._latitude,
+        longitude: selectedShop.Location._longitude,
+        latitudeDelta: old.latitudeDelta,
+        longitudeDelta: old.longitudeDelta,
+      };
+      context.switchShop(selectedShop);
+      context.setShopIntro(true);
+    }
+  };
 
   useEffect(() => {
     requestLocationPermission(context, mapCenter, watchID.current).then(r =>
@@ -55,6 +105,8 @@ export default function MapBackground() {
             mapCenter.current = region;
           }
         }}
+        onPress={event => mapPressed()}
+        onPanDrag={event => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={mapCenter.current}>
@@ -68,6 +120,7 @@ export default function MapBackground() {
               if (marker.isOpen) {
                 locationPress(context, mapCenter, marker.name);
               }
+              mapPressed();
             }}>
             <View style={styles.markerStyle}>
               <Text style={{color: 'red', fontWeight: 'bold'}}>
@@ -88,6 +141,7 @@ const styles = StyleSheet.create({
     height: screenHeight,
     width: screenWidth,
     justifyContent: 'flex-end',
+    zIndex: -3,
   },
   map: {
     ...StyleSheet.absoluteFillObject,

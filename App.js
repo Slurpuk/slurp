@@ -12,13 +12,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 import {Alert, Animated} from 'react-native';
-import auth from '@react-native-firebase/auth';
 
 export const GlobalContext = React.createContext();
 export default function App() {
   const isFirstTime = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(auth().currentUser);
+  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
   const [userRef, setUserRef] = useState(null);
   const [userObj, setUserObj] = useState(null);
   const [shopsData, setShopsData] = useState([]);
