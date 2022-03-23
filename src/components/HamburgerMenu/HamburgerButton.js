@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   floating_button: {
-    marginTop: '20%',
+    opacity: 0,
+    marginTop: screenHeight * 0.07,
     underlayColor: 'white',
     height: 0.07 * screenHeight,
     margin: '3%',

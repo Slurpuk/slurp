@@ -79,7 +79,7 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
         searchIcon={false}
       />
       {searchBarFocused ? (
-        <>
+        <View style={styles.activeElementsWrapper}>
           <View style={styles.cover} />
           <FlatList
             data={shops}
@@ -122,7 +122,7 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
               </View>
             )}
           />
-        </>
+        </View>
       ) : null}
     </View>
   );
@@ -137,18 +137,18 @@ const styles = StyleSheet.create({
     marginRight: 0,
     ...Platform.select({
       ios: {
-        marginTop: '15%',
+        marginTop: '0%',
       },
       android: {
-        marginTop: '15%',
+        marginTop: '0%',
       },
     }),
-    width: '100%',
     alignSelf: 'flex-end',
+    flex: 1,
   },
 
   searchResultContainer: {
-    width: screenWidth,
+    width: screenWidth * 0.7,
   },
 
   container: {
@@ -163,22 +163,26 @@ const styles = StyleSheet.create({
     height: 0.07 * screenHeight,
     color: '#046D66',
     overflow: 'visible',
-    marginLeft: screenWidth * 0.17,
+    marginLeft: '3%',
     marginRight: '3%',
     zIndex: 0,
   },
 
+  activeElementsWrapper:{
+    marginLeft: (-screenHeight * 0.1),
+  },
+
   searchResult: {
-    width: screenWidth * 1,
+    width: screenWidth * 1.1,
   },
 
   cover: {
     backgroundColor: 'white',
     opacity: 0.8,
-    width: screenWidth,
-    height: screenHeight * 0.17,
+    width: screenWidth * 1.1,
+    height: screenHeight * 0.15,
     position: 'absolute',
-    top: -screenHeight * 0.1,
+    top: -screenHeight * 0.15,
     zIndex: -1,
   },
 

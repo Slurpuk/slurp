@@ -19,6 +19,7 @@ import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
 import {SearchBar} from '../components/LandingMap/CustomSearchBar';
 import CustomSearchBar from '../components/LandingMap/CustomSearchBar';
+import LandingHamburgerIcon from '../assets/svgs/LandingHamburgerIcon';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -55,11 +56,17 @@ export default function LandingMapPage({navigation}) {
           searchBarFocused={searchBarFocused}
           setSearchBarFocussed={setSearchBarFocused}
         />
-        <CustomSearchBar
-          navigation={navigation}
-          searchBarFocused={searchBarFocused}
-          setSearchBarFocussed={setSearchBarFocused}
-        />
+
+        <View style={styles.searchWrapper}>
+          <View style={styles.newHamburger}>
+            <LandingHamburgerIcon />
+          </View>
+          <CustomSearchBar
+            navigation={navigation}
+            searchBarFocused={searchBarFocused}
+            setSearchBarFocussed={setSearchBarFocused}
+          />
+        </View>
       </View>
 
       {context.isShopIntro ? (
@@ -79,10 +86,32 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
   },
+
+  searchWrapper: {
+    // borderWidth: 3,
+    // backgroundColor: 'coral',
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    top: screenHeight * 0.07,
+  },
+
+  newHamburger: {
+    width: 0.07 * screenHeight,
+    height: 0.07 * screenHeight,
+    backgroundColor: 'whitesmoke',
+    marginLeft: '3%',
+    borderRadius: 14,
+    borderColor: '#046D66',
+    borderWidth: 2,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   searchBar: {
     borderRadius: 10,
-    marginTop: '15%',
-    margin: '5%',
+    // marginTop: '15%',
+    // margin: '5%',
     color: '#000',
     borderColor: '#666',
     backgroundColor: '#FFF',
