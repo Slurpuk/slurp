@@ -9,7 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 import {months} from '../data/Months';
 import {ScreenOptionsStyles} from '../../stylesheets/ScreenOptionsStyles';
 import {OrderStatus} from '../data/OrderStatus';
-import {formatOrders} from './ScreensFunctions';
+import {formatOrders} from '../helpers/ScreensFunctions';
 
 const Tab = createMaterialTopTabNavigator();
 
