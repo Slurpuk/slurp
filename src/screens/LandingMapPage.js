@@ -15,7 +15,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
-import CustomSearchBar from '../CustomSearchBar';
+import CustomSearchBar from '../components/LandingMap/CustomSearchBar';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -44,7 +44,7 @@ export default function LandingMapPage({navigation}) {
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground sheetRef={bottomSheetRef}/>
+        <MapBackground/>
         <CustomSearchBar navigation={navigation} />
       </View>
 

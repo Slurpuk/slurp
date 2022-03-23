@@ -9,7 +9,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../../../App';
 
 type SearchBarComponentProps = {};
 

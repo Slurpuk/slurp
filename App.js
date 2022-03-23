@@ -16,7 +16,7 @@ import auth from '@react-native-firebase/auth';
 
 export const GlobalContext = React.createContext();
 export default function App() {
-  const [isFirstTime, setIsFirstTime] = useState(true);
+  const isFirstTime = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(auth().currentUser);
   const [userRef, setUserRef] = useState(null);
@@ -34,45 +34,39 @@ export default function App() {
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
   });
-
   const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
   const checkForFirstTime = async () => {
-    const result = await AsyncStorage.getItem('isFirstTime');
-    //if what we get from the Async is null we are opening the app for the first time
-    //if we pressed the sign up button on the last slide we set the 'isFirstTime' to 'no'
-    if (result === null) {
-      setIsFirstTime(true);
-    } //now we can use the isFirstTimeLoad state to choose what to render
+    const result = await AsyncStorage.getItem('isFirstTime').then(() => {
+      isFirstTime.current = result === null;
+    });
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    checkForFirstTime();
+  }, []);
+
   const calculateDistance = coords => {
 
     const R = 6371e3; // metres
     const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
     const latitude2 = (coords.latitude * Math.PI) / 180;
     const diffLat =
-        ((coords.latitude - currentCenterLocation.latitude) * Math.PI) / 180;
+      ((coords.latitude - currentCenterLocation.latitude) * Math.PI) / 180;
     const diffLon =
-        ((coords.longitude - currentCenterLocation.longitude) * Math.PI) / 180;
+      ((coords.longitude - currentCenterLocation.longitude) * Math.PI) / 180;
 
     const aa =
-        Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-        Math.cos(latitude1) *
+      Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+      Math.cos(latitude1) *
         Math.cos(latitude2) *
         Math.sin(diffLon / 2) *
         Math.sin(diffLon / 2);
     const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa));
 
-  // in metres
+    // in metres
     return parseInt(R * cc);
   };
-
-
-  useEffect(() => {
-    checkForFirstTime();
-  }, []);
 
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(user => {
@@ -90,8 +84,7 @@ export default function App() {
   }, []);
 
   const enterApp = () => {
-    setIsFirstTime(false);
-    AsyncStorage.setItem('isFirstTime', 'potatoesInPower');
+    AsyncStorage.setItem('isFirstTime', 'true');
   };
 
   function clearBasket() {
@@ -100,15 +93,16 @@ export default function App() {
     setTotal(0);
   }
 
+  // When coming from the shop list
   function newShop({shop, navigation}) {
     clearBasket();
     setCurrShop(shop);
     navigation.navigate('Shop page');
   }
 
+  // When coming from the markers
   function switchNewShop({shop}) {
-    setBasketContent([]);
-    setBasketSize(0);
+    clearBasket();
     setCurrShop(shop);
   }
 
@@ -182,9 +176,10 @@ export default function App() {
       );
     } else {
       setCurrShop(shop);
-      if (!isShopIntro) setIsShopIntro(true);
+      if (!isShopIntro) {
+        setIsShopIntro(true);
+      }
     }
-
   }
 
   // Subscribe to the Shops model
@@ -206,7 +201,7 @@ export default function App() {
           documentSnapshot.data().ItemsOffered.forEach(itemRef => {
             firestore()
               .doc(itemRef.path)
-              .onSnapshot(querySnapshot => {
+              .onSnapshot(query => {
                 let collection = '';
                 if (itemRef.path.includes('Coffees')) {
                   collection = coffees;
@@ -216,8 +211,8 @@ export default function App() {
                   collection = snacks;
                 }
                 collection.push({
-                  ...querySnapshot.data(),
-                  key: querySnapshot.id,
+                  ...query.data(),
+                  key: query.id,
                 });
               });
           });
@@ -252,17 +247,17 @@ export default function App() {
               },
               Image: item.Image,
               Email: item.Email,
-              IsOpen: item.isOpen,
+              IsOpen: item.IsOpen,
               ItemsOffered: item.ItemsOffered,
               Likeness: item.Likeness,
               Queue: item.Queue,
+              key: item.key,
               DistanceTo: calculateDistance(item.Location),
             };
           });
 
           //ordering the shops based on distance from user location
-          editedShopsData
-              .sort((a, b) => a.DistanceTo - b.DistanceTo);
+          editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
 
           //filtering the shops based on radius limitation (rn 1500)
           const newEdited = editedShopsData
@@ -270,7 +265,6 @@ export default function App() {
 
           setOrderedShops(newEdited);
         });
-
       }, []);
 
     // Unsubscribe from events when no longer in use
@@ -292,6 +286,17 @@ export default function App() {
   function addToBasket(item) {
     const basket = basketContent;
     const exist = basket.find(x => isSameItem(x, item));
+    let type;
+    if (item.hasOwnProperty('Bean')) {
+      type = 'Coffee';
+    } else if (
+      currShop.ItemsOffered.Drinks.filter(x => x.Name === item.Name).length !==
+      0
+    ) {
+      type = 'Drink';
+    } else {
+      type = 'Snack';
+    }
     if (exist) {
       setBasketContent(
         basket.map(x =>
@@ -299,7 +304,7 @@ export default function App() {
         ),
       );
     } else {
-      setBasketContent([...basket, {...item, count: 1}]);
+      setBasketContent([...basket, {...item, count: 1, type: type}]);
     }
     setTotal(total + item.Price);
     setBasketSize(basketSize + 1);
@@ -325,13 +330,12 @@ export default function App() {
     setIsShopIntro(shown);
   };
 
-
-
   const Stack = createNativeStackNavigator();
   return (
     <GlobalContext.Provider
       value={{
         enterApp: enterApp,
+        isFirstTime: isFirstTime.current,
         user: currentUser, // Returns the authentication object
         currShop: currShop,
         setCurrShop: changeShop,
@@ -354,11 +358,10 @@ export default function App() {
         markers: markers,
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
-        userRef: userRef,
+        userRef: userRef, // Returns ID of the model object
         orderedShops: orderedShops,
         setOrderedShops: setOrderedShops,
-      }}
-    >
+      }}>
       <NavigationContainer>
         {isLoggedIn ? (
           <HamburgerSlideBarNavigator />
@@ -367,9 +370,7 @@ export default function App() {
             screenOptions={{
               headerShown: false,
             }}>
-            {isFirstTime ? (
-              <Stack.Screen name="Welcome" component={WelcomePages} />
-            ) : null}
+            {isFirstTime.current ? <Stack.Screen name="Welcome" component={WelcomePages} />: null}
             <Stack.Screen name="LogIn" component={LogInPage} />
             <Stack.Screen name="SignUp" component={SignUpPage} />
           </Stack.Navigator>

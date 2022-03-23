@@ -3,10 +3,10 @@ import {StyleSheet, View, FlatList, Text, SectionList} from 'react-native';
 import CollapsedOrder from '../components/Orders/CollapsableOrder';
 import textStyles from '../../stylesheets/textStyles';
 import GreenHeader from '../sub-components/GreenHeader';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import firestore from '@react-native-firebase/firestore';
 import {GlobalContext} from '../../App';
+import EmptyListText from '../sub-components/EmptyListText';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -14,8 +14,9 @@ const OrderPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
-  const [fpastOrders, fsetPastOrders] = useState([]);
-  const [fcurrentOrders, fsetCurrentOrders] = useState([]);
+  const emptyText =
+    "Looks like you haven't made any orders yet...\n\nHead over to the " +
+    'home page to get started!';
 
   useEffect(() => {
     const fetchData = firestore()
@@ -57,21 +58,12 @@ const OrderPage = ({navigation}) => {
           } else {
             currentOrdersLocal.push(firebaseOrder);
           }
-          fsetCurrentOrders(currentOrdersLocal);
-          fsetPastOrders(pastOrdersLocal);
         });
+        formatOrders(currentOrdersLocal, true);
+        formatOrders(pastOrdersLocal, false);
       });
-
     return () => fetchData();
-  }, []);
-
-  useEffect(() => {
-    formatOrders(fcurrentOrders, true);
-  }, [fcurrentOrders]);
-
-  useEffect(() => {
-    formatOrders(fpastOrders, false);
-  }, [fpastOrders]);
+  }, [context.userRef]);
 
   function formatOrders(formattedOrders, isCurrent) {
     let newOrders = [];
@@ -88,23 +80,24 @@ const OrderPage = ({navigation}) => {
       let newItems = [];
       for (let item of temp.Items) {
         let newItem;
-        if (item.Type === 'Coffee') {
-          await firestore()
-            .collection('Coffees')
-            .doc(item.ItemRef)
-            .get()
-            .then(doc => {
-              newItem = {
-                ...doc.data(),
-                type: item.Type,
-                key: doc.id,
-                quantity: item.Quantity,
-              };
-              newItems.push(newItem);
-            });
-        }
+        await firestore()
+          .collection(item.Type + 's')
+          .doc(item.ItemRef)
+          .get()
+          .then(doc => {
+            newItem = {
+              ...doc.data(),
+              type: item.Type,
+              key: doc.id,
+              quantity: item.Quantity,
+              options: item.Options,
+            };
+            newItems.push(newItem);
+          })
+          .catch(error => console.log(error));
       }
       temp.Items = newItems;
+
       await firestore()
         .collection('CoffeeShop')
         .doc(order.ShopID)
@@ -120,7 +113,8 @@ const OrderPage = ({navigation}) => {
               : newOrders.push({period: temp.period, data: [temp]});
           }
           isCurrent ? setCurrentOrders(newOrders) : setPastOrders(newOrders);
-        });
+        })
+        .catch(error => console.log(error));
     });
   }
 
@@ -154,10 +148,17 @@ const OrderPage = ({navigation}) => {
           },
         }}>
         <Tab.Screen name="Current">
-          {props => <CurrentOrders currentOrders={currentOrders} />}
+          {props => (
+            <CurrentOrders
+              currentOrders={currentOrders}
+              emptyText={emptyText}
+            />
+          )}
         </Tab.Screen>
         <Tab.Screen name="Past">
-          {props => <PastOrders pastOrders={pastOrders} />}
+          {props => (
+            <PastOrders pastOrders={pastOrders} emptyText={emptyText} />
+          )}
         </Tab.Screen>
       </Tab.Navigator>
     </View>
@@ -165,58 +166,36 @@ const OrderPage = ({navigation}) => {
 };
 
 const PastOrders = props => {
-  const numOrders = props.pastOrders.length;
   return (
     <>
-      {numOrders !== 0 ? (
-        <SectionList
-          contentContainerStyle={styles.mainContainer}
-          sections={props.pastOrders}
-          stickySectionHeadersEnabled={false}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({item}) => <CollapsedOrder order={item} />}
-          renderSectionHeader={({section: {period}}) => (
-            <Text
-              style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
-              {period}
-            </Text>
-          )}
-        />
-      ) : (
-        <EmptyText />
-      )}
+      <SectionList
+        contentContainerStyle={styles.mainContainer}
+        sections={props.pastOrders}
+        stickySectionHeadersEnabled={false}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({item}) => <CollapsedOrder order={item} />}
+        ListEmptyComponent={EmptyListText(props.emptyText)}
+        renderSectionHeader={({section: {period}}) => (
+          <Text
+            style={[textStyles.darkGreyPoppinsHeading, styles.periodHeader]}>
+            {period}
+          </Text>
+        )}
+      />
     </>
   );
 };
 
 const CurrentOrders = props => {
-  const numOrders = props.currentOrders.length;
   return (
     <>
-      {numOrders !== 0 ? (
-        <FlatList
-          contentContainerStyle={styles.mainContainer}
-          data={props.currentOrders}
-          renderItem={({item}) => <CollapsedOrder order={item} />}
-        />
-      ) : (
-        <EmptyText />
-      )}
+      <FlatList
+        contentContainerStyle={styles.mainContainer}
+        data={props.currentOrders}
+        renderItem={({item}) => <CollapsedOrder order={item} />}
+        ListEmptyComponent={EmptyListText(props.emptyText)}
+      />
     </>
-  );
-};
-
-const EmptyText = () => {
-  return (
-    <Text
-      style={[
-        styles.mainContainer,
-        styles.emptyText,
-        textStyles.darkGreyPoppinsSubHeading,
-      ]}>
-      Looks like you haven't made any orders yet... {'\n \n'} Head over to the
-      home page to get started!
-    </Text>
   );
 };
 
@@ -233,15 +212,10 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     marginTop: 20,
   },
+
   mainContainer: {
     backgroundColor: '#EDEBE7',
     flexGrow: 1,
-  },
-
-  emptyText: {
-    paddingTop: '15%',
-    paddingHorizontal: '2%',
-    textAlign: 'center',
   },
 });
 

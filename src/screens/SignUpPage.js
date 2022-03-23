@@ -13,7 +13,6 @@ import {
   Text,
   Alert,
   StatusBar,
-  Dimensions,
 } from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
@@ -22,9 +21,10 @@ import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
 import {GlobalContext} from '../../App';
+import WhiteArrowButton from "../sub-components/WhiteArrowButton";
 
 const SignUpPage = ({navigation}) => {
-  const globalContext = useContext(GlobalContext);
+  const context = useContext(GlobalContext);
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -75,7 +75,6 @@ const SignUpPage = ({navigation}) => {
         text: 'OK',
       },
     ]);
-    resetFields();
   };
 
   // Register the user to the database after checking their credentials
@@ -84,8 +83,10 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
+          resetFields();
           let newUser = auth().currentUser;
           addUser(newUser);
+          context.enterApp();
           registeredMessage();
         })
         .catch(error => {
@@ -121,8 +122,10 @@ const SignUpPage = ({navigation}) => {
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
-
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        {context.isFirstTime ? <WhiteArrowButton navigation={navigation} direction={'left'} onPressAction={() => navigation.navigate('Welcome')} customStyle={{marginRight: '26%'}}/>: null}
+        <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
+      </View>
       <View style={styles.formContainer}>
         <View style={styles.namesContainer}>
           <FormField
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    paddingTop: '3%',
+    paddingTop: '5%',
   },
 
   namesContainer: {
