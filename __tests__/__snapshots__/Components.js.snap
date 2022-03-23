@@ -157,6 +157,7 @@ exports[`Custom sub-components green header should render correctly 1`] = `
             "opacity": 1,
             "underlayColor": "gray",
           },
+          Object {},
         ]
       }
       underlayColor="transparent"
