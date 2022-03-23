@@ -1,9 +1,7 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
-import HamburgerSlideBarNavigator, {
-  VisibleContext,
-} from './src/navigation/HamburgerSlideBarNavigator';
+import React, {useEffect, useRef, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
 import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
@@ -46,6 +44,8 @@ export default function App() {
     checkForFirstTime();
   }, []);
 
+  // Calculates euclidean distance between two points on the map - current location & shop
+  // Param: {longitude, latitude} -- output: integer
   const calculateDistance = coords => {
 
     const R = 6371e3; // metres
@@ -68,6 +68,7 @@ export default function App() {
     return parseInt(R * cc);
   };
 
+  //check if the user is logged in, initialise the app for the currentUser
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -224,6 +225,8 @@ export default function App() {
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
+
+          // Sets up map markers for shops in the database.
           let mark = markers;
           mark.push({
             name: shopData.Name,
@@ -233,7 +236,7 @@ export default function App() {
               longitude: shopData.Location._longitude,
             },
             image: shopData.Image,
-            isOpen: shopData.IsOpen,
+            IsOpen: shopData.IsOpen,
           });
           setMarkers(mark);
 
@@ -256,10 +259,10 @@ export default function App() {
             };
           });
 
-          //ordering the shops based on distance from user location
+          // Ordering the shops based on distance from user location
           editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
 
-          //filtering the shops based on radius limitation (rn 1500)
+          // Filtering the shops based on radius limitation (rn 1500)
           const newEdited = editedShopsData
               .filter((item) => item.DistanceTo < 1500);
 

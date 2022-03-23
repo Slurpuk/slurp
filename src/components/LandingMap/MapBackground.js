@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
+import React, {useEffect, useContext, useRef} from 'react';
 
 import {
   Dimensions,
@@ -28,6 +28,8 @@ export default function MapBackground() {
     longitudeDelta: 0.01,
   });
 
+
+  // Called when user clicks on a Marker.
   const locationPress = clickedMarker => {
     let selectedShop = context.shopsData.find(
       shop => shop.Name === clickedMarker,
@@ -191,15 +193,15 @@ export default function MapBackground() {
             pinColor={'navy'}
             title={marker.name}
             onPress={() => {
-              if (marker.isOpen) {
+              if (marker.IsOpen) {
                 locationPress(marker.name);
               }
             }}>
             <View style={styles.markerStyle}>
               <Text style={{color: 'red', fontWeight: 'bold'}}>
-                {!marker.isOpen ? 'Closed' : ''}
+                {!marker.IsOpen ? 'Closed' : 'Open'}
               </Text>
-              <CustomMapIcon isOpen={marker.isOpen} />
+              <CustomMapIcon isOpen={marker.IsOpen} />
             </View>
           </Marker>
         ))}

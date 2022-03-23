@@ -1,4 +1,4 @@
-import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import React, {useContext} from 'react';
 import ShopCard from './ShopCard';

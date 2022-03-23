@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import ShopDetailIcons from './ShopDetailIcons';
 import {
   StyleSheet,
@@ -25,8 +25,7 @@ const ShopCard = ({shop, navigation}) => {
       imageStyle={styles.image}
       source={{uri: shop.Image}}
       resizeMode="cover"
-      blurRadius={4}
-    >
+      blurRadius={4}>
       <Text style={[textStyles.headingOne, styles.shopName]}>{shop.Name}</Text>
       <Text style={[textStyles.bodyText]}> CLOSED </Text>
     </ImageBackground>

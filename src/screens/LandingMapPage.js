@@ -1,22 +1,18 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useRef} from 'react';
 import {
   Dimensions,
   StyleSheet,
   View,
-  Button,
   LogBox,
-  TextInput,
-  StatusBar, Text,
+  StatusBar,
 } from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
-import firestore from '@react-native-firebase/firestore';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
-import {SearchBar} from '../components/LandingMap/CustomSearchBar';
-import CustomSearchBar from '../components/LandingMap/CustomSearchBar';
+import CustomSearchBar from '../CustomSearchBar';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
