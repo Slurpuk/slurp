@@ -7,6 +7,9 @@ import {
   Text,
   View,
   PermissionsAndroid,
+  Animated,
+  Image,
+  Keyboard,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
@@ -18,7 +21,10 @@ import firestore from '@react-native-firebase/firestore';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export default function MapBackground() {
+export default function MapBackground({
+  searchBarFocused,
+  setSearchBarFocussed,
+}) {
   const context = useContext(GlobalContext);
   const watchID = useRef();
   const mapCenter = useRef({
@@ -129,6 +135,11 @@ export default function MapBackground() {
     );
   };
 
+  const mapPressed = () => {
+    setSearchBarFocussed(false);
+    Keyboard.dismiss();
+  };
+
   const subscribeLocationLocation = () => {
     watchID.current = Geolocation.watchPosition(
       async position => {
@@ -183,6 +194,8 @@ export default function MapBackground() {
             mapCenter.current = region;
           }
         }}
+        onPress={event => mapPressed()}
+        onPanDrag={event => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={mapCenter.current}
@@ -197,8 +210,8 @@ export default function MapBackground() {
               if (marker.isOpen) {
                 locationPress(marker.name);
               }
-            }}
-          >
+              mapPressed();
+            }}>
             <View style={styles.markerStyle}>
               <Text style={{color: 'red', fontWeight: 'bold'}}>
                 {!marker.isOpen ? 'Closed' : ''}
@@ -218,6 +231,7 @@ const styles = StyleSheet.create({
     height: screenHeight,
     width: screenWidth,
     justifyContent: 'flex-end',
+    zIndex: -3,
   },
   map: {
     ...StyleSheet.absoluteFillObject,
