@@ -1,0 +1,244 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Custom components button should render correctly 1`] = `
+<View>
+  <View
+    collapsable={false}
+    style={
+      Object {
+        "transform": Array [
+          Object {
+            "scale": 1,
+          },
+        ],
+      }
+    }
+  >
+    <View
+      accessible={true}
+      collapsable={false}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderRadius": 13,
+          "display": "flex",
+          "flexDirection": "row",
+          "height": 43,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 682.5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#EFEFEF",
+            "fontFamily": "Poppins-SemiBold",
+            "fontSize": 17,
+            "letterSpacing": 0.5,
+          }
+        }
+      />
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Custom components: button should render correctly 1`] = `
+<View>
+  <View
+    collapsable={false}
+    style={
+      Object {
+        "transform": Array [
+          Object {
+            "scale": 1,
+          },
+        ],
+      }
+    }
+  >
+    <View
+      accessible={true}
+      collapsable={false}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderRadius": 13,
+          "display": "flex",
+          "flexDirection": "row",
+          "height": 43,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 682.5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#EFEFEF",
+            "fontFamily": "Poppins-SemiBold",
+            "fontSize": 17,
+            "letterSpacing": 0.5,
+          }
+        }
+      />
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Custom sub-components button should render correctly 1`] = `
+<View>
+  <View
+    collapsable={false}
+    style={
+      Object {
+        "transform": Array [
+          Object {
+            "scale": 1,
+          },
+        ],
+      }
+    }
+  >
+    <View
+      accessible={true}
+      collapsable={false}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderRadius": 13,
+          "display": "flex",
+          "flexDirection": "row",
+          "height": 43,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 682.5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#EFEFEF",
+            "fontFamily": "Poppins-SemiBold",
+            "fontSize": 17,
+            "letterSpacing": 0.5,
+          }
+        }
+      />
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Custom sub-components green header should render correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#046D66",
+      "flexDirection": "row",
+      "paddingBottom": "6%",
+      "paddingHorizontal": "5%",
+      "paddingTop": 30,
+    }
+  }
+>
+  <View>
+    <View
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Array [
+          Object {
+            "opacity": 1,
+            "underlayColor": "gray",
+          },
+        ]
+      }
+      underlayColor="transparent"
+    >
+      <Text
+        allowFontScaling={false}
+        selectable={false}
+        style={
+          Array [
+            Object {
+              "color": "white",
+              "fontSize": 34,
+            },
+            undefined,
+            Object {
+              "fontFamily": "Ionicons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Object {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "marginTop": "2%",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#EDEBE7",
+          "fontFamily": "JosefinSans-Bold",
+          "fontSize": 27,
+          "fontStyle": "normal",
+          "includeFontPadding": false,
+          "letterSpacing": 0.4,
+          "marginLeft": 20,
+        }
+      }
+    />
+  </View>
+</View>
+`;
