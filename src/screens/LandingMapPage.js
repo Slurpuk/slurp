@@ -7,7 +7,8 @@ import {
   LogBox,
   TextInput,
   StatusBar,
-  Text, Pressable,
+  Text,
+  Pressable,
 } from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from '@react-native-firebase/firestore';

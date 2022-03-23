@@ -137,7 +137,6 @@ export default function MapBackground({
 
   const mapPressed = () => {
     setSearchBarFocussed(false);
-    console.log('peekaboo', searchBarFocused);
     Keyboard.dismiss();
   };
 
