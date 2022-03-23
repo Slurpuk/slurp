@@ -53,6 +53,77 @@ exports[`Custom sub-components button should render correctly 1`] = `
 </View>
 `;
 
+exports[`Custom sub-components button should render correctly with number indicator 1`] = `
+<View>
+  <View
+    collapsable={false}
+    style={
+      Object {
+        "transform": Array [
+          Object {
+            "scale": 1,
+          },
+        ],
+      }
+    }
+  >
+    <View
+      accessible={true}
+      collapsable={false}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderRadius": 13,
+          "display": "flex",
+          "flexDirection": "row",
+          "height": 43,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 682.5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#EFEFEF",
+            "fontFamily": "Poppins-SemiBold",
+            "fontSize": 17,
+            "letterSpacing": 0.5,
+          }
+        }
+      />
+      <Text
+        style={
+          Array [
+            Object {
+              "borderRadius": 10,
+              "height": 20,
+              "marginBottom": 15,
+              "marginLeft": 8,
+              "overflow": "hidden",
+              "textAlign": "center",
+              "width": 20,
+            },
+            undefined,
+          ]
+        }
+      >
+        5
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
 exports[`Custom sub-components green header should render correctly 1`] = `
 <View
   style={
