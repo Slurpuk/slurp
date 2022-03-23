@@ -13,7 +13,6 @@ import textStyles from '../../stylesheets/textStyles';
 import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
-import {reset} from "react-native-svg/lib/typescript/lib/Matrix2D";
 
 const LogInPage = ({navigation}) => {
   const [email, setEmail] = useState('');

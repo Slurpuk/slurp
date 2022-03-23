@@ -15,7 +15,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
-import {SearchBar} from '../sub-components/CustomSearchBar';
 import CustomSearchBar from '../CustomSearchBar';
 
 LogBox.ignoreLogs([
