@@ -4,7 +4,7 @@
 import 'react-native-gesture-handler';
 import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
-import PaymentPage from "./src/screens/PaymentPage";
+import App from "./App";
 
 
-AppRegistry.registerComponent(appName, () => PaymentPage);
+AppRegistry.registerComponent(appName, () => App);

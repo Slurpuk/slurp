@@ -5,7 +5,6 @@ import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {GlobalContext} from '../../App';
 
@@ -78,7 +77,7 @@ const BasketPage = ({navigation}) => {
         <CustomButton
           priority={'primary'}
           text={'Apple/Google Pay'}
-          onPress={confirmOrder}
+          onPress={openPaymentSheet}
         />
       </View>
       <View style={[styles.lastButton, styles.buttons]}>
