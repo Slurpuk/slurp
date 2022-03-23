@@ -7,47 +7,52 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const HamburgerButton = ({navigation}) => {
   return (
     <View style={styles.header}>
-      <TouchableHighlight style={styles.floating_button}>
+      <Pressable style={styles.floating_button}>
         <Icon.Button
           onPress={() => navigation.openDrawer()}
           name="bars"
           color={'#046D66'}
-          underlayColor={'transparent'}
-          backgroundColor={'transparent'}
-          size={0.03 * screenHeight}
+          backgroundColor={'white'}
+          underlayColor={'white'}
+          style={styles.hamburger}
+          size={0.04 * screenHeight}
+          borderRadius={10}
         />
-      </TouchableHighlight>
+      </Pressable>
     </View>
   );
 };
 
 const screenHeight = Dimensions.get('window').height;
-
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   header: {
     height: 0,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   floating_button: {
-    ...Platform.select({
-      ios: {
-        marginTop: '32%',
-      },
-      android: {
-        marginTop: '31%',
-      },
-    }),
-    backgroundColor: '#ffffff',
-    borderRadius: 11,
-    paddingTop: '0.5%',
-    paddingLeft: '2.5%',
-    height: 0.055 * screenHeight,
-    marginRight: '3%',
+    marginTop: '20%',
+    underlayColor: 'white',
+    height: 0.07 * screenHeight,
+    margin: '3%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+
+  hamburger: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingRight: 0,
+    width: 0.14 * screenWidth,
+    borderStyle: 'solid',
+    borderColor: '#046D66',
+    borderWidth: 2,
   },
 });
 

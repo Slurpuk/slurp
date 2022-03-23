@@ -1,180 +1,75 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 
 import {
-  Alert,
-  Button,
   Dimensions,
-  Platform, Pressable,
+  Platform,
   StyleSheet,
   Text,
   View,
   PermissionsAndroid,
 } from 'react-native';
-//import Geolocation from '@react-native-community/geolocation';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import GetLocation from 'react-native-get-location';
-import textStyles from "../../../stylesheets/textStyles";
+import {GlobalContext} from '../../../App';
+import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
+import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
+import firestore from '@react-native-firebase/firestore';
+
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-let watchID;
 export default function MapBackground() {
-  const [
-    currentLongitude,
-    setCurrentLongitude
-  ] = useState(0);
-  const [
-    currentLatitude,
-    setCurrentLatitude
-  ] = useState(0);
-
-  const [
-    latitude,
-    setLatitude
-  ] = useState(0);
-
-  const [
-    longitude,
-    setLongitude
-  ] = useState(0);
-
-  //const [places, setPlaces] = useState([]);
-  // const outputCurrentLocation = () => {
-  //   console.log('This is my current latitude: '+currentLatitude)
-  //   console.log('This is my current longitude: '+currentLongitude)
-  // };
-  const showShopsNearby = () => {
-
-
-
-    const places = [hardcodedMapArea, ourPalace, bushHouse]
-    // pull data from firebase -> into a list -> print them out
-    //_.sortBy(places.map(coords)=>(calculateDistance(coords)))            // apply Pascua's function to the list to categorize data (least distance -> first item)
-    // apply the radius limitation + display places on the map using markers
-
-    const distancePlaces = [places.map(place => calculateDistance(coords = place))]
-    distancePlaces.sort((a, b) => (a > b) ? 1 : -1)
-
-    const distanceToPlace =  distancePlaces;
-    //
-    // const finalList = [places]
-    //     .map(e=> {
-    //       const {longitudeDelta, latitudeDelta, latitude, longitude, distanceToPlace} = e;
-    //       return {latitude, longitude, distanceToPlace};
-    //     });
-    //finalList.filter(distancePlaces < 2000);
-
-    //console.log(finalList)
-    //
-    // setLoc(places[1]);
-    // console.log("these are the latitude, longitude" + latitude + " " + longitude);
-
-  };
-
-
-  const calculateDistance = (coords) => {
-
-
-    //console.log('This is the user latitude: '+currentLatitude)
-    //console.log('This is  the user longitude: '+currentLongitude)
-    console.log('This is my current latitude: '+defaultLocation.latitude)
-    console.log('This is my current longitude: '+defaultLocation.longitude)
-    console.log(coords)
-
-    console.log('This is the shop latitude: '+coords.latitude)
-    console.log('This is the shop longitude: '+coords.latitude)
-
-    const R = 6371e3; // metres
-    const latitude1 = defaultLocation.latitude * Math.PI/180; // φ, λ in radians
-    const latitude2 = coords.latitude * Math.PI/180;
-    const diffLat = (coords.latitude-defaultLocation.latitude) * Math.PI/180;
-    const diffLon = (coords.longitude-defaultLocation.longitude) * Math.PI/180;
-
-    const aa = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
-        Math.cos(latitude1) * Math.cos(latitude2) *
-        Math.sin(diffLon/2) * Math.sin(diffLon/2);
-    const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1-aa));
-
-    const distance = parseInt(R * cc); // in metresv
-
-    console.log('(Eucledian Second Method)The places are '+distance+' metres away')
-    return distance;
-  };
-
-  const defaultLocation = {
-    latitude: 37.335480,
-    longitude: -121.893028,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01
-  };
-
-  const hardcodedMapArea = { //this corresponds to the bush house area
-    latitude: 51.5140310233705,
-    longitude: -0.1164075624320158,
+  const context = useContext(GlobalContext);
+  const watchID = useRef();
+  const mapCenter = useRef({
+    latitude: context.currentCenterLocation.latitude,
+    longitude: context.currentCenterLocation.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
-  };
+  });
 
-  const currentArea = {
-    latitude: currentLatitude,
-    longitude: currentLongitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
+  const locationPress = clickedMarker => {
+    let selectedShop = context.shopsData.find(
+      shop => shop.Name === clickedMarker,
+    );
 
-  const bushHouse={ //this corresponds to the bush house area
-    latitude: 51.5140310233705,
-    longitude: -0.1164075624320158,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
+    if (context.isShopIntro) {
+      fadeOpacityOut(context.adaptiveOpacity, 170);
 
-  const ourPalace={ //this corresponds to the queen palace
-    latitude: 51.495741653990926,
-    longitude: -0.14553530781225651,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
+      let myTimeout = setTimeout(() => {
+        context.setCurrentCenterLocation({
+          latitude: selectedShop.Location._latitude,
+          longitude: selectedShop.Location._longitude,
+        });
+        let old = mapCenter.current;
+        mapCenter.current = {
+          latitude: selectedShop.Location._latitude,
+          longitude: selectedShop.Location._longitude,
+          latitudeDelta: old.latitudeDelta,
+          longitudeDelta: old.longitudeDelta,
+        };
+        context.switchShop(selectedShop);
+        clearTimeout(myTimeout);
+      }, 200);
 
-  const hardcodedMarker2={ //this corresponds to the bush house area
-    latitude: 51.51143534301982,
-    longitude: -0.11969058630179567,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-
-  };
-
-  // this.state = {
-  //   markers: [{
-  //     title: 'bush',
-  //     coordinates: {
-  //       latitude: 51.5140310233705,
-  //       longitude: -0.1164075624320158
-  //     },
-  //   },
-  //     {
-  //       title: 'hihi',
-  //       coordinates: {
-  //         latitude: 51.51143534301982,
-  //         longitude: -0.11969058630179567
-  //       },
-  //     }]
-  // }
-
-
-  const setLoc = (latitude, longitude) => {
-    setLatitude(latitude)
-    setLongitude(longitude)
-  };
-
-  const currentLocationMarker = {//this corresponds rn to the current location but should be a shop marker
-    latitude: currentLatitude,
-    longitude: currentLongitude,
-  };
-
-  const locationPress = () => {
-    console.log('Function will be hre!!');
+      setTimeout(() => {
+        fadeOpacityIn(context.adaptiveOpacity, 200);
+      }, 210);
+    } else {
+      context.setCurrentCenterLocation({
+        latitude: selectedShop.Location._latitude,
+        longitude: selectedShop.Location._longitude,
+      });
+      let old = mapCenter.current;
+      mapCenter.current = {
+        latitude: selectedShop.Location._latitude,
+        longitude: selectedShop.Location._longitude,
+        latitudeDelta: old.latitudeDelta,
+        longitudeDelta: old.longitudeDelta,
+      };
+      context.switchShop(selectedShop);
+      context.setShopIntro(true);
+    }
   };
 
   useEffect(() => {
@@ -185,101 +80,131 @@ export default function MapBackground() {
       } else {
         try {
           const granted = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-              {
-                title: 'Location Access Required',
-                message: 'This App needs to Access your location',
-              },
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: 'Location Access Required',
+              message: 'This App needs to Access your location',
+            },
           );
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             //To Check, If Permission is granted
             getOneTimeLocation();
             subscribeLocationLocation();
-          } else {
-            //set a default location for the user to explore the app
-            setCurrentLongitude(defaultLocation.longitude);
-            setCurrentLatitude(defaultLocation.latitude);
           }
         } catch (err) {
           console.warn(err);
         }
       }
     };
-    requestLocationPermission();
+    requestLocationPermission().then(r => console.log('permission granted'));
     return () => {
-      Geolocation.clearWatch(watchID);
+      Geolocation.clearWatch(watchID.current);
     };
   }, []);
 
   const getOneTimeLocation = () => {
     Geolocation.getCurrentPosition(
-        //Will give you the current location
-        (position) => {
-          const currentLongitude =
-              position.coords.longitude;
-          const currentLatitude =
-              position.coords.latitude;
-          //Setting Longitude state
-          setCurrentLongitude(currentLongitude);
-          //Setting Longitude state
-          setCurrentLatitude(currentLatitude);
-        },
-        (error) => {
-        },
-        {
-          enableHighAccuracy: false,
-          timeout: 30000,
-          maximumAge: 1000
-        },
+      //Will give you the current location
+      position => {
+        const longitude = position.coords.longitude;
+        const latitude = position.coords.latitude;
+        let old = mapCenter.current;
+        mapCenter.current = {
+          latitude: latitude,
+          longitude: longitude,
+          latitudeDelta: old.latitudeDelta,
+          longitudeDelta: old.longitudeDelta,
+        };
+        // Setting new current location
+        context.setCurrentCenterLocation({
+          latitude: latitude,
+          longitude: longitude,
+        });
+      },
+      error => console.log(error),
+      {
+        enableHighAccuracy: true,
+        timeout: 30000,
+      },
     );
   };
 
   const subscribeLocationLocation = () => {
-    watchID = Geolocation.watchPosition(
-        (position) => {
-          //Will give you the location on location change
-          const currentLongitude =
-              position.coords.longitude;
-          const currentLatitude =
-              position.coords.latitude;
-          //Setting Longitude state
-          setCurrentLongitude(currentLongitude);
-          //Setting Latitude state
-          setCurrentLatitude(currentLatitude);
-        },
-        (error) => {
-        },
-        {
-          enableHighAccuracy: false,
-          maximumAge: 1000
-        },
+    watchID.current = Geolocation.watchPosition(
+      async position => {
+        //Will give you the location on location change
+        const longitude = position.coords.longitude;
+        const latitude = position.coords.latitude;
+        //Setting Longitude state
+        let old = mapCenter.current;
+        mapCenter.current = {
+          latitude: latitude,
+          longitude: longitude,
+          latitudeDelta: old.latitudeDelta,
+          longitudeDelta: old.longitudeDelta,
+        };
+        context.setCurrentCenterLocation({
+          latitude: latitude,
+          longitude: longitude,
+        });
+        if (context.userRef) {
+          await firestore()
+            .collection('Users')
+            .doc(context.userRef)
+            .update({
+              latitude: latitude,
+              longitude: longitude,
+            })
+            .then(r => console.log('position updated'))
+            .catch(error => console.log(error));
+        }
+      },
+      error => console.log(error),
+      {
+        enableHighAccuracy: true,
+      },
     );
   };
 
   return (
-      <View style={styles.container}>
-        <MapView
-            provider={PROVIDER_GOOGLE}
-            style={styles.map}
-            region={currentArea}
-        >
-          <MapView.Marker
-              coordinate={currentLocationMarker}
-              pinColor={'#fefefe'}
-              title={'hey there fellas'}
-              description={'Test market'}
-              onPress={locationPress}
-          />
-        </MapView>
-        <View>
-          <Pressable onPress={showShopsNearby}>
-            <Text style={{fontFamily: 'Poppins-SemiBold',
-              letterSpacing: 0.5,
-              fontSize: 40,
-              backgroundColor:'red'}}>Show shops nearby </Text>
-          </Pressable>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <MapView
+        onRegionChangeComplete={(region, isGesture) => {
+          if (Platform.OS === 'ios') {
+            if (
+              region.latitude.toFixed(6) !== mapCenter.current.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !== mapCenter.current.longitude.toFixed(6)
+            ) {
+              mapCenter.current = region;
+            }
+          } else {
+            mapCenter.current = region;
+          }
+        }}
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        region={mapCenter.current}>
+        {context.markers.map((marker, index) => (
+          <Marker
+            key={index}
+            coordinate={marker.coords}
+            pinColor={'navy'}
+            title={marker.name}
+            onPress={() => {
+              if (marker.isOpen) {
+                locationPress(marker.name);
+              }
+            }}>
+            <View style={styles.markerStyle}>
+              <Text style={{color: 'red', fontWeight: 'bold'}}>
+                {!marker.isOpen ? 'Closed' : ''}
+              </Text>
+              <CustomMapIcon isOpen={marker.isOpen} />
+            </View>
+          </Marker>
+        ))}
+      </MapView>
+    </View>
   );
 }
 
@@ -289,11 +214,23 @@ const styles = StyleSheet.create({
     height: screenHeight,
     width: screenWidth,
     justifyContent: 'flex-end',
-    // alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
   },
-  marker: {},
+
+  markerBg: {
+    backgroundColor: '#FAFAFA',
+    padding: 5,
+    marginBottom: 4,
+    borderRadius: 11,
+  },
+
+  markerStyle: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    maxWidth: 220,
+  },
 });

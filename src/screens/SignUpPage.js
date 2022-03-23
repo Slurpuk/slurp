@@ -6,34 +6,25 @@
  * @flow strict-local
  */
 
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   Alert,
   StatusBar,
-  Platform,
-  Button,
-  Dimensions,
-  TouchableOpacity,
 } from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
+import firestore from '@react-native-firebase/firestore';
+import {GlobalContext} from '../../App';
+import WhiteArrowButton from "../sub-components/WhiteArrowButton";
 
-// Redirect the user to the Log In Portal
-
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
-
-const SignUpPage = navigation => {
-  // const usersCollection = firestore().collection('Users');
+const SignUpPage = ({navigation}) => {
+  const context = useContext(GlobalContext);
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -54,15 +45,7 @@ const SignUpPage = navigation => {
   };
 
   const switchToLogIn = () => {
-    Alert.alert(
-      'FUTURE NAVIGATION FEATURE',
-      'One day, clicking this will take you to the log in portal',
-      [
-        {
-          text: ':)',
-        },
-      ],
-    );
+    navigation.navigate('LogIn');
   };
 
   const warningPassword = () => {
@@ -92,38 +75,57 @@ const SignUpPage = navigation => {
         text: 'OK',
       },
     ]);
-    resetFields();
   };
 
   // Register the user to the database after checking their credentials
-  const registerUser = () => {
-    if (password == password_confirmation) {
-      auth()
+  async function registerUser() {
+    if (password === password_confirmation) {
+      await auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(re => {
-          console.log(re);
-          console.log(x);
-        })
-        .catch(re => {
-          console.log(re);
+        .then(() => {
+          resetFields();
+          let newUser = auth().currentUser;
+          addUser(newUser);
+          context.enterApp();
+          registeredMessage();
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
             warningUserAlreadyExists();
           }
+        })
+        .catch(re => {
+          console.log(re);
         });
-      registeredMessage();
     } else {
       warningPassword();
       resetFLEFields();
     }
-  };
+  }
+
+  async function addUser(user) {
+    await firestore()
+      .collection('Users')
+      .add({
+        Email: email,
+        FirstName: first_name,
+        LastName: last_name,
+        authID: user.uid,
+        Basket: [],
+        TotalPrice: 0,
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
-
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        {context.isFirstTime ? <WhiteArrowButton navigation={navigation} direction={'left'} onPressAction={() => navigation.navigate('Welcome')} customStyle={{marginRight: '26%'}}/>: null}
+        <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
+      </View>
       <View style={styles.formContainer}>
         <View style={styles.namesContainer}>
           <FormField
@@ -181,7 +183,7 @@ const SignUpPage = navigation => {
             style={[textStyles.bluePoppinsBody, styles.hyperlink]}
             onPress={switchToLogIn}
           >
-            Already have an account? Log in here
+            Already have an account? Log in
           </Text>
         </View>
       </View>
@@ -202,7 +204,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    paddingTop: '3%',
+    paddingTop: '5%',
   },
 
   namesContainer: {
