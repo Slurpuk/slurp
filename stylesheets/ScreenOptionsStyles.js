@@ -17,10 +17,10 @@ export const ScreenOptionsStyles = StyleSheet.create({
   tabBarActiveTintColor: '#FFFFFF',
   tabBarInactiveTintColor: '#6D6D6D',
   tabBarStyle: {
-    //borderRadius: 13,
+    borderRadius: 13,
     height: 42,
     backgroundColor: '#E5E5E5',
     elevation: 0,
-    //borderColor: '#919191',
+    borderColor: '#919191',
   },
 });
