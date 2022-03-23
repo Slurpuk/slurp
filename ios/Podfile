@@ -15,15 +15,10 @@ target 'Slurp' do
     :hermes_enabled => false
   )
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
-  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
-  pod 'RNSharedElement', :path => '../node_modules/react-native-shared-element'
 
-  pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
 
   target 'SlurpTests' do
     inherit! :complete
