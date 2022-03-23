@@ -15,6 +15,7 @@ import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
 import firestore from '@react-native-firebase/firestore';
+import {locationPress, requestLocationPermission} from './locationHelpers';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -28,143 +29,14 @@ export default function MapBackground() {
     longitudeDelta: 0.01,
   });
 
-  const locationPress = clickedMarker => {
-    let selectedShop = context.shopsData.find(
-      shop => shop.Name === clickedMarker,
-    );
-
-    if (context.isShopIntro) {
-      fadeOpacityOut(context.adaptiveOpacity, 170);
-
-      let myTimeout = setTimeout(() => {
-        context.setCurrentCenterLocation({
-          latitude: selectedShop.Location._latitude,
-          longitude: selectedShop.Location._longitude,
-        });
-        let old = mapCenter.current;
-        mapCenter.current = {
-          latitude: selectedShop.Location._latitude,
-          longitude: selectedShop.Location._longitude,
-          latitudeDelta: old.latitudeDelta,
-          longitudeDelta: old.longitudeDelta,
-        };
-        context.switchShop(selectedShop);
-        clearTimeout(myTimeout);
-      }, 200);
-
-      setTimeout(() => {
-        fadeOpacityIn(context.adaptiveOpacity, 200);
-      }, 210);
-    } else {
-      context.setCurrentCenterLocation({
-        latitude: selectedShop.Location._latitude,
-        longitude: selectedShop.Location._longitude,
-      });
-      let old = mapCenter.current;
-      mapCenter.current = {
-        latitude: selectedShop.Location._latitude,
-        longitude: selectedShop.Location._longitude,
-        latitudeDelta: old.latitudeDelta,
-        longitudeDelta: old.longitudeDelta,
-      };
-      context.switchShop(selectedShop);
-      context.setShopIntro(true);
-    }
-  };
-
   useEffect(() => {
-    const requestLocationPermission = async () => {
-      if (Platform.OS === 'ios') {
-        getOneTimeLocation();
-        subscribeLocationLocation();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Access Required',
-              message: 'This App needs to Access your location',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            //To Check, If Permission is granted
-            getOneTimeLocation();
-            subscribeLocationLocation();
-          }
-        } catch (err) {
-          console.warn(err);
-        }
-      }
-    };
-    requestLocationPermission().then(r => console.log('permission granted'));
+    requestLocationPermission(context, mapCenter, watchID.current).then(r =>
+      console.log('permission granted'),
+    );
     return () => {
       Geolocation.clearWatch(watchID.current);
     };
   }, []);
-
-  const getOneTimeLocation = () => {
-    Geolocation.getCurrentPosition(
-      //Will give you the current location
-      position => {
-        const longitude = position.coords.longitude;
-        const latitude = position.coords.latitude;
-        let old = mapCenter.current;
-        mapCenter.current = {
-          latitude: latitude,
-          longitude: longitude,
-          latitudeDelta: old.latitudeDelta,
-          longitudeDelta: old.longitudeDelta,
-        };
-        // Setting new current location
-        context.setCurrentCenterLocation({
-          latitude: latitude,
-          longitude: longitude,
-        });
-      },
-      error => console.log(error),
-      {
-        enableHighAccuracy: true,
-        timeout: 30000,
-      },
-    );
-  };
-
-  const subscribeLocationLocation = () => {
-    watchID.current = Geolocation.watchPosition(
-      async position => {
-        //Will give you the location on location change
-        const longitude = position.coords.longitude;
-        const latitude = position.coords.latitude;
-        //Setting Longitude state
-        let old = mapCenter.current;
-        mapCenter.current = {
-          latitude: latitude,
-          longitude: longitude,
-          latitudeDelta: old.latitudeDelta,
-          longitudeDelta: old.longitudeDelta,
-        };
-        context.setCurrentCenterLocation({
-          latitude: latitude,
-          longitude: longitude,
-        });
-        if (context.userRef) {
-          await firestore()
-            .collection('Users')
-            .doc(context.userRef)
-            .update({
-              latitude: latitude,
-              longitude: longitude,
-            })
-            .then(r => console.log('position updated'))
-            .catch(error => console.log(error));
-        }
-      },
-      error => console.log(error),
-      {
-        enableHighAccuracy: true,
-      },
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -172,8 +44,10 @@ export default function MapBackground() {
         onRegionChangeComplete={(region, isGesture) => {
           if (Platform.OS === 'ios') {
             if (
-              region.latitude.toFixed(6) !== mapCenter.current.latitude.toFixed(6) &&
-              region.longitude.toFixed(6) !== mapCenter.current.longitude.toFixed(6)
+              region.latitude.toFixed(6) !==
+                mapCenter.current.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !==
+                mapCenter.current.longitude.toFixed(6)
             ) {
               mapCenter.current = region;
             }
@@ -192,7 +66,7 @@ export default function MapBackground() {
             title={marker.name}
             onPress={() => {
               if (marker.isOpen) {
-                locationPress(marker.name);
+                locationPress(context, mapCenter, marker.name);
               }
             }}>
             <View style={styles.markerStyle}>
