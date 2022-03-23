@@ -20,3 +20,4 @@ Difference between pod install and pod update: https://guides.cocoapods.org/usin
 
 PS: If you encounter problems when running android concerning the "Reanimated" package, refer to the following github commit and apply the changes accordingly: https://github.com/software-mansion-labs/reanimated-2-playground/commit/71642dbe7bd96eb41df5b9f59d661ab15f6fc3f8
 
+Test Master update
