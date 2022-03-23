@@ -361,15 +361,9 @@ PODS:
     - FirebaseAuth (~> 8.12.0)
   - Firebase/CoreOnly (8.12.1):
     - FirebaseCore (= 8.12.1)
-  - Firebase/Database (8.12.1):
-    - Firebase/CoreOnly
-    - FirebaseDatabase (~> 8.12.0)
   - Firebase/Firestore (8.12.1):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.12.1)
-  - Firebase/Storage (8.12.1):
-    - Firebase/CoreOnly
-    - FirebaseStorage (~> 8.12.0)
   - FirebaseAuth (8.12.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
@@ -384,9 +378,6 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
-  - FirebaseDatabase (8.12.0):
-    - FirebaseCore (~> 8.0)
-    - leveldb-library (~> 1.22)
   - FirebaseFirestore (8.12.1):
     - abseil/algorithm (= 0.20200225.0)
     - abseil/base (= 0.20200225.0)
@@ -400,9 +391,6 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
-  - FirebaseStorage (8.12.0):
-    - FirebaseCore (~> 8.0)
-    - GTMSessionFetcher/Core (~> 1.5)
   - fmt (6.2.1)
   - glog (0.3.5)
   - Google-Maps-iOS-Utils (3.10.3):
@@ -688,9 +676,9 @@ PODS:
     - React-Core
   - react-native-maps (0.30.1):
     - React-Core
-  - react-native-pager-view (5.4.11):
+  - react-native-pager-view (5.4.15):
     - React-Core
-  - react-native-safe-area-context (3.3.2):
+  - react-native-safe-area-context (3.4.1):
     - React-Core
   - React-perflogger (0.67.2)
   - React-RCTActionSheet (0.67.2):
@@ -759,29 +747,21 @@ PODS:
     - React-perflogger (= 0.67.2)
   - ReactNativeGetLocation (2.2.1):
     - React-Core
-  - RNCAsyncStorage (1.16.1):
+  - RNCAsyncStorage (1.17.0):
     - React-Core
-  - RNCCheckbox (0.5.9):
+  - RNCCheckbox (0.5.12):
     - React-Core
-  - RNDeviceInfo (8.4.9):
+  - RNDeviceInfo (8.5.1):
     - React-Core
-  - RNFBApp (14.5.0):
+  - RNFBApp (14.5.1):
     - Firebase/CoreOnly (= 8.12.1)
     - React-Core
-  - RNFBAuth (14.5.0):
+  - RNFBAuth (14.5.1):
     - Firebase/Auth (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBDatabase (14.3.0):
-    - Firebase/Database (= 8.12.1)
-    - React-Core
-    - RNFBApp
-  - RNFBFirestore (14.3.0):
+  - RNFBFirestore (14.5.1):
     - Firebase/Firestore (= 8.12.1)
-    - React-Core
-    - RNFBApp
-  - RNFBStorage (14.5.0):
-    - Firebase/Storage (= 8.12.1)
     - React-Core
     - RNFBApp
   - RNGestureHandler (2.2.0):
@@ -820,9 +800,9 @@ PODS:
     - React-RCTImage
   - RNSharedElement (0.8.4):
     - React-Core
-  - RNSVG (12.1.1):
-    - React
-  - RNVectorIcons (9.0.0):
+  - RNSVG (12.3.0):
+    - React-Core
+  - RNVectorIcons (9.1.0):
     - React-Core
   - Yoga (1.14.0)
 
@@ -871,9 +851,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
-  - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
-  - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -890,9 +868,7 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
-    - FirebaseDatabase
     - FirebaseFirestore
-    - FirebaseStorage
     - fmt
     - Google-Maps-iOS-Utils
     - GoogleDataTransport
@@ -990,12 +966,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
-  RNFBDatabase:
-    :path: "../node_modules/@react-native-firebase/database"
   RNFBFirestore:
     :path: "../node_modules/@react-native-firebase/firestore"
-  RNFBStorage:
-    :path: "../node_modules/@react-native-firebase/storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -1023,9 +995,7 @@ SPEC CHECKSUMS:
   FirebaseAuth: 5250d7bdba35e57cc34ec7ddc525f82b2757f2a0
   FirebaseCore: 8138de860a90ca7eec5e324da5788fb0ebf1d93c
   FirebaseCoreDiagnostics: 3b40dfadef5b90433a60ae01f01e90fe87aa76aa
-  FirebaseDatabase: f130b3d45b2a7a0b86059734d5bd67353df8d32f
   FirebaseFirestore: dfeb58916ee3ae0ef2453d4849a683672705920c
-  FirebaseStorage: 4b75458c35d8b728e4c1fc1371942997456ab299
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
   Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
@@ -1054,8 +1024,8 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: c0efb872258ed9240f1003a70fca9e9757e5c785
   react-native-google-maps: 17432eb7412df3c65d7c7c52ede085d0f5624f77
   react-native-maps: d752b0dd0e1951d815b1336332835aab6b4a836f
-  react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
-  react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
+  react-native-pager-view: b1914469643f40042e65d78cbf3d3dfebd6fb0d9
+  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   React-perflogger: 3c9bb7372493e49036f07a82c44c8cf65cbe88db
   React-RCTActionSheet: 052606483045a408693aa7e864410b4a052f541a
   React-RCTAnimation: 08d4cac13222bb1348c687a0158dfd3b577cdb63
@@ -1069,22 +1039,20 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 2450b43df7ffe8e805a0b3dcb2abd4282f1f1836
   ReactCommon: d98c6c96b567f9b3a15f9fd4cc302c1eda8e3cf2
   ReactNativeGetLocation: d6b15cb2a2023ab7703f756501bad86d3ecf6fea
-  RNCAsyncStorage: b49b4e38a1548d03b74b30e558a1d18465b94be7
-  RNCCheckbox: 6369808337432cdbd5025d62ceced2480b4c51df
-  RNDeviceInfo: 4944cf8787b9c5bffaf301fda68cc1a2ec003341
-  RNFBApp: 06c8447270d295edc431bccd55970d8711a07a42
-  RNFBAuth: e248a56b1d28d3b53b54b72a296cf9270df1d96e
-  RNFBDatabase: 8e9f3317722af1fb8209881669f9590b11a8e818
-  RNFBFirestore: c1d1c2a4ea96d15228da6a753aa015d0978ea268
-  RNFBStorage: e061bbb005be42225e95cb62af7768bda4d24e3a
+  RNCAsyncStorage: 4efdcd2f7378421b29467c9de58f43552b60cf5b
+  RNCCheckbox: ed1b4ca295475b41e7251ebae046360a703b6eb5
+  RNDeviceInfo: 8d4177859b062334835962799460528869a487fb
+  RNFBApp: 5bae3002117e55f3c9aa0fb38175dd16c8046c90
+  RNFBAuth: ed314ff1732011c23041570ac4a98bc6070f9f4d
+  RNFBFirestore: 6103ff28c04b6a71faaca286a7f778914c3c7bb4
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNReanimated: e28dfaa950064b674fde0a9b736e62b9dff500a7
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
   RNSharedElement: eb7d506733952d58634f34c82ec17e82f557e377
-  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
-  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
+  RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
+  RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   Yoga: 9b6696970c3289e8dea34b3eda93f23e61fb8121
 
-PODFILE CHECKSUM: 1f3fdd3b6d7a293499e5c2c61317910991b9dce7
+PODFILE CHECKSUM: d06889542044a5c7b3f4f5c3f9b9a9af1be5c7a3
 
 COCOAPODS: 1.11.2
