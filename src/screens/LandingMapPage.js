@@ -6,7 +6,8 @@ import {
   Button,
   LogBox,
   TextInput,
-  StatusBar, Text,
+  StatusBar,
+  Text,
 } from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
 import firestore from '@react-native-firebase/firestore';
@@ -45,7 +46,7 @@ export default function LandingMapPage({navigation}) {
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.map}>
-        <MapBackground/>
+        <MapBackground />
         <CustomSearchBar navigation={navigation} />
       </View>
 
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 18,
   },
-  inputContainerStyle:{
+  inputContainerStyle: {
     backgroundColor: 'yellow',
-  }
+  },
 });

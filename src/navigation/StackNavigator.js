@@ -20,7 +20,8 @@ const HomeStackNavigator = () => {
         headerShown: false,
         useNativeDriver: true,
         gestureEnabled: false,
-      }}>
+      }}
+    >
       <HomeStack.Screen name="Landing map" component={LandingMapPage} />
       <HomeStack.Screen name="Shop list" component={ShopList} />
       <HomeStack.Screen name="Basket page" component={BasketPage} />
@@ -45,7 +46,8 @@ const PaymentAccountsNavigator = () => {
     <PaymentAccountsStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <PaymentAccountsStack.Screen
         name="PaymentAccounts"
         component={PaymentCardsPage}
@@ -60,7 +62,8 @@ const BasketPageNavigator = () => {
     <BasketPageStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <BasketPageStack.Screen name="BasketPage" component={BasketPage} />
     </BasketPageStack.Navigator>
   );
@@ -72,7 +75,8 @@ const ChangeDetailsStackNavigator = () => {
     <ChangeDetailsStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <ChangeDetailsStack.Screen
         name="ChangeDetails"
         component={UpdateDetailsPage}
@@ -86,7 +90,8 @@ const ChangePasswordStackNavigator = () => {
     <ChangePasswordStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <ChangePasswordStack.Screen
         name="ChangePassword"
         component={ChangePasswordPage}
@@ -101,7 +106,8 @@ const OrderHistoryStackNavigator = () => {
     <OrderHistoryStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <OrderHistoryStack.Screen name="OrderHistory" component={OrderPage} />
     </OrderHistoryStack.Navigator>
   );

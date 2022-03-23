@@ -9,7 +9,7 @@ function SideDrawerContent(props) {
     try {
       await auth().signOut();
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
   return (

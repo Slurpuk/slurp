@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import FormField from '../sub-components/FormField';
 import CustomButton from '../sub-components/CustomButton';
 import firebase from '@react-native-firebase/app';
-import { GlobalContext } from "../../App";
+import {GlobalContext} from '../../App';
 import auth from '@react-native-firebase/auth';
 
 const ChangePasswordPage = ({navigation}) => {
@@ -56,9 +56,7 @@ const ChangePasswordPage = ({navigation}) => {
         },
       ],
     );
-
   }
-
 
   function changePassword() {
     if (newPassword === passwordConfirmation) {

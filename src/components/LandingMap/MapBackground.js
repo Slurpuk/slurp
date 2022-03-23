@@ -172,8 +172,10 @@ export default function MapBackground() {
         onRegionChangeComplete={(region, isGesture) => {
           if (Platform.OS === 'ios') {
             if (
-              region.latitude.toFixed(6) !== mapCenter.current.latitude.toFixed(6) &&
-              region.longitude.toFixed(6) !== mapCenter.current.longitude.toFixed(6)
+              region.latitude.toFixed(6) !==
+                mapCenter.current.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !==
+                mapCenter.current.longitude.toFixed(6)
             ) {
               mapCenter.current = region;
             }
@@ -183,7 +185,8 @@ export default function MapBackground() {
         }}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter.current}>
+        region={mapCenter.current}
+      >
         {context.markers.map((marker, index) => (
           <Marker
             key={index}
@@ -194,7 +197,8 @@ export default function MapBackground() {
               if (marker.isOpen) {
                 locationPress(marker.name);
               }
-            }}>
+            }}
+          >
             <View style={styles.markerStyle}>
               <Text style={{color: 'red', fontWeight: 'bold'}}>
                 {!marker.isOpen ? 'Closed' : ''}

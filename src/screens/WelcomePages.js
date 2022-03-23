@@ -64,8 +64,8 @@ const WelcomePages = ({onDone, navigation}) => {
           </Text>
           <CoffeeShopSvg style={[styles.circle]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            All your favourite local coffee shops in one place.
-            Order ahead and skip the line!
+            All your favourite local coffee shops in one place. Order ahead and
+            skip the line!
           </Text>
         </View>
         <View style={styles.component}>
@@ -74,10 +74,10 @@ const WelcomePages = ({onDone, navigation}) => {
           </Text>
           <CoffeeCupSvg style={[styles.circle]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            Our mission is to support independent, sustainable coffee shops in your area.
-            In a rush? Don't head into a standard chain store just yet.
-            Let us find the perfect coffee shop for your needs.
-            Order now and enjoy your favourite drink as soon as you walk in!
+            Our mission is to support independent, sustainable coffee shops in
+            your area. In a rush? Don't head into a standard chain store just
+            yet. Let us find the perfect coffee shop for your needs. Order now
+            and enjoy your favourite drink as soon as you walk in!
           </Text>
         </View>
         <View style={styles.component}>
@@ -86,7 +86,8 @@ const WelcomePages = ({onDone, navigation}) => {
           </Text>
           <CoffeeBeanSvg style={[styles.circle, {marginTop: 5}]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            Enjoy the best coffee from the best places. Explore your tastes with us
+            Enjoy the best coffee from the best places. Explore your tastes with
+            us
           </Text>
           <CustomButton
             text={'Sign Up'}
