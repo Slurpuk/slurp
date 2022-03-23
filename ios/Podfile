@@ -6,7 +6,7 @@ platform :ios, '11.0'
 rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-google-maps', :path => rn_maps_path
 
-target 'MyProject' do
+target 'Slurp' do
   config = use_native_modules!
 
   use_react_native!(
@@ -25,7 +25,7 @@ target 'MyProject' do
 
   pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
 
-  target 'MyProjectTests' do
+  target 'SlurpTests' do
     inherit! :complete
     # Pods for testing
   end
