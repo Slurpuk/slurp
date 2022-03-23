@@ -16,8 +16,8 @@ const BasketPage = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const fetchPaymentSheetParams = async () => {
-    console.log(context.total.toFixed(2))
-    let body = {amount: context.total.toFixed(2)}
+    console.log(context.total.toFixed(2));
+    let body = {amount: context.total.toFixed(2)};
     const response = await fetch(`${API_URL}/checkout`, {
       method: 'POST',
       headers: {
@@ -47,50 +47,52 @@ const BasketPage = ({navigation}) => {
   };
 
   const openPaymentSheet = async () => {
-    const {error} = await presentPaymentSheet();
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
+    if (context.total !== 0) {
+      const {error} = await presentPaymentSheet();
+      if (error) {
+        Alert.alert(`Error code: ${error.code}`, error.message);
+      } else {
+        confirmOrder().catch(error => console.log(error));
+      }
     } else {
-      confirmOrder().catch(error => console.log(error));
-    }
-  };
-
-  useEffect(() => {
-    initializePaymentSheet();
-  }, []);
-
-  async function confirmOrder() {
-    if (context.basketSize === 0) {
       Alert.alert('Empty basket.', 'Please add items to your basket.', [
         {
           text: 'OK',
         },
       ]);
-    } else {
-      await firestore()
-        .collection('Orders')
-        .add({
-          DateTime: firestore.Timestamp.now(),
-          Items: formatBasket(),
-          Status: 'incoming',
-          ShopID: context.currShop.key,
-          UserID: context.userRef,
-          Total: Number(context.total.toPrecision(2)),
-        })
-        .then(() => {
-          context.clearBasket();
-          Alert.alert(
-            'Order received.',
-            'Your order has been sent to the shop! Awaiting response.',
-            [
-              {
-                text: 'OK',
-                onPress: () => navigation.navigate('Order history'),
-              },
-            ],
-          );
-        });
     }
+  };
+
+  useEffect(() => {
+    if (context.total !== 0) {
+      initializePaymentSheet();
+    }
+  }, []);
+
+  async function confirmOrder() {
+    await firestore()
+      .collection('Orders')
+      .add({
+        DateTime: firestore.Timestamp.now(),
+        Items: formatBasket(),
+        Status: 'incoming',
+        ShopID: context.currShop.key,
+        UserID: context.userRef,
+        Total: Number(context.total.toPrecision(2)),
+      })
+      .then(() => {
+        context.clearBasket();
+        Alert.alert(
+          'Order received.',
+          'Your order has been sent to the shop! Awaiting response.',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Order history'),
+            },
+          ],
+        );
+      });
   }
 
   function formatBasket() {
