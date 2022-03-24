@@ -30,7 +30,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9B70B69A9FDE4E688BF5BC63 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4101EBE4ACB449E09045B5EF /* Poppins-Bold.ttf */; };
 		BCA0D2666D374B14A1CBF8C3 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 374619C00BAD4D989943C1AB /* Poppins-Medium.ttf */; };
-		C2A2057127EA4A5800CA3BCA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2A2057027EA4A5800CA3BCA /* GoogleService-Info.plist */; };
+		C2990D6327EBDEE000749603 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2990D6227EBDEE000749603 /* GoogleService-Info.plist */; };
 		C767910D64C246B1AB37B2C7 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C26C6B5B927F41FA86592314 /* Poppins-SemiBold.ttf */; };
 		DAF25FD8D58D4A31A5F569FB /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F680345C7DA4851A8C6C1AB /* Poppins-ExtraBold.ttf */; };
 		F49563F6649D4DE3A9F6092A /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 350E77BDFF774DCD8C70F9AA /* Poppins-Light.ttf */; };
@@ -106,7 +106,7 @@
 		BC47B32FCB4E46B99CCD6E95 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		BD28E51EE20346C6913E6261 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		C26C6B5B927F41FA86592314 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
-		C2A2057027EA4A5800CA3BCA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C2990D6227EBDEE000749603 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C3F2C85DF8B74FC99B5612A3 /* JosefinSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "JosefinSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/JosefinSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		C937F468E1644606BFEB35E4 /* JosefinSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "JosefinSans-Italic.ttf"; path = "../assets/Fonts/JosefinSans-Italic.ttf"; sourceTree = "<group>"; };
 		C971E8956136428BA296F95B /* JosefinSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "JosefinSans-Light.ttf"; path = "../src/assets/fonts/JosefinSans-Light.ttf"; sourceTree = "<group>"; };
@@ -194,7 +194,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				C2A2057027EA4A5800CA3BCA /* GoogleService-Info.plist */,
+				C2990D6227EBDEE000749603 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Slurp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SlurpTests */,
@@ -400,10 +400,10 @@
 				1EE2C2AC27AEF258008ADF32 /* JosefinSans-ThinItalic.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				C2A2057127EA4A5800CA3BCA /* GoogleService-Info.plist in Resources */,
 				F7AB3B73CE58436895881E9B /* Poppins-Regular.ttf in Resources */,
 				C767910D64C246B1AB37B2C7 /* Poppins-SemiBold.ttf in Resources */,
 				9B70B69A9FDE4E688BF5BC63 /* Poppins-Bold.ttf in Resources */,
+				C2990D6327EBDEE000749603 /* GoogleService-Info.plist in Resources */,
 				DAF25FD8D58D4A31A5F569FB /* Poppins-ExtraBold.ttf in Resources */,
 				F49563F6649D4DE3A9F6092A /* Poppins-Light.ttf in Resources */,
 				BCA0D2666D374B14A1CBF8C3 /* Poppins-Medium.ttf in Resources */,
@@ -626,6 +626,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 49T267BY9U;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = Slurp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -652,6 +653,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 49T267BY9U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Slurp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
