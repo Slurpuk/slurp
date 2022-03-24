@@ -6,8 +6,7 @@ import Menu from '../ShopMenu/Menu';
 import {ShopContext} from '../../screens/ShopPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 
-export const DraggableContext = React.createContext();
-const DraggableShopPage = ({shop, navigation, sheetRef}) => {
+const DraggableShopPage = ({shop, navigation}) => {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(ShopContext);
 
@@ -24,28 +23,25 @@ const DraggableShopPage = ({shop, navigation, sheetRef}) => {
   }
 
   return (
-    <DraggableContext.Provider value={{bottomSheetRef: sheetRef}}>
-      <ScrollBottomSheet
-        ref={sheetRef}
-        componentType="FlatList"
-        snapPoints={['0%', '70%', '100%']}
-        onSettle={index => updatePage({index})}
-        initialSnapIndex={1}
-        renderHandle={() => (
-          <View style={styles.header1}>
-            <View
-              style={[
-                styles.panelHandle,
-                context.isFullScreen ? {opacity: 0} : {opacity: 1},
-              ]}
-            />
-            <ShopIntro shop={shop} />
-            <Menu navigation={navigation} />
-          </View>
-        )}
-        contentContainerStyle={styles.contentContainerStyle}
-      />
-    </DraggableContext.Provider>
+    <ScrollBottomSheet
+      componentType="FlatList"
+      snapPoints={['0%', '70%', '100%']}
+      onSettle={index => updatePage({index})}
+      initialSnapIndex={1}
+      renderHandle={() => (
+        <View style={styles.header1}>
+          <View
+            style={[
+              styles.panelHandle,
+              context.isFullScreen ? {opacity: 0} : {opacity: 1},
+            ]}
+          />
+          <ShopIntro shop={shop} />
+          <Menu navigation={navigation} />
+        </View>
+      )}
+      contentContainerStyle={styles.contentContainerStyle}
+    />
   );
 };
 

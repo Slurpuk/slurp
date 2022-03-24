@@ -3,19 +3,24 @@ import Geolocation from 'react-native-geolocation-service';
 import firestore from '@react-native-firebase/firestore';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 
+//used for when a new location is pressed on the map
 export const locationPress = (context, mapCenter, clickedMarker) => {
+    //map the clicked marker to a shop from the shops on firebase
   let selectedShop = context.shopsData.find(
     shop => shop.Name === clickedMarker,
   );
 
+  //if there is a current shop intro, fade it out in ancicipation of the new one
   if (context.isShopIntro) {
     fadeOpacityOut(context.adaptiveOpacity, 170);
 
+    //after the fade out has completed, change the bottom sheet data to the new shop
     let myTimeout = setTimeout(() => {
       context.setCurrentCenterLocation({
         latitude: selectedShop.Location._latitude,
         longitude: selectedShop.Location._longitude,
       });
+      //update the map center to preserve the map position after rerender
       let old = mapCenter.current;
       mapCenter.current = {
         latitude: selectedShop.Location._latitude,
@@ -27,10 +32,12 @@ export const locationPress = (context, mapCenter, clickedMarker) => {
       clearTimeout(myTimeout);
     }, 200);
 
+    //fade in the new shop after the switch is completed
     setTimeout(() => {
       fadeOpacityIn(context.adaptiveOpacity, 200);
     }, 210);
   } else {
+      //if there is no selected shop, make this the current one
     context.setCurrentCenterLocation({
       latitude: selectedShop.Location._latitude,
       longitude: selectedShop.Location._longitude,
@@ -46,7 +53,7 @@ export const locationPress = (context, mapCenter, clickedMarker) => {
     context.setShopIntro(true);
   }
 };
-
+//get the user's location one time. Used on app load
 export const getOneTimeLocation = (context, mapCenter) => {
   Geolocation.getCurrentPosition(
     //Will give you the current location
@@ -74,6 +81,7 @@ export const getOneTimeLocation = (context, mapCenter) => {
   );
 };
 
+//watch the current location
 const subscribeLocationLocation = (context, mapCenter, watchID) => {
   watchID.current = Geolocation.watchPosition(
     async position => {
@@ -111,6 +119,7 @@ const subscribeLocationLocation = (context, mapCenter, watchID) => {
   );
 };
 
+//platform dependant request for location access
 export const requestLocationPermission = async (
   context,
   mapCenter,

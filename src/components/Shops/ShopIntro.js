@@ -14,7 +14,6 @@ import ShopDetailIcons from './ShopDetailIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 
-import {DraggableContext} from './DraggableShopPage';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 
@@ -22,7 +21,6 @@ const ShopIntro = ({shop}) => {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const context = shopContext === undefined ? globalContext : shopContext;
-  const draggable = useContext(DraggableContext);
 
   return (
     <Animated.View
@@ -31,17 +29,14 @@ const ShopIntro = ({shop}) => {
       }}
       onLayout={event => {
         fadeOpacityIn(globalContext.adaptiveOpacity, 140);
-      }}
-    >
+      }}>
       <ImageBackground
         imageStyle={styles.cardImgs}
         style={styles.container}
-        source={{uri: shop.Image}}
-      >
+        source={{uri: shop.Image}}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={styles.linearGradient}
-        >
+          style={styles.linearGradient}>
           <View
             style={[
               styles.back_button,
@@ -50,8 +45,7 @@ const ShopIntro = ({shop}) => {
                 : context.isShopIntro
                 ? {opacity: 0}
                 : {opacity: 1},
-            ]}
-          >
+            ]}>
             <WhiteArrowButton
               direction={context.isShopIntro ? 'down' : 'left'}
               navigation={context.navigation}
@@ -66,9 +60,7 @@ const ShopIntro = ({shop}) => {
             <Text style={[textStyles.headingOne, styles.heading]}>
               {shop.Name}
             </Text>
-            <ShopDetailIcons
-              timeToOrder={shop.Queue}
-            />
+            <ShopDetailIcons timeToOrder={shop.Queue} />
             <Text style={[textStyles.bodyText, styles.body]}>{shop.Intro}</Text>
           </View>
         </LinearGradient>
