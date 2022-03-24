@@ -1,19 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {useContext, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  StatusBar,
-} from 'react-native';
+import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
 import auth from '@react-native-firebase/auth';
@@ -21,7 +7,8 @@ import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
 import {GlobalContext} from '../../App';
-import WhiteArrowButton from "../sub-components/WhiteArrowButton";
+import WhiteArrowButton from '../sub-components/WhiteArrowButton';
+import {CustomAlerts} from '../sub-components/Alerts';
 
 const SignUpPage = ({navigation}) => {
   const context = useContext(GlobalContext);
@@ -31,15 +18,12 @@ const SignUpPage = ({navigation}) => {
   const [password, setPassword] = useState();
   const [password_confirmation, setPasswordConfirmation] = useState();
 
-  const resetFields = () => {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
-    setPasswordConfirmation('');
-  };
-
-  const resetFLEFields = () => {
+  function resetFields(justPasswords = false) {
+    if (!justPasswords) {
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+    }
     setPassword('');
     setPasswordConfirmation('');
   };
@@ -60,14 +44,6 @@ const SignUpPage = ({navigation}) => {
     );
   };
 
-  const warningUserAlreadyExists = () => {
-    Alert.alert('Warning!', 'This email already exists', [
-      {
-        text: 'OK',
-      },
-    ]);
-  };
-
   // Display a confirmation message to the user
   const registeredMessage = () => {
     Alert.alert('Congratulations', 'Registered Successfully', [
@@ -86,20 +62,14 @@ const SignUpPage = ({navigation}) => {
           resetFields();
           let newUser = auth().currentUser;
           addUser(newUser);
-          context.enterApp();
           registeredMessage();
         })
         .catch(error => {
-          if (error.code === 'auth/email-already-in-use') {
-            warningUserAlreadyExists();
-          }
-        })
-        .catch(re => {
-          console.log(re);
+          processBackEndErrors(error);
         });
     } else {
       warningPassword();
-      resetFLEFields();
+      resetFields(true);
     }
   }
 
@@ -119,11 +89,39 @@ const SignUpPage = ({navigation}) => {
       });
   }
 
+  /*
+This function provides a variety of error handling once received an error code from the database.
+ */
+  function processBackEndErrors(error) {
+    if (error.code === 'auth/network-request-failed') {
+      Alert.alert(
+        CustomAlerts.NO_NETWORK.title,
+        CustomAlerts.NO_NETWORK.message,
+      );
+    } else if (error.code === 'auth/email-already-in-use') {
+      //Do something else
+    } else if (error.code === 'auth/too-many-requests') {
+      Alert.alert(
+        CustomAlerts.MANY_REQUESTS.title,
+        CustomAlerts.MANY_REQUESTS.message,
+      );
+    } else {
+      Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    }
+  }
+
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-        {context.isFirstTime ? <WhiteArrowButton navigation={navigation} direction={'left'} onPressAction={() => navigation.navigate('Welcome')} customStyle={{marginRight: '26%'}}/>: null}
+        {context.isFirstTime ? (
+          <WhiteArrowButton
+            navigation={navigation}
+            direction={'left'}
+            onPressAction={() => navigation.navigate('Welcome')}
+            customStyle={{marginRight: '26%'}}
+          />
+        ) : null}
         <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
       </View>
       <View style={styles.formContainer}>
@@ -181,8 +179,7 @@ const SignUpPage = ({navigation}) => {
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-            onPress={switchToLogIn}
-          >
+            onPress={switchToLogIn}>
             Already have an account? Log in
           </Text>
         </View>
