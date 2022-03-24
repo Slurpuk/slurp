@@ -8,10 +8,11 @@ import CustomButton from '../sub-components/CustomButton';
 
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
-import { StripeProvider } from "@stripe/stripe-react-native/src/components/StripeProvider";
+import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 
 const BasketPage = ({navigation}) => {
-  const publishableKey = 'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
+  const publishableKey =
+    'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
   const context = useContext(GlobalContext);
   const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();

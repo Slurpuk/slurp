@@ -2,12 +2,10 @@ import React, {useContext, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   Text,
   View,
   StatusBar,
-  Platform,
 } from 'react-native';
 import CustomButton from '../sub-components/CustomButton';
 import textStyles from '../../stylesheets/textStyles';
@@ -17,10 +15,10 @@ import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
 import {getTightPadding} from '../../stylesheets/StyleFunction';
 import {GlobalContext} from '../../App';
 
-const WelcomePages = ({onDone, navigation}) => {
+const WelcomePages = ({navigation}) => {
   const appContext = useContext(GlobalContext);
   const [sliderState, setSliderState] = useState({currentPage: 0});
-  const {width, height} = Dimensions.get('window');
+  const width = Dimensions.get('window');
 
   const setSliderPage = (event: any) => {
     const {currentPage} = sliderState;
@@ -56,16 +54,15 @@ const WelcomePages = ({onDone, navigation}) => {
         showsHorizontalScrollIndicator={false}
         onScroll={(event: any) => {
           setSliderPage(event);
-        }}
-      >
+        }}>
         <View style={styles.component}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
             Welcome to Slurp!
           </Text>
           <CoffeeShopSvg style={[styles.circle]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            All your favourite local coffee shops in one place.
-            Order ahead and skip the line!
+            All your favourite local coffee shops in one place. Order ahead and
+            skip the line!
           </Text>
         </View>
         <View style={styles.component}>
@@ -74,10 +71,10 @@ const WelcomePages = ({onDone, navigation}) => {
           </Text>
           <CoffeeCupSvg style={[styles.circle]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            Our mission is to support independent, sustainable coffee shops in your area.
-            In a rush? Don't head into a standard chain store just yet.
-            Let us find the perfect coffee shop for your needs.
-            Order now and enjoy your favourite drink as soon as you walk in!
+            Our mission is to support independent, sustainable coffee shops in
+            your area. In a rush? Don't head into a standard chain store just
+            yet. Let us find the perfect coffee shop for your needs. Order now
+            and enjoy your favourite drink as soon as you walk in!
           </Text>
         </View>
         <View style={styles.component}>
@@ -86,7 +83,8 @@ const WelcomePages = ({onDone, navigation}) => {
           </Text>
           <CoffeeBeanSvg style={[styles.circle, {marginTop: 5}]} />
           <Text style={[textStyles.bluePoppinsMediumBody, styles.text]}>
-            Enjoy the best coffee from the best places. Explore your tastes with us
+            Enjoy the best coffee from the best places. Explore your tastes with
+            us
           </Text>
           <CustomButton
             text={'Sign Up'}
@@ -95,8 +93,7 @@ const WelcomePages = ({onDone, navigation}) => {
           />
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={proceedToLogIn}
-          >
+            onPress={proceedToLogIn}>
             Already have an account? Log in
           </Text>
         </View>
@@ -116,7 +113,6 @@ const WelcomePages = ({onDone, navigation}) => {
   );
 };
 const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   wrapper: {

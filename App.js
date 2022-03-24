@@ -16,7 +16,6 @@ import {Alert, Animated} from 'react-native';
 export const GlobalContext = React.createContext();
 export default function App() {
   const isFirstTime = useRef();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
   const [userRef, setUserRef] = useState(null);
   const [userObj, setUserObj] = useState(null);
@@ -36,7 +35,8 @@ export default function App() {
   const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
   const checkForFirstTime = async () => {
-    const result = await AsyncStorage.getItem('isFirstTime').then(() => {
+    const result = await AsyncStorage.getItem('isFirstTime').then(r => {
+      console.log(r);
       isFirstTime.current = result === null;
     });
   };
@@ -46,7 +46,6 @@ export default function App() {
   }, []);
 
   const calculateDistance = coords => {
-
     const R = 6371e3; // metres
     const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
     const latitude2 = (coords.latitude * Math.PI) / 180;
@@ -67,14 +66,15 @@ export default function App() {
     return parseInt(R * cc);
   };
 
+  console.log('currentUser is ', userRef);
+  //firebase.auth().signOut();
+
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        setIsLoggedIn(true);
         setCurrentUser(user);
         setUser();
       } else {
-        setIsLoggedIn(false);
         setCurrentUser(null);
       }
     });
@@ -111,6 +111,8 @@ export default function App() {
       .doc(userRef)
       .onSnapshot(documentSnapshot => {
         setUserObj(documentSnapshot.data());
+        console.log('userRef is ', userRef);
+        console.log('userObj is ', userObj);
       });
 
     // Stop listening for updates when no longer required
@@ -126,6 +128,7 @@ export default function App() {
         .then(querySnapshot => {
           querySnapshot.forEach(documentSnapshot => {
             setUserRef(documentSnapshot.id);
+            //setUserObj(documentSnapshot.data());
           });
         });
     }
@@ -259,8 +262,9 @@ export default function App() {
           editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
 
           //filtering the shops based on radius limitation (rn 1500)
-          const newEdited = editedShopsData
-              .filter((item) => item.DistanceTo < 1500);
+          const newEdited = editedShopsData.filter(
+            item => item.DistanceTo < 1500,
+          );
 
           setOrderedShops(newEdited);
         });
@@ -362,14 +366,16 @@ export default function App() {
         setOrderedShops: setOrderedShops,
       }}>
       <NavigationContainer>
-        {isLoggedIn ? (
+        {currentUser ? (
           <HamburgerSlideBarNavigator />
         ) : (
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
             }}>
-            {isFirstTime.current ? <Stack.Screen name="Welcome" component={WelcomePages} />: null}
+            {isFirstTime.current ? (
+              <Stack.Screen name="Welcome" component={WelcomePages} />
+            ) : null}
             <Stack.Screen name="LogIn" component={LogInPage} />
             <Stack.Screen name="SignUp" component={SignUpPage} />
           </Stack.Navigator>
