@@ -36,7 +36,7 @@ export function formatOrders(
           newItems.push(newItem);
         })
         .catch(error => {
-          if (error === 'auth/network-request-failed') {
+          if (error.code === 'auth/network-request-failed') {
             Alerts.connectionErrorAlert();
           } else {
             Alerts.databaseErrorAlert();
