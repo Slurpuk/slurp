@@ -1,6 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {StyleSheet, View, Text, StatusBar} from 'react-native';
 import WhiteArrowButton from './WhiteArrowButton';
 import textStyles from '../../stylesheets/textStyles';
 import {getTightPadding} from '../../stylesheets/StyleFunction';
