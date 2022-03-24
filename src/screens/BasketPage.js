@@ -8,15 +8,17 @@ import CustomButton from '../sub-components/CustomButton';
 
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
+import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 
 const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
+  const publishableKey =
+    'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
 
   const fetchPaymentSheetParams = async () => {
-    console.log(context.total.toFixed(2));
     let body = {amount: context.total.toFixed(2)};
     const response = await fetch(`${API_URL}/checkout`, {
       method: 'POST',
@@ -110,34 +112,36 @@ const BasketPage = ({navigation}) => {
   }
 
   return (
-    <View style={styles.basket}>
-      <GreenHeader
-        headerText={'My Basket - ' + context.currShop.Name}
-        navigation={navigation}
-      />
-      <View style={styles.main_container}>
-        <BasketContents Items={context.basketContent} />
-      </View>
+    <StripeProvider publishableKey={publishableKey}>
+      <View style={styles.basket}>
+        <GreenHeader
+          headerText={'My Basket - ' + context.currShop.Name}
+          navigation={navigation}
+        />
+        <View style={styles.main_container}>
+          <BasketContents Items={context.basketContent} />
+        </View>
 
-      <View style={styles.order_summary}>
-        <Text style={styles.total_text}>TOTAL</Text>
-        <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
+        <View style={styles.order_summary}>
+          <Text style={styles.total_text}>TOTAL</Text>
+          <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
+        </View>
+        <View style={styles.buttons}>
+          <CustomButton
+            priority={'primary'}
+            text={'Apple/Google Pay'}
+            onPress={openPaymentSheet}
+          />
+        </View>
+        <View style={[styles.lastButton, styles.buttons]}>
+          <CustomButton
+            priority={'primary'}
+            text={'Checkout with card'}
+            onPress={openPaymentSheet}
+          />
+        </View>
       </View>
-      <View style={styles.buttons}>
-        <CustomButton
-          priority={'primary'}
-          text={'Apple/Google Pay'}
-          onPress={openPaymentSheet}
-        />
-      </View>
-      <View style={[styles.lastButton, styles.buttons]}>
-        <CustomButton
-          priority={'primary'}
-          text={'Checkout with card'}
-          onPress={openPaymentSheet}
-        />
-      </View>
-    </View>
+    </StripeProvider>
   );
 };
 
