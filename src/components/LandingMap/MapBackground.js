@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
+import mapStyles from "../../../stylesheets/mapStyles";
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
@@ -217,22 +218,7 @@ const styles = StyleSheet.create({
     width: screenWidth,
     justifyContent: 'flex-end',
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-  },
-
-  markerBg: {
-    backgroundColor: '#FAFAFA',
-    padding: 5,
-    marginBottom: 4,
-    borderRadius: 11,
-  },
-
-  markerStyle: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    maxWidth: 220,
-  },
+  map: mapStyles.map,
+  markerBg: mapStyles.markerBg,
+  markerStyle: mapStyles.markerStyle,
 });
