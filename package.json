@@ -9,6 +9,7 @@
     "test": "jest --updateSnapshot && jest",
     "testCoverage": "jest --updateSnapshot && jest --coverage",
     "coverage": "jest --updateSnapshot && jest --coverage",
+    "stripe": "cd server && npm start",
     "lint": "eslint .",
     "pod": "cd ios && pod install && cd ..",
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",
