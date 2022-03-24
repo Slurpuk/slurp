@@ -96,8 +96,7 @@ const ShopPage = ({navigation, sheetRef}) => {
         getDefault: getDefaultMilk,
         isFullScreen: context.isFullScreen,
         setFullScreen: context.setFullScreen,
-      }}
-    >
+      }}>
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
           {context.isShopIntro ? (

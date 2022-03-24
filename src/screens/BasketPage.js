@@ -1,49 +1,98 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {GlobalContext} from '../../App';
+import {useStripe} from '@stripe/stripe-react-native';
 
 const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
+  const API_URL = 'http://localhost:8000';
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
+  const [loading, setLoading] = useState(false);
 
-  async function confirmOrder() {
-    if (context.basketSize === 0) {
+  const fetchPaymentSheetParams = async () => {
+    console.log(context.total.toFixed(2));
+    let body = {amount: context.total.toFixed(2)};
+    const response = await fetch(`${API_URL}/checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    const {paymentIntent, ephemeralKey, customer} = await response.json();
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
+
+  const initializePaymentSheet = async () => {
+    const {paymentIntent, ephemeralKey, customer} =
+      await fetchPaymentSheetParams();
+    const {error} = await initPaymentSheet({
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+    });
+    if (!error) {
+      setLoading(true);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    if (context.total !== 0) {
+      const {error} = await presentPaymentSheet();
+      if (error) {
+        Alert.alert(`Error code: ${error.code}`, error.message);
+      } else {
+        confirmOrder().catch(error => console.log(error));
+      }
+    } else {
       Alert.alert('Empty basket.', 'Please add items to your basket.', [
         {
           text: 'OK',
         },
       ]);
-    } else {
-      await firestore()
-        .collection('Orders')
-        .add({
-          DateTime: firestore.Timestamp.now(),
-          Items: formatBasket(),
-          Status: 'incoming',
-          ShopID: context.currShop.key,
-          UserID: context.userRef,
-          Total: Number(context.total.toPrecision(2)),
-        })
-        .then(() => {
-          context.clearBasket();
-          Alert.alert(
-            'Order received.',
-            'Your order has been sent to the shop! Awaiting response.',
-            [
-              {
-                text: 'OK',
-                onPress: () => navigation.navigate('Order history'),
-              },
-            ],
-          );
-        });
     }
+  };
+
+  useEffect(() => {
+    if (context.total !== 0) {
+      initializePaymentSheet();
+    }
+  }, []);
+
+  async function confirmOrder() {
+    await firestore()
+      .collection('Orders')
+      .add({
+        DateTime: firestore.Timestamp.now(),
+        Items: formatBasket(),
+        Status: 'incoming',
+        ShopID: context.currShop.key,
+        UserID: context.userRef,
+        Total: Number(context.total.toPrecision(2)),
+      })
+      .then(() => {
+        context.clearBasket();
+        Alert.alert(
+          'Order received.',
+          'Your order has been sent to the shop! Awaiting response.',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Order history'),
+            },
+          ],
+        );
+      });
   }
 
   function formatBasket() {
@@ -78,14 +127,14 @@ const BasketPage = ({navigation}) => {
         <CustomButton
           priority={'primary'}
           text={'Apple/Google Pay'}
-          onPress={confirmOrder}
+          onPress={openPaymentSheet}
         />
       </View>
       <View style={[styles.lastButton, styles.buttons]}>
         <CustomButton
           priority={'primary'}
           text={'Checkout with card'}
-          onPress={confirmOrder}
+          onPress={openPaymentSheet}
         />
       </View>
     </View>
