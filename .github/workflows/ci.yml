@@ -34,7 +34,7 @@ jobs:
           
   build-ios:
     needs: install-and-test
-    runs-on: [self-hosted, macos]
+    runs-on: macos
     steps: 
       - uses: actions/checkout@v2
       - name: Install npm dependencies
