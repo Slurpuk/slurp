@@ -183,8 +183,10 @@ export default function MapBackground({
         onRegionChangeComplete={(region, isGesture) => {
           if (Platform.OS === 'ios') {
             if (
-              region.latitude.toFixed(6) !== mapCenter.current.latitude.toFixed(6) &&
-              region.longitude.toFixed(6) !== mapCenter.current.longitude.toFixed(6)
+              region.latitude.toFixed(6) !==
+                mapCenter.current.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !==
+                mapCenter.current.longitude.toFixed(6)
             ) {
               mapCenter.current = region;
             }
@@ -196,7 +198,8 @@ export default function MapBackground({
         onPanDrag={event => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter.current}>
+        region={mapCenter.current}
+      >
         {context.markers.map((marker, index) => (
           <Marker
             key={index}

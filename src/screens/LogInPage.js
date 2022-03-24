@@ -17,7 +17,7 @@ import WhiteArrowButton from "../sub-components/WhiteArrowButton";
 import {GlobalContext} from "../../App";
 
 const LogInPage = ({navigation}) => {
-  const context = useContext(GlobalContext)
+  const context = useContext(GlobalContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -66,7 +66,14 @@ const LogInPage = ({navigation}) => {
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-        {context.isFirstTime ? <WhiteArrowButton navigation={navigation} direction={'left'} onPressAction={() => navigation.navigate('Welcome')} customStyle={{marginRight: '26%'}}/>: null}
+        {context.isFirstTime ? (
+          <WhiteArrowButton
+            navigation={navigation}
+            direction={'left'}
+            onPressAction={() => navigation.navigate('Welcome')}
+            customStyle={{marginRight: '26%'}}
+          />
+        ) : null}
         <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
       </View>
       <View style={styles.form}>
@@ -86,14 +93,16 @@ const LogInPage = ({navigation}) => {
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={null}>
+            onPress={null}
+          >
             Forgot your password?
           </Text>
         </View>
         <View>
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={switchToSignUp}>
+            onPress={switchToSignUp}
+          >
             New? Create an account
           </Text>
         </View>

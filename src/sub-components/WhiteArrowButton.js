@@ -6,7 +6,7 @@ const WhiteArrowButton = ({
   direction = 'back',
   navigation,
   onPressAction = null,
-    customStyle = {}
+  customStyle = {},
 }) => {
   let iconName;
   switch (direction) {
@@ -40,7 +40,8 @@ const WhiteArrowButton = ({
         {
           underlayColor: 'gray',
           opacity: pressed ? 0.6 : 1,
-        }, customStyle
+        },
+        customStyle,
       ]}
     >
       <Icon name={iconName} color={'white'} size={34} />
