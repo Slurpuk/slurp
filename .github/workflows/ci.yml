@@ -15,7 +15,7 @@ jobs:
         run: |
           npm test
           
-    build-android:
+  build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
     steps: 
