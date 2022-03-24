@@ -1,9 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import {Alert} from 'react-native';
-import {AlertMessage} from '../data/AlertMessages';
-
-const databaseErrorAlert = () =>
-  Alert.alert(AlertMessage.DATABASE.title, AlertMessage.DATABASE.message);
+import {Alerts} from '../data/Alerts';
 
 export function formatOrders(
   formattedOrders,
@@ -39,7 +35,13 @@ export function formatOrders(
           };
           newItems.push(newItem);
         })
-        .catch(() => databaseErrorAlert);
+        .catch(error => {
+          if (error === 'auth/network-request-failed') {
+            Alerts.connectionErrorAlert();
+          } else {
+            Alerts.databaseErrorAlert();
+          }
+        });
     }
     temp.Items = newItems;
 
@@ -59,6 +61,12 @@ export function formatOrders(
         }
         isCurrent ? setCurrentOrders(newOrders) : setPastOrders(newOrders);
       })
-      .catch(() => databaseErrorAlert);
+      .catch(error => {
+        if (error === 'auth/network-request-failed') {
+          Alerts.connectionErrorAlert();
+        } else {
+          Alerts.databaseErrorAlert();
+        }
+      });
   });
 }

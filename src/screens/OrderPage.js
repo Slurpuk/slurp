@@ -21,7 +21,7 @@ const OrderPage = ({navigation}) => {
     "Looks like you haven't made any orders yet...\n\n Head over to the " +
     'home page to get started!';
 
-  // load the logged-in user's orders from database
+  /* load the logged-in user's orders from database */
   useEffect(() => {
     const fetchData = firestore()
       .collection('Orders')
