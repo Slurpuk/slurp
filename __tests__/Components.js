@@ -2,6 +2,9 @@ import CustomButton from '../src/sub-components/CustomButton';
 import renderer from 'react-test-renderer';
 import React from 'react';
 import GreenHeader from '../src/sub-components/GreenHeader';
+import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
+import { Platform } from "react-native";
 
 describe('Custom sub-components', function () {
   describe('button', function () {
