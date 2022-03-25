@@ -13,26 +13,38 @@ const LogInPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const emailRegex = new RegExp(
+    '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
+  );
 
   const switchToSignUp = () => {
     navigation.navigate('SignUp');
   };
 
   async function forgotPassword() {
-    await firebase
-      .auth()
-      .currentUser.sendSignInLinkToEmail(email, {
-        handleCodeInApp: true,
-        url: 'app/email-verification',
-        iOS: {
-          bundleId: 'org.reactjs.native.example.Slurp',
-        },
-        android: {
-          installApp: true,
-          packageName: 'com.myproject',
-        },
-      })
-      .catch(e => console.log(e));
+    if (!emailRegex.test(email)) {
+      Alert.alert(
+        'Add Email',
+        'Please enter your email correctly in the field above to reset your password.',
+      );
+    } else {
+      await firebase
+        .auth()
+        .sendPasswordResetEmail(email)
+        .then(() => Alerts.resetPasswordAlert())
+        .catch(error => {
+          if (error.code === 'auth/network-request-failed') {
+            Alerts.connectionErrorAlert();
+          } else if (error.code === 'auth/invalid-email') {
+            Alerts.badEmailAlert();
+          } else if (error.code === 'auth/user-not-found') {
+            Alerts.resetPasswordAlert();
+          } else {
+            //Anything else
+            Alerts.elseAlert();
+          }
+        });
+    }
   }
 
   function handleLogInErrorsFrontEnd() {
