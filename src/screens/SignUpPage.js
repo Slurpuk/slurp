@@ -18,15 +18,10 @@ const SignUpPage = ({navigation}) => {
   const [password, setPassword] = useState();
   const [password_confirmation, setPasswordConfirmation] = useState();
 
-  function resetFields(justPasswords = false) {
-    if (!justPasswords) {
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-    }
+  function resetPasswordFields() {
     setPassword('');
     setPasswordConfirmation('');
-  };
+  }
 
   const switchToLogIn = () => {
     navigation.navigate('LogIn');
@@ -59,7 +54,6 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          resetFields();
           let newUser = auth().currentUser;
           addUser(newUser);
           registeredMessage();
@@ -69,7 +63,7 @@ const SignUpPage = ({navigation}) => {
         });
     } else {
       warningPassword();
-      resetFields(true);
+      resetPasswordFields();
     }
   }
 
