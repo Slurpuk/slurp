@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import HamburgerSlideBarNavigator, {
   VisibleContext,
@@ -9,16 +9,15 @@ import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {Alert, Animated} from 'react-native';
 
 export const GlobalContext = React.createContext();
 export default function App() {
   const isFirstTime = useRef();
-  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
-  const [userRef, setUserRef] = useState(null);
-  const [userObj, setUserObj] = useState(null);
+  const [currentUser, setCurrentUser] = useState(auth().currentUser);
+  const [userObj, setUserObj] = useState();
   const [shopsData, setShopsData] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [currShop, setCurrShop] = useState(shopsData[0]);
@@ -66,16 +65,26 @@ export default function App() {
     return parseInt(R * cc);
   };
 
-  console.log('currentUser is ', userRef);
-  //firebase.auth().signOut();
-
   useEffect(() => {
-    const subscriber = firebase.auth().onAuthStateChanged(user => {
+    const subscriber = auth().onAuthStateChanged(async user => {
       if (user) {
         setCurrentUser(user);
-        setUser();
+        await firestore()
+          .collection('Users')
+          .where('Email', '==', currentUser.email)
+          .get()
+          .then(querySnapshot => {
+            console.log(querySnapshot._docs[0]);
+            let userModel = querySnapshot._docs[0];
+            setUserObj({
+              ...userModel.data(),
+              key: userModel.id,
+            });
+            console.log(userObj);
+          });
       } else {
         setCurrentUser(null);
+        setUserObj(null);
       }
     });
     // Unsubscribe from events when no longer in use
@@ -103,35 +112,6 @@ export default function App() {
   function switchNewShop({shop}) {
     clearBasket();
     setCurrShop(shop);
-  }
-
-  useEffect(() => {
-    const subscriber = firestore()
-      .collection('Users')
-      .doc(userRef)
-      .onSnapshot(documentSnapshot => {
-        setUserObj(documentSnapshot.data());
-        console.log('userRef is ', userRef);
-        console.log('userObj is ', userObj);
-      });
-
-    // Stop listening for updates when no longer required
-    return () => subscriber();
-  }, [userRef]);
-
-  async function setUser() {
-    if (currentUser) {
-      await firestore()
-        .collection('Users')
-        .where('authID', '==', currentUser.uid)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(documentSnapshot => {
-            setUserRef(documentSnapshot.id);
-            //setUserObj(documentSnapshot.data());
-          });
-        });
-    }
   }
 
   function changeShop({shop, navigation}) {
@@ -361,7 +341,6 @@ export default function App() {
         markers: markers,
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
-        userRef: userRef, // Returns ID of the model object
         orderedShops: orderedShops,
         setOrderedShops: setOrderedShops,
       }}>

@@ -80,7 +80,7 @@ const BasketPage = ({navigation}) => {
         Items: formatBasket(),
         Status: 'incoming',
         ShopID: context.currShop.key,
-        UserID: context.userRef,
+        UserID: context.currentUser.key,
         Total: Number(context.total.toPrecision(2)),
       })
       .then(() => {

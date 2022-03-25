@@ -1,20 +1,13 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import FormField from '../sub-components/FormField';
 import textStyles from '../../stylesheets/textStyles';
+import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
-import WhiteArrowButton from "../sub-components/WhiteArrowButton";
-import {GlobalContext} from "../../App";
+import WhiteArrowButton from '../sub-components/WhiteArrowButton';
+import {GlobalContext} from '../../App';
 
 const LogInPage = ({navigation}) => {
   const context = useContext(GlobalContext);
@@ -57,11 +50,6 @@ const LogInPage = ({navigation}) => {
       },
     ]);
   };
-
-  // const resetFields = () => {
-  //   setEmail(' ');
-  //   setPassword(' ');
-  // };
 
   const authenticateUser = async () => {
     try {
