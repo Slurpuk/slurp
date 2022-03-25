@@ -1,11 +1,6 @@
-import '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-
-const EMULATOR_MODE_ON = true;
-
 /*
-Mock firebase-react-native */
+Mock firebase-react-native
+*/
 import * as ReactNative from 'react-native';
 
 jest.doMock('react-native', () => {
@@ -74,24 +69,60 @@ jest.doMock('react-native', () => {
     ReactNative,
   );
 });
+
+jest.doMock('@react-native-firebase/auth', () => {
+  return () => ({
+    signInWithEmailAndPassword: jest.fn(),
+    createUserWithEmailAndPassword: jest.fn(),
+    signOut: jest.fn(),
+    sendPasswordResetEmail: jest.fn(),
+  });
+});
+
+jest.doMock('@react-native-firebase/firestore', () => {
+  return () => ({
+    collection: jest.fn(),
+  });
+});
+
 /*
-Workaround for NativeEventEmitter library
+Mock stripe
+ */
+jest.mock('@stripe/stripe-react-native', () => ({
+  StripeProvider: jest.fn(({children}) => children),
+  CardField: jest.fn(() => null),
+  presentPaymentSheet: jest.fn(),
+  initPaymentSheet: jest.fn(),
+}));
+
+/*
+Mock stripe
+ */
+jest.mock('@stripe/stripe-react-native/src/components/StripeProvider', () => ({
+  StripeProvider: jest.fn(({children}) => children),
+  CardField: jest.fn(() => null),
+  presentPaymentSheet: jest.fn(),
+  initPaymentSheet: jest.fn(),
+}));
+
+/*
+Mock for NativeEventEmitter library
  */
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
 /*
-Workaround for Device-Info library
+Mock for Device-Info library
  */
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 jest.mock('react-native-device-info', () => mockRNDeviceInfo);
 
 /*
-Workaround for RNReanimated
+Mock for RNReanimated
  */
 global.__reanimatedWorkletInit = jest.fn();
 
 /*
-Workaround for RNNavigation
+Mock for RNNavigation
  */
 import 'react-native-gesture-handler/jestSetup';
 
@@ -108,10 +139,14 @@ jest.mock('react-native-reanimated', () => {
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
-
 /*
-Workaround for RNAsync-Storage
+Mock for RNAsync-Storage
  */
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+
+/*
+Simulates timers used for animations etc.
+ */
+jest.useFakeTimers();
