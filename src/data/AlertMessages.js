@@ -25,6 +25,11 @@ export const AlertMessage = {
     title: 'Wrong Password',
     message: "You can reset your password if you can't remember.",
   },
+  RESET_PASSWORD: {
+    title: 'Reset Sent',
+    message:
+      'If an account exists with that email, you will receive a link to rest you password.',
+  },
   ELSE: {
     title: 'Rare Error!',
     message:

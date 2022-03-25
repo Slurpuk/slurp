@@ -29,6 +29,12 @@ export const Alerts = {
       AlertMessage.WRONG_PASSWORD.message,
     );
   },
+  resetPasswordAlert: () => {
+    Alert.alert(
+      AlertMessage.RESET_PASSWORD.title,
+      AlertMessage.RESET_PASSWORD.message,
+    );
+  },
   elseAlert: () => {
     Alert.alert(AlertMessage.ELSE.title, AlertMessage.ELSE.message);
   },
