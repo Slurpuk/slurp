@@ -1,6 +1,7 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import {Dimensions, Platform, StyleSheet} from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const DetailIconsStyles = StyleSheet.create({
   container: {
@@ -56,7 +57,6 @@ const ShopIntroStyles = StyleSheet.create({
   },
 });
 
-
 const OptionStyles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -105,4 +105,52 @@ const OptionStyles = StyleSheet.create({
   },
 });
 
-export {DetailIconsStyles, ShopIntroStyles, OptionStyles};
+const OptionPopUpStyles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    paddingLeft: '7%',
+    width: 0.9128 * screenWidth,
+    height: 0.6 * screenHeight,
+    backgroundColor: 'white',
+    paddingVertical: '6%',
+    position: 'absolute',
+    top: '20%',
+    bottom: '23%',
+    left: '4%',
+    right: '4%',
+    elevation: 200,
+    zIndex: 100,
+  },
+
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  product_name: {
+    color: 'black',
+    marginLeft: '2%',
+  },
+
+  list: {
+    flex: 1,
+    height: '60%',
+  },
+
+  icon: {
+    marginRigh: '7%',
+    marginBottom: '2%',
+  },
+});
+
+export {
+  DetailIconsStyles,
+  ShopIntroStyles,
+  OptionStyles,
+  OptionPopUpStyles,
+  screenWidth,
+  screenHeight,
+};

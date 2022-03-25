@@ -1,18 +1,12 @@
 import CheckboxSectionList from './CheckboxSectionList';
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  Alert,
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {Alert, Text, TouchableHighlight, View} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
+import {OptionPopUpStyles, screenWidth} from '../../../stylesheets/ShopStyles';
 
 export const OptionsContext = React.createContext();
 const OptionsPopUp = ({data, renderer, item}) => {
@@ -22,7 +16,7 @@ const OptionsPopUp = ({data, renderer, item}) => {
   const [milk, setMilk] = useState(context.getDefault()); // List of options currently selected
   const [syrups, setSyrups] = useState([]);
 
-  const updateOptions = (option, isAdd) => {
+  function updateOptions(option, isAdd) {
     if (isAdd) {
       const newPrice = totalPrice + option.Price;
       setTotalPrice(newPrice);
@@ -45,8 +39,12 @@ const OptionsPopUp = ({data, renderer, item}) => {
         setSyrups(newState);
       }
     }
-  };
+  }
 
+  /**
+   * Ensures a milk option is selected, along with any number of syrups
+   * and will update the items customisation and total.
+   */
   function addToBasket() {
     if (milk === null) {
       Alert.alert(
@@ -77,20 +75,19 @@ const OptionsPopUp = ({data, renderer, item}) => {
 
   return (
     <OptionsContext.Provider value={{milk: milk}}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={[textStyles.headingOne, styles.product_name]}>
+      <View style={OptionPopUpStyles.container}>
+        <View style={OptionPopUpStyles.header}>
+          <Text style={[textStyles.headingOne, OptionPopUpStyles.product_name]}>
             {item.Name}
           </Text>
           <TouchableHighlight
-            style={styles.icon}
+            style={OptionPopUpStyles.icon}
             underlayColor={'white'}
-            onPress={() => context.setOptionsVisible(false)}
-          >
+            onPress={() => context.setOptionsVisible(false)}>
             <Icon size={30} color="black" name="close" />
           </TouchableHighlight>
         </View>
-        <View style={styles.list}>
+        <View style={OptionPopUpStyles.list}>
           <CheckboxSectionList
             updateOptions={updateOptions}
             DATA={data}
@@ -107,48 +104,5 @@ const OptionsPopUp = ({data, renderer, item}) => {
     </OptionsContext.Provider>
   );
 };
-
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    paddingLeft: '7%',
-    width: 0.9128 * screenWidth,
-    height: 0.6 * screenHeight,
-    backgroundColor: 'white',
-    paddingVertical: '6%',
-    position: 'absolute',
-    top: '20%',
-    bottom: '23%',
-    left: '4%',
-    right: '4%',
-    elevation: 200,
-    zIndex: 100,
-  },
-
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
-  product_name: {
-    color: 'black',
-    marginLeft: '2%',
-  },
-
-  list: {
-    flex: 1,
-    height: '60%',
-  },
-
-  icon: {
-    marginRight: '7%',
-    marginBottom: '2%',
-  },
-});
 
 export default OptionsPopUp;
