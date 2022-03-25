@@ -7,13 +7,7 @@
  */
 
 import React, {useContext, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  StatusBar,
-} from 'react-native';
+import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
 import auth from '@react-native-firebase/auth';
@@ -21,7 +15,7 @@ import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
 import {GlobalContext} from '../../App';
-import WhiteArrowButton from "../sub-components/WhiteArrowButton";
+import WhiteArrowButton from '../sub-components/WhiteArrowButton';
 
 const SignUpPage = ({navigation}) => {
   const context = useContext(GlobalContext);
@@ -123,7 +117,14 @@ const SignUpPage = ({navigation}) => {
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-        {context.isFirstTime ? <WhiteArrowButton navigation={navigation} direction={'left'} onPressAction={() => navigation.navigate('Welcome')} customStyle={{marginRight: '26%'}}/>: null}
+        {context.isFirstTime ? (
+          <WhiteArrowButton
+            navigation={navigation}
+            direction={'left'}
+            onPressAction={() => navigation.navigate('Welcome')}
+            customStyle={{marginRight: '26%'}}
+          />
+        ) : null}
         <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
       </View>
       <View style={styles.formContainer}>
