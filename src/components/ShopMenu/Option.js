@@ -1,18 +1,18 @@
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import React, {useContext, useEffect, useState} from 'react';
 import {OptionsContext} from './OptionsPopUp';
+import {OptionStyles} from '../../../stylesheets/ShopStyles';
+import textStyles from '../../../stylesheets/textStyles';
 
-const Option = ({option, updateOptions}) => {
+export default function Option({option, updateOptions}) {
   const context = useContext(OptionsContext);
   const [toggleCheckBox, setToggleCheckBox] = useState(option.Name === 'Dairy');
-  const [isDisabled, setIsDisabled] = useState(false);
+  const isDisabled = false;
 
-  const update = newValue => {
-    setToggleCheckBox(newValue);
-    updateOptions(option, !toggleCheckBox);
-  };
-
+  /**
+   * useEffect tracking the choice of milk to ensure only 1 milk is selected at any one time.
+   */
   useEffect(() => {
     if (option.Type === 'Milk' && context.milk !== option && toggleCheckBox) {
       setToggleCheckBox(false);
@@ -20,16 +20,26 @@ const Option = ({option, updateOptions}) => {
     }
   }, [context.milk]);
 
+  /**
+   * Update option checkbox.
+   * @param newValue
+   */
+  function update(newValue) {
+    setToggleCheckBox(newValue);
+    updateOptions(option, !toggleCheckBox);
+  }
+
   return (
-    <View style={styles.container}>
+    <View style={OptionStyles.container}>
       <View
         style={[
-          toggleCheckBox ? styles.checkedCheckBoxView : styles.checkBoxView,
-        ]}
-      >
+          toggleCheckBox
+            ? OptionStyles.checkedCheckBoxView
+            : OptionStyles.checkBoxView,
+        ]}>
         <CheckBox
           hideBox
-          style={styles.checkBox}
+          style={OptionStyles.checkBox}
           disabled={isDisabled}
           value={toggleCheckBox}
           onValueChange={newValue => update(newValue)}
@@ -38,12 +48,20 @@ const Option = ({option, updateOptions}) => {
           animationDuration={0.2}
         />
       </View>
-      <View style={[styles.container]}>
-        <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
+      <View style={[OptionStyles.container]}>
+        <Text
+          style={
+            toggleCheckBox ? textStyles.optionsTextBold : textStyles.optionsText
+          }>
           {option.Name}
         </Text>
         {option.Price !== 0 && (
-          <Text style={toggleCheckBox ? styles.bold : styles.text_info}>
+          <Text
+            style={
+              toggleCheckBox
+                ? textStyles.optionsTextBold
+                : textStyles.optionsText
+            }>
             {' '}
             +{option.Price < 1 ? option.Price * 100 : option.Price}p
           </Text>
@@ -51,70 +69,4 @@ const Option = ({option, updateOptions}) => {
       </View>
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  text_info: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    fontFamily: 'Poppins-Regular',
-    fontSize: 13,
-    color: '#717171',
-  },
-
-  bold: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: 13,
-    color: 'black',
-  },
-
-  checkBoxView: {
-    ...Platform.select({
-      ios: {
-        borderColor: '#717171',
-        borderRadius: 2,
-        borderWidth: 2,
-        height: 18,
-        width: 18,
-        marginVertical: '1.5%',
-        marginHorizontal: '2%',
-      },
-      android: {},
-    }),
-  },
-
-  checkedCheckBoxView: {
-    ...Platform.select({
-      ios: {
-        borderColor: '#087562',
-        backgroundColor: '#087562',
-        borderRadius: 2,
-        borderWidth: 2,
-        height: 18,
-        width: 18,
-        marginVertical: '1.5%',
-        marginHorizontal: '2%',
-      },
-      android: {},
-    }),
-  },
-
-  checkBox: {
-    ...Platform.select({
-      ios: {
-        height: 14,
-      },
-      android: {},
-    }),
-  },
-});
-
-export default Option;
+}
