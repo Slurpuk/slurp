@@ -25,6 +25,23 @@ const LogInPage = ({navigation}) => {
     navigation.navigate('SignUp');
   };
 
+  async function forgotPassword() {
+    await firebase
+      .auth()
+      .currentUser.sendSignInLinkToEmail(email, {
+        handleCodeInApp: true,
+        url: 'app/email-verification',
+        iOS: {
+          bundleId: 'org.reactjs.native.example.Slurp',
+        },
+        android: {
+          installApp: true,
+          packageName: 'com.myproject',
+        },
+      })
+      .catch(e => console.log(e));
+  }
+
   const invalidUserMessage = () => {
     Alert.alert('Invalid', 'Authenticated Denied', [
       {
