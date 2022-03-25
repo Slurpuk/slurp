@@ -9,7 +9,7 @@ app.use(express.json());
 app.post('/checkout', async (req, res) => {
   //Basically creates a new customer each time and stores their key.
   let customer = await stripe.customers.create();
-  let amount = req.body.amount * 100;
+  let amount = (req.body.amount * 100).toFixed(0);
   //App displays saved payment methods and save new ones
   const ephemeralKey = await stripe.ephemeralKeys.create(
     {customer: customer.id},

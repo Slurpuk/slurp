@@ -7,14 +7,15 @@ import renderers from '../../renderers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
-import EmptyListText from "../../sub-components/EmptyListText";
+import EmptyListText from '../../sub-components/EmptyListText';
 
 const Tab = createMaterialTopTabNavigator();
 
 const Menu = ({navigation}) => {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
-  const emptyText = 'There are currently no items in this section, check again later.';
+  const emptyText =
+    'There are currently no items in this section, check again later.';
   return (
     <>
       <Tab.Navigator
