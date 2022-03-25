@@ -66,9 +66,7 @@ const ShopIntro = ({shop}) => {
             <Text style={[textStyles.headingOne, styles.heading]}>
               {shop.Name}
             </Text>
-            <ShopDetailIcons
-              timeToOrder={shop.Queue}
-            />
+            <ShopDetailIcons timeToOrder={shop.Queue} />
             <Text style={[textStyles.bodyText, styles.body]}>{shop.Intro}</Text>
           </View>
         </LinearGradient>

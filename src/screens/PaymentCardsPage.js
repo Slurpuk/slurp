@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, FlatList} from 'react-native';
-import PaymentCardsData from '../fake-data/PaymentCardsData';
+import PaymentCardsData from '../data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
