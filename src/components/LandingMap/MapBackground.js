@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
+import React, {useEffect, useContext, useRef} from 'react';
 
 import {
   Dimensions,
@@ -14,9 +14,9 @@ import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
 import {locationPress, requestLocationPermission} from './locationHelpers';
+import mapStyles from '../../../stylesheets/mapStyles';
+Dimensions.get('window').height;
 
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
 export default function MapBackground({
   searchBarFocused,
   setSearchBarFocussed,
@@ -98,29 +98,8 @@ export default function MapBackground({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    height: screenHeight,
-    width: screenWidth,
-    justifyContent: 'flex-end',
-    zIndex: -3,
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-  },
-
-  markerBg: {
-    backgroundColor: '#FAFAFA',
-    padding: 5,
-    marginBottom: 4,
-    borderRadius: 11,
-  },
-
-  markerStyle: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    maxWidth: 220,
-  },
+  container: mapStyles.MapBackgroundContainer,
+  map: mapStyles.mapWithAbsoluteFill,
+  markerBg: mapStyles.markerBg,
+  markerStyle: mapStyles.markerStyle,
 });

@@ -1,6 +1,5 @@
-import React, {createContext, useContext, useRef, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
-  Dimensions,
   StyleSheet,
   View,
   LogBox,
@@ -14,16 +13,13 @@ import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
 import CustomSearchBar from '../components/LandingMap/CustomSearchBar';
 import LandingHamburgerIcon from '../assets/svgs/LandingHamburgerIcon';
+import mapStyles from '../../stylesheets/mapStyles';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
 
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
-
 export default function LandingMapPage({navigation}) {
-
   //determine if the hamburger icon is pressable or not
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
@@ -78,41 +74,11 @@ export default function LandingMapPage({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-    display: 'flex',
-  },
+  container: mapStyles.container,
+  map: mapStyles.map,
 
-  searchWrapper: {
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'row',
-    top: screenHeight * 0.07,
-  },
+  searchWrapper: mapStyles.searchWrapper,
 
-  newHamburger: {
-    width: 0.07 * screenHeight,
-    height: 0.07 * screenHeight,
-    backgroundColor: 'whitesmoke',
-    marginLeft: '3%',
-    borderRadius: 16,
-    borderColor: '#046D66',
-    borderWidth: 2,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  searchBar: {
-    borderRadius: 10,
-    borderColor: '#666',
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    height: screenHeight / 19,
-    width: screenWidth / 1.4,
-    paddingHorizontal: 10,
-    fontSize: 18,
-  },
+  newHamburger: mapStyles.newHamburger,
+  searchBar: mapStyles.searchBar,
 });
