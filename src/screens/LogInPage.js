@@ -1,26 +1,22 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import firebase from '@react-native-firebase/app';
-import {GlobalContext} from '../../App';
 import FormField from '../sub-components/FormField';
 import CustomButton from '../sub-components/CustomButton';
-import WhiteArrowButton from '../sub-components/WhiteArrowButton';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import textStyles from '../../stylesheets/textStyles';
 import {Alerts} from '../data/Alerts';
 
 const LogInPage = ({navigation}) => {
-  const context = useContext(GlobalContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRegex = new RegExp(
     '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
   );
 
-  const switchToSignUp = () => {
-    navigation.navigate('SignUp');
-  };
-
+  /*
+  Send verification email to user to reset their password
+   */
   async function forgotPassword() {
     if (!emailRegex.test(email)) {
       Alert.alert(
@@ -47,11 +43,11 @@ const LogInPage = ({navigation}) => {
     }
   }
 
+  /*
+  Deal with bad or empty inputs before sending request
+   */
   function handleLogInErrorsFrontEnd() {
     let validity = true;
-    const emailRegex = new RegExp(
-      '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
-    );
     if (email === '') {
       Alert.alert('Empty Email', 'Please enter your email.');
       validity = false;
@@ -65,6 +61,9 @@ const LogInPage = ({navigation}) => {
     return validity;
   }
 
+  /*
+  Manage response to database failure
+   */
   function handleLogInErrorsBackEnd(error) {
     let errorCode = error.code;
     if (
@@ -82,29 +81,19 @@ const LogInPage = ({navigation}) => {
     }
   }
 
-  const authenticateUser = async () => {
+  async function authenticateUser() {
     if (handleLogInErrorsFrontEnd()) {
       await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .catch(error => handleLogInErrorsBackEnd(error));
     }
-  };
+  }
 
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-        {context.isFirstTime ? (
-          <WhiteArrowButton
-            navigation={navigation}
-            direction={'left'}
-            onPressAction={() => navigation.navigate('Welcome')}
-            customStyle={{marginRight: '26%'}}
-          />
-        ) : null}
-        <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
-      </View>
+      <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
       <View style={styles.form}>
         <FormField
           title={'Email'}
@@ -126,7 +115,7 @@ const LogInPage = ({navigation}) => {
         </Text>
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={switchToSignUp}>
+          onPress={() => navigation.navigate('SignUp')}>
           New? Create an account
         </Text>
       </View>
@@ -160,7 +149,6 @@ const styles = StyleSheet.create({
   },
   hyperlink: {
     marginVertical: '2%',
-    textAlign: 'center',
     textDecorationLine: 'underline',
     textAlignVertical: 'bottom',
   },
