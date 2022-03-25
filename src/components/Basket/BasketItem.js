@@ -9,7 +9,7 @@ export default function BasketItem({item}) {
   const [itemTotal, setItemTotal] = useState(item.Price * item.count);
 
   /**
-   * Reduce the item's count, ensuring it does not
+   * Reduce the basket item's count, ensuring it does not
    * go below 0 (removed from basket).
    */
   function remove() {
@@ -21,7 +21,7 @@ export default function BasketItem({item}) {
   }
 
   /**
-   * Increase the item's count.
+   * Increase the basket item's count.
    */
   function add() {
     context.addToBasket(item);
