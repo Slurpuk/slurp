@@ -3,8 +3,6 @@ import UpdateDetailsPage from '../screens/UpdateDetailsPage';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ShopList from '../components/Shops/ShopList';
-import {TransitionPresets} from '@react-navigation/stack';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import ShopPage from '../screens/ShopPage';
 import ChangePasswordPage from '../screens/ChangePasswordPage';
 import OrderPage from '../screens/OrderPage';

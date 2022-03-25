@@ -1,9 +1,7 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
-import HamburgerSlideBarNavigator, {
-  VisibleContext,
-} from './src/navigation/HamburgerSlideBarNavigator';
+import React, {useEffect, useRef, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
 import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
@@ -11,13 +9,15 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+
 import {Alert, Animated} from 'react-native';
 
 export const GlobalContext = React.createContext();
 export default function App() {
   const isFirstTime = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
+  const [currentUser, setCurrentUser] = useState(auth().currentUser);
   const [userRef, setUserRef] = useState(null);
   const [userObj, setUserObj] = useState(null);
   const [shopsData, setShopsData] = useState([]);
@@ -45,7 +45,7 @@ export default function App() {
     checkForFirstTime();
   }, []);
 
-  const calculateDistance = coords => {
+  function calculateDistance(coords) {
 
     const R = 6371e3; // metres
     const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians

@@ -133,7 +133,7 @@ exports[`Custom sub-components green header should render correctly 1`] = `
       "flexDirection": "row",
       "paddingBottom": "6%",
       "paddingHorizontal": "5%",
-      "paddingTop": 30,
+      "paddingTop": undefined,
     }
   }
 >
@@ -173,7 +173,7 @@ exports[`Custom sub-components green header should render correctly 1`] = `
             },
             undefined,
             Object {
-              "fontFamily": "Ionicons",
+              "fontFamily": undefined,
               "fontStyle": "normal",
               "fontWeight": "normal",
             },

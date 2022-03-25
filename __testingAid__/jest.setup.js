@@ -1,37 +1,128 @@
-import '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+/*
+Mock firebase-react-native
+*/
+import * as ReactNative from 'react-native';
 
-const EMULATOR_MODE_ON = true;
+jest.doMock('react-native', () => {
+  return Object.setPrototypeOf(
+    {
+      Platform: {
+        OS: 'android',
+        select: () => {},
+      },
+      NativeModules: {
+        ...ReactNative.NativeModules,
+        RNFBAnalyticsModule: {
+          logEvent: jest.fn(),
+        },
+        RNFBAppModule: {
+          NATIVE_FIREBASE_APPS: [
+            {
+              appConfig: {
+                name: '[DEFAULT]',
+              },
+              options: {},
+            },
+
+            {
+              appConfig: {
+                name: 'secondaryFromNative',
+              },
+              options: {},
+            },
+          ],
+          FIREBASE_RAW_JSON: '{}',
+          addListener: jest.fn(),
+          eventsAddListener: jest.fn(),
+          eventsNotifyReady: jest.fn(),
+          removeListeners: jest.fn(),
+        },
+        RNFBAuthModule: {
+          APP_LANGUAGE: {
+            '[DEFAULT]': 'en-US',
+          },
+          APP_USER: {
+            '[DEFAULT]': 'jestUser',
+          },
+          addAuthStateListener: jest.fn(),
+          addIdTokenListener: jest.fn(),
+          useEmulator: jest.fn(),
+        },
+        RNFBCrashlyticsModule: {},
+        RNFBDatabaseModule: {
+          on: jest.fn(),
+          useEmulator: jest.fn(),
+        },
+        RNFBFirestoreModule: {
+          settings: jest.fn(),
+          documentSet: jest.fn(),
+        },
+        RNFBMessagingModule: {
+          onMessage: jest.fn(),
+        },
+        RNFBPerfModule: {},
+        RNFBStorageModule: {
+          useEmulator: jest.fn(),
+        },
+      },
+    },
+    ReactNative,
+  );
+});
+
+jest.doMock('@react-native-firebase/auth', () => {
+  return () => ({
+    signInWithEmailAndPassword: jest.fn(),
+    createUserWithEmailAndPassword: jest.fn(),
+    signOut: jest.fn(),
+    sendPasswordResetEmail: jest.fn(),
+  });
+});
+
+jest.doMock('@react-native-firebase/firestore', () => {
+  return () => ({
+    collection: jest.fn(),
+  });
+});
 
 /*
-Set up emulated DB
+Mock stripe
  */
-// if (__DEV__) {
-//   auth().useEmulator('http://localhost:9099');
-//   firestore().useEmulator('localhost', 8080);
-// }
-//
-// const db = firestore();
+jest.mock('@stripe/stripe-react-native', () => ({
+  StripeProvider: jest.fn(({children}) => children),
+  CardField: jest.fn(() => null),
+  presentPaymentSheet: jest.fn(),
+  initPaymentSheet: jest.fn(),
+}));
 
 /*
-Workaround for NativeEventEmitter library
+Mock stripe
+ */
+jest.mock('@stripe/stripe-react-native/src/components/StripeProvider', () => ({
+  StripeProvider: jest.fn(({children}) => children),
+  CardField: jest.fn(() => null),
+  presentPaymentSheet: jest.fn(),
+  initPaymentSheet: jest.fn(),
+}));
+
+/*
+Mock for NativeEventEmitter library
  */
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
 /*
-Workaround for Device-Info library
+Mock for Device-Info library
  */
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 jest.mock('react-native-device-info', () => mockRNDeviceInfo);
 
 /*
-Workaround for RNReanimated
+Mock for RNReanimated
  */
 global.__reanimatedWorkletInit = jest.fn();
 
 /*
-Workaround for RNNavigation
+Mock for RNNavigation
  */
 import 'react-native-gesture-handler/jestSetup';
 
@@ -48,10 +139,14 @@ jest.mock('react-native-reanimated', () => {
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
-
 /*
-Workaround for RNAsync-Storage
+Mock for RNAsync-Storage
  */
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+
+/*
+Simulates timers used for animations etc.
+ */
+jest.useFakeTimers();
