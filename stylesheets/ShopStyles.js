@@ -141,7 +141,7 @@ const OptionPopUpStyles = StyleSheet.create({
   },
 
   icon: {
-    marginRigh: '7%',
+    marginRight: '7%',
     marginBottom: '2%',
   },
 });
