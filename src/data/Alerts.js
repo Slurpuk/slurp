@@ -8,4 +8,28 @@ export const Alerts = {
   connectionErrorAlert: () => {
     Alert.alert(AlertMessage.CONNECTION.title, AlertMessage.CONNECTION.message);
   },
+  tooManyRequestsAlert: () => {
+    Alert.alert(
+      AlertMessage.MANY_REQUESTS.title,
+      AlertMessage.MANY_REQUESTS.message,
+    );
+  },
+  wrongCredentialsAlert: () => {
+    Alert.alert(
+      AlertMessage.WRONG_CREDENTIALS.title,
+      AlertMessage.WRONG_CREDENTIALS.message,
+    );
+  },
+  badEmailAlert: () => {
+    Alert.alert(AlertMessage.BAD_EMAIL.title, AlertMessage.BAD_EMAIL.message);
+  },
+  wrongPasswordAlert: () => {
+    Alert.alert(
+      AlertMessage.WRONG_PASSWORD.title,
+      AlertMessage.WRONG_PASSWORD.message,
+    );
+  },
+  elseAlert: () => {
+    Alert.alert(AlertMessage.ELSE.title, AlertMessage.ELSE.message);
+  },
 };

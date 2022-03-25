@@ -18,7 +18,7 @@ export const CustomAlerts = {
   ),
   WRONG_PASSWORD: new Alert(
     'Wrong Password',
-    "You can reset your passwork if you can't remember.",
+    "You can reset your password if you can't remember.",
   ),
   MANY_REQUESTS: new Alert(
     'Too many requests',

@@ -1,13 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
-import FormField from '../sub-components/FormField';
-import textStyles from '../../stylesheets/textStyles';
 import firebase from '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
-import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
+import {GlobalContext} from '../../App';
+import FormField from '../sub-components/FormField';
 import CustomButton from '../sub-components/CustomButton';
 import WhiteArrowButton from '../sub-components/WhiteArrowButton';
-import {GlobalContext} from '../../App';
+import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
+import textStyles from '../../stylesheets/textStyles';
+import {Alerts} from '../data/Alerts';
 
 const LogInPage = ({navigation}) => {
   const context = useContext(GlobalContext);
@@ -35,35 +35,47 @@ const LogInPage = ({navigation}) => {
       .catch(e => console.log(e));
   }
 
-  const invalidUserMessage = () => {
-    Alert.alert('Invalid', 'Authenticated Denied', [
-      {
-        text: 'OK',
-      },
-    ]);
-  };
+  function handleLogInErrorsFrontEnd() {
+    let validity = true;
+    const emailRegex = new RegExp(
+      '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
+    );
+    if (email === '') {
+      Alert.alert('Empty Email', 'Please enter your email.');
+      validity = false;
+    } else if (!emailRegex.test(email)) {
+      Alerts.badEmailAlert();
+      validity = false;
+    } else if (password === '') {
+      Alert.alert('Empty Password', 'Please enter your password.');
+      validity = false;
+    }
+    return validity;
+  }
 
-  const invalidMessage = e => {
-    Alert.alert('Invalid', 'Please enter your credentials correctly', [
-      {
-        text: 'OK',
-      },
-    ]);
-  };
+  function handleLogInErrorsBackEnd(error) {
+    let errorCode = error.code;
+    if (
+      errorCode === 'auth/wrong-password' ||
+      errorCode === 'auth/user-not-found'
+    ) {
+      Alerts.wrongCredentialsAlert();
+    } else if (errorCode === 'auth/invalid-email') {
+      Alerts.badEmailAlert();
+    } else if (errorCode === 'auth/network-request-failed') {
+      Alerts.connectionErrorAlert();
+    } else {
+      //Anything else
+      Alerts.elseAlert();
+    }
+  }
 
   const authenticateUser = async () => {
-    try {
-      await auth()
+    if (handleLogInErrorsFrontEnd()) {
+      await firebase
+        .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(response => {
-          if (response && response.user) {
-            context.enterApp();
-          } else {
-            invalidUserMessage();
-          }
-        });
-    } catch (e) {
-      invalidMessage(e.message);
+        .catch(error => handleLogInErrorsBackEnd(error));
     }
   };
 
