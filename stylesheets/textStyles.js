@@ -1,4 +1,3 @@
-
 import {StyleSheet} from 'react-native';
 
 const textStyles = StyleSheet.create({
@@ -172,6 +171,22 @@ const textStyles = StyleSheet.create({
     color: 'white',
     letterSpacing: 0.8,
     marginLeft: 7,
+  },
+
+  optionsText: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 13,
+    color: '#717171',
+  },
+
+  optionsTextBold: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 13,
+    color: 'black',
   },
 });
 

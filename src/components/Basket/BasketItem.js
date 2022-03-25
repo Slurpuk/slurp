@@ -6,6 +6,8 @@ export default function BasketItem({item}) {
   const context = useContext(GlobalContext);
   const [count, setCount] = useState(item.count);
   const [itemTotal, setItemTotal] = useState(item.Price * item.count);
+
+
   function remove() {
     if (count > 0) {
       context.removeFromBasket(item);
