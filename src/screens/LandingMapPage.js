@@ -17,7 +17,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import DraggableShopList from '../components/Shops/DraggableShopList';
 import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
-import {SearchBar} from '../components/LandingMap/CustomSearchBar';
 import CustomSearchBar from '../components/LandingMap/CustomSearchBar';
 import LandingHamburgerIcon from '../assets/svgs/LandingHamburgerIcon';
 

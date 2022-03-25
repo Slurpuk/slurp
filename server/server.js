@@ -1,16 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const stripe = require('stripe')(process.env.secret_key); // https://stripe.com/docs/keys#obtain-api-keys
+const stripe = require('stripe')(
+  'sk_test_51KRjSVGig6SwlicvjdIQgL4wuz8wkr61CkyJDzTfyUWIM0sXWMHm17ibH4kk4anzkgpwKD14jhjjyKM10GAgFWjJ00r7kJHSov',
+);
 app.use(express.static('.'));
 app.use(express.json());
 
-// An endpoint for your checkout
+// An endpoint for the checkout
 app.post('/checkout', async (req, res) => {
-  //Basically creates a new customer each time and stores their key.
+  //Create a new customer each time and store their key.
   let customer = await stripe.customers.create();
-  let amount = req.body.amount * 100;
-  //App displays saved payment methods and save new ones
+  let amount = (req.body.amount * 100).toFixed(0);
+
+  //Create ephemeral key and assign it to the customer.
   const ephemeralKey = await stripe.ephemeralKeys.create(
     {customer: customer.id},
     {apiVersion: '2020-08-27'},
@@ -25,15 +28,12 @@ app.post('/checkout', async (req, res) => {
 
   // Send the object keys to the client
   res.send({
-    publishableKey: process.env.publishable_key,
+    publishableKey:
+      'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1',
     paymentIntent: paymentIntent.client_secret,
     customer: customer.id,
     ephemeralKey: ephemeralKey.secret,
   });
 });
-
-app.listen(process.env.PORT, () =>
-  console.log(`Node server listening on port ${process.env.PORT}!`),
-);
-
-
+//Listen the port 8000
+app.listen(8000, () => console.log(`Node server listening on port 8000!`));

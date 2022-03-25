@@ -17,7 +17,6 @@ import com.facebook.react.bridge.JSIModulePackage;
 import com.facebook.soloader.SoLoader;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 import java.lang.reflect.InvocationTargetException;
-import io.invertase.firebase.storage.ReactNativeFirebaseStoragePackage;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
