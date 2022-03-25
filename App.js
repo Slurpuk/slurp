@@ -42,7 +42,6 @@ export default function App() {
   }, []);
 
   function calculateDistance(coords) {
-
     const R = 6371e3; // metres
     const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
     const latitude2 = (coords.latitude * Math.PI) / 180;
@@ -61,7 +60,7 @@ export default function App() {
 
     // in metres
     return parseInt(R * cc);
-  };
+  }
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(async user => {
@@ -182,7 +181,7 @@ export default function App() {
             firestore()
               .doc(itemRef.path)
               .onSnapshot(query => {
-                let collection = '';
+                let collection;
                 if (itemRef.path.includes('Coffees')) {
                   collection = coffees;
                 } else if (itemRef.path.includes('Drinks')) {
@@ -317,7 +316,6 @@ export default function App() {
       value={{
         enterApp: enterApp,
         isFirstTime: isFirstTime.current,
-        user: currentUser, // Returns the authentication object
         currShop: currShop,
         setCurrShop: changeShop,
         isShopIntro: isShopIntro,
