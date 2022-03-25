@@ -5,13 +5,13 @@ import {OptionsContext} from './OptionsPopUp';
 import {OptionStyles} from '../../../stylesheets/ShopStyles';
 import textStyles from '../../../stylesheets/textStyles';
 
-const Option = ({option, updateOptions}) => {
+export default function Option({option, updateOptions}) {
   const context = useContext(OptionsContext);
   const [toggleCheckBox, setToggleCheckBox] = useState(option.Name === 'Dairy');
-  const [isDisabled, setIsDisabled] = useState(false);
+  const isDisabled = false;
 
   /**
-   * useEffect to track the choice of milk to ensure only 1 is checked.
+   * useEffect tracking the choice of milk to ensure only 1 is checked.
    */
   useEffect(() => {
     if (option.Type === 'Milk' && context.milk !== option && toggleCheckBox) {
@@ -21,14 +21,13 @@ const Option = ({option, updateOptions}) => {
   }, [context.milk]);
 
   /**
-   * Update option checkbox
+   * Update option checkbox.
    * @param newValue
    */
   function update(newValue) {
     setToggleCheckBox(newValue);
     updateOptions(option, !toggleCheckBox);
   }
-
 
   return (
     <View style={OptionStyles.container}>
@@ -70,6 +69,4 @@ const Option = ({option, updateOptions}) => {
       </View>
     </View>
   );
-};
-
-export default Option;
+}

@@ -9,13 +9,20 @@ import {GlobalContext} from '../../../App';
 import {OptionPopUpStyles, screenWidth} from '../../../stylesheets/ShopStyles';
 
 export const OptionsContext = React.createContext();
-const OptionsPopUp = ({data, renderer, item}) => {
+
+export default function OptionsPopUp({data, renderer, item}) {
   const context = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const [totalPrice, setTotalPrice] = useState(item.Price);
   const [milk, setMilk] = useState(context.getDefault()); // List of options currently selected
   const [syrups, setSyrups] = useState([]);
 
+  /**
+   * If an option is selected, calculate a new total and reflect this
+   * in the item's options field.
+   * @param option
+   * @param isAdd
+   */
   function updateOptions(option, isAdd) {
     if (isAdd) {
       const newPrice = totalPrice + option.Price;
@@ -103,6 +110,4 @@ const OptionsPopUp = ({data, renderer, item}) => {
       </View>
     </OptionsContext.Provider>
   );
-};
-
-export default OptionsPopUp;
+}

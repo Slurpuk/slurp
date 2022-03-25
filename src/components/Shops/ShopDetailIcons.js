@@ -4,7 +4,7 @@ import textStyles from '../../../stylesheets/textStyles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {DetailIconsStyles} from '../../../stylesheets/ShopStyles';
 
-const ShopDetailIcons = ({timeToOrder}) => {
+export default function ShopDetailIcons({timeToOrder}){
   return (
     <View style={DetailIconsStyles.container}>
       <Icon size={24} color="#FFE" name="walk" />
@@ -15,4 +15,3 @@ const ShopDetailIcons = ({timeToOrder}) => {
   );
 };
 
-export default ShopDetailIcons;

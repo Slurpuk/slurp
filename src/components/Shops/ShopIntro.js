@@ -10,7 +10,7 @@ import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
 
-const ShopIntro = ({shop}) => {
+export default function ShopIntro({shop}) {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const context = shopContext === undefined ? globalContext : shopContext;
@@ -23,17 +23,14 @@ const ShopIntro = ({shop}) => {
       }}
       onLayout={() => {
         fadeOpacityIn(globalContext.adaptiveOpacity, 140);
-      }}
-    >
+      }}>
       <ImageBackground
         imageStyle={ShopIntroStyles.cardImg}
         style={ShopIntroStyles.container}
-        source={{uri: shop.Image}}
-      >
+        source={{uri: shop.Image}}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={ShopIntroStyles.linearGradient}
-        >
+          style={ShopIntroStyles.linearGradient}>
           <View
             style={[
               ShopIntroStyles.back_button,
@@ -42,8 +39,7 @@ const ShopIntro = ({shop}) => {
                 : context.isShopIntro
                 ? {opacity: 0}
                 : {opacity: 1},
-            ]}
-          >
+            ]}>
             <WhiteArrowButton
               direction={context.isShopIntro ? 'down' : 'left'}
               navigation={context.navigation}
@@ -67,6 +63,4 @@ const ShopIntro = ({shop}) => {
       </ImageBackground>
     </Animated.View>
   );
-};
-
-export default ShopIntro;
+}
