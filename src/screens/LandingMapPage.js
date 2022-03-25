@@ -1,10 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  LogBox,
-  StatusBar,
-} from 'react-native';
+import {StyleSheet, View, LogBox, StatusBar} from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
@@ -38,7 +33,6 @@ export default function LandingMapPage({navigation}) {
 
   return (
     <View style={styles.container}>
-
       {/*allows full screen map on devices with a notch*/}
       <StatusBar translucent={true} backgroundColor="transparent" />
 
@@ -76,9 +70,7 @@ export default function LandingMapPage({navigation}) {
 const styles = StyleSheet.create({
   container: mapStyles.container,
   map: mapStyles.map,
-
   searchWrapper: mapStyles.searchWrapper,
-
   newHamburger: mapStyles.newHamburger,
   searchBar: mapStyles.searchBar,
 });
