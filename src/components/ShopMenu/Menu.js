@@ -1,5 +1,5 @@
-import React, {useContext, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useContext} from 'react';
+import {View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
 import {FlatList} from 'react-native-gesture-handler';
@@ -7,18 +7,20 @@ import renderers from '../../renderers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
-import EmptyListText from "../../sub-components/EmptyListText";
+import EmptyListText from '../../sub-components/EmptyListText';
+import {menuStyles} from './shopStyles';
 
 const Tab = createMaterialTopTabNavigator();
 
 const Menu = ({navigation}) => {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
-  const emptyText = 'There are currently no items in this section, check again later.';
+  const emptyText =
+    'There are currently no items in this section, check again later.';
   return (
     <>
       <Tab.Navigator
-        style={styles.navigatorContent}
+        style={menuStyles.navigatorContent}
         screenOptions={{
           tabBarLabelStyle: {
             fontSize: 18,
@@ -39,8 +41,7 @@ const Menu = ({navigation}) => {
             elevation: 0,
           },
         }}
-        containerStyle={styles.container}
-      >
+        containerStyle={menuStyles.container}>
         <Tab.Screen
           name="Coffees"
           children={() => (
@@ -50,8 +51,8 @@ const Menu = ({navigation}) => {
               keyExtractor={item => item.key}
               numColumns={2}
               ListEmptyComponent={EmptyListText(emptyText)}
-              columnWrapperStyle={styles.row}
-              contentContainerStyle={styles.content}
+              columnWrapperStyle={menuStyles.row}
+              contentContainerStyle={menuStyles.content}
             />
           )}
         />
@@ -64,8 +65,8 @@ const Menu = ({navigation}) => {
               keyExtractor={item => item.key}
               numColumns={2}
               ListEmptyComponent={EmptyListText(emptyText)}
-              columnWrapperStyle={styles.row}
-              contentContainerStyle={styles.content}
+              columnWrapperStyle={menuStyles.row}
+              contentContainerStyle={menuStyles.content}
             />
           )}
         />
@@ -78,18 +79,17 @@ const Menu = ({navigation}) => {
               keyExtractor={item => item.key}
               numColumns={2}
               ListEmptyComponent={EmptyListText(emptyText)}
-              columnWrapperStyle={styles.row}
-              contentContainerStyle={styles.content}
+              columnWrapperStyle={menuStyles.row}
+              contentContainerStyle={menuStyles.content}
             />
           )}
         />
       </Tab.Navigator>
 
-      <View style={styles.absoluteArea}>
+      <View style={menuStyles.absoluteArea}>
         <LinearGradient
           colors={['transparent', '#EDEBE7', '#EDEBE7']}
-          style={styles.linearGradient}
-        >
+          style={menuStyles.linearGradient}>
           <CustomButton
             text="View Basket"
             priority="primary"
@@ -101,71 +101,4 @@ const Menu = ({navigation}) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 20,
-  },
-
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-
-  absoluteArea: {
-    position: 'absolute',
-    height: 100,
-    backgroundColor: '',
-    bottom: 0,
-    width: '100%',
-  },
-
-  panelHandle: {
-    width: '10%',
-    height: 5,
-    backgroundColor: 'white',
-    borderRadius: 4,
-    position: 'absolute',
-    top: '2%',
-    zIndex: 2,
-    left: '45%',
-  },
-  header1: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    height: '100%',
-  },
-  contentContainerStyle: {
-    backgroundColor: '#EDEBE7',
-    width: '100%',
-    height: '100%',
-    flex: 1,
-  },
-
-  content: {
-    flexGrow: 1,
-    marginHorizontal: '5%',
-    paddingBottom: '15%',
-  },
-
-  container: {
-    flex: 1,
-    minHeight: '100%',
-    width: '100%',
-    position: 'relative',
-  },
-
-  navigatorContent: {
-    width: '100%',
-    flex: 1,
-  },
-});
-
 export default Menu;

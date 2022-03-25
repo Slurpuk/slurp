@@ -41,10 +41,6 @@ function HamburgerSlideBarNavigator() {
           children={() => <OrderHistoryStackNavigator />}
         />
         <Drawer.Screen
-          name="Payment accounts"
-          children={() => <PaymentAccountsNavigator />}
-        />
-        <Drawer.Screen
           name="Change name"
           children={() => <ChangeDetailsStackNavigator />}
         />
@@ -56,7 +52,5 @@ function HamburgerSlideBarNavigator() {
     </VisibleContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({});
 
 export default HamburgerSlideBarNavigator;

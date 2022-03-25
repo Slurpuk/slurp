@@ -6,7 +6,7 @@ platform :ios, '11.0'
 rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-google-maps', :path => rn_maps_path
 
-target 'MyProject' do
+target 'Slurp' do
   config = use_native_modules!
 
   use_react_native!(
@@ -14,18 +14,9 @@ target 'MyProject' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
+  pod 'stripe-react-native', :path => '../node_modules/@stripe/stripe-react-native'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-
-  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
-
-  pod 'RNSharedElement', :path => '../node_modules/react-native-shared-element'
-
-  pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
-
-  target 'MyProjectTests' do
+  target 'SlurpTests' do
     inherit! :complete
     # Pods for testing
   end
