@@ -15,7 +15,6 @@ app.post('/checkout', async (req, res) => {
     {customer: customer.id},
     {apiVersion: '2020-08-27'},
   );
-
   // Create a PaymentIntent with the payment amount, currency, and customer
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,

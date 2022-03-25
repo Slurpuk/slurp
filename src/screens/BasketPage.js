@@ -8,25 +8,25 @@ import CustomButton from '../sub-components/CustomButton';
 
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
-import { StripeProvider } from "@stripe/stripe-react-native/src/components/StripeProvider";
+import { StripeProvider } from '@stripe/stripe-react-native/src/components/StripeProvider';
 
 const BasketPage = ({navigation}) => {
   const publishableKey = 'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
   const context = useContext(GlobalContext);
-  const API_URL = 'http://localhost:8000';
+  const API_URL = 'http://localhost:8088';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
 
   const fetchPaymentSheetParams = async () => {
-    console.log(context.total.toFixed(2));
     let body = {amount: context.total.toFixed(2)};
+    console.log(JSON.stringify(body))
     const response = await fetch(`${API_URL}/checkout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    });
+    }).catch(error => Alert.alert('error', error.message));
     const {paymentIntent, ephemeralKey, customer} = await response.json();
     return {
       paymentIntent,
@@ -54,7 +54,9 @@ const BasketPage = ({navigation}) => {
       if (error) {
         Alert.alert(`Error code: ${error.code}`, error.message);
       } else {
-        confirmOrder().catch(error => console.log(error));
+        confirmOrder().catch(err =>
+          Alert.alert(`Error code: ${err.code}`, err.message),
+        );
       }
     } else {
       Alert.alert('Empty basket.', 'Please add items to your basket.', [
@@ -81,6 +83,7 @@ const BasketPage = ({navigation}) => {
         ShopID: context.currShop.key,
         UserID: context.userRef,
         Total: Number(context.total.toPrecision(2)),
+        IsRequired: true,
       })
       .then(() => {
         context.clearBasket();
@@ -130,7 +133,7 @@ const BasketPage = ({navigation}) => {
           <CustomButton
             priority={'primary'}
             text={'Checkout'}
-            onPress={openPaymentSheet}
+            onPress={confirmOrder}
           />
         </View>
       </View>

@@ -7,6 +7,12 @@ import {ShopContext} from '../../screens/ShopPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
 
 export const DraggableContext = React.createContext();
+/**
+ * Non draggable version of the shop page
+ * @param shop The shop to display
+ * @param navigation The navigation object
+ * @param sheetRef The reference to the bottom sheet
+ */
 const DraggableShopPage = ({shop, navigation, sheetRef}) => {
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(ShopContext);
