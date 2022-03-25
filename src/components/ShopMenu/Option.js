@@ -11,7 +11,7 @@ export default function Option({option, updateOptions}) {
   const isDisabled = false;
 
   /**
-   * useEffect tracking the choice of milk to ensure only 1 is checked.
+   * useEffect tracking the choice of milk to ensure only 1 milk is selected at any one time.
    */
   useEffect(() => {
     if (option.Type === 'Milk' && context.milk !== option && toggleCheckBox) {
