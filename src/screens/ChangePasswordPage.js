@@ -29,20 +29,12 @@ const ChangePasswordPage = ({navigation}) => {
   }
 
   function invalidUpdateMessage() {
-    Alert.alert('Invalid', 'Something went wrong! Please try again.', [
-      {
-        text: 'OK',
-      },
-    ]);
+    Alert.alert('Invalid', 'Something went wrong! Please try again.');
     resetFields();
   }
 
   function invalidCredentialsMessage() {
-    Alert.alert('Invalid', 'Please enter your old password correctly.', [
-      {
-        text: 'OK',
-      },
-    ]);
+    Alert.alert('Invalid', 'Please enter your old password correctly.');
     resetFields();
   }
 
@@ -50,11 +42,6 @@ const ChangePasswordPage = ({navigation}) => {
     Alert.alert(
       'Invalid',
       'Your confirmation does not match the new password.',
-      [
-        {
-          text: 'OK',
-        },
-      ],
     );
   }
 
