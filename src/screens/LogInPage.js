@@ -90,24 +90,18 @@ const LogInPage = ({navigation}) => {
           type={'password'}
           value={password}
         />
-        <View>
-          <Text
-            style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={null}
-          >
-            Forgot your password?
-          </Text>
-        </View>
-        <View>
-          <Text
-            style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={switchToSignUp}
-          >
-            New? Create an account
-          </Text>
-        </View>
+        <Text
+          style={[textStyles.bluePoppinsBody, styles.hyperlink]}
+          onPress={forgotPassword}>
+          Forgot your password?
+        </Text>
+        <Text
+          style={[textStyles.bluePoppinsBody, styles.hyperlink]}
+          onPress={switchToSignUp}>
+          New? Create an account
+        </Text>
       </View>
-      <View style={styles.buttonsContainer}>
+      <View style={styles.buttonContainer}>
         <CustomButton
           text={'Log in'}
           onPress={authenticateUser}
@@ -124,17 +118,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EDEBE7',
     paddingTop: getCushyPaddingTop(),
+    paddingBottom: '5%',
     paddingHorizontal: '5%',
   },
   form: {
     flex: 3,
     paddingVertical: '5%',
   },
-  buttonsContainer: {
+  buttonContainer: {
     justifyContent: 'flex-end',
     marginBottom: '4%',
   },
-  footer: {
+  hyperlink: {
+    marginVertical: '2%',
     textAlign: 'center',
     textDecorationLine: 'underline',
     textAlignVertical: 'bottom',

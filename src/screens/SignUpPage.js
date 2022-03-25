@@ -159,24 +159,20 @@ This function provides a variety of error handling once received an error code f
           type={'password'}
           value={password_confirmation}
         />
+        <Text
+          style={[textStyles.bluePoppinsBody, styles.hyperlink]}
+          onPress={switchToLogIn}>
+          Already have an account? Log in
+        </Text>
       </View>
 
-      <View style={styles.buttonsContainer}>
-        <View style={styles.button}>
-          <CustomButton
-            text={'Create Account'}
-            onPress={registerUser}
-            priority={'primary'}
-            style={styles.button}
-          />
-        </View>
-        <View>
-          <Text
-            style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-            onPress={switchToLogIn}>
-            Already have an account? Log in
-          </Text>
-        </View>
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          text={'Create Account'}
+          onPress={registerUser}
+          priority={'primary'}
+          style={styles.button}
+        />
       </View>
     </View>
   );
@@ -188,10 +184,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EDEBE7',
     paddingTop: getCushyPaddingTop(),
+    paddingBottom: '5%',
     paddingHorizontal: '5%',
-  },
-  container: {
-    flex: 1,
   },
   formContainer: {
     flex: 1,
@@ -210,13 +204,10 @@ const styles = StyleSheet.create({
     marginRight: '5%',
   },
 
-  buttonsContainer: {
+  buttonContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     marginBottom: '4%',
-  },
-  button: {
-    marginVertical: '2%',
   },
   hyperlink: {
     marginVertical: '2%',
