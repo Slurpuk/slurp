@@ -1,51 +1,127 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useContext} from 'react';
-
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
 import {GlobalContext} from '../../App';
+import {useStripe} from '@stripe/stripe-react-native';
+import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 
 const BasketPage = ({navigation}) => {
+  const publishableKey =
+    'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
   const context = useContext(GlobalContext);
+  const API_URL = 'http://localhost:8000';
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
 
-  async function confirmOrder() {
-    if (context.basketSize === 0) {
+  /*
+   * Fetch the payments' sheet parameters from the server.
+   * @return {paymentIntent} Return the encapsulated details about the transaction.
+   * @return {ephemeralKey} Return the cryptographic payment key.
+   * @return {customer} Return the customer.
+   */
+  const fetchPaymentSheetParams = async () => {
+    console.log(context.total.toFixed(2));
+    let body = {amount: context.total.toFixed(2)};
+    const response = await fetch(`${API_URL}/checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    const {paymentIntent, ephemeralKey, customer} = await response.json();
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
+
+  /*
+   * Initialize the payment sheet with customerId,
+   * customerEphemeralKeySecret, paymentIntentClientSecret
+   */
+  const initializePaymentSheet = async () => {
+    const {paymentIntent, ephemeralKey, customer} =
+      await fetchPaymentSheetParams();
+    const {error} = await initPaymentSheet({
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+    });
+  };
+
+  /*
+   * Open payment sheet if error doesn't exists.
+   * @function {confirmOrder} Confirm order if payment sheet is present.
+   */
+  const openPaymentSheet = async () => {
+    if (context.total !== 0) {
+      const {error} = await presentPaymentSheet();
+      if (error) {
+        Alert.alert(`Error code: ${error.code}`, error.message);
+      } else {
+        confirmOrder().catch(error => console.log(error));
+      }
+    } else {
       Alert.alert('Empty basket.', 'Please add items to your basket.', [
         {
           text: 'OK',
         },
       ]);
-    } else {
-      await firestore()
-        .collection('Orders')
-        .add({
-          DateTime: firestore.Timestamp.now(),
-          Items: formatBasket(),
-          Status: 'incoming',
-          ShopID: context.currShop.key,
-          UserID: context.userRef,
-          Total: Number(context.total.toPrecision(2)),
-        })
-        .then(() => {
-          context.clearBasket();
-          Alert.alert(
-            'Order received.',
-            'Your order has been sent to the shop! Awaiting response.',
-            [
-              {
-                text: 'OK',
-                onPress: () => navigation.navigate('Order history'),
-              },
-            ],
-          );
-        });
     }
+  };
+
+  /*
+   * Dynamically initialise the payment sheet if the total price is greater than 0.
+   */
+  useEffect(() => {
+    if (context.total !== 0) {
+      initializePaymentSheet();
+    }
+  }, []);
+
+  /*
+   * Send data to firebase.
+   * DateTime, Items, Status, ShopID, UserID,Total are added to the
+   * firestore collection 'Orders'.
+   */
+  async function confirmOrder() {
+    await firestore()
+      .collection('Orders')
+      .add({
+        DateTime: firestore.Timestamp.now(),
+        Items: formatBasket(),
+        Status: 'incoming',
+        ShopID: context.currShop.key,
+        UserID: context.userRef,
+        Total: Number(context.total.toPrecision(2)),
+      })
+      .then(() => {
+        context.clearBasket();
+        Alert.alert(
+          'Order received.',
+          'Your order has been sent to the shop! Awaiting response.',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Order history'),
+            },
+          ],
+        );
+      });
   }
 
+  /*
+   * Format basket contents to match a precision.
+   * @return {ItemRef} The item key.
+   * @return {Quantity} The item quantity.
+   * @return {Price} The price of the item.
+   * @return {Type} The type of the item.
+   * @ return {Options} the Options of the item.
+   */
   function formatBasket() {
     let items = context.basketContent.map(item => {
       console.log(item);
@@ -61,34 +137,29 @@ const BasketPage = ({navigation}) => {
   }
 
   return (
-    <View style={styles.basket}>
-      <GreenHeader
-        headerText={'My Basket - ' + context.currShop.Name}
-        navigation={navigation}
-      />
-      <View style={styles.main_container}>
-        <BasketContents Items={context.basketContent} />
-      </View>
+    <StripeProvider publishableKey={publishableKey}>
+      <View style={styles.basket}>
+        <GreenHeader
+          headerText={'My Basket - ' + context.currShop.Name}
+          navigation={navigation}
+        />
+        <View style={styles.main_container}>
+          <BasketContents Items={context.basketContent} />
+        </View>
 
-      <View style={styles.order_summary}>
-        <Text style={styles.total_text}>TOTAL</Text>
-        <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
+        <View style={styles.order_summary}>
+          <Text style={styles.total_text}>TOTAL</Text>
+          <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
+        </View>
+        <View style={[styles.lastButton, styles.buttons]}>
+          <CustomButton
+            priority={'primary'}
+            text={'Checkout'}
+            onPress={openPaymentSheet}
+          />
+        </View>
       </View>
-      <View style={styles.buttons}>
-        <CustomButton
-          priority={'primary'}
-          text={'Apple/Google Pay'}
-          onPress={confirmOrder}
-        />
-      </View>
-      <View style={[styles.lastButton, styles.buttons]}>
-        <CustomButton
-          priority={'primary'}
-          text={'Checkout with card'}
-          onPress={confirmOrder}
-        />
-      </View>
-    </View>
+    </StripeProvider>
   );
 };
 

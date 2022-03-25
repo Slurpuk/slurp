@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativestripesdk.StripeSdkPackage;
 import com.ijzerenhein.sharedelement.RNSharedElementPackage;
 import com.cmcewen.blurview.BlurViewPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -16,7 +17,6 @@ import com.facebook.react.bridge.JSIModulePackage;
 import com.facebook.soloader.SoLoader;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 import java.lang.reflect.InvocationTargetException;
-import io.invertase.firebase.storage.ReactNativeFirebaseStoragePackage;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {

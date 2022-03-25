@@ -69,6 +69,7 @@ export default function MapBackground({
         onPanDrag={event => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
+
         region={mapCenter.current}>
         {/*//map each of the shops to a marker on the map*/}
         {context.markers.map((marker, index) => (

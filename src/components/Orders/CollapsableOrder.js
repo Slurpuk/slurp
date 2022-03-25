@@ -1,8 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import React from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
@@ -31,7 +27,6 @@ const CollapsableOrder = ({order}) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   order: {

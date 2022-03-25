@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>185382636935-e66dgsqo84qe06hha6de92sa180m5jgi.apps.googleusercontent.com</string>
+	<string>185382636935-cc16ou3bqad4mqgv9ef7hktmf4qvuaks.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.185382636935-e66dgsqo84qe06hha6de92sa180m5jgi</string>
+	<string>com.googleusercontent.apps.185382636935-cc16ou3bqad4mqgv9ef7hktmf4qvuaks</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBVwWU3vW3pmlyPC212a2AHZPLzapPOpL4</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.MyProject</string>
+	<string>org.reactjs.native.example.Slurp</string>
 	<key>PROJECT_ID</key>
 	<string>independentcoffeeshops</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:185382636935:ios:8d3d61a6c97ebbdcf75722</string>
+	<string>1:185382636935:ios:668781fc9f89e7ecf75722</string>
+	<key>DATABASE_URL</key>
+	<string>https://independentcoffeeshops-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>

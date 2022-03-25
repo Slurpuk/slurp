@@ -9,7 +9,7 @@ function SideDrawerContent(props) {
     try {
       await auth().signOut();
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
   return (
@@ -36,16 +36,6 @@ function SideDrawerContent(props) {
       <DrawerItem
         label="View basket"
         onPress={() => props.navigation.navigate('Basket page')}
-        activeTintColor="#2196f3"
-        activeBackgroundColor="rgba(0, 0, 0, .04)"
-        inactiveTintColor="rgba(0, 0, 0, .87)"
-        inactiveBackgroundColor="transparent"
-        style={styles.drawer_item}
-        labelStyle={styles.drawer_item_label}
-      />
-      <DrawerItem
-        label="Payment accounts"
-        onPress={() => props.navigation.navigate('Payment accounts')}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
         inactiveTintColor="rgba(0, 0, 0, .87)"
