@@ -4,4 +4,5 @@ export const OrderStatus = {
   ACCEPTED: 'accepted',
   READY: 'ready',
   COLLECTED: 'collected',
+  CANCELLED:'cancelled',
 };

@@ -12,10 +12,14 @@ import {OrderStatus} from "../../data/OrderStatus";
  * @param order Order object
  */
 const CollapsableOrder = ({order}) => {
+
+  //Identifies if the order is current to determine the initial height
   const isOrderCurrent =
     order.Status === OrderStatus.READY ||
     order.Status === OrderStatus.INCOMING ||
     order.Status === OrderStatus.ACCEPTED;
+
+  //Sets the initial height for the Animated Card
   const initialHeight = isOrderCurrent ? 126 : 100;
 
   return (
