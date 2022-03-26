@@ -1,6 +1,7 @@
 import {PermissionsAndroid, Platform} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import firestore from '@react-native-firebase/firestore';
+import { Alerts } from "../../data/Alerts";
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 
 //used for when a new location is pressed on the map
@@ -143,7 +144,11 @@ export const requestLocationPermission = async (
         subscribeLocationLocation(context, mapCenter, watchID);
       }
     } catch (err) {
-      alert(err);
+      if (err === 'auth/network-request-failed') {
+        Alerts.connectionErrorAlert();
+      } else {
+        Alerts.databaseErrorAlert();
+      }
     }
   }
 };
