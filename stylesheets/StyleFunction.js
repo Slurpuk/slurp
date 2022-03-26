@@ -15,7 +15,7 @@ export const getCushyPaddingTop = () => {
     padding = statusBarHeight;
   } else {
     if (hasNotch()) {
-      padding = statusBarHeight + 8;
+      padding = statusBarHeight + 14;
     } else {
       padding = statusBarHeight + 16;
     }

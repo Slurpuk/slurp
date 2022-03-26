@@ -1,57 +1,104 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, FlatList} from 'react-native';
-import PaymentCardsData from '../data/PaymentCardsData';
 import PaymentCard from '../components/PaymentCards/PaymentCard';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
-import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
-import {useIsFocused} from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+import {GlobalContext} from "../../App";
 
 export const PaymentCardsContext = React.createContext();
 
 const PaymentCardsPage = ({navigation}) => {
-  const [cards, setCards] = useState(PaymentCardsData);
-  const setVisible = useContext(VisibleContext);
+    const [cards, setCards] = useState();
+    const [defaultCard, setDefaultCard] = useState(null);
+    const globalContext = useContext(GlobalContext);
 
-  return (
-    <View style={styles.page}>
-      <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
-      <PaymentCardsContext.Provider
-        value={{
-          cards: cards,
-          setCards: setCards,
-        }}
-      >
-        <FlatList
-          data={cards}
-          renderItem={({item}) => <PaymentCard card={item} />}
-          style={styles.list}
-        />
-      </PaymentCardsContext.Provider>
-      <View style={styles.button}>
-        <CustomButton text={'Add New Payment Card'} priority={'secondary'} />
-      </View>
-    </View>
-  );
+    /*
+    Function to order the cards to have the default card first.
+     */
+    function orderCardsFirstDefault(localCards) {
+        return localCards.sort(function (x, y) {
+            return x.isDefault === y.isDefault ? 0 : x.isDefault ? -1 : 1;
+        });
+    }
+
+    function goToAddNewCard() {
+        navigation.navigate('Add new card');
+    }
+
+    useEffect(() => {
+        const subscriber = firestore()
+            .collection('Cards')
+            .where('userID', '==', globalContext.currentUser.key)
+            .onSnapshot(querySnapshot => {
+                const cards = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    cards.push({
+                        ...documentSnapshot.data(),
+                        key: documentSnapshot.id,
+                    });
+                    if (documentSnapshot._data.isDefault) {
+                        setDefaultCard({
+                            ...documentSnapshot._data,
+                            key: documentSnapshot.id,
+                        });
+                    }
+                });
+                setCards(orderCardsFirstDefault(cards));
+            });
+        return () => subscriber();
+    }, []);
+
+    return (
+        <View style={styles.container}>
+            <GreenHeader headerText={'PAYMENT CARDS'} navigation={navigation} />
+            <View style={styles.content}>
+                <PaymentCardsContext.Provider
+                    value={{
+                        cards: cards,
+                        setCards: setCards,
+                    }}>
+                    <FlatList
+                        data={cards}
+                        renderItem={({item}) => (
+                            <PaymentCard
+                                card={item}
+                                setDefault={setDefaultCard}
+                                defaultCard={defaultCard}
+                            />
+                        )}
+                        style={styles.list}
+                    />
+                </PaymentCardsContext.Provider>
+                <View style={styles.button}>
+                    <CustomButton
+                        onPress={goToAddNewCard}
+                        text={'Add New Payment Card'}
+                        priority={'secondary'}
+                    />
+                </View>
+            </View>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  page: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    backgroundColor: '#E5E5E5',
-    flex: 1,
-  },
-  button: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#EDEBE7',
+    },
+    content: {
+        flex: 1,
+        marginHorizontal: '5%',
+    },
+    button: {
+        marginBottom: '8%',
+    },
 
-  list: {
-    padding: '5%',
-    flexGrow: 0,
-  },
+    list: {
+        marginVertical: '5%',
+        flex: 1,
+    },
 });
 
-export default PaymentCardsPage;
+export default PaymentCardsPage

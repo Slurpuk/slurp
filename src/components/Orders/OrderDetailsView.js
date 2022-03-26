@@ -1,16 +1,21 @@
 import {
-  FlatList,
   View,
   StyleSheet,
-  Pressable,
   Text,
   ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import textStyles from '../../../stylesheets/textStyles';
+import {OrderStatus} from "../../data/OrderStatus";
 
+/**
+ * Corresponds to the closed version of the order
+ * which shows the most essential information
+ * @param order Order object
+ */
 const OrderDetailsView = ({order}) => {
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
+
   return (
     <View style={styles.container}>
       <View style={styles.orderDetails}>
@@ -38,7 +43,13 @@ const OrderDetailsView = ({order}) => {
   );
 };
 
-const getItemsText = order => {
+/**
+ * Displays the amount of items there are in an order
+ * if there is more than 1 item
+ * @param order Order object
+ * @return String
+ */
+function getItemsText(order) {
   let itemsComponent = '';
   if (order.Items.length === 1) {
     let singleItem = order.Items[0];
@@ -51,9 +62,16 @@ const getItemsText = order => {
   return itemsComponent;
 };
 
-const getStatusAndDateComponent = order => {
+/**
+ * Returns a component that indicates the date of completion of an order.
+ * This can include the current date if the order has not been completed.
+ * @param order Order object
+ * @return Component
+ */
+function getStatusAndDateComponent(order){
   let dateAndTime = order.DateTime.toDate().toDateString();
-  if (order.Status === 'collected') {
+  if (order.Status ===OrderStatus.COLLECTED ||
+      order.Status ===OrderStatus.REJECTED) {
     return (
       <Text
         style={[
@@ -65,32 +83,6 @@ const getStatusAndDateComponent = order => {
         {order.Status} {dateAndTime}
       </Text>
     );
-  } else if (order.Status === 'rejected') {
-    return (
-      <Text
-        style={[
-          textStyles.lightGreyPoppins,
-          styles.textFlex,
-          styles.finishedOrder,
-          styles.cancelledOrder,
-        ]}
-      >
-        Rejected {dateAndTime}
-      </Text>
-    );
-  } else if (order.Status === 'cancelled') {
-    return (
-      <Text
-        style={[
-          textStyles.lightGreyPoppins,
-          styles.textFlex,
-          styles.finishedOrder,
-          styles.cancelledOrder,
-        ]}
-      >
-        Cancelled {dateAndTime}
-      </Text>
-    );
   } else {
     return (
       <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
@@ -100,12 +92,17 @@ const getStatusAndDateComponent = order => {
   }
 };
 
-const getCurrentOrderStatusComponent = order => {
-  if (order.Status === 'incoming') {
+/**
+ * Creates a more user-friendly and descriptive version of the order status
+ * @param order Order object
+ * @return Text-Component
+ */
+function getCurrentOrderStatusComponent(order){
+  if (order.Status === OrderStatus.INCOMING) {
     return <Text style={textStyles.pendingBluePoppins}>Pending</Text>;
-  } else if (order.Status === 'accepted') {
+  } else if (order.Status === OrderStatus.ACCEPTED) {
     return <Text style={textStyles.pendingBluePoppins}>Accepted</Text>;
-  } else if (order.Status === 'ready') {
+  } else if (order.Status === OrderStatus.READY) {
     return <Text style={textStyles.readyGreenPoppins}>Ready to Collect</Text>;
   }
 };
@@ -117,11 +114,6 @@ const styles = StyleSheet.create({
   orderDetails: {
     display: 'flex',
     flexDirection: 'row',
-  },
-  orderPrice: {
-    position: 'absolute',
-    bottom: '2%',
-    right: '2%',
   },
   picture: {
     borderRadius: 5,

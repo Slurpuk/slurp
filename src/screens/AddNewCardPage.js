@@ -1,100 +1,93 @@
-import React, {useState} from 'react';
-import GreenHeader from '../sub-components/GreenHeader';
-import {StyleSheet, View, Text, Alert, StatusBar, Platform} from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import CustomButton from '../sub-components/CustomButton';
-import FormField from '../sub-components/FormField';
+import React, {useState,useContext} from 'react';
+import {StyleSheet, View, Alert} from 'react-native';
+import {
+  CardField,
+  CardFieldInput,
+} from '@stripe/stripe-react-native';
+import GreenHeader from "../sub-components/GreenHeader";
+import firestore from '@react-native-firebase/firestore';
+import CustomButton from "../sub-components/CustomButton";
+import {GlobalContext} from "../../App";
 
-const AddNewCardPage = () => {
-  const [expiryDate, setExpiryDate] = useState();
-  const [CVC, setCVC] = useState();
-  const [cardNumber, setCardNumber] = useState();
-  const [password, setPassword] = useState();
+const AddNewCardComponent=({navigation})=> {
+  const [card, setCard] = useState(CardFieldInput.Details | null);
+  const globalContext = useContext(GlobalContext);
 
-  const handleMMYY = text => {
-    let textTemp = text;
-    if (textTemp.slice(-1) === '/') {
-      textTemp = textTemp.slice(0, -2);
+  const saveCard = () => {
+    if (card.complete) {
+      firestore()
+          .collection('Cards')
+          .add({
+            isDefault: false,
+            brand: card.brand,
+            expiryMonth: card.expiryMonth,
+            expiryYear: card.expiryYear,
+            last4: card.last4,
+            postalCode: card.postalCode,
+            userID: globalContext.currentUser.key, //Must be the current users id
+          })
+          .then(() => {
+            console.log('Card added!');
+            Alert.alert('Success', 'Your card has been added!');
+          });
+    } else {
     }
-    if (textTemp.length === 2) {
-      textTemp += '/';
-    }
-
-    setExpiryDate(textTemp);
   };
 
+
   return (
-    <View style={styles.container}>
-      <GreenHeader headerText={'ADD NEW CARD'} />
-      <View style={styles.form}>
-        <FormField
-          title={'Card Number'}
-          placeholder={'xxxxxxxxxxxxxxxx'}
-          type={'cardNumber'}
-          setField={setCardNumber}
-        />
-        <View style={styles.DetailsContainer}>
-          <FormField
-            style={[styles.subDetails, styles.spaceRight]}
-            title={'Expiry Date'}
-            placeholder={'MM/YY'}
-            type={'expiryDate'}
-            setField={handleMMYY}
+      <View style={styles.container}>
+        <GreenHeader headerText={'ADD NEW CARD'} navigation={navigation} />
+        <View style={styles.content}>
+          <CardField
+              postalCodeEnabled={true}
+              placeholder={{
+                number: '4242 4242 4242 4242',
+              }}
+              cardStyle={{
+                backgroundColor: '#EDEBE7',
+                textColor: '#000000',
+              }}
+              style={{
+                width: '100%',
+                height: 50,
+                marginVertical: 30,
+              }}
+              onCardChange={cardDetails => {
+                setCard(cardDetails);
+              }}
+              onFocus={focusedField => {
+              }}
           />
-          <FormField
-            style={[styles.subDetails, styles.spaceLeft]}
-            title={'CVC'}
-            placeholder={'xxx'}
-            setField={setCVC}
-            type={'CVC'}
+          <CustomButton
+              text={'Add Card'}
+              onPress={saveCard}
+              priority={'secondary'}
           />
         </View>
-        <FormField
-          title={'Password'}
-          setField={setPassword}
-          type={'password'}
-        />
       </View>
-
-      <View style={styles.button}>
-        <CustomButton
-          text={'Add New Payment Card'}
-          priority="secondary"
-          onPress={null}
-        />
-      </View>
-    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#EDEBE7',
     flex: 1,
-  },
-  form: {
-    margin: '5%',
-  },
-  button: {
     display: 'flex',
+    flexDirection: 'column',
+  },
+  content: {
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  DetailsContainer: {
-    flexDirection: 'row',
+    backgroundColor: '#EDEBE7',
     display: 'flex',
-    justifyContent: 'space-between',
-    paddingVertical: '2%',
-  },
-  subDetails: {
     flex: 1,
   },
-  spaceLeft: {
-    marginLeft: '2%',
+  periodHeader: {
+    marginLeft: 7,
+    marginTop: 20,
   },
-  spaceRight: {
-    marginRight: '2%',
+  mainContainer: {
+    paddingBottom: '5%',
   },
 });
 
-export default AddNewCardPage;
+export default AddNewCardComponent;

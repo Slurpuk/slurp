@@ -3,18 +3,15 @@ import {StyleSheet, View, Alert} from 'react-native';
 import FormField from '../sub-components/FormField';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
-import firebase from '@react-native-firebase/app';
 import {GlobalContext} from '../../App';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 const UpdateDetailsPage = ({navigation}) => {
-  const [first_name, setFirstName] = useState();
-  const [last_name, setLastName] = useState();
-  const [password, setPassword] = useState();
   const context = useContext(GlobalContext);
-  const currentUser = context.currentUser;
-  const user = context.user;
+  const [first_name, setFirstName] = useState(context.currentUser.FirstName);
+  const [last_name, setLastName] = useState(context.currentUser.LastName);
+  const [password, setPassword] = useState();
 
   const resetFields = () => {
     setFirstName('');
@@ -63,11 +60,11 @@ const UpdateDetailsPage = ({navigation}) => {
       LastName: last_name,
     };
     auth()
-      .signInWithEmailAndPassword(user.email, password)
+      .signInWithEmailAndPassword(context.currentUser.Email, password)
       .then(() => {
         firestore()
           .collection('Users')
-          .doc(context.userRef)
+          .doc(context.currentUser.key)
           .update(updated)
           .then(() => {
             resetFields();
@@ -92,7 +89,6 @@ const UpdateDetailsPage = ({navigation}) => {
             title={'First Name'}
             setField={setFirstName}
             value={first_name}
-            placeholder={currentUser.FirstName}
             type={'name'}
           />
           <FormField
@@ -100,7 +96,6 @@ const UpdateDetailsPage = ({navigation}) => {
             title={'Last Name'}
             setField={setLastName}
             value={last_name}
-            placeholder={currentUser.LastName}
             type={'name'}
           />
         </View>
