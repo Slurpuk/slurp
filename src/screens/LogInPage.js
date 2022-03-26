@@ -49,14 +49,14 @@ const LogInPage = ({navigation}) => {
   function handleLogInErrorsFrontEnd() {
     let validity = true;
     if (email === '') {
+      validity = false;
       Alert.alert('Empty Email', 'Please enter your email.');
-      validity = false;
     } else if (!emailRegex.test(email)) {
+      validity = false;
       Alerts.badEmailAlert();
-      validity = false;
     } else if (password === '') {
-      Alert.alert('Empty Password', 'Please enter your password.');
       validity = false;
+      Alert.alert('Empty Password', 'Please enter your password.');
     }
     return validity;
   }
