@@ -81,7 +81,7 @@
       "\\.(css|less)$": "<rootDir>/__testingAid__/__mocks__/fileMock.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!@react-native|react-native|react-native-firebase|react-native-firebase/auth|react-native-firebase/firestore)"
+      "node_modules/(?!@react-native|react-native|@react-native-firebase)"
     ],
     "setupFiles": [
       "<rootDir>/__testingAid__/jest.setup.js"
