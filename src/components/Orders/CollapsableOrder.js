@@ -4,12 +4,18 @@ import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
+import {OrderStatus} from "../../data/OrderStatus";
 
+/**
+ * Component corresponding to an order that can dynamically
+ * change size to show the order details or just essential info
+ * @param order Order object
+ */
 const CollapsableOrder = ({order}) => {
   const isOrderCurrent =
-    order.Status === 'ready' ||
-    order.Status === 'incoming' ||
-    order.Status === 'accepted';
+    order.Status === OrderStatus.READY ||
+    order.Status === OrderStatus.INCOMING ||
+    order.Status === OrderStatus.ACCEPTED;
   const initialHeight = isOrderCurrent ? 126 : 100;
 
   return (
