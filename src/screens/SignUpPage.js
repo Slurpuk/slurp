@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
@@ -14,33 +6,19 @@ import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
-import {GlobalContext} from '../../App';
-import WhiteArrowButton from '../sub-components/WhiteArrowButton';
+import {CustomAlerts} from '../sub-components/Alerts';
 
 const SignUpPage = ({navigation}) => {
-  const context = useContext(GlobalContext);
   const [first_name, setFirstName] = useState();
   const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [password_confirmation, setPasswordConfirmation] = useState();
 
-  const resetFields = () => {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
+  function resetPasswordFields() {
     setPassword('');
     setPasswordConfirmation('');
-  };
-
-  const resetFLEFields = () => {
-    setPassword('');
-    setPasswordConfirmation('');
-  };
-
-  const switchToLogIn = () => {
-    navigation.navigate('LogIn');
-  };
+  }
 
   const warningPassword = () => {
     Alert.alert(
@@ -52,14 +30,6 @@ const SignUpPage = ({navigation}) => {
         },
       ],
     );
-  };
-
-  const warningUserAlreadyExists = () => {
-    Alert.alert('Warning!', 'This email already exists', [
-      {
-        text: 'OK',
-      },
-    ]);
   };
 
   // Display a confirmation message to the user
@@ -77,23 +47,16 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          resetFields();
           let newUser = auth().currentUser;
           addUser(newUser);
-          context.enterApp();
           registeredMessage();
         })
         .catch(error => {
-          if (error.code === 'auth/email-already-in-use') {
-            warningUserAlreadyExists();
-          }
-        })
-        .catch(re => {
-          console.log(re);
+          processBackEndErrors(error);
         });
     } else {
       warningPassword();
-      resetFLEFields();
+      resetPasswordFields();
     }
   }
 
@@ -113,20 +76,31 @@ const SignUpPage = ({navigation}) => {
       });
   }
 
+  /*
+This function provides a variety of error handling once received an error code from the database.
+ */
+  function processBackEndErrors(error) {
+    if (error.code === 'auth/network-request-failed') {
+      Alert.alert(
+        CustomAlerts.NO_NETWORK.title,
+        CustomAlerts.NO_NETWORK.message,
+      );
+    } else if (error.code === 'auth/email-already-in-use') {
+      //Do something else
+    } else if (error.code === 'auth/too-many-requests') {
+      Alert.alert(
+        CustomAlerts.MANY_REQUESTS.title,
+        CustomAlerts.MANY_REQUESTS.message,
+      );
+    } else {
+      Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    }
+  }
+
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-        {context.isFirstTime ? (
-          <WhiteArrowButton
-            navigation={navigation}
-            direction={'left'}
-            onPressAction={() => navigation.navigate('Welcome')}
-            customStyle={{marginRight: '26%'}}
-          />
-        ) : null}
-        <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
-      </View>
+      <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
       <View style={styles.formContainer}>
         <View style={styles.namesContainer}>
           <FormField
@@ -168,25 +142,20 @@ const SignUpPage = ({navigation}) => {
           type={'password'}
           value={password_confirmation}
         />
+        <Text
+          style={[textStyles.bluePoppinsBody, styles.hyperlink]}
+          onPress={() => navigation.navigate('LogIn')}>
+          Already have an account? Log in
+        </Text>
       </View>
 
-      <View style={styles.buttonsContainer}>
-        <View style={styles.button}>
-          <CustomButton
-            text={'Create Account'}
-            onPress={registerUser}
-            priority={'primary'}
-            style={styles.button}
-          />
-        </View>
-        <View>
-          <Text
-            style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-            onPress={switchToLogIn}
-          >
-            Already have an account? Log in
-          </Text>
-        </View>
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          text={'Create Account'}
+          onPress={registerUser}
+          priority={'primary'}
+          style={styles.button}
+        />
       </View>
     </View>
   );
@@ -198,10 +167,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EDEBE7',
     paddingTop: getCushyPaddingTop(),
+    paddingBottom: '5%',
     paddingHorizontal: '5%',
-  },
-  container: {
-    flex: 1,
   },
   formContainer: {
     flex: 1,
@@ -220,17 +187,13 @@ const styles = StyleSheet.create({
     marginRight: '5%',
   },
 
-  buttonsContainer: {
+  buttonContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     marginBottom: '4%',
   },
-  button: {
-    marginVertical: '2%',
-  },
   hyperlink: {
     marginVertical: '2%',
-    textAlign: 'center',
     textDecorationLine: 'underline',
     textAlignVertical: 'bottom',
   },

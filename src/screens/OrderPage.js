@@ -25,7 +25,7 @@ const OrderPage = ({navigation}) => {
   useEffect(() => {
     const fetchData = firestore()
       .collection('Orders')
-      .where('UserID', '==', context.userRef)
+      .where('UserID', '==', context.currentUser.key)
       .onSnapshot(querySnapshot => {
         let currentOrdersLocal = [];
         let pastOrdersLocal = [];
@@ -53,7 +53,7 @@ const OrderPage = ({navigation}) => {
         formatOrders(pastOrdersLocal, false, setCurrentOrders, setPastOrders);
       });
     return () => fetchData();
-  }, [context.userRef]);
+  }, [context.currentUser.key]);
 
   return (
     <View style={styles.container}>

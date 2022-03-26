@@ -34,7 +34,7 @@ const MenuItem = ({item}) => {
     }
 
     setCount(newCount);
-  }, [globalContext.basketContent]);
+  }, [globalContext.basketContent, item]);
 
   /*
    * Show current item options.
@@ -44,9 +44,9 @@ const MenuItem = ({item}) => {
     shopContext.setOptionsVisible(true);
   };
 
-  /*
+  /**
    * Add new item to the global context.
-   * @param {newItem} The item to be added.
+   * @param newItem The item to be added.
    */
   function add(newItem) {
     newItem.hasOwnProperty('Bean')
