@@ -1,4 +1,4 @@
-package com.myproject;
+package com.slurp;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 

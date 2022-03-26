@@ -1,23 +1,36 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import renderers from '../renderers';
-
 import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import DraggableShopPage from '../components/Shops/DraggableShopPage';
 import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
 import {GlobalContext} from '../../App';
-import firestore from '@react-native-firebase/firestore';
 
 export const ShopContext = React.createContext();
+
+/**
+ * Component for displaying a shop (both draggable and non-draggable)
+ * @param navigation The navigation object
+ * @param sheetRef The reference to the bottom sheet
+ */
 const ShopPage = ({navigation, sheetRef}) => {
   const context = useContext(GlobalContext);
   const shop = context.currShop;
-  const [optionsVisible, setOptionsVisible] = useState(false);
-  const [currItem, setCurrItem] = useState(null);
-  const [options, setOptions] = useState([]);
+  const [optionsVisible, setOptionsVisible] = useState(false); // Is the options popup visible
+  const [currItem, setCurrItem] = useState(null); // Current item displayed in the shop.
 
-  function filterData() {
+  /**
+   * Callback that separates the items offered by the shop into 3 sections: coffees, drinks and snacks.
+   * Formats the data before passing it to the flatlists.
+   * @return The formatted menu data
+   */
+  const filterDataCallBack = useCallback(() => {
     let data = [
       {title: 'Coffees', list: [], key: 1},
       {title: 'Drinks', list: [], key: 2},
@@ -28,57 +41,15 @@ const ShopPage = ({navigation, sheetRef}) => {
     data[1].list = items.Drinks;
     data[2].list = items.Snacks;
     return data;
-  }
+  }, [shop.ItemsOffered]);
+  const menuData = useMemo(() => filterDataCallBack(), [filterDataCallBack]); // Memoized menu data
 
-  function getCoffees() {
-    return filterData()[0].list;
-  }
-  function getDrinks() {
-    return filterData()[1].list;
-  }
-  function getSnacks() {
-    return filterData()[2].list;
-  }
-
-  // Retrieves the options data from firebase
-  async function getOptions() {
-    let initial = [
-      {title: 'Select Milk', data: []},
-      {title: 'Add Syrup', data: []},
-    ];
-    let dairy;
-    await firestore()
-      .collection('Options')
-      .get()
-      .then(querySnapShot => {
-        querySnapShot.forEach(documentSnapshot => {
-          let option = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          };
-          let index = 0;
-          option.Type === 'Syrup' ? (index = 1) : (index = 0);
-          if (option.Name === 'Dairy') {
-            dairy = option;
-          } else {
-            initial[index].data.push(option);
-          }
-        });
-        initial[1].data.sort((a, b) => a.Name.localeCompare(b.Name));
-        initial[0].data.sort((a, b) => a.Name.localeCompare(b.Name));
-        initial[0].data.unshift(dairy);
-        setOptions(initial);
-      });
-  }
-
-  // Get the options on first render.
-  useEffect(() => {
-    getOptions();
-  }, []);
-
+  /**
+   * Get the default milk
+   * @return Object The default milk
+   */
   function getDefaultMilk() {
-    let def = options[0].data.find(el => el.Name === 'Dairy');
-    return def;
+    return shop.options[0].data.find(el => el.Name === 'Dairy');
   }
 
   return (
@@ -88,14 +59,12 @@ const ShopPage = ({navigation, sheetRef}) => {
         setCurrItem: setCurrItem,
         shop: shop,
         navigation: navigation,
-        setShopIntro: context.setShopIntro,
-        isShopIntro: context.isShopIntro,
-        getCoffees: getCoffees,
-        getSnacks: getSnacks,
-        getDrinks: getDrinks,
-        getDefault: getDefaultMilk,
-        isFullScreen: context.isFullScreen,
-        setFullScreen: context.setFullScreen,
+        menuData: {
+          coffees: menuData[0].list,
+          drinks: menuData[1].list,
+          snacks: menuData[2].list,
+          defaultMilk: getDefaultMilk(),
+        },
       }}>
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
@@ -120,7 +89,7 @@ const ShopPage = ({navigation, sheetRef}) => {
       </TouchableWithoutFeedback>
       {optionsVisible ? (
         <OptionsPopUp
-          data={options}
+          data={shop.options}
           item={currItem}
           renderer={renderers.renderOption}
         />

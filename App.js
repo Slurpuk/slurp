@@ -10,6 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {Alert, Animated} from 'react-native';
+import LoadingPage from './src/screens/LoadingPage';
+import {getOptions} from './src/firebase/queries';
 
 export const GlobalContext = React.createContext();
 export default function App() {
@@ -68,16 +70,14 @@ export default function App() {
         setCurrentUser(user);
         await firestore()
           .collection('Users')
-          .where('Email', '==', currentUser.email)
+          .where('Email', '==', user.email)
           .get()
           .then(querySnapshot => {
-            console.log(querySnapshot._docs[0]);
             let userModel = querySnapshot._docs[0];
             setUserObj({
               ...userModel.data(),
               key: userModel.id,
             });
-            console.log(userObj);
           });
       } else {
         setCurrentUser(null);
@@ -200,6 +200,9 @@ export default function App() {
             Drinks: drinks,
             Snacks: snacks,
           };
+          getOptions().then(options => {
+            shopData.options = options;
+          });
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
@@ -342,7 +345,11 @@ export default function App() {
       }}>
       <NavigationContainer>
         {currentUser ? (
-          <HamburgerSlideBarNavigator />
+          userObj ? (
+            <HamburgerSlideBarNavigator />
+          ) : (
+            <LoadingPage />
+          )
         ) : (
           <Stack.Navigator
             screenOptions={{

@@ -3,14 +3,25 @@ import {View, StyleSheet} from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopIntro from './ShopIntro';
 import Menu from '../ShopMenu/Menu';
-import {ShopContext} from '../../screens/ShopPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
+import {GlobalContext} from "../../../App";
 
 export const DraggableContext = React.createContext();
+
+/**
+ * Draggable version of the shop page
+ * @param shop The item to display
+ * @param navigation The navigation object
+ * @param sheetRef The reference to the bottom sheet
+ */
 const DraggableShopPage = ({shop, navigation, sheetRef}) => {
   const setHamburgerVisible = useContext(VisibleContext);
-  const context = useContext(ShopContext);
+  const context = useContext(GlobalContext);
 
+  /**
+   * Function executed when the bottom sheet settles on a new snap point
+   * @param index Index of the new snap point
+   */
   function updatePage({index}) {
     if (index === 0) {
       setHamburgerVisible(false);
@@ -36,7 +47,6 @@ const DraggableShopPage = ({shop, navigation, sheetRef}) => {
             <View
               style={[
                 styles.panelHandle,
-                context.isFullScreen ? {opacity: 0} : {opacity: 1},
               ]}
             />
             <ShopIntro shop={shop} />
