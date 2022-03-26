@@ -1,9 +1,7 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
-import HamburgerSlideBarNavigator, {
-  VisibleContext,
-} from './src/navigation/HamburgerSlideBarNavigator';
+import React, {useEffect, useRef, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
 import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
