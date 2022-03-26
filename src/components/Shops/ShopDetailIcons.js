@@ -9,7 +9,7 @@ export default function ShopDetailIcons({timeToOrder}){
     <View style={DetailIconsStyles.container}>
       <Icon size={24} color="#FFE" name="walk" />
       <Text style={[textStyles.iconText, DetailIconsStyles.spacing]}>
-        {timeToOrder}mins
+        {timeToOrder} mins
       </Text>
     </View>
   );

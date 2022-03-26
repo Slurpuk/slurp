@@ -20,7 +20,6 @@ export const menuStyles = StyleSheet.create(
     absoluteArea: {
       position: 'absolute',
       height: 100,
-      backgroundColor: '',
       bottom: 0,
       width: '100%',
     },
