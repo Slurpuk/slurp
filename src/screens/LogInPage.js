@@ -15,6 +15,26 @@ const LogInPage = ({navigation}) => {
   );
 
   /*
+  Manage response to database failure
+   */
+  function handleForgotPasswordErrorsBackEnd(errorCode) {
+    if (errorCode === 'auth/network-request-failed') {
+      Alerts.connectionErrorAlert();
+    } else if (errorCode === 'auth/invalid-email') {
+      Alerts.badEmailAlert();
+    } else if (errorCode === 'auth/user-not-found') {
+      /*
+      We send the same success message if user not found to avoid letting
+      malicious users that there is or isn't a user with a certain email.
+       */
+      Alerts.resetPasswordAlert();
+    } else {
+      //Anything else
+      Alerts.elseAlert();
+    }
+  }
+
+  /*
   Send verification email to user to reset their password
    */
   async function forgotPassword() {
@@ -28,18 +48,7 @@ const LogInPage = ({navigation}) => {
         .auth()
         .sendPasswordResetEmail(email)
         .then(() => Alerts.resetPasswordAlert())
-        .catch(error => {
-          if (error.code === 'auth/network-request-failed') {
-            Alerts.connectionErrorAlert();
-          } else if (error.code === 'auth/invalid-email') {
-            Alerts.badEmailAlert();
-          } else if (error.code === 'auth/user-not-found') {
-            Alerts.resetPasswordAlert();
-          } else {
-            //Anything else
-            Alerts.elseAlert();
-          }
-        });
+        .catch(error => handleForgotPasswordErrorsBackEnd(error.code));
     }
   }
 
@@ -64,8 +73,7 @@ const LogInPage = ({navigation}) => {
   /*
   Manage response to database failure
    */
-  function handleLogInErrorsBackEnd(error) {
-    let errorCode = error.code;
+  function handleLogInErrorsBackEnd(errorCode) {
     if (
       errorCode === 'auth/wrong-password' ||
       errorCode === 'auth/user-not-found'
@@ -86,7 +94,7 @@ const LogInPage = ({navigation}) => {
       await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .catch(error => handleLogInErrorsBackEnd(error));
+        .catch(error => handleLogInErrorsBackEnd(error.code));
     }
   }
 
