@@ -85,7 +85,7 @@ export default function MapBackground({
             }}>
             {/*//closed markers appear grey*/}
             <View style={styles.markerStyle}>
-              <Text style={{color: 'coral', fontWeight: 'bold'}}>
+              <Text style={{color: 'coral', fontWeight: 'bold', top: 0}}>
                 {!marker.isOpen ? 'Closed' : ''}
               </Text>
               <CustomMapIcon isOpen={marker.isOpen} />
@@ -122,5 +122,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     maxWidth: 220,
+    top: -5,
   },
 });

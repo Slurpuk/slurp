@@ -60,7 +60,6 @@ export default function LandingMapPage({navigation}) {
             <LandingHamburgerIcon />
           </View>
           <CustomSearchBar
-            navigation={navigation}
             searchBarFocused={searchBarFocused}
             setSearchBarFocussed={setSearchBarFocused}
           />
