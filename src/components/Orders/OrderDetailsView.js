@@ -71,8 +71,7 @@ function getItemsText(order) {
 function getStatusAndDateComponent(order){
   let dateAndTime = order.DateTime.toDate().toDateString();
   if (order.Status ===OrderStatus.COLLECTED ||
-      order.Status ===OrderStatus.REJECTED ||
-      order.Status ===OrderStatus.CANCELLED ) {
+      order.Status ===OrderStatus.REJECTED) {
     return (
       <Text
         style={[
