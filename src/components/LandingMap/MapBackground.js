@@ -158,10 +158,10 @@ export default function MapBackground({
           latitude: latitude,
           longitude: longitude,
         });
-        if (context.userRef) {
+        if (context.currentUser.key) {
           await firestore()
             .collection('Users')
-            .doc(context.userRef)
+            .doc(context.currentUser.key)
             .update({
               latitude: latitude,
               longitude: longitude,

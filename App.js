@@ -1,25 +1,21 @@
 import 'react-native-gesture-handler';
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
-import HamburgerSlideBarNavigator, {
-  VisibleContext,
-} from './src/navigation/HamburgerSlideBarNavigator';
+import React, {useEffect, useRef, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
 import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {Alert, Animated} from 'react-native';
 
 export const GlobalContext = React.createContext();
 export default function App() {
   const isFirstTime = useRef();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(firebase.auth().currentUser);
-  const [userRef, setUserRef] = useState(null);
-  const [userObj, setUserObj] = useState(null);
+  const [currentUser, setCurrentUser] = useState(auth().currentUser);
+  const [userObj, setUserObj] = useState();
   const [shopsData, setShopsData] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false);
   const [currShop, setCurrShop] = useState(shopsData[0]);
@@ -45,8 +41,7 @@ export default function App() {
     checkForFirstTime();
   }, []);
 
-  const calculateDistance = coords => {
-
+  function calculateDistance(coords) {
     const R = 6371e3; // metres
     const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
     const latitude2 = (coords.latitude * Math.PI) / 180;
@@ -65,17 +60,28 @@ export default function App() {
 
     // in metres
     return parseInt(R * cc);
-  };
+  }
 
   useEffect(() => {
-    const subscriber = firebase.auth().onAuthStateChanged(user => {
+    const subscriber = auth().onAuthStateChanged(async user => {
       if (user) {
-        setIsLoggedIn(true);
         setCurrentUser(user);
-        setUser();
+        await firestore()
+          .collection('Users')
+          .where('Email', '==', currentUser.email)
+          .get()
+          .then(querySnapshot => {
+            console.log(querySnapshot._docs[0]);
+            let userModel = querySnapshot._docs[0];
+            setUserObj({
+              ...userModel.data(),
+              key: userModel.id,
+            });
+            console.log(userObj);
+          });
       } else {
-        setIsLoggedIn(false);
         setCurrentUser(null);
+        setUserObj(null);
       }
     });
     // Unsubscribe from events when no longer in use
@@ -103,32 +109,6 @@ export default function App() {
   function switchNewShop({shop}) {
     clearBasket();
     setCurrShop(shop);
-  }
-
-  useEffect(() => {
-    const subscriber = firestore()
-      .collection('Users')
-      .doc(userRef)
-      .onSnapshot(documentSnapshot => {
-        setUserObj(documentSnapshot.data());
-      });
-
-    // Stop listening for updates when no longer required
-    return () => subscriber();
-  }, [userRef]);
-
-  async function setUser() {
-    if (currentUser) {
-      await firestore()
-        .collection('Users')
-        .where('authID', '==', currentUser.uid)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(documentSnapshot => {
-            setUserRef(documentSnapshot.id);
-          });
-        });
-    }
   }
 
   function changeShop({shop, navigation}) {
@@ -201,7 +181,7 @@ export default function App() {
             firestore()
               .doc(itemRef.path)
               .onSnapshot(query => {
-                let collection = '';
+                let collection;
                 if (itemRef.path.includes('Coffees')) {
                   collection = coffees;
                 } else if (itemRef.path.includes('Drinks')) {
@@ -259,8 +239,9 @@ export default function App() {
           editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
 
           //filtering the shops based on radius limitation (rn 1500)
-          const newEdited = editedShopsData
-              .filter((item) => item.DistanceTo < 1500);
+          const newEdited = editedShopsData.filter(
+            item => item.DistanceTo < 1500,
+          );
 
           setOrderedShops(newEdited);
         });
@@ -335,7 +316,6 @@ export default function App() {
       value={{
         enterApp: enterApp,
         isFirstTime: isFirstTime.current,
-        user: currentUser, // Returns the authentication object
         currShop: currShop,
         setCurrShop: changeShop,
         isShopIntro: isShopIntro,
@@ -357,19 +337,20 @@ export default function App() {
         markers: markers,
         clearBasket: clearBasket,
         currentUser: userObj, // Returns the model object
-        userRef: userRef, // Returns ID of the model object
         orderedShops: orderedShops,
         setOrderedShops: setOrderedShops,
       }}>
       <NavigationContainer>
-        {isLoggedIn ? (
+        {currentUser ? (
           <HamburgerSlideBarNavigator />
         ) : (
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
             }}>
-            {isFirstTime.current ? <Stack.Screen name="Welcome" component={WelcomePages} />: null}
+            {isFirstTime.current ? (
+              <Stack.Screen name="Welcome" component={WelcomePages} />
+            ) : null}
             <Stack.Screen name="LogIn" component={LogInPage} />
             <Stack.Screen name="SignUp" component={SignUpPage} />
           </Stack.Navigator>

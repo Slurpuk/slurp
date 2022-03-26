@@ -1,0 +1,231 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login page should render correctly 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#EDEBE7",
+      "display": "flex",
+      "flex": 1,
+      "paddingBottom": "5%",
+      "paddingHorizontal": "5%",
+      "paddingTop": undefined,
+    }
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#173C4F",
+          "fontFamily": "Josefin Sans",
+          "fontSize": 35,
+          "fontWeight": "700",
+          "letterSpacing": 0.3,
+        },
+      ]
+    }
+  >
+    Log In
+  </Text>
+  <View
+    style={
+      Object {
+        "flex": 3,
+        "paddingVertical": "5%",
+      }
+    }
+  >
+    <View>
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#173C4F",
+              "fontFamily": "Poppins-SemiBold",
+              "fontSize": 16,
+              "fontWeight": "600",
+              "includeFontPadding": false,
+              "letterSpacing": 0.3,
+            },
+            Object {
+              "marginBottom": "2.5%",
+            },
+          ]
+        }
+      >
+        Email
+      </Text>
+      <TextInput
+        autoCapitalize="none"
+        autoCompleteType="email"
+        autoCorrect={false}
+        keyboardType="default"
+        maxLength={1235}
+        onChangeText={[Function]}
+        placeholder=""
+        placeholderTextColor="#D3D3D3"
+        secureTextEntry={false}
+        style={
+          Object {
+            "backgroundColor": "#F9F9F9",
+            "borderRadius": 5,
+            "color": "black",
+            "height": 37,
+            "marginBottom": "3.5%",
+            "paddingHorizontal": 10,
+          }
+        }
+        value=""
+      />
+    </View>
+    <View>
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#173C4F",
+              "fontFamily": "Poppins-SemiBold",
+              "fontSize": 16,
+              "fontWeight": "600",
+              "includeFontPadding": false,
+              "letterSpacing": 0.3,
+            },
+            Object {
+              "marginBottom": "2.5%",
+            },
+          ]
+        }
+      >
+        Password
+      </Text>
+      <TextInput
+        autoCapitalize="none"
+        autoCompleteType="password"
+        autoCorrect={false}
+        keyboardType="default"
+        maxLength={1235}
+        onChangeText={[Function]}
+        placeholder=""
+        placeholderTextColor="#D3D3D3"
+        secureTextEntry={true}
+        style={
+          Object {
+            "backgroundColor": "#F9F9F9",
+            "borderRadius": 5,
+            "color": "black",
+            "height": 37,
+            "marginBottom": "3.5%",
+            "paddingHorizontal": 10,
+          }
+        }
+        value=""
+      />
+    </View>
+    <Text
+      onPress={[Function]}
+      style={
+        Array [
+          Object {
+            "color": "#173C4F",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 15,
+            "includeFontPadding": false,
+            "letterSpacing": 0.3,
+          },
+          Object {
+            "marginVertical": "2%",
+            "textAlignVertical": "bottom",
+            "textDecorationLine": "underline",
+          },
+        ]
+      }
+    >
+      Forgot your password?
+    </Text>
+    <Text
+      onPress={[Function]}
+      style={
+        Array [
+          Object {
+            "color": "#173C4F",
+            "fontFamily": "Poppins-Regular",
+            "fontSize": 15,
+            "includeFontPadding": false,
+            "letterSpacing": 0.3,
+          },
+          Object {
+            "marginVertical": "2%",
+            "textAlignVertical": "bottom",
+            "textDecorationLine": "underline",
+          },
+        ]
+      }
+    >
+      New? Create an account
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "justifyContent": "flex-end",
+        "marginBottom": "4%",
+      }
+    }
+  >
+    <View>
+      <View
+        collapsable={false}
+        style={
+          Object {
+            "transform": Array [
+              Object {
+                "scale": 1,
+              },
+            ],
+          }
+        }
+      >
+        <View
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#087562",
+              "borderRadius": 13,
+              "display": "flex",
+              "flexDirection": "row",
+              "height": 43,
+              "justifyContent": "center",
+              "opacity": 1,
+              "width": 682.5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#EFEFEF",
+                "fontFamily": "Poppins-SemiBold",
+                "fontSize": 17,
+                "letterSpacing": 0.5,
+              }
+            }
+          >
+            Log in
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;
