@@ -70,15 +70,6 @@ jest.doMock('react-native', () => {
   );
 });
 
-jest.doMock('@react-native-firebase/auth', () => {
-  return () => ({
-    signInWithEmailAndPassword: jest.fn(),
-    createUserWithEmailAndPassword: jest.fn(),
-    signOut: jest.fn(),
-    sendPasswordResetEmail: jest.fn(),
-  });
-});
-
 jest.doMock('@react-native-firebase/firestore', () => {
   return () => ({
     collection: jest.fn(),
