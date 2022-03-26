@@ -42,12 +42,12 @@ export const locationPress = (context, mapCenter, clickedMarker) => {
       latitude: selectedShop.Location._latitude,
       longitude: selectedShop.Location._longitude,
     });
-    let old = mapCenter.current;
+    let previousShop = mapCenter.current;
     mapCenter.current = {
       latitude: selectedShop.Location._latitude,
       longitude: selectedShop.Location._longitude,
-      latitudeDelta: old.latitudeDelta,
-      longitudeDelta: old.longitudeDelta,
+      latitudeDelta: previousShop.latitudeDelta,
+      longitudeDelta: previousShop.longitudeDelta,
     };
     context.switchShop(selectedShop);
     context.setShopIntro(true);
@@ -73,7 +73,7 @@ export const getOneTimeLocation = (context, mapCenter) => {
         longitude: longitude,
       });
     },
-    error => console.log(error),
+    error => alert(error),
     {
       enableHighAccuracy: true,
       timeout: 30000,
@@ -108,11 +108,11 @@ const subscribeLocationLocation = (context, mapCenter, watchID) => {
             latitude: latitude,
             longitude: longitude,
           })
-          .then(r => console.log('position updated'))
-          .catch(error => console.log(error));
+          .then(r => alert('position updated'))
+          .catch(error => alert(error));
       }
     },
-    error => console.log(error),
+    error => alert(error),
     {
       enableHighAccuracy: true,
     },
@@ -143,7 +143,7 @@ export const requestLocationPermission = async (
         subscribeLocationLocation(context, mapCenter, watchID);
       }
     } catch (err) {
-      console.warn(err);
+      alert(err);
     }
   }
 };

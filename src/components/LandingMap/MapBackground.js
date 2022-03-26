@@ -34,9 +34,10 @@ export default function MapBackground({
   //setup location access on map load. remove the location access when this component is unmounted
   useEffect(() => {
     requestLocationPermission(context, mapCenter, watchID.current).then(r =>
-      console.log('permission granted'),
+      alert('permission granted'),
     );
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       Geolocation.clearWatch(watchID.current);
     };
   }, []);
