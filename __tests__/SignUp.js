@@ -1,4 +1,4 @@
-import {fireEvent, render, waitFor} from '@testing-library/react-native';
+import {render} from '@testing-library/react-native';
 import React from 'react';
 import {GlobalContext} from '../App';
 import SignUpPage from '../src/screens/SignUpPage';
@@ -8,7 +8,7 @@ describe('sign up', function () {
     const globalContextMock = {
       isFirstTime: false,
     };
-    const {getByTestId, getByText, queryByTestId, toJSON} = render(
+    const {toJSON} = render(
       <GlobalContext.Provider value={globalContextMock}>
         <SignUpPage />
       </GlobalContext.Provider>,

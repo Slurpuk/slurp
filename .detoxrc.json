@@ -1,0 +1,21 @@
+{
+  "testRunner": "jest",
+  "runnerConfig": "e2e/config.json",
+  "skipLegacyWorkersInjection": true,
+  "configurations": {
+    "android": {
+      "binaryPath": "android/app/build/outputs/apk/release/app-debug.apk",
+      "build": "cd android && ./gradlew app:assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..",
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_4_API_29"
+      }
+    },
+    "ios": {
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/Slurp.app",
+      "build": "xcodebuild -workspace ios/Slurp.xcworkspace -configuration Debug -scheme Slurp -sdk iphonesimulator -derivedDataPath ios/build -destination id=C066F75C-4D73-4A0D-8F26-59FE712AF451",
+      "type": "ios.simulator",
+      "name": "iPhone 13"
+    }
+  }
+}
