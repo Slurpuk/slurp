@@ -49,7 +49,7 @@ export default function MapBackground({
   return (
     <View style={styles.container}>
       <MapView
-        onRegionChangeComplete={(region, isGesture) => {
+        onRegionChangeComplete={(region) => {
           if (Platform.OS === 'ios') {
             if (
               region.latitude.toFixed(6) !==
@@ -64,8 +64,8 @@ export default function MapBackground({
           }
         }}
         //focus only on map when map pressed
-        onPress={event => mapPressed()}
-        onPanDrag={event => mapPressed()}
+        onPress={() => mapPressed()}
+        onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={mapCenter.current}>
