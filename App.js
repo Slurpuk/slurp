@@ -106,7 +106,7 @@ export default function App() {
     setCurrShop(shop);
   }
 
-  function changeShop({shop, navigation}) {
+  function changeShop(shop, navigation) {
     if (currShop !== shop && basketSize !== 0) {
       Alert.alert(
         'Are you sure ?',
@@ -125,6 +125,7 @@ export default function App() {
         {cancelable: false},
       );
     } else {
+      console.log(shop);
       setCurrShop(shop);
       navigation.navigate('Shop page');
     }
@@ -163,7 +164,7 @@ export default function App() {
       .onSnapshot(querySnapshot => {
         const shops = [];
 
-        querySnapshot.forEach(documentSnapshot => {
+        querySnapshot.forEach( async documentSnapshot => {
           let shopData = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
@@ -195,7 +196,7 @@ export default function App() {
             Drinks: drinks,
             Snacks: snacks,
           };
-          getOptions().then(options => {
+          await getOptions().then(options => {
             shopData.options = options;
           });
           shops.push(shopData);
@@ -214,22 +215,14 @@ export default function App() {
           });
           setMarkers(mark);
 
-          const editedShopsData = shops.map(item => {
+          const editedShopsData = shops.map(shop => {
             return {
-              Name: item.Name,
-              Intro: item.Intro,
+              ...shop,
               Location: {
-                latitude: item.Location._latitude,
-                longitude: item.Location._longitude,
+                latitude: shop.Location._latitude,
+                longitude: shop.Location._longitude,
               },
-              Image: item.Image,
-              Email: item.Email,
-              IsOpen: item.IsOpen,
-              ItemsOffered: item.ItemsOffered,
-              Likeness: item.Likeness,
-              Queue: item.Queue,
-              key: item.key,
-              DistanceTo: calculateDistance(item.Location),
+              DistanceTo: calculateDistance(shop.Location),
             };
           });
 

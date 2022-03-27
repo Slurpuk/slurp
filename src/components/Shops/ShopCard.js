@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import ShopDetailIcons from './ShopDetailIcons';
 import {
   StyleSheet,
@@ -8,15 +8,15 @@ import {
   Platform,
   ImageBackground,
 } from 'react-native';
-
 import textStyles from '../../../stylesheets/textStyles';
 import {GlobalContext} from '../../../App';
+
+
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
-  // const [isShopPage, setShopPage] = useState(false);
 
   const shopPageDetails = () => {
-    context.setCurrShop({shop, navigation});
+    context.setCurrShop(shop, navigation);
   };
 
   return !shop.IsOpen ? (
