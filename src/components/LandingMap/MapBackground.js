@@ -15,6 +15,7 @@ import {GlobalContext} from '../../../App';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
 import {locationPress, requestLocationPermission} from './locationHelpers';
 import mapStyles from '../../../stylesheets/mapStyles';
+import { Alerts } from "../../data/Alerts";
 
 export default function MapBackground({
   searchBarFocused,
@@ -32,7 +33,7 @@ export default function MapBackground({
 
   //setup location access on map load. remove the location access when this component is unmounted
   useEffect(() => {
-    requestLocationPermission(context, mapCenter, watchID.current);
+    requestLocationPermission(context, mapCenter, watchID.current).then(null).catch(() => Alerts.locationAlert);
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       Geolocation.clearWatch(watchID.current);

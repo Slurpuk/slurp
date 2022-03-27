@@ -30,6 +30,7 @@ export default function App() {
   const [currentCenterLocation, setCurrentCenterLocation] = useState({
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
+    isDefault: true,
   });
   const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
