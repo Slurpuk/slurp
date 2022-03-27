@@ -11,9 +11,7 @@ describe('Login page', function () {
       callbackOrButtons[1].onPress(),
     );
 
-  it('should render correctly', function () {
-    expect(render(<LogInPage />).toJSON()).toMatchSnapshot();
-  });
+  afterEach(() => spyAlert.mockClear());
 
   describe('log in', function () {
     it('should raise alert on submit with empty email', async function () {
@@ -25,8 +23,6 @@ describe('Login page', function () {
       expect(spyAlert.mock.calls[0][0]).toBe('Empty Email');
     });
     it('should raise alert on email without @', async function () {
-      spyAlert.mockClear();
-
       const {getByText, getAllByPlaceholderText} = render(<LogInPage />);
 
       const inputs = getAllByPlaceholderText('');
@@ -35,13 +31,11 @@ describe('Login page', function () {
       fireEvent.changeText(inputs[0], 'emailwithoutaroba.com');
 
       fireEvent(getByText('Log in'), 'press');
-
+      console.log(spyAlert.mock);
       expect(spyAlert).toHaveBeenCalled();
       expect(spyAlert.mock.calls[0][0]).toBe('Bad Email');
     });
     it('should raise alert on email with empty domain name', async function () {
-      spyAlert.mockClear();
-
       const {getByText, getAllByPlaceholderText} = render(<LogInPage />);
 
       const inputs = getAllByPlaceholderText('');
@@ -55,8 +49,6 @@ describe('Login page', function () {
       expect(spyAlert.mock.calls[0][0]).toBe('Bad Email');
     });
     it('should raise alert on empty password', async function () {
-      spyAlert.mockClear();
-
       const {getByText, getAllByPlaceholderText} = render(<LogInPage />);
 
       const inputs = getAllByPlaceholderText('');
@@ -72,15 +64,16 @@ describe('Login page', function () {
       expect(spyAlert.mock.calls[0][0]).toBe('Empty Password');
     });
     it('should not raise alert on valid data', async function () {
-      spyAlert.mockClear();
-
       const {getByText, getAllByPlaceholderText} = render(<LogInPage />);
 
       const inputs = getAllByPlaceholderText('');
       expect(inputs[0]).toBeTruthy();
 
-      fireEvent.changeText(inputs[0], 'janedoe@gmail.com');
-      fireEvent.changeText(inputs[1], 'Password123');
+      const email = 'janedoe@gmail.com';
+      const password = 'Password123';
+
+      fireEvent.changeText(inputs[0], email);
+      fireEvent.changeText(inputs[1], password);
 
       expect(inputs[1]).toBeTruthy();
 
@@ -91,8 +84,6 @@ describe('Login page', function () {
   });
   describe('forgot password', function () {
     it('should raise alert on empty email when clicking forgot password', async function () {
-      spyAlert.mockClear();
-
       const {getByText, getAllByPlaceholderText} = render(<LogInPage />);
 
       const inputs = getAllByPlaceholderText('');
@@ -106,8 +97,6 @@ describe('Login page', function () {
       expect(spyAlert.mock.calls[0][0]).toBe('Add Email');
     });
     it('should raise alert on faulty email when clicking forgot password', async function () {
-      spyAlert.mockClear();
-
       const {getByText, getAllByPlaceholderText} = render(<LogInPage />);
 
       const inputs = getAllByPlaceholderText('');
@@ -121,8 +110,6 @@ describe('Login page', function () {
       expect(spyAlert.mock.calls[0][0]).toBe('Add Email');
     });
     it('should not raise alert when clicking forgot password with valid email', async function () {
-      spyAlert.mockClear();
-
       const {getByText, getAllByPlaceholderText} = render(<LogInPage />);
 
       const inputs = getAllByPlaceholderText('');

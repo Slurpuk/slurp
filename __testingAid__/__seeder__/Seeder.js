@@ -6,27 +6,25 @@ firestore().useEmulator('localhost', 8080);
 
 const db = firestore();
 
-// function getSeedData() {
-//   try {
-//     [...Array(10).keys()].map(() =>
-//       db.collection('CoffeeShop').add({
-//         author_name: faker.name.firstName() + '' + faker.name.lastName(),
-//         author_profile_pic: faker.image.imageUrl(),
-//         title: faker.commerce.productName(),
-//         description: faker.commerce.productDescription(),
-//         address: {
-//           addr_1: faker.address.streetAddress(),
-//           addr_2: faker.address.secondaryAddress(),
-//           city: faker.address.city(),
-//           state: faker.address.state(),
-//           zipCode: faker.address.zipCode(),
-//         },
-//       }),
-//     );
-//     console.log('database seed was successful');
-//   } catch (error) {
-//     console.log(error, 'database seed failed');
-//   }
-// }
-//
-// getSeedData();
+function getSeedData() {
+  try {
+    [...Array(20).keys()].map(() => {
+      createUsers();
+    });
+    console.log('database seed was successful');
+  } catch (error) {
+    console.log(error, 'database seed failed');
+  }
+}
+
+function createUsers() {
+  const email = faker.email.email();
+  db.collection('users').add({
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    email: email,
+  });
+  auth().createUserWithEmailAndPassword(email, 'Password123');
+}
+
+getSeedData();

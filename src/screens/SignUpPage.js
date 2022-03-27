@@ -7,93 +7,103 @@ import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
 import {CustomAlerts} from '../sub-components/Alerts';
+import {Alerts} from '../data/Alerts';
 
 const SignUpPage = ({navigation}) => {
-  const [first_name, setFirstName] = useState();
-  const [last_name, setLastName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [password_confirmation, setPasswordConfirmation] = useState();
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const emailRegex = new RegExp(
+    '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
+  );
+  const passwordRegex =
+    /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/;
 
-  function resetPasswordFields() {
-    setPassword('');
-    setPasswordConfirmation('');
-  }
-
-  const warningPassword = () => {
-    Alert.alert(
-      'Warning!',
-      'Password should be same as password confirmation!',
-      [
-        {
-          text: 'OK',
-        },
-      ],
-    );
-  };
-
-  // Display a confirmation message to the user
-  const registeredMessage = () => {
-    Alert.alert('Congratulations', 'Registered Successfully', [
-      {
-        text: 'OK',
-      },
-    ]);
-  };
-
-  // Register the user to the database after checking their credentials
-  async function registerUser() {
-    if (password === password_confirmation) {
-      await auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          let newUser = auth().currentUser;
-          addUser(newUser);
-          registeredMessage();
-        })
-        .catch(error => {
-          processBackEndErrors(error);
-        });
-    } else {
-      warningPassword();
-      resetPasswordFields();
+  /**
+   * Deal with bad or empty inputs before sending request
+   * @returns {boolean} true if it passes basic form validation
+   */
+  function handleSignUpErrorsFrontEnd() {
+    let validity = true;
+    if (first_name === '') {
+      validity = false;
+      Alert.alert('Empty Name', 'Please enter a first name.');
+    } else if (email === '') {
+      validity = false;
+      Alert.alert('Empty Email', 'Please enter your email.');
+    } else if (!emailRegex.test(email)) {
+      validity = false;
+      Alerts.badEmailAlert();
+    } else if (password === '') {
+      validity = false;
+      Alert.alert('Empty Password', 'Please enter your password.');
+    } else if (password_confirmation === '') {
+      validity = false;
+      Alert.alert('Empty Password', 'Please enter confirm you password.');
+    } else if (password_confirmation !== password) {
+      validity = false;
+      Alert.alert(
+        "Passwords don't match",
+        "Make sure you've entered your password correctly.",
+      );
+    } else if (!passwordRegex.test(password)) {
+      validity = false;
+      Alert.alert(
+        'Weak password',
+        'Must have a number, a special character and at 6 to 20 characters.',
+      );
     }
+    return validity;
   }
 
-  async function addUser(user) {
-    await firestore()
-      .collection('Users')
-      .add({
-        Email: email,
-        FirstName: first_name,
-        LastName: last_name,
-        authID: user.uid,
-        Basket: [],
-        TotalPrice: 0,
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  /*
-This function provides a variety of error handling once received an error code from the database.
- */
-  function processBackEndErrors(error) {
-    if (error.code === 'auth/network-request-failed') {
+  /**
+   * Handle errors once received an error code from the database
+   * @param errorCode Firebase error code
+   */
+  function handleSignUpErrorsBackEnd(errorCode) {
+    if (errorCode === 'auth/network-request-failed') {
       Alert.alert(
         CustomAlerts.NO_NETWORK.title,
         CustomAlerts.NO_NETWORK.message,
       );
-    } else if (error.code === 'auth/email-already-in-use') {
-      //Do something else
-    } else if (error.code === 'auth/too-many-requests') {
+    } else if (errorCode === 'auth/email-already-in-use') {
+      Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+      // This is not ideal, implementing a confirm email feature would allow us to show the same message as if a confirmation email had been sent.
+    } else if (errorCode === 'auth/too-many-requests') {
       Alert.alert(
         CustomAlerts.MANY_REQUESTS.title,
         CustomAlerts.MANY_REQUESTS.message,
       );
     } else {
       Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    }
+  }
+
+  /**
+   *  Create a new user for authentication and firestore model.
+   */
+  async function registerUser() {
+    if (handleSignUpErrorsFrontEnd()) {
+      await auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(async () => {
+          await firestore()
+            .collection('Users')
+            .add({
+              Email: email,
+              FirstName: first_name,
+              LastName: last_name,
+            })
+            .then(() => Alert.alert('Welcome!', 'Registered Successfully'))
+            .catch(error => {
+              handleSignUpErrorsBackEnd(error);
+            });
+        })
+        .catch(error => {
+          handleSignUpErrorsBackEnd(error.code);
+        });
     }
   }
 
