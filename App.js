@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
@@ -10,15 +10,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {Alert, Animated} from 'react-native';
+import LoadingPage from './src/screens/LoadingPage';
+import {getOptions} from './src/firebase/queries';
+import {calculateDistance} from "./src/helpers/CalcFunctions";
 
 export const GlobalContext = React.createContext();
 export default function App() {
-  const isFirstTime = useRef();
   const [currentUser, setCurrentUser] = useState(auth().currentUser);
   const [userObj, setUserObj] = useState();
   const [shopsData, setShopsData] = useState([]);
+  const [currShop, setCurrShop] = useState();
   const [isShopIntro, setIsShopIntro] = useState(false);
-  const [currShop, setCurrShop] = useState(shopsData[0]);
   const [isFullScreen, setFullScreen] = useState(false);
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
@@ -28,39 +30,15 @@ export default function App() {
   const [currentCenterLocation, setCurrentCenterLocation] = useState({
     latitude: 51.5140310233705,
     longitude: -0.1164075624320158,
+    isDefault: true,
   });
   const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
-  const checkForFirstTime = async () => {
+  const isFirstTime = useMemo(async () => {
     const result = await AsyncStorage.getItem('isFirstTime').then(() => {
       isFirstTime.current = result === null;
     });
-  };
-
-  useEffect(() => {
-    checkForFirstTime();
   }, []);
-
-  function calculateDistance(coords) {
-    const R = 6371e3; // metres
-    const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
-    const latitude2 = (coords.latitude * Math.PI) / 180;
-    const diffLat =
-      ((coords.latitude - currentCenterLocation.latitude) * Math.PI) / 180;
-    const diffLon =
-      ((coords.longitude - currentCenterLocation.longitude) * Math.PI) / 180;
-
-    const aa =
-      Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-      Math.cos(latitude1) *
-        Math.cos(latitude2) *
-        Math.sin(diffLon / 2) *
-        Math.sin(diffLon / 2);
-    const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa));
-
-    // in metres
-    return parseInt(R * cc);
-  }
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(async user => {
@@ -68,16 +46,14 @@ export default function App() {
         setCurrentUser(user);
         await firestore()
           .collection('Users')
-          .where('Email', '==', currentUser.email)
+          .where('Email', '==', user.email)
           .get()
           .then(querySnapshot => {
-            console.log(querySnapshot._docs[0]);
-            let userModel = querySnapshot._docs[0];
+            let userModel = querySnapshot.docs[0];
             setUserObj({
               ...userModel.data(),
               key: userModel.id,
             });
-            console.log(userObj);
           });
       } else {
         setCurrentUser(null);
@@ -111,7 +87,7 @@ export default function App() {
     setCurrShop(shop);
   }
 
-  function changeShop({shop, navigation}) {
+  function changeShop(shop, navigation) {
     if (currShop !== shop && basketSize !== 0) {
       Alert.alert(
         'Are you sure ?',
@@ -130,6 +106,7 @@ export default function App() {
         {cancelable: false},
       );
     } else {
+      console.log(shop);
       setCurrShop(shop);
       navigation.navigate('Shop page');
     }
@@ -168,7 +145,7 @@ export default function App() {
       .onSnapshot(querySnapshot => {
         const shops = [];
 
-        querySnapshot.forEach(documentSnapshot => {
+        querySnapshot.forEach( async documentSnapshot => {
           let shopData = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
@@ -200,6 +177,9 @@ export default function App() {
             Drinks: drinks,
             Snacks: snacks,
           };
+          await getOptions().then(options => {
+            shopData.options = options;
+          });
           shops.push(shopData);
           setShopsData(shops);
           setCurrShop(shops[0]);
@@ -216,22 +196,14 @@ export default function App() {
           });
           setMarkers(mark);
 
-          const editedShopsData = shops.map(item => {
+          const editedShopsData = shops.map(shop => {
             return {
-              Name: item.Name,
-              Intro: item.Intro,
+              ...shop,
               Location: {
-                latitude: item.Location._latitude,
-                longitude: item.Location._longitude,
+                latitude: shop.Location._latitude,
+                longitude: shop.Location._longitude,
               },
-              Image: item.Image,
-              Email: item.Email,
-              IsOpen: item.IsOpen,
-              ItemsOffered: item.ItemsOffered,
-              Likeness: item.Likeness,
-              Queue: item.Queue,
-              key: item.key,
-              DistanceTo: calculateDistance(item.Location),
+              DistanceTo: calculateDistance(shop.Location, currentCenterLocation),
             };
           });
 
@@ -342,7 +314,11 @@ export default function App() {
       }}>
       <NavigationContainer>
         {currentUser ? (
-          <HamburgerSlideBarNavigator />
+          userObj ? (
+            <HamburgerSlideBarNavigator />
+          ) : (
+            <LoadingPage />
+          )
         ) : (
           <Stack.Navigator
             screenOptions={{

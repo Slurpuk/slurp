@@ -39,6 +39,11 @@ export const AlertMessage = {
     title: 'Registration Error',
     message: 'This is our bad, contact technical support. Error code #0001',
   },
+  LOCATION: {
+    title: 'Location Error',
+    message: 'Something with the location permissions must have gone wrong. Are you under water or sth?',
+  },
+
 };
 
 /*

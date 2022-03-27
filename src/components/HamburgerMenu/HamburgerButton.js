@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Dimensions,
-  Platform,
-  StyleSheet,
-  TouchableHighlight,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 
 import {
   Dimensions,
@@ -6,26 +6,23 @@ import {
   StyleSheet,
   Text,
   View,
-  PermissionsAndroid,
-  Animated,
-  Image,
   Keyboard,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
-import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
-import firestore from '@react-native-firebase/firestore';
+import {locationPress, requestLocationPermission} from './locationHelpers';
+import mapStyles from '../../../stylesheets/mapStyles';
+import { Alerts } from "../../data/Alerts";
 
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
 export default function MapBackground({
   searchBarFocused,
   setSearchBarFocussed,
 }) {
   const context = useContext(GlobalContext);
+  //used to watch the users location
   const watchID = useRef();
   const mapCenter = useRef({
     latitude: context.currentCenterLocation.latitude,
@@ -34,153 +31,25 @@ export default function MapBackground({
     longitudeDelta: 0.01,
   });
 
-  const locationPress = clickedMarker => {
-    let selectedShop = context.shopsData.find(
-      shop => shop.Name === clickedMarker,
-    );
-
-    if (context.isShopIntro) {
-      fadeOpacityOut(context.adaptiveOpacity, 170);
-
-      let myTimeout = setTimeout(() => {
-        context.setCurrentCenterLocation({
-          latitude: selectedShop.Location._latitude,
-          longitude: selectedShop.Location._longitude,
-        });
-        let old = mapCenter.current;
-        mapCenter.current = {
-          latitude: selectedShop.Location._latitude,
-          longitude: selectedShop.Location._longitude,
-          latitudeDelta: old.latitudeDelta,
-          longitudeDelta: old.longitudeDelta,
-        };
-        context.switchShop(selectedShop);
-        clearTimeout(myTimeout);
-      }, 200);
-
-      setTimeout(() => {
-        fadeOpacityIn(context.adaptiveOpacity, 200);
-      }, 210);
-    } else {
-      context.setCurrentCenterLocation({
-        latitude: selectedShop.Location._latitude,
-        longitude: selectedShop.Location._longitude,
-      });
-      let old = mapCenter.current;
-      mapCenter.current = {
-        latitude: selectedShop.Location._latitude,
-        longitude: selectedShop.Location._longitude,
-        latitudeDelta: old.latitudeDelta,
-        longitudeDelta: old.longitudeDelta,
-      };
-      context.switchShop(selectedShop);
-      context.setShopIntro(true);
-    }
-  };
-
+  //setup location access on map load. remove the location access when this component is unmounted
   useEffect(() => {
-    const requestLocationPermission = async () => {
-      if (Platform.OS === 'ios') {
-        getOneTimeLocation();
-        subscribeLocationLocation();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Access Required',
-              message: 'This App needs to Access your location',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            //To Check, If Permission is granted
-            getOneTimeLocation();
-            subscribeLocationLocation();
-          }
-        } catch (err) {
-          console.warn(err);
-        }
-      }
-    };
-    requestLocationPermission().then(r => console.log('permission granted'));
+    requestLocationPermission(context, mapCenter, watchID.current).then(null).catch(() => Alerts.locationAlert);
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       Geolocation.clearWatch(watchID.current);
     };
   }, []);
 
-  const getOneTimeLocation = () => {
-    Geolocation.getCurrentPosition(
-      //Will give you the current location
-      position => {
-        const longitude = position.coords.longitude;
-        const latitude = position.coords.latitude;
-        let old = mapCenter.current;
-        mapCenter.current = {
-          latitude: latitude,
-          longitude: longitude,
-          latitudeDelta: old.latitudeDelta,
-          longitudeDelta: old.longitudeDelta,
-        };
-        // Setting new current location
-        context.setCurrentCenterLocation({
-          latitude: latitude,
-          longitude: longitude,
-        });
-      },
-      error => console.log(error),
-      {
-        enableHighAccuracy: true,
-        timeout: 30000,
-      },
-    );
-  };
-
+  //dismiss the keyboard and search results when the map is clicked
   const mapPressed = () => {
     setSearchBarFocussed(false);
     Keyboard.dismiss();
   };
 
-  const subscribeLocationLocation = () => {
-    watchID.current = Geolocation.watchPosition(
-      async position => {
-        //Will give you the location on location change
-        const longitude = position.coords.longitude;
-        const latitude = position.coords.latitude;
-        //Setting Longitude state
-        let old = mapCenter.current;
-        mapCenter.current = {
-          latitude: latitude,
-          longitude: longitude,
-          latitudeDelta: old.latitudeDelta,
-          longitudeDelta: old.longitudeDelta,
-        };
-        context.setCurrentCenterLocation({
-          latitude: latitude,
-          longitude: longitude,
-        });
-        if (context.currentUser.key) {
-          await firestore()
-            .collection('Users')
-            .doc(context.currentUser.key)
-            .update({
-              latitude: latitude,
-              longitude: longitude,
-            })
-            .then(r => console.log('position updated'))
-            .catch(error => console.log(error));
-        }
-      },
-      error => console.log(error),
-      {
-        enableHighAccuracy: true,
-      },
-    );
-  };
-
   return (
     <View style={styles.container}>
       <MapView
-        onRegionChangeComplete={(region, isGesture) => {
+        onRegionChangeComplete={(region) => {
           if (Platform.OS === 'ios') {
             if (
               region.latitude.toFixed(6) !==
@@ -194,12 +63,13 @@ export default function MapBackground({
             mapCenter.current = region;
           }
         }}
-        onPress={event => mapPressed()}
-        onPanDrag={event => mapPressed()}
+        //focus only on map when map pressed
+        onPress={() => mapPressed()}
+        onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter.current}
-      >
+        region={mapCenter.current}>
+        {/*//map each of the shops to a marker on the map*/}
         {context.markers.map((marker, index) => (
           <Marker
             key={index}
@@ -208,12 +78,13 @@ export default function MapBackground({
             title={marker.name}
             onPress={() => {
               if (marker.isOpen) {
-                locationPress(marker.name);
+                locationPress(context, mapCenter, marker.name);
               }
               mapPressed();
             }}>
+            {/*//closed markers appear grey*/}
             <View style={styles.markerStyle}>
-              <Text style={{color: 'red', fontWeight: 'bold'}}>
+              <Text style={{color: 'coral', fontWeight: 'bold', top: 0}}>
                 {!marker.isOpen ? 'Closed' : ''}
               </Text>
               <CustomMapIcon isOpen={marker.isOpen} />
@@ -226,29 +97,8 @@ export default function MapBackground({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    height: screenHeight,
-    width: screenWidth,
-    justifyContent: 'flex-end',
-    zIndex: -3,
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-  },
-
-  markerBg: {
-    backgroundColor: '#FAFAFA',
-    padding: 5,
-    marginBottom: 4,
-    borderRadius: 11,
-  },
-
-  markerStyle: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    maxWidth: 220,
-  },
+  container: mapStyles.MapBackgroundContainer,
+  map: mapStyles.mapWithAbsoluteFill,
+  markerBg: mapStyles.markerBg,
+  markerStyle: mapStyles.markerStyle,
 });

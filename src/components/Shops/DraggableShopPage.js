@@ -3,14 +3,18 @@ import {View, StyleSheet} from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopIntro from './ShopIntro';
 import Menu from '../ShopMenu/Menu';
-import {ShopContext} from '../../screens/ShopPage';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
+import {GlobalContext} from "../../../App";
 
-export const DraggableContext = React.createContext();
-const DraggableShopPage = ({shop, navigation, sheetRef}) => {
+
+const DraggableShopPage = ({shop, navigation}) => {
   const setHamburgerVisible = useContext(VisibleContext);
-  const context = useContext(ShopContext);
+  const context = useContext(GlobalContext);
 
+  /**
+   * Function executed when the bottom sheet settles on a new snap point
+   * @param index Index of the new snap point
+   */
   function updatePage({index}) {
     if (index === 0) {
       setHamburgerVisible(false);
@@ -24,28 +28,25 @@ const DraggableShopPage = ({shop, navigation, sheetRef}) => {
   }
 
   return (
-    <DraggableContext.Provider value={{bottomSheetRef: sheetRef}}>
-      <ScrollBottomSheet
-        ref={sheetRef}
-        componentType="FlatList"
-        snapPoints={['0%', '70%', '100%']}
-        onSettle={index => updatePage({index})}
-        initialSnapIndex={1}
-        renderHandle={() => (
-          <View style={styles.header1}>
-            <View
-              style={[
-                styles.panelHandle,
-                context.isFullScreen ? {opacity: 0} : {opacity: 1},
-              ]}
-            />
-            <ShopIntro shop={shop} />
-            <Menu navigation={navigation} />
-          </View>
-        )}
-        contentContainerStyle={styles.contentContainerStyle}
-      />
-    </DraggableContext.Provider>
+    <ScrollBottomSheet
+      componentType="FlatList"
+      snapPoints={['0%', '70%', '100%']}
+      onSettle={index => updatePage({index})}
+      initialSnapIndex={1}
+      renderHandle={() => (
+        <View style={styles.header1}>
+          <View
+            style={[
+              styles.panelHandle,
+              context.isFullScreen ? {opacity: 0} : {opacity: 1},
+            ]}
+          />
+          <ShopIntro shop={shop} />
+          <Menu navigation={navigation} />
+        </View>
+      )}
+      contentContainerStyle={styles.contentContainerStyle}
+    />
   );
 };
 

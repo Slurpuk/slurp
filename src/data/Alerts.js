@@ -38,4 +38,7 @@ export const Alerts = {
   elseAlert: () => {
     Alert.alert(AlertMessage.ELSE.title, AlertMessage.ELSE.message);
   },
+  locationAlert: () => {
+    Alert.alert(AlertMessage.LOCATION.title, AlertMessage.LOCATION.message);
+  },
 };

@@ -5,7 +5,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
-import {DraggableContext} from './DraggableShopPage';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
@@ -14,7 +13,6 @@ export default function ShopIntro({shop}) {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const context = shopContext === undefined ? globalContext : shopContext;
-  const draggable = useContext(DraggableContext);
 
   return (
     <Animated.View
@@ -25,7 +23,7 @@ export default function ShopIntro({shop}) {
         fadeOpacityIn(globalContext.adaptiveOpacity, 140);
       }}>
       <ImageBackground
-        imageStyle={ShopIntroStyles.cardImg}
+        imageStyle={ShopIntroStyles.cardImgs}
         style={ShopIntroStyles.container}
         source={{uri: shop.Image}}>
         <LinearGradient
@@ -54,7 +52,9 @@ export default function ShopIntro({shop}) {
             <Text style={[textStyles.headingOne, ShopIntroStyles.heading]}>
               {shop.Name}
             </Text>
-            <ShopDetailIcons timeToOrder={shop.Queue} />
+            {globalContext.currentCenterLocation.isDefault || shop.DistanceTo === null ? null : (
+              <ShopDetailIcons timeToOrder={shop.DistanceTo} />
+            )}
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
               {shop.Intro}
             </Text>

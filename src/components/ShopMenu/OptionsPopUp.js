@@ -14,7 +14,7 @@ export default function OptionsPopUp({data, renderer, item}) {
   const context = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const [totalPrice, setTotalPrice] = useState(item.Price);
-  const [milk, setMilk] = useState(context.getDefault()); // List of options currently selected
+  const [milk, setMilk] = useState(context.menuData.defaultMilk); // List of options currently selected
   const [syrups, setSyrups] = useState([]);
 
   /**
