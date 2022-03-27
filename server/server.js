@@ -36,4 +36,4 @@ app.post('/checkout', async (req, res) => {
   });
 });
 //Listen the port 8000
-app.listen(8000, () => console.log(`Node server listening on port 8000!`));
+app.listen(7070, () => console.log(`Node server listening on port 7070!`));

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
@@ -15,12 +15,11 @@ import {getOptions} from './src/firebase/queries';
 
 export const GlobalContext = React.createContext();
 export default function App() {
-  const isFirstTime = useRef();
   const [currentUser, setCurrentUser] = useState(auth().currentUser);
   const [userObj, setUserObj] = useState();
   const [shopsData, setShopsData] = useState([]);
+  const [currShop, setCurrShop] = useState();
   const [isShopIntro, setIsShopIntro] = useState(false);
-  const [currShop, setCurrShop] = useState(shopsData[0]);
   const [isFullScreen, setFullScreen] = useState(false);
   const [basketContent, setBasketContent] = useState([]);
   const [basketSize, setBasketSize] = useState(0);
@@ -33,14 +32,10 @@ export default function App() {
   });
   const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
-  const checkForFirstTime = async () => {
+  const isFirstTime = useMemo(async () => {
     const result = await AsyncStorage.getItem('isFirstTime').then(() => {
       isFirstTime.current = result === null;
     });
-  };
-
-  useEffect(() => {
-    checkForFirstTime();
   }, []);
 
   function calculateDistance(coords) {
@@ -73,7 +68,7 @@ export default function App() {
           .where('Email', '==', user.email)
           .get()
           .then(querySnapshot => {
-            let userModel = querySnapshot._docs[0];
+            let userModel = querySnapshot.docs[0];
             setUserObj({
               ...userModel.data(),
               key: userModel.id,

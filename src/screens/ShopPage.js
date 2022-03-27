@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useContext,
   useMemo,
   useState,
@@ -26,11 +25,11 @@ const ShopPage = ({navigation, sheetRef}) => {
   const [currItem, setCurrItem] = useState(null); // Current item displayed in the shop.
 
   /**
-   * Callback that separates the items offered by the shop into 3 sections: coffees, drinks and snacks.
+   * Hook that divdes the items offered by the shop into 3 sections: coffees, drinks and snacks and memoizes it.
    * Formats the data before passing it to the flatlists.
    * @return The formatted menu data
    */
-  const filterDataCallBack = useCallback(() => {
+  const menuData = useMemo(() => {
     let data = [
       {title: 'Coffees', list: [], key: 1},
       {title: 'Drinks', list: [], key: 2},
@@ -42,7 +41,6 @@ const ShopPage = ({navigation, sheetRef}) => {
     data[2].list = items.Snacks;
     return data;
   }, [shop.ItemsOffered]);
-  const menuData = useMemo(() => filterDataCallBack(), [filterDataCallBack]); // Memoized menu data
 
   /**
    * Get the default milk
