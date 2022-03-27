@@ -13,13 +13,7 @@ import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
 import {GlobalContext} from '../../App';
 
 export const ShopContext = React.createContext();
-
-/**
- * Component for displaying a shop (both draggable and non-draggable)
- * @param navigation The navigation object
- * @param sheetRef The reference to the bottom sheet
- */
-const ShopPage = ({navigation, sheetRef}) => {
+const ShopPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const shop = context.currShop;
   const [optionsVisible, setOptionsVisible] = useState(false); // Is the options popup visible
@@ -72,7 +66,6 @@ const ShopPage = ({navigation, sheetRef}) => {
             <DraggableShopPage
               shop={shop}
               navigation={navigation}
-              sheetRef={sheetRef}
             />
           ) : (
             <NonDraggableShopPage shop={shop} navigation={navigation} />

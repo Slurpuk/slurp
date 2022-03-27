@@ -1,64 +1,60 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {SearchBar} from 'react-native-elements';
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
   Platform,
   Dimensions,
-  Pressable,
+  Pressable, Keyboard,
 } from 'react-native';
+
 import {GlobalContext} from '../../../App';
+const screenHeight = Dimensions.get('window').height;
 
-type SearchBarComponentProps = {};
-
-const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
-  navigation,
-  searchBarFocused,
-  setSearchBarFocussed,
-}) => {
+const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   const context = useContext(GlobalContext);
-  const [shopsData, setShopsData] = useState(context.shopsData);
+
+  //Used to store current text in search bar
   const [query, setQuery] = useState('');
-  const [shops, setShops] = useState([]);
 
-  useEffect(() => {
-    const temp = context.shopsData;
-    setShopsData(temp);
-    setShops(shopsData.slice());
-  }, [context.shopsData, shopsData]);
+  //the filtered list of shops to be shown in search results
+  const [shops, setShops] = useState(context.shopsData);
 
+  //focus the search bar when a letter is typed and update the filtered shops
   const updateQuery = input => {
-    if (!searchBarFocused) {
+    if (!searchBarFocused && input !== '') {
       setSearchBarFocussed(true);
     }
     setQuery(input);
-    setShops(shopsData.slice());
+    filterShops();
   };
 
-  const filterNames = shop => {
-    let search = query;
-    if (search.length === 0) {
-      clear();
-    }
-    if (shop.Name.toLowerCase().includes(search.toLowerCase())) {
-      let open;
-      shop.IsOpen ? (open = 'Open') : (open = 'Closed');
-      return `${shop.Name} - ${open}`;
-    } else {
-      return null;
-    }
-  };
+  //set the shops to be displayed to those which match the search query
+  const filterShops = useCallback(() => {
+    setShops(
+      context.shopsData.filter(shop =>
+        shop.Name.toLowerCase().includes(query.toLowerCase()),
+      ),
+    );
+  }, [context.shopsData, query]);
 
+  //required to force update of search results to match current state, not previous state.
+  useEffect(() => {
+    filterShops();
+  }, [filterShops, query]);
+
+  //unfocus the search bar (remove search results)
   const clear = () => {
     setSearchBarFocussed(false);
   };
 
+  //set the bottom sheet to the selected shop
   const selectShop = shop => {
     if (shop.IsOpen) {
       context.switchShop(shop);
+      setSearchBarFocussed(false);
     }
   };
 
@@ -66,11 +62,12 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
     <View style={styles.view}>
       <SearchBar
         placeholder="Where to..."
+        // Function to run when a letter is pressed
         onChangeText={updateQuery}
         value={query}
-        lightTheme={true}
         containerStyle={styles.container}
         inputContainerStyle={styles.inputContainer}
+        // function to run when the x in search bar is pressed
         onClear={clear}
         placeholderTextColor={'#046D66'}
         inputStyle={{color: '#046D66'}}
@@ -78,33 +75,36 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
         rightIconContainerStyle={{color: '#046D66'}}
         searchIcon={false}
       />
+      {/*Only display search results when the search bar is focused*/}
       {searchBarFocused ? (
         <View style={styles.activeElementsWrapper}>
           <View style={styles.cover} />
           <FlatList
+            // Only display the filtered shops in the results
+            keyboardShouldPersistTaps="handled"
             data={shops}
-            extraData={query}
             styles={styles.flatList}
-            renderItem={({item}) => (
-              <View
-                style={[
-                  styles.searchResultContainer,
-                  {display: searchBarFocused ? 'flex' : 'none'},
-                ]}>
-                {filterNames(item) ? (
+            renderItem={({item}) => {
+              return (
+                <View
+                  style={[
+                    styles.searchResultContainer,
+                    {display: searchBarFocused ? 'flex' : 'none'},
+                  ]}>
                   <Pressable
+                    onPressIn={() => {
+                      if (item.IsOpen) Keyboard.dismiss();
+                    }}
                     onPress={() => selectShop(item)}
                     style={({pressed}) => [
-                      {backgroundColor: item.IsOpen ? 'white' : 'lightgrey'},
                       {
                         backgroundColor:
                           pressed && item.IsOpen
-                            ? 'teal'
+                            ? '#087562'
                             : item.IsOpen
                             ? 'white'
-                            : 'grey',
+                            : '#C5C5C5',
                       },
-
                       styles.searchResult,
                     ]}>
                     {({pressed}) => (
@@ -114,21 +114,19 @@ const CustomSearchBar: React.FunctionComponent<SearchBarComponentProps> = ({
 
                           styles.flatListItem,
                         ]}>
-                        {filterNames(item)}
+                        {item.Name}
                       </Text>
                     )}
                   </Pressable>
-                ) : null}
-              </View>
-            )}
+                </View>
+              );
+            }}
           />
         </View>
       ) : null}
     </View>
   );
 };
-
-const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
@@ -168,8 +166,9 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
 
-  activeElementsWrapper:{
-    marginLeft: (-screenHeight * 0.1),
+  activeElementsWrapper: {
+    marginLeft: -screenHeight * 0.1,
+    maxHeight: screenHeight * 0.52,
   },
 
   searchResult: {
@@ -201,10 +200,10 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 0,
     fontFamily: 'Poppins',
-    borderBottomColor: '#26a69a',
+    borderBottomColor: '#DDDDDD',
     borderBottomWidth: 1,
     position: 'relative',
-    height: 60,
+    height: 54,
   },
   flatList: {
     display: 'flex',
