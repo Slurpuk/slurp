@@ -18,3 +18,16 @@ export function calculateDistance(coords, currentCenterLocation) {
   // in metres
   return parseInt(R * cc);
 }
+
+export function processDistance(minutes){
+  minutes = Number(minutes);
+  var d = Math.floor(minutes / (24*60));
+  var h = Math.floor(minutes % (24*60) / 60);
+  var m = Math.floor(minutes % 60);
+
+  var dDisplay = d > 0 ? d + ' d' : "";
+  var hDisplay = h > 0 ? h + ' h ' : "";
+  var mDisplay = m > 0 ? m + (m == 1 ? " min " : " mins ") : "";
+
+  return dDisplay + hDisplay + mDisplay;
+}
