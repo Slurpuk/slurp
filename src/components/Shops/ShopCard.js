@@ -42,7 +42,7 @@ const ShopCard = ({shop, navigation}) => {
           {shop.Name}
         </Text>
         {context.currentCenterLocation.isDefault ? null : (
-          <ShopDetailIcons timeToOrder={shop.Queue} />
+          <ShopDetailIcons timeToOrder={shop.DistanceTo} />
         )}
       </ImageBackground>
     </Pressable>

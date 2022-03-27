@@ -3,6 +3,7 @@ import Geolocation from 'react-native-geolocation-service';
 import firestore from '@react-native-firebase/firestore';
 import { Alerts } from "../../data/Alerts";
 import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
+import {calculateDistance} from '../../helpers/CalcFunctions';
 
 //used for when a new location is pressed on the map
 export const locationPress = (context, mapCenter, clickedMarker) => {
@@ -101,6 +102,22 @@ const subscribeLocationLocation = (context, mapCenter, watchID) => {
         latitude: latitude,
         longitude: longitude,
       });
+
+      // update the user's distance to shops
+      const updatedShopsData = context.orderedShops.map(shop => {
+        return {
+          ...shop,
+          DistanceTo: calculateDistance(shop.Location, context.currentCenterLocation),
+        };
+      });
+      //ordering the shops based on distance from user location
+      updatedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
+      //filtering the shops based on radius limitation (rn 1500)
+      const newUpdated = updatedShopsData.filter(
+        item => item.DistanceTo < 1500,
+      );
+      context.setOrderedShops(newUpdated);
+
       if (context.userRef) {
         await firestore()
           .collection('Users')

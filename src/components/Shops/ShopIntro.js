@@ -53,7 +53,7 @@ export default function ShopIntro({shop}) {
               {shop.Name}
             </Text>
             {globalContext.currentCenterLocation.isDefault ? null : (
-              <ShopDetailIcons timeToOrder={shop.Queue} />
+              <ShopDetailIcons timeToOrder={shop.DistanceTo} />
             )}
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
               {shop.Intro}
