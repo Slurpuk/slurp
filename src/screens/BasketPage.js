@@ -1,11 +1,9 @@
 import firestore from '@react-native-firebase/firestore';
 import React, {useContext, useEffect, useState} from 'react';
-
 import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
-
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
@@ -16,8 +14,13 @@ const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const API_URL = 'http://localhost:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
-  const [loading, setLoading] = useState(false);
 
+  /*
+   * Fetch the payments' sheet parameters from the server.
+   * @return {paymentIntent} Return the encapsulated details about the transaction.
+   * @return {ephemeralKey} Return the cryptographic payment key.
+   * @return {customer} Return the customer.
+   */
   const fetchPaymentSheetParams = async () => {
     console.log(context.total.toFixed(2));
     let body = {amount: context.total.toFixed(2)};
@@ -36,6 +39,10 @@ const BasketPage = ({navigation}) => {
     };
   };
 
+  /*
+   * Initialize the payment sheet with customerId,
+   * customerEphemeralKeySecret, paymentIntentClientSecret
+   */
   const initializePaymentSheet = async () => {
     const {paymentIntent, ephemeralKey, customer} =
       await fetchPaymentSheetParams();
@@ -44,11 +51,12 @@ const BasketPage = ({navigation}) => {
       customerEphemeralKeySecret: ephemeralKey,
       paymentIntentClientSecret: paymentIntent,
     });
-    if (!error) {
-      setLoading(true);
-    }
   };
 
+  /*
+   * Open payment sheet if error doesn't exists.
+   * @function {confirmOrder} Confirm order if payment sheet is present.
+   */
   const openPaymentSheet = async () => {
     if (context.total !== 0) {
       const {error} = await presentPaymentSheet();
@@ -66,12 +74,20 @@ const BasketPage = ({navigation}) => {
     }
   };
 
+  /*
+   * Dynamically initialise the payment sheet if the total price is greater than 0.
+   */
   useEffect(() => {
     if (context.total !== 0) {
       initializePaymentSheet();
     }
   }, []);
 
+  /*
+   * Send data to firebase.
+   * DateTime, Items, Status, ShopID, UserID,Total are added to the
+   * firestore collection 'Orders'.
+   */
   async function confirmOrder() {
     await firestore()
       .collection('Orders')
@@ -98,6 +114,14 @@ const BasketPage = ({navigation}) => {
       });
   }
 
+  /*
+   * Format basket contents to match a precision.
+   * @return {ItemRef} The item key.
+   * @return {Quantity} The item quantity.
+   * @return {Price} The price of the item.
+   * @return {Type} The type of the item.
+   * @ return {Options} the Options of the item.
+   */
   function formatBasket() {
     let items = context.basketContent.map(item => {
       console.log(item);
