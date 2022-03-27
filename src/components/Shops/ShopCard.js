@@ -41,7 +41,9 @@ const ShopCard = ({shop, navigation}) => {
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-        <ShopDetailIcons timeToOrder={shop.Queue} />
+        {context.currentCenterLocation.isDefault ? null : (
+          <ShopDetailIcons timeToOrder={shop.Queue} />
+        )}
       </ImageBackground>
     </Pressable>
   );

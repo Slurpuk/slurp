@@ -127,6 +127,7 @@ export const requestLocationPermission = async (
   watchID,
 ) => {
   if (Platform.OS === 'ios') {
+    context.setCurrentCenterLocation(() => ({isDefault: false}));
     getOneTimeLocation(context, mapCenter);
     subscribeLocationLocation(context, mapCenter, watchID);
   } else {
@@ -139,7 +140,8 @@ export const requestLocationPermission = async (
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        //To Check, If Permission is granted
+        // To Check, If Permission is granted
+        context.setCurrentCenterLocation(() => ({isDefault: false}));
         getOneTimeLocation(context, mapCenter);
         subscribeLocationLocation(context, mapCenter, watchID);
       }
