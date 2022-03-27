@@ -19,7 +19,7 @@ const SignUpPage = ({navigation}) => {
     '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
   );
   const passwordRegex =
-    /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/;
 
   /**
    * Deal with bad or empty inputs before sending request
@@ -42,17 +42,17 @@ const SignUpPage = ({navigation}) => {
     } else if (password_confirmation === '') {
       validity = false;
       Alert.alert('Empty Password', 'Please enter confirm you password.');
-    } else if (password !== password_confirmation) {
+    } else if (password_confirmation !== password) {
       validity = false;
       Alert.alert(
         "Passwords don't match",
         "Make sure you've entered your password correctly.",
       );
-    } else if (!passwordRegex.test(email)) {
+    } else if (!passwordRegex.test(password)) {
       validity = false;
       Alert.alert(
-        "Passwords don't match",
-        "Make sure you've entered your password correctly.",
+        'Weak password',
+        'Must have a number, a special character and at 6 to 20 characters.',
       );
     }
     return validity;
