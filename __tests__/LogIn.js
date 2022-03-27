@@ -13,10 +13,6 @@ describe('Login page', function () {
 
   afterEach(() => spyAlert.mockClear());
 
-  it('should render correctly', function () {
-    expect(render(<LogInPage />).toJSON()).toMatchSnapshot();
-  });
-
   describe('log in', function () {
     it('should raise alert on submit with empty email', async function () {
       const {getByText} = render(<LogInPage />);
@@ -35,7 +31,7 @@ describe('Login page', function () {
       fireEvent.changeText(inputs[0], 'emailwithoutaroba.com');
 
       fireEvent(getByText('Log in'), 'press');
-
+      console.log(spyAlert.mock);
       expect(spyAlert).toHaveBeenCalled();
       expect(spyAlert.mock.calls[0][0]).toBe('Bad Email');
     });
