@@ -4,8 +4,10 @@ import {View, Text, Pressable, ImageBackground} from 'react-native';
 import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
-import {GlobalContext} from '../../../App';
 import {menuItemStyles} from './shopStyles';
+import {addToBasket} from '../../helpers/ScreensFunctions';
+import {GlobalContext} from '../../../App';
+import {Alerts} from '../../data/Alerts';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
@@ -16,12 +18,13 @@ const MenuItem = ({item}) => {
    * Dynamically update the menuItem counter based on the current basket content.
    */
   useEffect(() => {
-    const basket = globalContext.basketContent;
+    const basket = globalContext.currBasket.data;
     let newCount = 0;
     if (item.hasOwnProperty('Bean')) {
       for (let it of basket) {
         if (it.key === item.key) {
           newCount += it.count;
+          console.log(it);
         }
       }
     } else {
@@ -32,9 +35,8 @@ const MenuItem = ({item}) => {
         }
       }
     }
-
     setCount(newCount);
-  }, [globalContext.basketContent, item]);
+  }, [globalContext.currBasket, item]);
 
   /*
    * Show current item options.
@@ -48,10 +50,16 @@ const MenuItem = ({item}) => {
    * Add new item to the global context.
    * @param newItem The item to be added.
    */
-  function add(newItem) {
-    newItem.hasOwnProperty('Bean')
-      ? showOptions()
-      : globalContext.addToBasket(newItem);
+  async function add(newItem) {
+    if (newItem.hasOwnProperty('Bean')) {
+      showOptions();
+    } else {
+      await addToBasket(
+        newItem,
+        globalContext.currShop,
+        globalContext.currBasket.setContent,
+      );
+    }
   }
 
   return (

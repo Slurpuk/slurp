@@ -1,37 +1,31 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopIntro from './ShopIntro';
 import Menu from '../ShopMenu/Menu';
-import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
-import {GlobalContext} from "../../../App";
-
+import {GlobalContext} from '../../../App';
 
 const DraggableShopPage = ({shop, navigation}) => {
-  const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
+  const sheetRef = useRef();
+  const [isFullScreen, setFullScreen] = useState(false);
 
-  /**
-   * Function executed when the bottom sheet settles on a new snap point
-   * @param index Index of the new snap point
-   */
-  function updatePage({index}) {
+  function updatePage(index) {
     if (index === 0) {
-      setHamburgerVisible(false);
-      context.setFullScreen(true);
+      setFullScreen(true);
     } else if (index === 2) {
       context.setShopIntro(false);
     } else {
-      setHamburgerVisible(true);
-      context.setFullScreen(false);
+      setFullScreen(false);
     }
   }
 
   return (
     <ScrollBottomSheet
       componentType="FlatList"
+      ref={sheetRef}
       snapPoints={['0%', '70%', '100%']}
-      onSettle={index => updatePage({index})}
+      onSettle={index => updatePage(index)}
       initialSnapIndex={1}
       renderHandle={() => (
         <View style={styles.header1}>
@@ -41,7 +35,7 @@ const DraggableShopPage = ({shop, navigation}) => {
               context.isFullScreen ? {opacity: 0} : {opacity: 1},
             ]}
           />
-          <ShopIntro shop={shop} />
+          <ShopIntro shop={shop} sheetRef={sheetRef} navigation={navigation} isFullScreen={isFullScreen}/>
           <Menu navigation={navigation} />
         </View>
       )}

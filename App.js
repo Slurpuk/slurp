@@ -6,334 +6,178 @@ import SignUpPage from './src/screens/SignUpPage';
 import LogInPage from './src/screens/LogInPage';
 import WelcomePages from './src/screens/WelcomePages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {Alert, Animated} from 'react-native';
+import {Animated} from 'react-native';
 import LoadingPage from './src/screens/LoadingPage';
-import {getOptions} from './src/firebase/queries';
+import {getOptions, setUserObject} from './src/firebase/queries';
+import {Alerts} from './src/data/Alerts';
+import {
+  clearBasket,
+  getIsFirstTime,
+  refreshCurrentBasket,
+  refreshCurrentShop,
+  setCurrentShopKey,
+} from './src/helpers/ScreensFunctions';
 
 export const GlobalContext = React.createContext();
 export default function App() {
-  const [currentUser, setCurrentUser] = useState(auth().currentUser);
-  const [userObj, setUserObj] = useState();
-  const [shopsData, setShopsData] = useState([]);
-  const [currShop, setCurrShop] = useState();
-  const [isShopIntro, setIsShopIntro] = useState(false);
-  const [isFullScreen, setFullScreen] = useState(false);
-  const [basketContent, setBasketContent] = useState([]);
-  const [basketSize, setBasketSize] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [markers, setMarkers] = useState([]);
-  const [orderedShops, setOrderedShops] = useState([]);
-  const [currentCenterLocation, setCurrentCenterLocation] = useState({
-    latitude: 51.5140310233705,
-    longitude: -0.1164075624320158,
+  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState({
+    authUser: auth().currentUser,
+    userObj: null,
   });
+  const [shopsData, setShopsData] = useState([]);
+  const currShop = useRef(null);
+  const isFirstTime = useMemo(async () => getIsFirstTime(), []);
+  const [currBasket, setCurrBasket] = useState([]);
+  const [isShopIntro, setIsShopIntro] = useState(false);
   const adaptiveOpacity = useRef(new Animated.Value(0)).current;
-
-  const isFirstTime = useMemo(async () => {
-    const result = await AsyncStorage.getItem('isFirstTime').then(() => {
-      isFirstTime.current = result === null;
-    });
-  }, []);
-
-  function calculateDistance(coords) {
-    const R = 6371e3; // metres
-    const latitude1 = (currentCenterLocation.latitude * Math.PI) / 180; // φ, λ in radians
-    const latitude2 = (coords.latitude * Math.PI) / 180;
-    const diffLat =
-      ((coords.latitude - currentCenterLocation.latitude) * Math.PI) / 180;
-    const diffLon =
-      ((coords.longitude - currentCenterLocation.longitude) * Math.PI) / 180;
-
-    const aa =
-      Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-      Math.cos(latitude1) *
-        Math.cos(latitude2) *
-        Math.sin(diffLon / 2) *
-        Math.sin(diffLon / 2);
-    const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa));
-
-    // in metres
-    return parseInt(R * cc);
-  }
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(async user => {
       if (user) {
         setCurrentUser(user);
-        await firestore()
-          .collection('Users')
-          .where('Email', '==', user.email)
-          .get()
-          .then(querySnapshot => {
-            let userModel = querySnapshot.docs[0];
-            setUserObj({
-              ...userModel.data(),
-              key: userModel.id,
-            });
-          });
+        setUserObject(user, setCurrentUser).catch(error => console.log(error));
       } else {
         setCurrentUser(null);
-        setUserObj(null);
+        setCurrentUser(prevState => ({...prevState, userObj: null}));
       }
     });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
 
-  const enterApp = () => {
-    AsyncStorage.setItem('isFirstTime', 'true');
+  // Subscribe to the Shops model
+  useEffect(() => {
+    if (currentUser.userObj) {
+      const subscriber = firestore()
+        .collection('CoffeeShop')
+        .onSnapshot(async querySnapshot => {
+          const shops = [];
+          await Promise.all(
+            querySnapshot.docs.map(async documentSnapshot => {
+              let shopData = {
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+              };
+              let coffees = [];
+              let drinks = [];
+              let snacks = [];
+              await Promise.all(
+                documentSnapshot.data().ItemsOffered.map(async itemRef => {
+                  await firestore()
+                    .doc(itemRef.path)
+                    .get()
+                    .then(item => {
+                      if (itemRef.path.includes('Coffees')) {
+                        coffees.push({...item.data(), key: item.id});
+                      } else if (itemRef.path.includes('Drinks')) {
+                        drinks.push({...item.data(), key: item.id});
+                      } else {
+                        snacks.push({...item.data(), key: item.id});
+                      }
+                    });
+                }),
+              );
+              shopData.ItemsOffered = {
+                Coffees: coffees,
+                Drinks: drinks,
+                Snacks: snacks,
+              };
+
+              await getOptions().then(options => {
+                shopData.options = options;
+                shops.push(shopData);
+              });
+            }),
+          );
+          setShopsData(shops);
+          console.log('1');
+          await refreshCurrentShop(currShop, shops);
+          await refreshCurrentBasket(currBasket, setCurrBasket);
+          setLoading(false);
+        });
+      // Unsubscribe from events when no longer in use
+      return () => subscriber();
+    }
+  }, [currBasket, currentUser.userObj]);
+
+  const setShopIntro = shown => {
+    setIsShopIntro(shown);
   };
 
-  function clearBasket() {
-    setBasketContent([]);
-    setBasketSize(0);
-    setTotal(0);
+  async function setNewShop(shop) {
+    currShop.current = shop;
+    await setCurrentShopKey(shop.key).catch(error => console.log(error));
   }
 
   // When coming from the shop list
-  function newShop({shop, navigation}) {
+  async function cardSwitchShop(shop, navigation) {
     clearBasket();
-    setCurrShop(shop);
+    await setNewShop(shop);
     navigation.navigate('Shop page');
   }
 
   // When coming from the markers
-  function switchNewShop({shop}) {
+  async function markerSwitchShop(shop) {
     clearBasket();
-    setCurrShop(shop);
+    await setNewShop(shop);
   }
 
-  function changeShop(shop, navigation) {
-    if (currShop !== shop && basketSize !== 0) {
-      Alert.alert(
-        'Are you sure ?',
-        'Changing shops will clear your basket.',
-        [
-          {
-            text: 'Yes',
-            onPress: () => newShop({shop, navigation}),
-          },
-          {
-            text: 'No',
-            onPress: () => navigation.navigate('Shop page'),
-            style: 'cancel',
-          },
-        ],
-        {cancelable: false},
-      );
+  // When coming from the shop list
+  function changeShopFromCard(shop, navigation) {
+    let basketSize = currBasket.length;
+    if (
+      currShop.current &&
+      currShop.current.key !== shop.key &&
+      basketSize !== 0
+    ) {
+      Alerts.changeShopAlertV2(cardSwitchShop, shop, navigation);
     } else {
-      console.log(shop);
-      setCurrShop(shop);
       navigation.navigate('Shop page');
     }
   }
 
-  function switchShop(shop) {
-    if (currShop !== shop && basketSize !== 0) {
-      Alert.alert(
-        'Are you sure ?',
-        'Changing shops will clear your basket.',
-        [
-          {
-            text: 'Yes',
-            onPress: () => switchNewShop({shop}),
-          },
-          {
-            text: 'No',
-            onPress: () => setIsShopIntro(true),
-            style: 'cancel',
-          },
-        ],
-        {cancelable: false},
-      );
+  // When coming from the markers
+  async function changeShopFromMarker(shop) {
+    let basketSize = currBasket.length;
+    if (
+      currShop.current &&
+      currShop.current.key !== shop.key &&
+      basketSize !== 0
+    ) {
+      Alerts.changeShopAlertV1(markerSwitchShop, shop);
     } else {
-      setCurrShop(shop);
+      await setNewShop(shop);
       if (!isShopIntro) {
         setIsShopIntro(true);
       }
     }
   }
 
-  // Subscribe to the Shops model
-  useEffect(() => {
-    const subscriber = firestore()
-      .collection('CoffeeShop')
-      .onSnapshot(querySnapshot => {
-        const shops = [];
-
-        querySnapshot.forEach( async documentSnapshot => {
-          let shopData = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          };
-
-          let coffees = [];
-          let drinks = [];
-          let snacks = [];
-          documentSnapshot.data().ItemsOffered.forEach(itemRef => {
-            firestore()
-              .doc(itemRef.path)
-              .onSnapshot(query => {
-                let collection;
-                if (itemRef.path.includes('Coffees')) {
-                  collection = coffees;
-                } else if (itemRef.path.includes('Drinks')) {
-                  collection = drinks;
-                } else {
-                  collection = snacks;
-                }
-                collection.push({
-                  ...query.data(),
-                  key: query.id,
-                });
-              });
-          });
-          shopData.ItemsOffered = {
-            Coffees: coffees,
-            Drinks: drinks,
-            Snacks: snacks,
-          };
-          await getOptions().then(options => {
-            shopData.options = options;
-          });
-          shops.push(shopData);
-          setShopsData(shops);
-          setCurrShop(shops[0]);
-          let mark = markers;
-          mark.push({
-            name: shopData.Name,
-            description: shopData.Intro,
-            coords: {
-              latitude: shopData.Location._latitude,
-              longitude: shopData.Location._longitude,
-            },
-            image: shopData.Image,
-            isOpen: shopData.IsOpen,
-          });
-          setMarkers(mark);
-
-          const editedShopsData = shops.map(shop => {
-            return {
-              ...shop,
-              Location: {
-                latitude: shop.Location._latitude,
-                longitude: shop.Location._longitude,
-              },
-              DistanceTo: calculateDistance(shop.Location),
-            };
-          });
-
-          //ordering the shops based on distance from user location
-          editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
-
-          //filtering the shops based on radius limitation (rn 1500)
-          const newEdited = editedShopsData.filter(
-            item => item.DistanceTo < 1500,
-          );
-
-          setOrderedShops(newEdited);
-        });
-      }, []);
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
-
-  function isSameItem(it, currIt) {
-    if (currIt.hasOwnProperty('Bean') && it.hasOwnProperty('Bean')) {
-      let itOptions = '';
-      it.options.forEach(option => (itOptions += option.Name));
-      let currItOptions = '';
-      currIt.options.forEach(option => (currItOptions += option.Name));
-      return it.key === currIt.key && itOptions === currItOptions;
-    } else {
-      return it.key === currIt.key;
-    }
+  function changeShop(isFromCard, newShop, navigation = null) {
+    isFromCard
+      ? changeShopFromCard(newShop, navigation)
+      : changeShopFromMarker(newShop);
   }
-
-  function addToBasket(item) {
-    const basket = basketContent;
-    const exist = basket.find(x => isSameItem(x, item));
-    let type;
-    if (item.hasOwnProperty('Bean')) {
-      type = 'Coffee';
-    } else if (
-      currShop.ItemsOffered.Drinks.filter(x => x.Name === item.Name).length !==
-      0
-    ) {
-      type = 'Drink';
-    } else {
-      type = 'Snack';
-    }
-    if (exist) {
-      setBasketContent(
-        basket.map(x =>
-          isSameItem(x, item) ? {...exist, count: exist.count + 1} : x,
-        ),
-      );
-    } else {
-      setBasketContent([...basket, {...item, count: 1, type: type}]);
-    }
-    setTotal(total + item.Price);
-    setBasketSize(basketSize + 1);
-  }
-
-  function removeFromBasket(item) {
-    const basket = basketContent;
-    const exist = basket.find(x => isSameItem(x, item));
-    if (exist.count === 1) {
-      setBasketContent(basket.filter(x => x.key !== item.key));
-    } else {
-      setBasketContent(
-        basket.map(x =>
-          isSameItem(x, item) ? {...exist, count: exist.count - 1} : x,
-        ),
-      );
-    }
-    setTotal(total - item.Price);
-    setBasketSize(basketSize - 1);
-  }
-
-  const setShopIntro = shown => {
-    setIsShopIntro(shown);
-  };
 
   const Stack = createNativeStackNavigator();
   return (
     <GlobalContext.Provider
       value={{
-        enterApp: enterApp,
-        isFirstTime: isFirstTime.current,
-        currShop: currShop,
-        setCurrShop: changeShop,
-        isShopIntro: isShopIntro,
+        currentUser: currentUser.userObj,
         shopsData: shopsData,
+        currBasket: {data: currBasket, setContent: setCurrBasket},
+        currShop: currShop.current,
+        changeShop: changeShop,
+        isShopIntro: isShopIntro,
         setShopIntro: setShopIntro,
-        isFullScreen: isFullScreen,
-        setFullScreen: setFullScreen,
-        basketContent: basketContent,
-        setBasketContent: setBasketContent,
-        total: total,
-        setTotal: setTotal,
-        addToBasket: addToBasket,
-        removeFromBasket: removeFromBasket,
-        basketSize: basketSize,
-        switchShop: switchShop,
-        currentCenterLocation: currentCenterLocation,
-        setCurrentCenterLocation: setCurrentCenterLocation,
         adaptiveOpacity: adaptiveOpacity,
-        markers: markers,
-        clearBasket: clearBasket,
-        currentUser: userObj, // Returns the model object
-        orderedShops: orderedShops,
-        setOrderedShops: setOrderedShops,
       }}>
       <NavigationContainer>
         {currentUser ? (
-          userObj ? (
+          currentUser.userObj && !loading ? (
             <HamburgerSlideBarNavigator />
           ) : (
             <LoadingPage />
@@ -343,7 +187,7 @@ export default function App() {
             screenOptions={{
               headerShown: false,
             }}>
-            {isFirstTime.current ? (
+            {isFirstTime ? (
               <Stack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
             <Stack.Screen name="LogIn" component={LogInPage} />

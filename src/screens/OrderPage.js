@@ -10,6 +10,7 @@ import {months} from '../data/Months';
 import {ScreenOptionsStyles} from '../../stylesheets/ScreenOptionsStyles';
 import {OrderStatus} from '../data/OrderStatus';
 import {formatOrders} from '../helpers/ScreensFunctions';
+import {emptyCurrentOrdersText, emptyPastOrdersText} from "../data/Texts";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -17,9 +18,7 @@ const OrderPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
-  const emptyText =
-    "Looks like you haven't made any orders yet...\n\n Head over to the " +
-    'home page to get started!';
+
 
   /* load the logged-in user's orders from database */
   useEffect(() => {
@@ -66,12 +65,12 @@ const OrderPage = ({navigation}) => {
           {() => (
             <CurrentOrders
               currentOrders={currentOrders}
-              emptyText={emptyText}
+              emptyText={emptyCurrentOrdersText}
             />
           )}
         </Tab.Screen>
         <Tab.Screen name="Past">
-          {() => <PastOrders pastOrders={pastOrders} emptyText={emptyText} />}
+          {() => <PastOrders pastOrders={pastOrders} emptyText={emptyPastOrdersText} />}
         </Tab.Screen>
       </Tab.Navigator>
     </View>

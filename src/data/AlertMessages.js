@@ -39,6 +39,20 @@ export const AlertMessage = {
     title: 'Registration Error',
     message: 'This is our bad, contact technical support. Error code #0001',
   },
+  LOCATION: {
+    title: 'Location inaccessible',
+    message:
+      'An error occured when accessing your current location, want to try that again ?',
+  },
+  STORAGE: {
+    title: 'Storage error',
+    message:
+      "An error occured when accessing the app's local storage, want to try that again ?",
+  },
+  CHANGE_SHOP: {
+    title: 'Changing shop',
+    message: 'Changing shops will clear your basket. Are you sure ?',
+  },
 };
 
 /*

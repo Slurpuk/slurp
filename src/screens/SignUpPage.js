@@ -7,6 +7,7 @@ import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
 import {CustomAlerts} from '../sub-components/Alerts';
+import {enterApp} from "../helpers/ScreensFunctions";
 
 const SignUpPage = ({navigation}) => {
   const [first_name, setFirstName] = useState();
@@ -47,8 +48,10 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
+          console.log('lol')
           let newUser = auth().currentUser;
           addUser(newUser);
+          enterApp();
           registeredMessage();
         })
         .catch(error => {
@@ -68,8 +71,7 @@ const SignUpPage = ({navigation}) => {
         FirstName: first_name,
         LastName: last_name,
         authID: user.uid,
-        Basket: [],
-        TotalPrice: 0,
+        Location: new firestore.GeoPoint(51.5140310233705, -0.1164075624320158),
       })
       .catch(error => {
         console.log(error);
@@ -93,6 +95,7 @@ This function provides a variety of error handling once received an error code f
         CustomAlerts.MANY_REQUESTS.message,
       );
     } else {
+      console.log('llasqjwd')
       Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
     }
   }

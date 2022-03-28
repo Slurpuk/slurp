@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import {Alerts} from '../data/Alerts';
 
 /**
  * Separates the items offered by the shop into 3 sections: coffees, drinks and snacks.
@@ -36,4 +37,37 @@ async function getOptions() {
   return options;
 }
 
-export {getOptions}
+async function updateUserLocation(userRef, latitude, longitude) {
+  await firestore()
+    .collection('Users')
+    .doc(userRef)
+    .update({Location: new firestore.GeoPoint(latitude, longitude)})
+    .catch(error => {
+      if (error === 'auth/network-request-failed') {
+        Alerts.connectionErrorAlert();
+      } else {
+        Alerts.databaseErrorAlert();
+      }
+    });
+}
+
+async function setUserObject(user, setUser) {
+  await firestore()
+    .collection('Users')
+    .where('Email', '==', user.email)
+    .get()
+    .then(querySnapshot => {
+      let userModel = querySnapshot.docs[0];
+      let newUser = {...userModel.data(), key: userModel.id};
+      setUser(prevState => ({...prevState, userObj: newUser}));
+    })
+    .catch(error => {
+      if (error === 'auth/network-request-failed') {
+        Alerts.connectionErrorAlert();
+      } else {
+        Alerts.databaseErrorAlert();
+      }
+    });
+}
+
+export {getOptions, updateUserLocation, setUserObject};

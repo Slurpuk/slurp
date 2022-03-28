@@ -1,8 +1,4 @@
-import React, {
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import renderers from '../renderers';
 import {BlurView} from '@react-native-community/blur';
@@ -12,10 +8,9 @@ import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
 import {GlobalContext} from '../../App';
 
 export const ShopContext = React.createContext();
-const ShopPage = ({navigation}) => {
+const ShopPage = ({navigation, isShopIntro = false}) => {
   const context = useContext(GlobalContext);
   const shop = context.currShop;
-  console.log(shop)
   const [optionsVisible, setOptionsVisible] = useState(false); // Is the options popup visible
   const [currItem, setCurrItem] = useState(null); // Current item displayed in the shop.
 
@@ -50,8 +45,6 @@ const ShopPage = ({navigation}) => {
       value={{
         setOptionsVisible: setOptionsVisible,
         setCurrItem: setCurrItem,
-        shop: shop,
-        navigation: navigation,
         menuData: {
           coffees: menuData[0].list,
           drinks: menuData[1].list,
@@ -62,10 +55,7 @@ const ShopPage = ({navigation}) => {
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
           {context.isShopIntro ? (
-            <DraggableShopPage
-              shop={shop}
-              navigation={navigation}
-            />
+            <DraggableShopPage shop={shop} navigation={navigation} />
           ) : (
             <NonDraggableShopPage shop={shop} navigation={navigation} />
           )}

@@ -3,16 +3,13 @@ import {Animated, View, Text, ImageBackground} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
-import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
 
-export default function ShopIntro({shop}) {
-  const shopContext = useContext(ShopContext);
+export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
   const globalContext = useContext(GlobalContext);
-  const context = shopContext === undefined ? globalContext : shopContext;
 
   return (
     <Animated.View
@@ -23,7 +20,7 @@ export default function ShopIntro({shop}) {
         fadeOpacityIn(globalContext.adaptiveOpacity, 140);
       }}>
       <ImageBackground
-        imageStyle={ShopIntroStyles.cardImgs}
+        imageStyle={!isFullScreen ? ShopIntroStyles.cardImg: null}
         style={ShopIntroStyles.container}
         source={{uri: shop.Image}}>
         <LinearGradient
@@ -32,18 +29,18 @@ export default function ShopIntro({shop}) {
           <View
             style={[
               ShopIntroStyles.back_button,
-              context.isFullScreen
+              isFullScreen
                 ? {opacity: 1}
-                : context.isShopIntro
+                : globalContext.isShopIntro
                 ? {opacity: 0}
                 : {opacity: 1},
             ]}>
             <WhiteArrowButton
-              direction={context.isShopIntro ? 'down' : 'left'}
-              navigation={context.navigation}
+              direction={globalContext.isShopIntro ? 'down' : 'left'}
+              navigation={navigation}
               onPressAction={
-                context.isShopIntro
-                  ? () => draggable.bottomSheetRef.current.snapTo(1)
+                globalContext.isShopIntro
+                  ? () => sheetRef.current.snapTo(1)
                   : null
               }
             />

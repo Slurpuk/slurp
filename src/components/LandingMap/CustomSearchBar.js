@@ -53,7 +53,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   //set the bottom sheet to the selected shop
   const selectShop = shop => {
     if (shop.IsOpen) {
-      context.switchShop(shop);
+      context.changeShop(false, shop);
       setSearchBarFocussed(false);
     }
   };
@@ -61,7 +61,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   return (
     <View style={styles.view}>
       <SearchBar
-        placeholder="Where to..."
+        placeholder="Type in a coffee shop..."
         // Function to run when a letter is pressed
         onChangeText={updateQuery}
         value={query}

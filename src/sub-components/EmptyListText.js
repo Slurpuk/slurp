@@ -2,7 +2,7 @@ import {StyleSheet, Text} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import React from 'react';
 
-const EmptyListText = text => {
+const EmptyListText = ({text}) => {
   return (
     <Text
       style={[

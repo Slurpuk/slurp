@@ -19,5 +19,4 @@ if (__DEV__ && EMULATOR_MODE_ON) {
 }
 
 const db = firestore(); //I'm 99% certain we don't need this line.
-
 AppRegistry.registerComponent(appName, () => App);

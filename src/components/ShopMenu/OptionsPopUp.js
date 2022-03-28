@@ -1,20 +1,21 @@
 import CheckboxSectionList from './CheckboxSectionList';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import {Alert, Text, TouchableHighlight, View} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ShopContext} from '../../screens/ShopPage';
-import {GlobalContext} from '../../../App';
 import {OptionPopUpStyles, screenWidth} from '../../../stylesheets/ShopStyles';
+import {addToBasket} from '../../helpers/ScreensFunctions';
+import {GlobalContext} from '../../../App';
 
 export const OptionsContext = React.createContext();
 
 export default function OptionsPopUp({data, renderer, item}) {
-  const context = useContext(ShopContext);
+  const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
   const [totalPrice, setTotalPrice] = useState(item.Price);
-  const [milk, setMilk] = useState(context.menuData.defaultMilk); // List of options currently selected
+  const [milk, setMilk] = useState(shopContext.menuData.defaultMilk);
   const [syrups, setSyrups] = useState([]);
 
   /**
@@ -52,7 +53,7 @@ export default function OptionsPopUp({data, renderer, item}) {
    * Ensures a milk option is selected, along with any number of syrups
    * and will update the items customisation and total.
    */
-  function addToBasket() {
+  async function addToCurrentBasket() {
     if (milk === null) {
       Alert.alert(
         'No milk selected.',
@@ -74,9 +75,13 @@ export default function OptionsPopUp({data, renderer, item}) {
         options: syrups,
         Price: totalPrice,
       };
-      globalContext.addToBasket(newItem);
-      context.setOptionsVisible(false);
-      context.setCurrItem(null);
+      shopContext.setOptionsVisible(false);
+      shopContext.setCurrItem(null);
+      await addToBasket(
+        newItem,
+        globalContext.currShop,
+        globalContext.currBasket.setContent,
+      );
     }
   }
 
@@ -90,7 +95,7 @@ export default function OptionsPopUp({data, renderer, item}) {
           <TouchableHighlight
             style={OptionPopUpStyles.icon}
             underlayColor={'white'}
-            onPress={() => context.setOptionsVisible(false)}>
+            onPress={() => shopContext.setOptionsVisible(false)}>
             <Icon size={30} color="black" name="close" />
           </TouchableHighlight>
         </View>
@@ -105,7 +110,7 @@ export default function OptionsPopUp({data, renderer, item}) {
           text={`Add To Order  £${totalPrice.toPrecision(3)}`}
           priority={'primary'}
           width={screenWidth * 0.79}
-          onPress={() => addToBasket()}
+          onPress={() => addToCurrentBasket()}
         />
       </View>
     </OptionsContext.Provider>

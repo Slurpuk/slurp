@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
@@ -8,24 +8,33 @@ import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 import {NetworkInfo} from 'react-native-network-info';
+import {
+  addToBasket,
+  clearBasket,
+  removeFromBasket,
+} from '../helpers/ScreensFunctions';
 
+export const BasketContext = React.createContext();
 const BasketPage = ({navigation}) => {
+  const context = useContext(GlobalContext);
+  const [contents, setContents] = useState(context.currBasket.data);
+  const [total, setTotal] = useState(
+    context.currBasket.data.reduce((a, b) => a.Price + b.Price, 0),
+  );
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
-  const context = useContext(GlobalContext);
-
-  const {initPaymentSheet, presentPaymentSheet} = useStripe();
-
-  /*
+  console.log(context.currShop)
+  /**
    * Fetch the payments' sheet parameters from the server.
    * @return {paymentIntent} Return the encapsulated details about the transaction.
    * @return {ephemeralKey} Return the cryptographic payment key.
    * @return {customer} Return the customer.
    */
-  const fetchPaymentSheetParams = async (ipAddress) => {
+  const fetchPaymentSheetParams = async ipAddress => {
     let API_URL = 'http://192.168.0.128:7070';
     console.log('asc', API_URL);
-    let body = {amount: context.total.toFixed(2)};
+    let body = {amount: total.toFixed(2)};
     const response = await fetch(`${API_URL}/checkout`, {
       method: 'POST',
       headers: {
@@ -45,7 +54,7 @@ const BasketPage = ({navigation}) => {
    * Initialize the payment sheet with customerId,
    * customerEphemeralKeySecret, paymentIntentClientSecret
    */
-  const initializePaymentSheet = async (ipAddress) => {
+  const initializePaymentSheet = async ipAddress => {
     const {paymentIntent, ephemeralKey, customer} =
       await fetchPaymentSheetParams(ipAddress);
     const {error} = await initPaymentSheet({
@@ -61,7 +70,7 @@ const BasketPage = ({navigation}) => {
    * @function {confirmOrder} Confirm order if payment sheet is present.
    */
   const openPaymentSheet = async () => {
-    if (context.total !== 0) {
+    if (total !== 0) {
       const {error} = await presentPaymentSheet();
       if (error) {
         Alert.alert(`Error code: ${error.code}`, error.message);
@@ -81,13 +90,13 @@ const BasketPage = ({navigation}) => {
    * Dynamically initialise the payment sheet if the total price is greater than 0.
    */
   useEffect(() => {
-    if (context.total !== 0) {
+    if (total !== 0) {
       NetworkInfo.getIPV4Address().then(currIp => {
-        console.log(currIp)
+        console.log(currIp);
         initializePaymentSheet(currIp);
       });
     }
-  }, [context.total]);
+  }, [total]);
 
   /*
    * Send data to firebase.
@@ -105,8 +114,9 @@ const BasketPage = ({navigation}) => {
         UserID: context.currentUser.key,
         Total: Number(context.total.toPrecision(2)),
       })
-      .then(() => {
-        context.clearBasket();
+      .then(async () => {
+        context.currBasket.setContent([]);
+        await clearBasket();
         Alert.alert(
           'Order received.',
           'Your order has been sent to the shop! Awaiting response.',
@@ -120,17 +130,12 @@ const BasketPage = ({navigation}) => {
       });
   }
 
-  /*
+  /**
    * Format basket contents to match a precision.
-   * @return {ItemRef} The item key.
-   * @return {Quantity} The item quantity.
-   * @return {Price} The price of the item.
-   * @return {Type} The type of the item.
-   * @ return {Options} the Options of the item.
+   * @return items The list of formatted items
    */
   function formatBasket() {
-    let items = context.basketContent.map(item => {
-      console.log(item);
+    let items = contents.map(item => {
       return {
         ItemRef: item.key,
         Quantity: item.count,
@@ -142,29 +147,47 @@ const BasketPage = ({navigation}) => {
     return items;
   }
 
+  async function addToCurrentBasket(item) {
+    setContents(prevState => prevState.concat([item]));
+    await addToBasket(item, context.currShop, context.currBasket.setContent);
+    setTotal(total + item.Price);
+  }
+
+  async function removeFromCurrentBasket(item) {
+    setContents(prevState => prevState.pop());
+    await removeFromBasket(item, context.currBasket.setContent);
+    setTotal(total - item.Price);
+  }
+
   return (
     <StripeProvider publishableKey={publishableKey}>
-      <View style={styles.basket}>
-        <GreenHeader
-          headerText={'My Basket - ' + context.currShop.Name}
-          navigation={navigation}
-        />
-        <View style={styles.main_container}>
-          <BasketContents Items={context.basketContent} />
-        </View>
-
-        <View style={styles.order_summary}>
-          <Text style={styles.total_text}>TOTAL</Text>
-          <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
-        </View>
-        <View style={[styles.lastButton, styles.buttons]}>
-          <CustomButton
-            priority={'primary'}
-            text={'Checkout'}
-            onPress={openPaymentSheet}
+      <BasketContext.Provider
+        value={{
+          addToBasket: addToCurrentBasket,
+          removeFromBasket: removeFromCurrentBasket,
+        }}>
+        <View style={styles.basket}>
+          <GreenHeader
+            headerText={'My Basket - ' + context.currShop.Name}
+            navigation={navigation}
           />
+          <View style={styles.main_container}>
+            <BasketContents Items={contents} />
+          </View>
+
+          <View style={styles.order_summary}>
+            <Text style={styles.total_text}>TOTAL</Text>
+            <Text style={styles.total_amount}>£{total}</Text>
+          </View>
+          <View style={[styles.lastButton, styles.buttons]}>
+            <CustomButton
+              priority={'primary'}
+              text={'Checkout'}
+              onPress={openPaymentSheet}
+            />
+          </View>
         </View>
-      </View>
+      </BasketContext.Provider>
     </StripeProvider>
   );
 };
