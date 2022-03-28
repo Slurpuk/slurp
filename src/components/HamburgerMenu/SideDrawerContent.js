@@ -26,7 +26,7 @@ function SideDrawerContent(props) {
         style={styles.close_button}
       />
       <DrawerItem
-        label="View order history"
+        label="My orders"
         onPress={() => props.navigation.navigate('View order history')}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
@@ -37,7 +37,7 @@ function SideDrawerContent(props) {
       />
       {context.currBasket.data.length !== 0 ? (
         <DrawerItem
-          label="View basket"
+          label="My basket"
           onPress={() => props.navigation.navigate('Basket page')}
           activeTintColor="#2196f3"
           activeBackgroundColor="rgba(0, 0, 0, .04)"

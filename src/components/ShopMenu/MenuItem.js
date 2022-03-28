@@ -7,7 +7,6 @@ import {ShopContext} from '../../screens/ShopPage';
 import {menuItemStyles} from './shopStyles';
 import {addToBasket} from '../../helpers/ScreensFunctions';
 import {GlobalContext} from '../../../App';
-import {Alerts} from '../../data/Alerts';
 
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
@@ -24,7 +23,6 @@ const MenuItem = ({item}) => {
       for (let it of basket) {
         if (it.key === item.key) {
           newCount += it.count;
-          console.log(it);
         }
       }
     } else {

@@ -128,6 +128,7 @@ async function addToBasket(item, currShop, setCurrBasket) {
   }
   setCurrBasket(newBasket);
   await setBasket(newBasket);
+  return newBasket;
 }
 
 async function removeFromBasket(item, setCurrBasket) {
@@ -143,6 +144,7 @@ async function removeFromBasket(item, setCurrBasket) {
   }
   await setBasket(newBasket);
   setCurrBasket(newBasket);
+  return newBasket;
 }
 
 async function getBasketSize() {
@@ -166,21 +168,21 @@ async function setCurrentShopKey(shopKey) {
   }
 }
 
-async function refreshCurrentShop(currShop, shops) {
+async function refreshCurrentShop(currShop, setCurrShop, shops) {
   let storageKey = await getCurrentShopKey();
-  if (currShop.current) {
-    let res = shops.find(shop => shop.key === currShop.current.key);
+  if (currShop) {
+    let res = shops.find(shop => shop.key === currShop.key);
     if (res) {
       currShop = res;
     } else {
-      currShop.current = null;
+      setCurrShop(prevState => ({...prevState, currShop: null}));
       await setCurrentShopKey('');
       clearBasket();
     }
   } else if (storageKey !== '') {
     let storageShop = shops.find(shop => shop.key === storageKey);
     if (storageShop) {
-      currShop.current = storageShop;
+      setCurrShop(prevState => ({...prevState, currShop: storageShop}));
     } else {
       let basketSize = await getBasketSize();
       if (basketSize !== 0) {
@@ -236,11 +238,9 @@ function clearBasket() {
   setBasket([]).catch(error => Alerts.elseAlert());
 }
 
-async function refreshCurrentBasket(currBasket, setCurrBasket) {
-  if (currBasket.length === 0) {
-    let storageBasket = await getBasket();
-    setCurrBasket(storageBasket);
-  }
+async function refreshCurrentBasket(setCurrBasket) {
+  let storageBasket = await getBasket();
+  setCurrBasket(storageBasket);
 }
 
 function enterApp() {

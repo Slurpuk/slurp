@@ -59,7 +59,7 @@ async function setUserObject(user, setUser) {
     .then(querySnapshot => {
       let userModel = querySnapshot.docs[0];
       let newUser = {...userModel.data(), key: userModel.id};
-      setUser(prevState => ({...prevState, userObj: newUser}));
+      setUser(newUser);
     })
     .catch(error => {
       if (error === 'auth/network-request-failed') {

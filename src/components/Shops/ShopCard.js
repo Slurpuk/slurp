@@ -16,7 +16,8 @@ const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
 
   const shopPageDetails = () => {
-    context.setCurrShop(shop, navigation);
+    console.log(shop.Name)
+    context.changeShop(true, shop, navigation);
   };
 
   return !shop.IsOpen ? (

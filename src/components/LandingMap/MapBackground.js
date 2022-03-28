@@ -22,6 +22,8 @@ export default function MapBackground({
     longitudeDelta: 0.01,
   });
 
+
+
   const markers = useMemo(() => {
     return context.shopsData.map(shop => ({
       name: shop.Name,
@@ -42,7 +44,7 @@ export default function MapBackground({
       context.currentUser.key,
       mapCenter,
       watchID,
-    ).catch(error => console.log('qwdqw', error));
+    ).catch(error => console.log(error));
     return () => {
       Geolocation.clearWatch(currWatch);
     };

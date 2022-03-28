@@ -30,9 +30,9 @@ export default function DraggableShopList({navigation}) {
     });
 
     //ordering the shops based on distance from user location
-    editedShopsData.sort((a, b) => a.DistanceTo - b.DistanceTo);
+    editedShopsData.sort((a, b) => a.DistanceTo > b.DistanceTo);
     //filtering the shops based on radius limitation
-    setOrderedShops(editedShopsData.filter(item => item.DistanceTo < 1500));
+    setOrderedShops(editedShopsData.filter(item => item.DistanceTo < 10000));
   }, [context.shopsData, context.currentUser.Location]);
 
   return (

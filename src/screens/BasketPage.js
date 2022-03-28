@@ -1,13 +1,12 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Text, View, Alert} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
-import {NetworkInfo} from 'react-native-network-info';
 import {
   addToBasket,
   clearBasket,
@@ -17,14 +16,20 @@ import {
 export const BasketContext = React.createContext();
 const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
+  const getTotal = (newBasket = null) => {
+    let basket = newBasket ? newBasket : context.currBasket.data;
+    return basket
+      .reduce(function (acc, item) {
+        return acc + item.Price * item.count;
+      }, 0)
+      .toPrecision(3);
+  };
   const [contents, setContents] = useState(context.currBasket.data);
-  const [total, setTotal] = useState(
-    context.currBasket.data.reduce((a, b) => a.Price + b.Price, 0),
-  );
+  const [total, setTotal] = useState(getTotal());
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
-  console.log(context.currShop)
+
   /**
    * Fetch the payments' sheet parameters from the server.
    * @return {paymentIntent} Return the encapsulated details about the transaction.
@@ -89,14 +94,14 @@ const BasketPage = ({navigation}) => {
   /*
    * Dynamically initialise the payment sheet if the total price is greater than 0.
    */
-  useEffect(() => {
-    if (total !== 0) {
-      NetworkInfo.getIPV4Address().then(currIp => {
-        console.log(currIp);
-        initializePaymentSheet(currIp);
-      });
-    }
-  }, [total]);
+  // useEffect(() => {
+  //   if (total !== 0) {
+  //     NetworkInfo.getIPV4Address().then(currIp => {
+  //       console.log(currIp);
+  //       initializePaymentSheet(currIp);
+  //     });
+  //   }
+  // }, [total]);
 
   /*
    * Send data to firebase.
@@ -107,17 +112,17 @@ const BasketPage = ({navigation}) => {
     await firestore()
       .collection('Orders')
       .add({
-        DateTime: firestore.Timestamp.now(),
+        DateTime: new firestore.Timestamp.now(),
         Items: formatBasket(),
         Status: 'incoming',
         ShopID: context.currShop.key,
         UserID: context.currentUser.key,
-        Total: Number(context.total.toPrecision(2)),
+        Total: Number(getTotal()),
       })
       .then(async () => {
         context.currBasket.setContent([]);
         await clearBasket();
-        Alert.alert(
+        await Alert.alert(
           'Order received.',
           'Your order has been sent to the shop! Awaiting response.',
           [
@@ -139,7 +144,7 @@ const BasketPage = ({navigation}) => {
       return {
         ItemRef: item.key,
         Quantity: item.count,
-        Price: Number(item.Price.toPrecision(2)),
+        Price: Number(item.Price.toPrecision(3)),
         Type: item.type,
         Options: item.options,
       };
@@ -148,15 +153,19 @@ const BasketPage = ({navigation}) => {
   }
 
   async function addToCurrentBasket(item) {
-    setContents(prevState => prevState.concat([item]));
-    await addToBasket(item, context.currShop, context.currBasket.setContent);
-    setTotal(total + item.Price);
+    let newBasket = await addToBasket(
+      item,
+      context.currShop,
+      context.currBasket.setContent,
+    );
+    setContents(newBasket);
+    setTotal(getTotal(newBasket));
   }
 
   async function removeFromCurrentBasket(item) {
-    setContents(prevState => prevState.pop());
-    await removeFromBasket(item, context.currBasket.setContent);
-    setTotal(total - item.Price);
+    let newBasket = await removeFromBasket(item, context.currBasket.setContent);
+    setContents(newBasket);
+    setTotal(getTotal(newBasket));
   }
 
   return (
@@ -183,7 +192,7 @@ const BasketPage = ({navigation}) => {
             <CustomButton
               priority={'primary'}
               text={'Checkout'}
-              onPress={openPaymentSheet}
+              onPress={confirmOrder}
             />
           </View>
         </View>

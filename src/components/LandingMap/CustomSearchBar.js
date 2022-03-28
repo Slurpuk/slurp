@@ -7,7 +7,8 @@ import {
   FlatList,
   Platform,
   Dimensions,
-  Pressable, Keyboard,
+  Pressable,
+  Keyboard,
 } from 'react-native';
 
 import {GlobalContext} from '../../../App';
@@ -26,6 +27,8 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   const updateQuery = input => {
     if (!searchBarFocused && input !== '') {
       setSearchBarFocussed(true);
+    } else if (searchBarFocused && input === '') {
+      setSearchBarFocussed(false);
     }
     setQuery(input);
     filterShops();
@@ -93,7 +96,9 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   ]}>
                   <Pressable
                     onPressIn={() => {
-                      if (item.IsOpen) Keyboard.dismiss();
+                      if (item.IsOpen) {
+                        Keyboard.dismiss();
+                      }
                     }}
                     onPress={() => selectShop(item)}
                     style={({pressed}) => [

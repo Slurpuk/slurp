@@ -23,98 +23,105 @@ import {
 export const GlobalContext = React.createContext();
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState({
-    authUser: auth().currentUser,
-    userObj: null,
-  });
-  const [shopsData, setShopsData] = useState([]);
-  const currShop = useRef(null);
-  const isFirstTime = useMemo(async () => getIsFirstTime(), []);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [shopsData, setShopsData] = useState({allShops: [], currShop: null});
   const [currBasket, setCurrBasket] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false);
+
+  const isFirstTime = useMemo(async () => getIsFirstTime(), []);
   const adaptiveOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(async user => {
-      if (user) {
-        setCurrentUser(user);
-        setUserObject(user, setCurrentUser).catch(error => console.log(error));
-      } else {
-        setCurrentUser(null);
-        setCurrentUser(prevState => ({...prevState, userObj: null}));
-      }
+      user
+        ? setUserObject(user, setCurrentUser).catch(error => console.log(error))
+        : setCurrentUser(null);
     });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
 
-  // Subscribe to the Shops model
   useEffect(() => {
-    if (currentUser.userObj) {
+    if (!loading) {
       const subscriber = firestore()
-        .collection('CoffeeShop')
-        .onSnapshot(async querySnapshot => {
-          const shops = [];
-          await Promise.all(
-            querySnapshot.docs.map(async documentSnapshot => {
-              let shopData = {
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-              };
-              let coffees = [];
-              let drinks = [];
-              let snacks = [];
-              await Promise.all(
-                documentSnapshot.data().ItemsOffered.map(async itemRef => {
-                  await firestore()
-                    .doc(itemRef.path)
-                    .get()
-                    .then(item => {
-                      if (itemRef.path.includes('Coffees')) {
-                        coffees.push({...item.data(), key: item.id});
-                      } else if (itemRef.path.includes('Drinks')) {
-                        drinks.push({...item.data(), key: item.id});
-                      } else {
-                        snacks.push({...item.data(), key: item.id});
-                      }
-                    });
-                }),
-              );
-              shopData.ItemsOffered = {
-                Coffees: coffees,
-                Drinks: drinks,
-                Snacks: snacks,
-              };
-
-              await getOptions().then(options => {
-                shopData.options = options;
-                shops.push(shopData);
-              });
-            }),
-          );
-          setShopsData(shops);
-          console.log('1');
-          await refreshCurrentShop(currShop, shops);
-          await refreshCurrentBasket(currBasket, setCurrBasket);
-          setLoading(false);
+        .collection('Users')
+        .where('Email', '==', auth().currentUser.email)
+        .onSnapshot(query => {
+          let newUser = query.docs[0];
+          setCurrentUser({...newUser.data(), key: newUser.id});
         });
-      // Unsubscribe from events when no longer in use
       return () => subscriber();
     }
-  }, [currBasket, currentUser.userObj]);
+  }, [loading]);
+
+  // Subscribe to the Shops model
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('CoffeeShop')
+      .onSnapshot(async querySnapshot => {
+        const shops = [];
+        await Promise.all(
+          querySnapshot.docs.map(async documentSnapshot => {
+            let shopData = {
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+            };
+            let coffees = [];
+            let drinks = [];
+            let snacks = [];
+            await Promise.all(
+              documentSnapshot.data().ItemsOffered.map(async itemRef => {
+                await firestore()
+                  .doc(itemRef.path)
+                  .get()
+                  .then(item => {
+                    if (itemRef.path.includes('Coffees')) {
+                      coffees.push({...item.data(), key: item.id});
+                    } else if (itemRef.path.includes('Drinks')) {
+                      drinks.push({...item.data(), key: item.id});
+                    } else {
+                      snacks.push({...item.data(), key: item.id});
+                    }
+                  });
+              }),
+            );
+            shopData.ItemsOffered = {
+              Coffees: coffees,
+              Drinks: drinks,
+              Snacks: snacks,
+            };
+
+            await getOptions().then(options => {
+              shopData.options = options;
+              shops.push(shopData);
+            });
+          }),
+        );
+        setShopsData(prevState => ({...prevState, allShops: shops}));
+        console.log('1');
+        await refreshCurrentShop(shopsData.currShop, setShopsData, shops);
+        if (loading) {
+          await refreshCurrentBasket(setCurrBasket);
+        }
+        setLoading(false);
+      });
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, [shopsData.currShop, loading]);
 
   const setShopIntro = shown => {
     setIsShopIntro(shown);
   };
 
   async function setNewShop(shop) {
-    currShop.current = shop;
+    setShopsData(prevState => ({...prevState, currShop: shop}));
     await setCurrentShopKey(shop.key).catch(error => console.log(error));
   }
 
   // When coming from the shop list
   async function cardSwitchShop(shop, navigation) {
     clearBasket();
+    setCurrBasket([]);
     await setNewShop(shop);
     navigation.navigate('Shop page');
   }
@@ -122,19 +129,22 @@ export default function App() {
   // When coming from the markers
   async function markerSwitchShop(shop) {
     clearBasket();
+    setCurrBasket([]);
     await setNewShop(shop);
+    setIsShopIntro(true);
   }
 
   // When coming from the shop list
-  function changeShopFromCard(shop, navigation) {
+  async function changeShopFromCard(shop, navigation) {
     let basketSize = currBasket.length;
     if (
-      currShop.current &&
-      currShop.current.key !== shop.key &&
+      shopsData.currShop &&
+      shopsData.currShop.key !== shop.key &&
       basketSize !== 0
     ) {
       Alerts.changeShopAlertV2(cardSwitchShop, shop, navigation);
     } else {
+      await setNewShop(shop);
       navigation.navigate('Shop page');
     }
   }
@@ -143,11 +153,11 @@ export default function App() {
   async function changeShopFromMarker(shop) {
     let basketSize = currBasket.length;
     if (
-      currShop.current &&
-      currShop.current.key !== shop.key &&
+      shopsData.currShop &&
+      shopsData.currShop.key !== shop.key &&
       basketSize !== 0
     ) {
-      Alerts.changeShopAlertV1(markerSwitchShop, shop);
+      await Alerts.changeShopAlertV1(markerSwitchShop, shop);
     } else {
       await setNewShop(shop);
       if (!isShopIntro) {
@@ -166,10 +176,10 @@ export default function App() {
   return (
     <GlobalContext.Provider
       value={{
-        currentUser: currentUser.userObj,
-        shopsData: shopsData,
+        currentUser: currentUser,
+        shopsData: shopsData.allShops,
         currBasket: {data: currBasket, setContent: setCurrBasket},
-        currShop: currShop.current,
+        currShop: shopsData.currShop,
         changeShop: changeShop,
         isShopIntro: isShopIntro,
         setShopIntro: setShopIntro,
@@ -177,7 +187,7 @@ export default function App() {
       }}>
       <NavigationContainer>
         {currentUser ? (
-          currentUser.userObj && !loading ? (
+          !loading ? (
             <HamburgerSlideBarNavigator />
           ) : (
             <LoadingPage />

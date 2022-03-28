@@ -9,7 +9,7 @@ import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
 import EmptyListText from '../../sub-components/EmptyListText';
 import {menuStyles} from './shopStyles';
-import {getBasketSize} from "../../helpers/ScreensFunctions";
+import {getBasketSize} from '../../helpers/ScreensFunctions';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -94,7 +94,13 @@ const Menu = ({navigation}) => {
           <CustomButton
             text="View Basket"
             priority="primary"
-            optionalNumber={globalContext.currBasket.data.length}
+            optionalNumber={globalContext.currBasket.data.reduce(function (
+              acc,
+              item,
+            ) {
+              return acc + item.count;
+            },
+            0)}
             onPress={() => navigation.navigate('Basket page')}
           />
         </LinearGradient>

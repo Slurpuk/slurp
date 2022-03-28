@@ -9,8 +9,8 @@ import firestore from '@react-native-firebase/firestore';
 
 const UpdateDetailsPage = ({navigation}) => {
   const context = useContext(GlobalContext);
-  const [first_name, setFirstName] = useState(context.currentUser.FirstName);
-  const [last_name, setLastName] = useState(context.currentUser.LastName);
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
   const [password, setPassword] = useState();
 
   const resetFields = () => {
@@ -89,6 +89,7 @@ const UpdateDetailsPage = ({navigation}) => {
             title={'First Name'}
             setField={setFirstName}
             value={first_name}
+            placeholder={context.currentUser.FirstName}
             type={'name'}
           />
           <FormField
@@ -96,6 +97,7 @@ const UpdateDetailsPage = ({navigation}) => {
             title={'Last Name'}
             setField={setLastName}
             value={last_name}
+            placeholder={context.currentUser.LastName}
             type={'name'}
           />
         </View>

@@ -24,7 +24,7 @@ export const locationPress = (context, mapCenter, clickedMarker) => {
   if (context.isShopIntro) {
     fadeOpacityOut(context.adaptiveOpacity, 170);
     //after the fade out has completed, change the bottom sheet data to the new shop
-    let myTimeout = setTimeout(() => {
+    let myTimeout = setTimeout(async () => {
       context.changeShop(false, selectedShop);
       clearTimeout(myTimeout);
     }, 200);
@@ -34,7 +34,6 @@ export const locationPress = (context, mapCenter, clickedMarker) => {
     }, 210);
   } else {
     context.changeShop(false, selectedShop);
-    context.setShopIntro(true);
   }
 };
 
@@ -80,7 +79,7 @@ const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
       };
       if (userRef) {
         updateUserLocation(userRef, latitude, longitude).catch(error => {
-          console.log('dsqasqs', error);
+          console.log(error);
           Alerts.elseAlert();
         });
       }

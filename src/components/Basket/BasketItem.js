@@ -1,7 +1,7 @@
 import {FlatList, Pressable, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {BasketItemStyles} from '../../../stylesheets/ShopStyles';
-import {BasketContext} from "../../screens/BasketPage";
+import {BasketContext} from '../../screens/BasketPage';
 
 export default function BasketItem({item}) {
   const context = useContext(BasketContext);
@@ -13,9 +13,9 @@ export default function BasketItem({item}) {
    */
   async function remove() {
     if (count > 0) {
-      await context.removeFromBasket(item);
       setCount(count - 1);
       setItemTotal(itemTotal - item.Price);
+      await context.removeFromBasket(item);
     }
   }
 
