@@ -3,6 +3,8 @@ import React from 'react';
 
 import CustomButton from '../src/sub-components/CustomButton';
 import GreenHeader from '../src/sub-components/GreenHeader';
+import WhiteArrowButton from '../src/sub-components/WhiteArrowButton';
+import AnimatedCard from '../src/sub-components/AnimatedCard';
 
 describe('Custom sub-components', function () {
   describe('button', function () {
@@ -20,6 +22,20 @@ describe('Custom sub-components', function () {
   describe('green header', function () {
     it('should render correctly', function () {
       const tree = renderer.create(<GreenHeader />).toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+  });
+
+  describe('white arrow button', function () {
+    it('should render correctly', function () {
+      const tree = renderer.create(<WhiteArrowButton />).toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+  });
+
+  describe('animated card', function () {
+    it('should render correctly', function () {
+      const tree = renderer.create(<AnimatedCard />).toJSON();
       expect(tree).toMatchSnapshot();
     });
   });
