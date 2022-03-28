@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {StyleSheet, Text, View, Alert} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
@@ -7,12 +7,13 @@ import CustomButton from '../sub-components/CustomButton';
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
+import {NetworkInfo} from 'react-native-network-info';
 
 const BasketPage = ({navigation}) => {
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
   const context = useContext(GlobalContext);
-  const API_URL = 'http://localhost:8000';
+
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
 
   /*
@@ -21,8 +22,9 @@ const BasketPage = ({navigation}) => {
    * @return {ephemeralKey} Return the cryptographic payment key.
    * @return {customer} Return the customer.
    */
-  const fetchPaymentSheetParams = async () => {
-    console.log(context.total.toFixed(2));
+  const fetchPaymentSheetParams = async (ipAddress) => {
+    let API_URL = 'http://192.168.0.128:7070';
+    console.log('asc', API_URL);
     let body = {amount: context.total.toFixed(2)};
     const response = await fetch(`${API_URL}/checkout`, {
       method: 'POST',
@@ -43,13 +45,14 @@ const BasketPage = ({navigation}) => {
    * Initialize the payment sheet with customerId,
    * customerEphemeralKeySecret, paymentIntentClientSecret
    */
-  const initializePaymentSheet = async () => {
+  const initializePaymentSheet = async (ipAddress) => {
     const {paymentIntent, ephemeralKey, customer} =
-      await fetchPaymentSheetParams();
+      await fetchPaymentSheetParams(ipAddress);
     const {error} = await initPaymentSheet({
       customerId: customer,
       customerEphemeralKeySecret: ephemeralKey,
       paymentIntentClientSecret: paymentIntent,
+      merchantDisplayName: 'Slurp',
     });
   };
 
@@ -79,9 +82,12 @@ const BasketPage = ({navigation}) => {
    */
   useEffect(() => {
     if (context.total !== 0) {
-      initializePaymentSheet();
+      NetworkInfo.getIPV4Address().then(currIp => {
+        console.log(currIp)
+        initializePaymentSheet(currIp);
+      });
     }
-  }, []);
+  }, [context.total]);
 
   /*
    * Send data to firebase.
@@ -96,7 +102,7 @@ const BasketPage = ({navigation}) => {
         Items: formatBasket(),
         Status: 'incoming',
         ShopID: context.currShop.key,
-        UserID: context.userRef,
+        UserID: context.currentUser.key,
         Total: Number(context.total.toPrecision(2)),
       })
       .then(() => {

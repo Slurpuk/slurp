@@ -1,6 +1,7 @@
-import CustomButton from '../src/sub-components/CustomButton';
 import renderer from 'react-test-renderer';
 import React from 'react';
+
+import CustomButton from '../src/sub-components/CustomButton';
 import GreenHeader from '../src/sub-components/GreenHeader';
 
 describe('Custom sub-components', function () {

@@ -46,7 +46,7 @@ const Menu = ({navigation}) => {
           name="Coffees"
           children={() => (
             <FlatList
-              data={shopContext.getCoffees()}
+              data={shopContext.menuData.coffees}
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
@@ -60,7 +60,7 @@ const Menu = ({navigation}) => {
           name="Drinks"
           children={() => (
             <FlatList
-              data={shopContext.getDrinks()}
+              data={shopContext.menuData.drinks}
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}
@@ -74,7 +74,7 @@ const Menu = ({navigation}) => {
           name="Snacks"
           children={() => (
             <FlatList
-              data={shopContext.getSnacks()}
+              data={shopContext.menuData.snacks}
               renderItem={({item}) => renderers.renderMenuItem({item})}
               keyExtractor={item => item.key}
               numColumns={2}

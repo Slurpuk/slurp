@@ -1,4 +1,4 @@
-package com.myproject;
+package com.slurp;
 
 import android.app.Application;
 import android.content.Context;

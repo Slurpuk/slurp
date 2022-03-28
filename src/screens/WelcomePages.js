@@ -2,12 +2,10 @@ import React, {useContext, useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   Text,
   View,
   StatusBar,
-  Platform,
 } from 'react-native';
 import CustomButton from '../sub-components/CustomButton';
 import textStyles from '../../stylesheets/textStyles';
@@ -17,10 +15,10 @@ import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
 import {getTightPadding} from '../../stylesheets/StyleFunction';
 import {GlobalContext} from '../../App';
 
-const WelcomePages = ({onDone, navigation}) => {
+const WelcomePages = ({navigation}) => {
   const appContext = useContext(GlobalContext);
   const [sliderState, setSliderState] = useState({currentPage: 0});
-  const {width, height} = Dimensions.get('window');
+  const width = Dimensions.get('window');
 
   const setSliderPage = (event: any) => {
     const {currentPage} = sliderState;
@@ -56,8 +54,7 @@ const WelcomePages = ({onDone, navigation}) => {
         showsHorizontalScrollIndicator={false}
         onScroll={(event: any) => {
           setSliderPage(event);
-        }}
-      >
+        }}>
         <View style={styles.component}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
             Welcome to Slurp!
@@ -96,8 +93,7 @@ const WelcomePages = ({onDone, navigation}) => {
           />
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={proceedToLogIn}
-          >
+            onPress={proceedToLogIn}>
             Already have an account? Log in
           </Text>
         </View>
@@ -117,7 +113,6 @@ const WelcomePages = ({onDone, navigation}) => {
   );
 };
 const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   wrapper: {
