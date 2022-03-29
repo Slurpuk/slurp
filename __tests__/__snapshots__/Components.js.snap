@@ -208,3 +208,52 @@ exports[`Custom sub-components green header should render correctly 1`] = `
   </View>
 </View>
 `;
+
+exports[`Custom sub-components white arrow button should render correctly 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
