@@ -61,5 +61,28 @@ describe('Login page', function () {
       expect(spyAlert).toHaveBeenCalled();
       expect(spyAlert.mock.calls[0][0]).toBe('Empty Email');
     });
+
+    it('should not raise alert on valid data', async function () {
+      const {getByText, getAllByPlaceholderText} = render(<SignUpPage />);
+
+      const inputs = getAllByPlaceholderText('');
+      expect(inputs[0]).toBeTruthy();
+
+      const first_name = 'Jane';
+      const last_name = 'Doe';
+      const email = 'janedoe@gmail.com';
+      const password = 'Password123';
+
+      fireEvent.changeText(inputs[0], first_name);
+      fireEvent.changeText(inputs[1], last_name);
+      fireEvent.changeText(inputs[2], email);
+      fireEvent.changeText(inputs[3], password);
+
+      expect(inputs[1]).toBeTruthy();
+
+      fireEvent(getByText('Sign up'), 'press');
+
+      expect(spyAlert).toHaveBeenCalledTimes(0);
+    });
   });
 });
