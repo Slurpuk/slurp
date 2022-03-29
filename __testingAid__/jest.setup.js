@@ -70,6 +70,52 @@ jest.doMock('react-native', () => {
   );
 });
 
+// jest.mock('react-native-maps', () => {
+//   return class MockMapView extends React.Component {
+//     static Marker = props => React.createElement('Marker', props, props.children);
+//     static propTypes = { children: React.PropTypes.any };
+//
+//     render() {
+//       return React.createElement('MapView', this.props, this.props.children);
+//     }
+//   }
+// });
+
+jest.mock('react-native-maps', () => {
+  const React = jest.requireActual('react');
+  const MapView = jest.requireActual('react-native-maps');
+
+
+
+  class MockCallout extends React.Component {
+    render() {
+      return React.createElement('Callout', this.props, this.props.children);
+    }
+  }
+
+  class MockMarker extends React.Component {
+
+
+
+    render() {
+      return React.createElement('Marker', this.props, this.props.children);
+    }
+  }
+
+  class MockMapView extends React.Component {
+    render() {
+      return React.createElement('MapView', this.props, this.props.children);
+    }
+  }
+
+  MockCallout.propTypes = MapView.Callout.propTypes;
+  MockMarker.propTypes = MapView.Marker.propTypes;
+  MockMapView.propTypes = MapView.propTypes;
+  MockMapView.Marker = MockMarker;
+  MockMapView.Callout = MockCallout;
+  return MockMapView;
+});
+
 jest.doMock('@react-native-firebase/firestore', () => {
   return () => ({
     collection: jest.fn(),
@@ -265,6 +311,11 @@ Mock for RNAsync-Storage
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+
+//mock for location permission
+jest.mock("react-native-permissions", () =>
+    require("react-native-permissions/mock")
+)
 
 /*
 Simulates timers used for animations etc.

@@ -56,11 +56,13 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
       context.switchShop(shop);
       setSearchBarFocussed(false);
     }
+
   };
 
   return (
     <View style={styles.view}>
       <SearchBar
+          testID="search-bar"
         placeholder="Where to..."
         // Function to run when a letter is pressed
         onChangeText={updateQuery}

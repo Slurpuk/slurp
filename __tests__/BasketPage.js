@@ -2,8 +2,14 @@ import {fireEvent, render, waitFor} from '@testing-library/react-native';
 import React from 'react';
 import {GlobalContext} from '../App';
 import BasketPage from '../src/screens/BasketPage';
-import {Alert} from "react-native";
+import {Alert, Text, View} from "react-native";
 import BasketContents from "../src/components/Basket/BasketContents";
+import {findAllByText, getByText, queryAllByText, queryByTestId, queryByText} from "@testing-library/react";
+import '@testing-library/jest-native/extend-expect';
+import {toBeEmpty, toHaveTextContent} from "@testing-library/jest-dom/dist/matchers";
+import BasketItem from "../src/components/Basket/BasketItem";
+
+expect.extend({ toBeEmpty, toHaveTextContent });
 
 const globalContextMock = {
   basketContent: null,
@@ -11,6 +17,8 @@ const globalContextMock = {
   total: 2.5,
   currentUser: {key: 1},
   clearBasket: null,
+    addToBasket: jest.fn(),
+    removeFromBasket: jest.fn(),
 };
 
 describe('Basket page', function () {
@@ -111,17 +119,58 @@ describe('Basket Content', function (){
     expect(getAllByText('-', {exact: false})).toHaveLength(testItems.length);
   });
 
-  it('Should correctly increase the total when the plus icon is pressed', function (){
-      const {getByText, getAllByText} = render(
-          <BasketContents Items={testItems}/>
+  it('Should not render any items when the basket is empty', async () => {
+      const {queryAllByText, getByText, findAllByText} = render(
+          <BasketContents Items={[]}/>
+      );
+      //It is safe to assume, if there are none of these symbols on the page, no basket items have been rendered.
+      expect(await queryAllByText('+')).toHaveLength(0);
+      expect(await queryAllByText('-')).toHaveLength(0);
+      expect(await queryAllByText('£')).toHaveLength(0);
+  });
+
+  it('Should correctly increase the total when the plus icon is pressed', async function (){
+
+      const singularItem = {count: 1, ItemRef: 'Americano', Quantity: 1, Price: 2.50, Type: 'Coffee', options: [{Name: 'Dairy', Type: 'Milk', key: 1}], Bean:'Kenyan Single Origin'}
+
+      const {getByText, queryAllByText} = render(
+    
+          <GlobalContext.Provider value={globalContextMock}>
+            <BasketItem item={singularItem}/>
+          </GlobalContext.Provider>
       );
 
-      //Need to add addToBasket in mockGlobal context for this to work
-      // expect(getAllByText('+', {exact: false})[0]).toHaveText('1');
-      // fireEvent(getAllByText('+', {exact: false})[0], 'press');
-      // expect(getAllByText('+', {exact: false})[0]).toHaveText('2');
-      expect(true).toBeTruthy();
+      // Need to add addToBasket in mockGlobal context for this to work
+      expect(getByText('1')).toBeTruthy();
+      expect(await queryAllByText('2')).toHaveLength(0);
 
-  })
+      fireEvent(getByText('+'), 'press');
+
+      expect(await queryAllByText('1')).toHaveLength(0);
+      expect(getByText('2')).toBeTruthy();
+
+  });
+
+    it('Should correctly decrease the total when the minus icon is pressed', async function (){
+
+        const singularItem = {count: 2, ItemRef: 'Americano', Quantity: 2, Price: 2.50, Type: 'Coffee', options: [{Name: 'Dairy', Type: 'Milk', key: 1}], Bean:'Kenyan Single Origin'}
+
+        const {getByText, queryAllByText} = render(
+
+            <GlobalContext.Provider value={globalContextMock}>
+                <BasketItem item={singularItem}/>
+            </GlobalContext.Provider>
+        );
+
+        // Need to add addToBasket in mockGlobal context for this to work
+        expect(getByText('2')).toBeTruthy();
+        expect(await queryAllByText('1')).toHaveLength(0);
+
+        fireEvent(getByText('-'), 'press');
+
+        expect(await queryAllByText('2')).toHaveLength(0);
+        expect(getByText('1')).toBeTruthy();
+
+    })
 
 })

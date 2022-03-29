@@ -15,7 +15,6 @@ export const ShopContext = React.createContext();
 const ShopPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const shop = context.currShop;
-  console.log(shop)
   const [optionsVisible, setOptionsVisible] = useState(false); // Is the options popup visible
   const [currItem, setCurrItem] = useState(null); // Current item displayed in the shop.
 

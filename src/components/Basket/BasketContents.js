@@ -15,7 +15,7 @@ const BasketContents = ({Items}) => {
   }
   return (
     <View style={basketContentStyles.basket_content}>
-      <Text style={basketContentStyles.my_order}>My Order</Text>
+      <Text style={basketContentStyles.my_order} testID="my-order">My Order</Text>
       <FlatList
         data={Items}
         renderItem={({item}) => <BasketItem item={item} />}
