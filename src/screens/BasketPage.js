@@ -7,13 +7,18 @@ import CustomButton from '../sub-components/CustomButton';
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
+import DeviceInfo, {getIpAddress} from 'react-native-device-info';
+import {NetworkInfo} from 'react-native-network-info';
+import * as localIp from 'local-ip-url';
 
 const BasketPage = ({navigation}) => {
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
   const context = useContext(GlobalContext);
-  const API_URL = 'http://localhost:8000';
+  const API_URL = 'http://192.168.0.54:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
+  let {ip} = useState();
+  //const localIpUrl = require('local-ip-url');
 
   /*
    * Fetch the payments' sheet parameters from the server.
@@ -31,11 +36,17 @@ const BasketPage = ({navigation}) => {
       },
       body: JSON.stringify(body),
     });
-    const {paymentIntent, ephemeralKey, customer} = await response.json();
+    const {paymentIntent, ephemeralKey, customer, ipAddress} =
+      await response.json();
+    console.log(customer);
+    console.log(ipAddress);
+    ip = ipAddress;
+    console.log(ip);
     return {
       paymentIntent,
       ephemeralKey,
       customer,
+      ipAddress,
     };
   };
 
@@ -80,6 +91,7 @@ const BasketPage = ({navigation}) => {
   useEffect(() => {
     if (context.total !== 0) {
       initializePaymentSheet();
+      //console.log(localIpUrl());
     }
   }, []);
 

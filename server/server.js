@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const localIpUrl = require('local-ip-url');
 const stripe = require('stripe')(
   'sk_test_51KRjSVGig6SwlicvjdIQgL4wuz8wkr61CkyJDzTfyUWIM0sXWMHm17ibH4kk4anzkgpwKD14jhjjyKM10GAgFWjJ00r7kJHSov',
 );
@@ -33,7 +34,9 @@ app.post('/checkout', async (req, res) => {
     paymentIntent: paymentIntent.client_secret,
     customer: customer.id,
     ephemeralKey: ephemeralKey.secret,
+    ipAddress: localIpUrl(), //added for testing
   });
 });
 //Listen the port 8000
 app.listen(8000, () => console.log(`Node server listening on port 8000!`));
+console.log('Your ip address', localIpUrl());
