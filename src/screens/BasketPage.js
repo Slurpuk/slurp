@@ -9,7 +9,17 @@ import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 import DeviceInfo, {getIpAddress} from 'react-native-device-info';
 import {NetworkInfo} from 'react-native-network-info';
-import * as localIp from 'local-ip-url';
+//import 'local-ip-url';
+//import * as server from '../../server/server';
+//import os from 'os';
+//import os from 'react-native-os';
+import * as ip from 'local-ip-url';
+//import {localIpUrl} from '../../server/server';
+//import * as server from '../../server/server;'
+
+//const localIpUrl = require('local-ip-url');
+//const sIp = localIpUrl();
+//console.log(localIpUrl());
 
 const BasketPage = ({navigation}) => {
   const publishableKey =
@@ -18,7 +28,11 @@ const BasketPage = ({navigation}) => {
   const API_URL = 'http://192.168.0.54:8000';
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   let {ip} = useState();
+
+  //const machine = os
+  //  .networkInterfaces().Ethernet.map(item => item.family === 'IPv4');
   //const localIpUrl = require('local-ip-url');
+  //const ipOs = os.networkInterfaces().map(item => item.family === 'IPv4');
 
   /*
    * Fetch the payments' sheet parameters from the server.
@@ -42,6 +56,9 @@ const BasketPage = ({navigation}) => {
     console.log(ipAddress);
     ip = ipAddress;
     console.log(ip);
+    //console.log(localIpUrl);
+    //console.log(server.localIpUrl);
+    //console.log(m.address);
     return {
       paymentIntent,
       ephemeralKey,

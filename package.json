@@ -58,7 +58,8 @@
     "react-native-svg": "^12.1.1",
     "react-native-tabs-section-list": "^1.0.1",
     "react-native-vector-icons": "^9.0.0",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "stripe": "^8.213.0"
   },
   "devDependencies": {
     "@babel/core": "7.16.12",

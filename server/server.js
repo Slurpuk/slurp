@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const app = express();
 const localIpUrl = require('local-ip-url');
@@ -40,3 +39,6 @@ app.post('/checkout', async (req, res) => {
 //Listen the port 8000
 app.listen(8000, () => console.log(`Node server listening on port 8000!`));
 console.log('Your ip address', localIpUrl());
+module.exports = {
+  localIpUrl: localIpUrl(),
+};
