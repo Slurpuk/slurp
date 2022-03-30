@@ -51,10 +51,11 @@ const ShopPage = ({navigation, isShopIntro = false}) => {
           snacks: menuData[2].list,
           defaultMilk: getDefaultMilk(),
         },
-      }}>
+      }}
+    >
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
-          {context.isShopIntro ? (
+          {context.bottomSheet.isOpen ? (
             <DraggableShopPage shop={shop} navigation={navigation} />
           ) : (
             <NonDraggableShopPage shop={shop} navigation={navigation} />

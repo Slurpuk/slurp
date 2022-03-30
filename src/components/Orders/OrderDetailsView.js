@@ -1,12 +1,7 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  ImageBackground,
-} from 'react-native';
+import {View, StyleSheet, Text, ImageBackground} from 'react-native';
 import React from 'react';
 import textStyles from '../../../stylesheets/textStyles';
-import {OrderStatus} from "../../data/OrderStatus";
+import {OrderStatus} from '../../data/OrderStatus';
 
 /**
  * Corresponds to the closed version of the order
@@ -60,7 +55,7 @@ function getItemsText(order) {
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
-};
+}
 
 /**
  * Returns a component that indicates the date of completion of an order.
@@ -68,10 +63,12 @@ function getItemsText(order) {
  * @param order Order object
  * @return Component
  */
-function getStatusAndDateComponent(order){
+function getStatusAndDateComponent(order) {
   let dateAndTime = order.DateTime.toDate().toDateString();
-  if (order.Status ===OrderStatus.COLLECTED ||
-      order.Status ===OrderStatus.REJECTED) {
+  if (
+    order.Status === OrderStatus.COLLECTED ||
+    order.Status === OrderStatus.REJECTED
+  ) {
     return (
       <Text
         style={[
@@ -90,14 +87,14 @@ function getStatusAndDateComponent(order){
       </Text>
     );
   }
-};
+}
 
 /**
  * Creates a more user-friendly and descriptive version of the order status
  * @param order Order object
  * @return Text-Component
  */
-function getCurrentOrderStatusComponent(order){
+function getCurrentOrderStatusComponent(order) {
   if (order.Status === OrderStatus.INCOMING) {
     return <Text style={textStyles.pendingBluePoppins}>Pending</Text>;
   } else if (order.Status === OrderStatus.ACCEPTED) {
@@ -105,7 +102,7 @@ function getCurrentOrderStatusComponent(order){
   } else if (order.Status === OrderStatus.READY) {
     return <Text style={textStyles.readyGreenPoppins}>Ready to Collect</Text>;
   }
-};
+}
 
 const styles = StyleSheet.create({
   container: {

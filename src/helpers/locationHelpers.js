@@ -1,11 +1,17 @@
 import {PermissionsAndroid, Platform} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import {Alerts} from '../../data/Alerts';
-import {fadeOpacityIn, fadeOpacityOut} from '../../sub-components/Animations';
-import {updateUserLocation} from '../../firebase/queries';
+import {Alerts} from '../data/Alerts';
+import {fadeOpacityIn, fadeOpacityOut} from '../sub-components/Animations';
+import {updateUserLocation} from '../firebase/queries';
 
-//used for when a new location is pressed on the map
-export const locationPress = (context, mapCenter, clickedMarker) => {
+/**
+ * Used when a shop marker is pressed. Center the map around the marker and
+ * drag the corresponding shop's intro up with a fading animation.
+ * @param context
+ * @param mapCenter The current center point of the map
+ * @param clickedMarker
+ */
+export const locationPress = async (context, mapCenter, clickedMarker) => {
   //map the clicked marker to a shop from the shops on firebase
   let selectedShop = context.shopsData.find(
     shop => shop.Name === clickedMarker,
@@ -21,11 +27,11 @@ export const locationPress = (context, mapCenter, clickedMarker) => {
   };
 
   //if there is a current shop intro, fade it out in anticipation of the new one
-  if (context.isShopIntro) {
+  if (context.bottomSheet.isOpen) {
     fadeOpacityOut(context.adaptiveOpacity, 170);
     //after the fade out has completed, change the bottom sheet data to the new shop
     let myTimeout = setTimeout(async () => {
-      context.changeShop(false, selectedShop);
+      await context.changeShop(selectedShop);
       clearTimeout(myTimeout);
     }, 200);
     //fade in the new shop after the switch is completed
@@ -33,11 +39,14 @@ export const locationPress = (context, mapCenter, clickedMarker) => {
       fadeOpacityIn(context.adaptiveOpacity, 200);
     }, 210);
   } else {
-    context.changeShop(false, selectedShop);
+    await context.changeShop(selectedShop);
   }
 };
 
-//get the user's location one time. Used on app load
+/**
+ * Retrieve the current user's location and set the map center to it.
+ * @param mapCenter The current center point of the map
+ */
 const getOneTimeLocation = mapCenter => {
   Geolocation.getCurrentPosition(
     //Will give you the current location
@@ -62,7 +71,12 @@ const getOneTimeLocation = mapCenter => {
   );
 };
 
-//watch the current location
+/**
+ * Track the current user's location. Update it in the backend ans set the map center accordingly.
+ * @param userRef The id of the current user
+ * @param mapCenter The current center point of the map
+ * @param watchID The watchID for tracking the user's position
+ */
 const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
   watchID.current = Geolocation.watchPosition(
     async position => {
@@ -93,7 +107,12 @@ const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
   );
 };
 
-//platform dependant request for location access
+/**
+ * Platform dependant request for location access.
+ * @param userRef The id of the current user
+ * @param mapCenter The current center point of the map
+ * @param watchID The watchID for tracking the user's position
+ */
 export const requestLocationPermission = async (
   userRef,
   mapCenter,

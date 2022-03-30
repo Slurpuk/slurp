@@ -49,7 +49,8 @@ export default function BasketItem({item}) {
             style={[
               BasketItemStyles.change_amount_button,
               BasketItemStyles.minus,
-            ]}>
+            ]}
+          >
             -
           </Text>
         </Pressable>
@@ -59,7 +60,8 @@ export default function BasketItem({item}) {
             style={[
               BasketItemStyles.change_amount_button,
               BasketItemStyles.plus,
-            ]}>
+            ]}
+          >
             +
           </Text>
         </Pressable>

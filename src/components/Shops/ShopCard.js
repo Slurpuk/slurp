@@ -11,13 +11,11 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import {GlobalContext} from '../../../App';
 
-
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
 
-  const shopPageDetails = () => {
-    console.log(shop.Name)
-    context.changeShop(true, shop, navigation);
+  const shopPageDetails = async () => {
+    await context.changeShop(shop, navigation);
   };
 
   return !shop.IsOpen ? (

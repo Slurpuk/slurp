@@ -1,6 +1,5 @@
-import firestore from '@react-native-firebase/firestore';
-import React, {useContext, useState} from 'react';
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
@@ -9,149 +8,99 @@ import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 import {
   addToBasket,
-  clearBasket,
+  formatBasket,
   removeFromBasket,
-} from '../helpers/ScreensFunctions';
+} from '../helpers/screenHelpers';
+import {initializePayment, openPaymentSheet} from '../helpers/paymentHelpers';
+import {Alerts} from '../data/Alerts';
+import {sendOrder} from '../firebase/queries';
 
 export const BasketContext = React.createContext();
+
+/**
+ * Screen to display the basket contents.
+ */
 const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
-  const getTotal = (newBasket = null) => {
+  const [contents, setContents] = useState(context.currBasket.data);
+  const [total, setTotal] = useState(getTotal());
+  const [readyForPayment, setReadyForPayment] = useState(false); // Is the payment server ready
+  const {initPaymentSheet, presentPaymentSheet} = useStripe(); // Stripe hook payment methods
+  const publishableKey =
+    'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
+
+  /**
+   * Callback for initializing the stripe payment sheet.
+   * If initialization is successful, set ready to true.
+   */
+  const initialize = useCallback(async () => {
+    const ready = await initializePayment(initPaymentSheet, total);
+    setReadyForPayment(ready);
+  }, [initPaymentSheet, total]);
+
+  /**
+   * Side effect that dynamically initializes the payment sheet if the basket is not empty.
+   */
+  useEffect(() => {
+    if (contents.length !== 0) {
+      initialize().catch(error => Alerts.elseAlert());
+    }
+  }, [contents.length, initialize]);
+
+  /**
+   * Return a string formatted version of the basket's total amount.
+   * @param newBasket An optional newBasket possibly different from the current one.
+   */
+  function getTotal(newBasket = null) {
     let basket = newBasket ? newBasket : context.currBasket.data;
     return basket
       .reduce(function (acc, item) {
         return acc + item.Price * item.count;
       }, 0)
-      .toPrecision(3);
-  };
-  const [contents, setContents] = useState(context.currBasket.data);
-  const [total, setTotal] = useState(getTotal());
-  const {initPaymentSheet, presentPaymentSheet} = useStripe();
-  const publishableKey =
-    'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
+      .toFixed(2);
+  }
 
   /**
-   * Fetch the payments' sheet parameters from the server.
-   * @return {paymentIntent} Return the encapsulated details about the transaction.
-   * @return {ephemeralKey} Return the cryptographic payment key.
-   * @return {customer} Return the customer.
+   * Checkout. If the server is ready and the basket is not empty, proceed to payment.
    */
-  const fetchPaymentSheetParams = async ipAddress => {
-    let API_URL = 'http://192.168.0.128:7070';
-    console.log('asc', API_URL);
-    let body = {amount: total.toFixed(2)};
-    const response = await fetch(`${API_URL}/checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    const {paymentIntent, ephemeralKey, customer} = await response.json();
-    return {
-      paymentIntent,
-      ephemeralKey,
-      customer,
-    };
-  };
+  async function checkout() {
+    contents.length === 0
+      ? Alerts.emptyBasketAlert()
+      : readyForPayment
+      ? await proceedToPayment()
+      : Alerts.initPaymentAlert(initialize);
+  }
 
-  /*
-   * Initialize the payment sheet with customerId,
-   * customerEphemeralKeySecret, paymentIntentClientSecret
+  /**
+   * Proceed to payment. Open the payment sheet if no error occurs.
    */
-  const initializePaymentSheet = async ipAddress => {
-    const {paymentIntent, ephemeralKey, customer} =
-      await fetchPaymentSheetParams(ipAddress);
-    const {error} = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-      merchantDisplayName: 'Slurp',
-    });
-  };
-
-  /*
-   * Open payment sheet if error doesn't exists.
-   * @function {confirmOrder} Confirm order if payment sheet is present.
-   */
-  const openPaymentSheet = async () => {
-    if (total !== 0) {
-      const {error} = await presentPaymentSheet();
-      if (error) {
-        Alert.alert(`Error code: ${error.code}`, error.message);
-      } else {
-        confirmOrder().catch(error => console.log(error));
-      }
+  async function proceedToPayment() {
+    const successful = await openPaymentSheet(presentPaymentSheet);
+    if (successful) {
+      await confirmOrder();
     } else {
-      Alert.alert('Empty basket.', 'Please add items to your basket.', [
-        {
-          text: 'OK',
-        },
-      ]);
+      Alerts.initPaymentAlert(initialize);
     }
-  };
+  }
 
-  /*
-   * Dynamically initialise the payment sheet if the total price is greater than 0.
-   */
-  // useEffect(() => {
-  //   if (total !== 0) {
-  //     NetworkInfo.getIPV4Address().then(currIp => {
-  //       console.log(currIp);
-  //       initializePaymentSheet(currIp);
-  //     });
-  //   }
-  // }, [total]);
-
-  /*
-   * Send data to firebase.
-   * DateTime, Items, Status, ShopID, UserID,Total are added to the
-   * firestore collection 'Orders'.
+  /**
+   * Create and send a new order based on the current basket. Clear the basket and inform the user.
    */
   async function confirmOrder() {
-    await firestore()
-      .collection('Orders')
-      .add({
-        DateTime: new firestore.Timestamp.now(),
-        Items: formatBasket(),
-        Status: 'incoming',
-        ShopID: context.currShop.key,
-        UserID: context.currentUser.key,
-        Total: Number(getTotal()),
-      })
-      .then(async () => {
-        context.currBasket.setContent([]);
-        await clearBasket();
-        await Alert.alert(
-          'Order received.',
-          'Your order has been sent to the shop! Awaiting response.',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('Order history'),
-            },
-          ],
-        );
-      });
+    await sendOrder(
+      formatBasket(),
+      context.currShop.key,
+      context.currentUser.key,
+      Number(getTotal()),
+    );
+    await context.currBasket.clear();
+    Alerts.orderSentAlert();
   }
 
   /**
-   * Format basket contents to match a precision.
-   * @return items The list of formatted items
+   * Add given item from current basket and storage basket.
+   * @param item The item to add
    */
-  function formatBasket() {
-    let items = contents.map(item => {
-      return {
-        ItemRef: item.key,
-        Quantity: item.count,
-        Price: Number(item.Price.toPrecision(3)),
-        Type: item.type,
-        Options: item.options,
-      };
-    });
-    return items;
-  }
-
   async function addToCurrentBasket(item) {
     let newBasket = await addToBasket(
       item,
@@ -162,6 +111,10 @@ const BasketPage = ({navigation}) => {
     setTotal(getTotal(newBasket));
   }
 
+  /**
+   * Remove given item from current basket and storage basket.
+   * @param item The item to remove
+   */
   async function removeFromCurrentBasket(item) {
     let newBasket = await removeFromBasket(item, context.currBasket.setContent);
     setContents(newBasket);
@@ -174,7 +127,8 @@ const BasketPage = ({navigation}) => {
         value={{
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
-        }}>
+        }}
+      >
         <View style={styles.basket}>
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.Name}
@@ -192,7 +146,7 @@ const BasketPage = ({navigation}) => {
             <CustomButton
               priority={'primary'}
               text={'Checkout'}
-              onPress={confirmOrder}
+              onPress={checkout}
             />
           </View>
         </View>
@@ -202,10 +156,6 @@ const BasketPage = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  safe_header: {
-    flex: 0,
-    backgroundColor: '#046D66',
-  },
   basket: {
     flex: 1,
     display: 'flex',
@@ -228,67 +178,6 @@ const styles = StyleSheet.create({
   lastButton: {
     marginBottom: '6%',
   },
-  basket_content: {
-    display: 'flex',
-    height: '100%',
-  },
-  my_order: {
-    fontWeight: '700',
-    fontSize: 26,
-    color: '#212121',
-    paddingBottom: '5%',
-  },
-  items_list: {
-    display: 'flex',
-    flex: 2,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#C0C0C0',
-  },
-  item_container: {
-    flex: 1,
-    borderColor: '#C0C0C0',
-    borderStyle: 'solid',
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    borderWidth: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    paddingVertical: '5%',
-    justifyContent: 'space-between',
-  },
-  item_information: {
-    alignSelf: 'flex-start',
-    flex: 1,
-  },
-  item_name: {
-    color: '#173C4F',
-    fontSize: 21,
-    fontWeight: '600',
-    paddingBottom: '2%',
-    alignSelf: 'flex-start',
-  },
-  item_specification_list: {},
-  item_specification: {
-    color: '#717171',
-    fontWeight: '300',
-    fontSize: 13,
-  },
-  price: {
-    paddingVertical: '2%',
-    paddingHorizontal: '3%',
-    minWidth: 30,
-    flex: 0.25,
-    display: 'flex',
-    fontWeight: '600',
-    fontSize: 17,
-    textAlign: 'right',
-    alignSelf: 'flex-start',
-    color: '#434343',
-  },
   order_summary: {
     display: 'flex',
     flexDirection: 'row',
@@ -307,26 +196,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#173C4F',
     fontWeight: '900',
-  },
-  amount_selection_container: {
-    display: 'flex',
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    backgroundColor: '#1B947E',
-    borderRadius: 3,
-    paddingVertical: '2%',
-    paddingHorizontal: '3%',
-    flex: 0.15,
-    marginEnd: '5%',
-    justifyContent: 'space-between',
-  },
-  amount: {
-    color: '#F1F1F1',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  change_amount_button: {
-    color: '#FFFFFF',
   },
 });
 

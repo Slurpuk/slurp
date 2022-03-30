@@ -14,7 +14,7 @@ const DraggableShopPage = ({shop, navigation}) => {
     if (index === 0) {
       setFullScreen(true);
     } else if (index === 2) {
-      context.setShopIntro(false);
+      context.bottomSheet.setOpen(false);
     } else {
       setFullScreen(false);
     }
@@ -35,7 +35,12 @@ const DraggableShopPage = ({shop, navigation}) => {
               context.isFullScreen ? {opacity: 0} : {opacity: 1},
             ]}
           />
-          <ShopIntro shop={shop} sheetRef={sheetRef} navigation={navigation} isFullScreen={isFullScreen}/>
+          <ShopIntro
+            shop={shop}
+            sheetRef={sheetRef}
+            navigation={navigation}
+            isFullScreen={isFullScreen}
+          />
           <Menu navigation={navigation} />
         </View>
       )}

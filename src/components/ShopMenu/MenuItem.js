@@ -1,20 +1,28 @@
 import React, {useContext, useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
-import {View, Text, Pressable, ImageBackground} from 'react-native';
-import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
 import {menuItemStyles} from './shopStyles';
-import {addToBasket} from '../../helpers/ScreensFunctions';
+import {addToBasket} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
 
+/**
+ * Menu item component displayed in a shop's menu.
+ */
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
 
-  /*
-   * Dynamically update the menuItem counter based on the current basket content.
+  /**
+   * Side effect to dynamically update the menuItem counter based on the current basket content.
    */
   useEffect(() => {
     const basket = globalContext.currBasket.data;
@@ -34,10 +42,10 @@ const MenuItem = ({item}) => {
       }
     }
     setCount(newCount);
-  }, [globalContext.currBasket, item]);
+  }, [globalContext.currBasket.data, item]);
 
-  /*
-   * Show current item options.
+  /**
+   * Show current item options on a popup.
    */
   const showOptions = () => {
     shopContext.setCurrItem(item);
@@ -61,14 +69,16 @@ const MenuItem = ({item}) => {
   }
 
   return (
-    <RNGHTouchableOpacity style={menuItemStyles.item} onPress={() => add(item)}>
+    <TouchableOpacity style={menuItemStyles.item} onPress={() => add(item)}>
       <ImageBackground
         source={{uri: item.Image}}
-        imageStyle={{borderRadius: 10, overflow: 'hidden'}}
-        style={{width: '100%', height: '100%'}}>
+        imageStyle={menuItemStyles.image}
+        style={menuItemStyles.imageContainer}
+      >
         <LinearGradient
           colors={['transparent', 'black']}
-          style={menuItemStyles.linearGradient}>
+          style={menuItemStyles.linearGradient}
+        >
           <View style={menuItemStyles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, menuItemStyles.title]}>
               {item.Name}
@@ -79,24 +89,16 @@ const MenuItem = ({item}) => {
           </View>
           <Pressable
             onPress={() => add(item)}
-            style={menuItemStyles.menuCardPopupTrigger}>
-            <Text
-              style={[
-                textStyles.iconText,
-                {
-                  marginLeft: 1,
-                  marginTop: 2,
-                  color: 'black',
-                  textAlign: 'center',
-                },
-              ]}>
+            style={menuItemStyles.menuCardPopupTrigger}
+          >
+            <Text style={[textStyles.iconText, menuItemStyles.counter]}>
               {' '}
               {count === 0 ? '+' : count}
             </Text>
           </Pressable>
         </LinearGradient>
       </ImageBackground>
-    </RNGHTouchableOpacity>
+    </TouchableOpacity>
   );
 };
 export default MenuItem;

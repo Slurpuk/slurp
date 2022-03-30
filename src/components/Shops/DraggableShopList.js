@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Platform, Text, View, StyleSheet} from 'react-native';
 import ShopList from './ShopList';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
-import {calculateDistance} from '../../helpers/ScreensFunctions';
+import {calculateDistance} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
 
 export default function DraggableShopList({navigation}) {

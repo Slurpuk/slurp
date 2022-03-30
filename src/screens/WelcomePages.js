@@ -50,7 +50,8 @@ const WelcomePages = ({navigation}) => {
         showsHorizontalScrollIndicator={false}
         onScroll={(event: any) => {
           setSliderPage(event);
-        }}>
+        }}
+      >
         <View style={styles.component}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
             Welcome to Slurp!
@@ -89,7 +90,8 @@ const WelcomePages = ({navigation}) => {
           />
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={proceedToLogIn}>
+            onPress={proceedToLogIn}
+          >
             Already have an account? Log in
           </Text>
         </View>

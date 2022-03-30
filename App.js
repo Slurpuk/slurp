@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
@@ -10,39 +10,71 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {Animated} from 'react-native';
 import LoadingPage from './src/screens/LoadingPage';
-import {getOptions, setUserObject} from './src/firebase/queries';
+import {setUserObject} from './src/firebase/queries';
 import {Alerts} from './src/data/Alerts';
+import {getFormattedShops, refreshShops} from './src/helpers/screenHelpers';
 import {
-  clearBasket,
+  clearStorageBasket,
+  getCurrentShopKey,
   getIsFirstTime,
   refreshCurrentBasket,
-  refreshCurrentShop,
   setCurrentShopKey,
-} from './src/helpers/ScreensFunctions';
+} from './src/helpers/storageHelpers';
 
 export const GlobalContext = React.createContext();
+/**
+ * Root component rendered when the application boots.
+ */
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Is the app still fetching backend data.
   const [currentUser, setCurrentUser] = useState(null);
-  const [shopsData, setShopsData] = useState({allShops: [], currShop: null});
+  const [shopsData, setShopsData] = useState({allShops: [], currShopIndex: -1});
+  const staticShopsData = useRef(shopsData);
   const [currBasket, setCurrBasket] = useState([]);
-  const [isShopIntro, setIsShopIntro] = useState(false);
+  const [isShopIntro, setIsShopIntro] = useState(false); // Is the shop page bottom sheet up.
+  const [isFirst, setIsFirst] = useState(true); // Is it the first time the app is downloaded
+  const adaptiveOpacity = useRef(new Animated.Value(0)).current; // Animation fading value.
+  const LoggedOutStack = createNativeStackNavigator(); // Stack navigator for logged out users.
+  /**
+   * Side effect that fires when App first renders to determine whether it is the first time the app is used since download
+   * Sets the first time state accordingly.
+   */
+  useEffect(() => {
+    async function setIsFirstTime() {
+      const isFirstTime = await getIsFirstTime();
+      setIsFirst(isFirstTime);
+    }
 
-  const isFirstTime = useMemo(async () => getIsFirstTime(), []);
-  const adaptiveOpacity = useRef(new Animated.Value(0)).current;
+    setIsFirstTime().catch(error => Alerts.elseAlert());
+  }, []);
 
+  /**
+   * Side effect that updates the static shops data on every render.
+   */
+  useEffect(() => {
+    staticShopsData.current = shopsData;
+  });
+
+  /**
+   * Side effect that tracks the authentication state of the current user.
+   * Sets the current user object accordingly.
+   */
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(async user => {
       user
-        ? setUserObject(user, setCurrentUser).catch(error => console.log(error))
+        ? setUserObject(user, setCurrentUser).catch(error => Alerts.elseAlert())
         : setCurrentUser(null);
     });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
 
+  /**
+   * Side effect that tracks changes in the model instance of the user in the database and updates the state accordingly
+   * Sets the current user object accordingly.
+   */
   useEffect(() => {
-    if (!loading) {
+    if (!loading && auth().currentUser) {
       const subscriber = firestore()
         .collection('Users')
         .where('Email', '==', auth().currentUser.email)
@@ -54,92 +86,82 @@ export default function App() {
     }
   }, [loading]);
 
-  // Subscribe to the Shops model
+  /**
+   * Side effect that tracks any change in the coffee shop model.
+   * Retrieves the latest shop data, formats it and updates the current set of shops as well as the basket.
+   */
   useEffect(() => {
     const subscriber = firestore()
       .collection('CoffeeShop')
       .onSnapshot(async querySnapshot => {
-        const shops = [];
-        await Promise.all(
-          querySnapshot.docs.map(async documentSnapshot => {
-            let shopData = {
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
-            };
-            let coffees = [];
-            let drinks = [];
-            let snacks = [];
-            await Promise.all(
-              documentSnapshot.data().ItemsOffered.map(async itemRef => {
-                await firestore()
-                  .doc(itemRef.path)
-                  .get()
-                  .then(item => {
-                    if (itemRef.path.includes('Coffees')) {
-                      coffees.push({...item.data(), key: item.id});
-                    } else if (itemRef.path.includes('Drinks')) {
-                      drinks.push({...item.data(), key: item.id});
-                    } else {
-                      snacks.push({...item.data(), key: item.id});
-                    }
-                  });
-              }),
-            );
-            shopData.ItemsOffered = {
-              Coffees: coffees,
-              Drinks: drinks,
-              Snacks: snacks,
-            };
-
-            await getOptions().then(options => {
-              shopData.options = options;
-              shops.push(shopData);
-            });
-          }),
+        let formattedShops = await getFormattedShops(querySnapshot);
+        await refreshShops(
+          formattedShops,
+          staticShopsData.current,
+          clearBasket,
+          setShopsData,
         );
-        setShopsData(prevState => ({...prevState, allShops: shops}));
-        console.log('1');
-        await refreshCurrentShop(shopsData.currShop, setShopsData, shops);
         if (loading) {
           await refreshCurrentBasket(setCurrBasket);
         }
-        setLoading(false);
+        if (loading) {
+          setLoading(false);
+        }
       });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, [shopsData.currShop, loading]);
+  }, [loading]);
 
-  const setShopIntro = shown => {
-    setIsShopIntro(shown);
-  };
-
+  /**
+   * Set the current shop state and the storage instance to the given shop.
+   * @param shop The new shop
+   */
   async function setNewShop(shop) {
-    setShopsData(prevState => ({...prevState, currShop: shop}));
-    await setCurrentShopKey(shop.key).catch(error => console.log(error));
+    let newIndex = shopsData.allShops.findIndex(curr => curr.key === shop.key);
+    setShopsData(prevState => ({...prevState, currShopIndex: newIndex}));
+    await setCurrentShopKey(shop.key).catch(error => Alerts.elseAlert());
   }
 
-  // When coming from the shop list
-  async function cardSwitchShop(shop, navigation) {
-    clearBasket();
+  /**
+   * Clear the basket state as well as the storage one.
+   */
+  async function clearBasket() {
     setCurrBasket([]);
+    await clearStorageBasket();
+  }
+
+  /**
+   * Clear the basket, change to the new shop and navigate to the shop page.
+   * @param shop The new shop
+   * @param navigation The navigation object
+   */
+  async function cardSwitchShop(shop, navigation) {
+    await clearBasket();
     await setNewShop(shop);
     navigation.navigate('Shop page');
   }
 
-  // When coming from the markers
+  /**
+   * Clear the basket, change to the new shop and drag the shop introduction sheet up
+   * @param shop The new shop
+   */
   async function markerSwitchShop(shop) {
-    clearBasket();
-    setCurrBasket([]);
+    await clearBasket();
     await setNewShop(shop);
     setIsShopIntro(true);
   }
 
-  // When coming from the shop list
+  /**
+   * Handles changing shops when pressing a shop card (in the shop list).
+   * @param shop The new shop
+   * @param navigation The navigation object
+   */
   async function changeShopFromCard(shop, navigation) {
     let basketSize = currBasket.length;
+    // Pops up an alert if the new shop is different from the current one and the basket is not empty.
     if (
-      shopsData.currShop &&
-      shopsData.currShop.key !== shop.key &&
+      shopsData.currShopIndex !== -1 &&
+      shopsData.allShops[shopsData.currShopIndex].key !== shop.key &&
       basketSize !== 0
     ) {
       Alerts.changeShopAlertV2(cardSwitchShop, shop, navigation);
@@ -149,12 +171,16 @@ export default function App() {
     }
   }
 
-  // When coming from the markers
+  /**
+   * Handles changing shops when pressing a map marker.
+   * @param shop The new shop
+   */
   async function changeShopFromMarker(shop) {
     let basketSize = currBasket.length;
+    // Pops up an alert if the new shop is different from the current one and the basket is not empty.
     if (
-      shopsData.currShop &&
-      shopsData.currShop.key !== shop.key &&
+      shopsData.currShopIndex !== -1 &&
+      shopsData.allShops[shopsData.currShopIndex].key !== shop.key &&
       basketSize !== 0
     ) {
       await Alerts.changeShopAlertV1(markerSwitchShop, shop);
@@ -166,25 +192,36 @@ export default function App() {
     }
   }
 
-  function changeShop(isFromCard, newShop, navigation = null) {
-    isFromCard
-      ? changeShopFromCard(newShop, navigation)
-      : changeShopFromMarker(newShop);
+  /**
+   * Handles changing shops throughout the app.
+   * @param newShop The newly selected shop.
+   * @param navigation The optional navigation (passed if the change is occurring by pressing a shop card)
+   */
+  async function changeShop(newShop, navigation = null) {
+    navigation
+      ? await changeShopFromCard(newShop, navigation)
+      : await changeShopFromMarker(newShop);
   }
 
-  const Stack = createNativeStackNavigator();
   return (
     <GlobalContext.Provider
       value={{
         currentUser: currentUser,
         shopsData: shopsData.allShops,
-        currBasket: {data: currBasket, setContent: setCurrBasket},
-        currShop: shopsData.currShop,
+        currBasket: {
+          data: currBasket,
+          setContent: setCurrBasket,
+          clear: clearBasket,
+        },
+        currShop:
+          shopsData.currShopIndex === -1
+            ? null
+            : shopsData.allShops[shopsData.currShopIndex],
         changeShop: changeShop,
-        isShopIntro: isShopIntro,
-        setShopIntro: setShopIntro,
+        bottomSheet: {isOpen: isShopIntro, setOpen: setIsShopIntro},
         adaptiveOpacity: adaptiveOpacity,
-      }}>
+      }}
+    >
       <NavigationContainer>
         {currentUser ? (
           !loading ? (
@@ -192,18 +229,19 @@ export default function App() {
           ) : (
             <LoadingPage />
           )
-        ) : (
-          <Stack.Navigator
+        ) : !loading ? (
+          <LoggedOutStack.Navigator
             screenOptions={{
               headerShown: false,
-            }}>
-            {isFirstTime ? (
-              <Stack.Screen name="Welcome" component={WelcomePages} />
+            }}
+          >
+            {isFirst ? (
+              <LoggedOutStack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
-            <Stack.Screen name="LogIn" component={LogInPage} />
-            <Stack.Screen name="SignUp" component={SignUpPage} />
-          </Stack.Navigator>
-        )}
+            <LoggedOutStack.Screen name="LogIn" component={LogInPage} />
+            <LoggedOutStack.Screen name="SignUp" component={SignUpPage} />
+          </LoggedOutStack.Navigator>
+        ) : null}
       </NavigationContainer>
     </GlobalContext.Provider>
   );

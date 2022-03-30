@@ -5,7 +5,10 @@ import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
-import {locationPress, requestLocationPermission} from './locationHelpers';
+import {
+  locationPress,
+  requestLocationPermission,
+} from '../../helpers/locationHelpers';
 import mapStyles from '../../../stylesheets/mapStyles';
 
 export default function MapBackground({
@@ -21,8 +24,6 @@ export default function MapBackground({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-
-
 
   const markers = useMemo(() => {
     return context.shopsData.map(shop => ({
@@ -78,7 +79,8 @@ export default function MapBackground({
         onPanDrag={event => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter.current}>
+        region={mapCenter.current}
+      >
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -86,12 +88,13 @@ export default function MapBackground({
             coordinate={marker.coords}
             pinColor={'navy'}
             title={marker.name}
-            onPress={() => {
+            onPress={async () => {
               if (marker.isOpen) {
-                locationPress(context, mapCenter, marker.name);
+                await locationPress(context, mapCenter, marker.name);
               }
               mapPressed();
-            }}>
+            }}
+          >
             {/*//closed markers appear grey*/}
             <View style={styles.markerStyle}>
               <Text style={{color: 'coral', fontWeight: 'bold', top: 0}}>

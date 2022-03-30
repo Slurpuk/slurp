@@ -6,7 +6,7 @@ import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import {OptionPopUpStyles, screenWidth} from '../../../stylesheets/ShopStyles';
-import {addToBasket} from '../../helpers/ScreensFunctions';
+import {addToBasket} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
 
 export const OptionsContext = React.createContext();
@@ -95,7 +95,8 @@ export default function OptionsPopUp({data, renderer, item}) {
           <TouchableHighlight
             style={OptionPopUpStyles.icon}
             underlayColor={'white'}
-            onPress={() => shopContext.setOptionsVisible(false)}>
+            onPress={() => shopContext.setOptionsVisible(false)}
+          >
             <Icon size={30} color="black" name="close" />
           </TouchableHighlight>
         </View>

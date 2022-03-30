@@ -10,7 +10,7 @@ export const CurrentOrders = props => {
         contentContainerStyle={{backgroundColor: '#EDEBE7', flexGrow: 1}}
         data={props.currentOrders}
         renderItem={({item}) => <CollapsableOrder order={item} />}
-        ListEmptyComponent={<EmptyListText text={props.emptyText}/>}
+        ListEmptyComponent={<EmptyListText text={props.emptyText} />}
       />
     </>
   );

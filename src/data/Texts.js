@@ -6,4 +6,4 @@ const emptyPastOrdersText =
 const emptyShopListText =
   'It looks like there are no coffee shops close by...\n\n Try searching for one on the search bar, your journey starts there!';
 
-export {emptyShopListText, emptyCurrentOrdersText, emptyPastOrdersText}
+export {emptyShopListText, emptyCurrentOrdersText, emptyPastOrdersText};

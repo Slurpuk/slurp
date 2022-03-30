@@ -7,7 +7,7 @@ import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
 import {CustomAlerts} from '../sub-components/Alerts';
-import {enterApp} from "../helpers/ScreensFunctions";
+import {enterApp} from '../helpers/screenHelpers';
 
 const SignUpPage = ({navigation}) => {
   const [first_name, setFirstName] = useState();
@@ -48,7 +48,6 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          console.log('lol')
           let newUser = auth().currentUser;
           addUser(newUser);
           enterApp();
@@ -95,7 +94,7 @@ This function provides a variety of error handling once received an error code f
         CustomAlerts.MANY_REQUESTS.message,
       );
     } else {
-      console.log('llasqjwd')
+      console.log('llasqjwd');
       Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
     }
   }
@@ -147,7 +146,8 @@ This function provides a variety of error handling once received an error code f
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('LogIn')}>
+          onPress={() => navigation.navigate('LogIn')}
+        >
           Already have an account? Log in
         </Text>
       </View>

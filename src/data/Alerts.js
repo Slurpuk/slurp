@@ -102,4 +102,46 @@ export const Alerts = {
       {cancelable: false},
     );
   },
+
+  initPaymentAlert: (tryAgain = () => {}) => {
+    Alert.alert(
+      AlertMessage.INIT_PAYMENT.title,
+      AlertMessage.INIT_PAYMENT.message,
+      [
+        {
+          text: 'Yes',
+          onPress: () => tryAgain(),
+        },
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
+  },
+
+  networkAlert: () => {
+    Alert.alert(AlertMessage.NETWORK.title, AlertMessage.NETWORK.message);
+  },
+
+  emptyBasketAlert: () => {
+    Alert.alert(
+      AlertMessage.EMPTY_BASKET.title,
+      AlertMessage.EMPTY_BASKET.message,
+    );
+  },
+
+  orderSentAlert: navigation => {
+    Alert.alert(
+      'Order received.',
+      'Your order has been sent to the shop! Awaiting response.',
+      [
+        {
+          text: 'OK',
+          onPress: () => navigation.navigate('Order history'),
+        },
+      ],
+    );
+  },
 };

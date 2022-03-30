@@ -21,7 +21,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   const [query, setQuery] = useState('');
 
   //the filtered list of shops to be shown in search results
-  const [shops, setShops] = useState(context.shopsData);
+  const [shops, setShops] = useState();
 
   //focus the search bar when a letter is typed and update the filtered shops
   const updateQuery = input => {
@@ -54,9 +54,9 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   };
 
   //set the bottom sheet to the selected shop
-  const selectShop = shop => {
+  const selectShop = async shop => {
     if (shop.IsOpen) {
-      context.changeShop(false, shop);
+      await context.changeShop(shop);
       setSearchBarFocussed(false);
     }
   };
@@ -93,7 +93,8 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   style={[
                     styles.searchResultContainer,
                     {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}>
+                  ]}
+                >
                   <Pressable
                     onPressIn={() => {
                       if (item.IsOpen) {
@@ -111,14 +112,16 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                             : '#C5C5C5',
                       },
                       styles.searchResult,
-                    ]}>
+                    ]}
+                  >
                     {({pressed}) => (
                       <Text
                         style={[
                           {color: pressed && item.IsOpen ? 'white' : 'black'},
 
                           styles.flatListItem,
-                        ]}>
+                        ]}
+                      >
                         {item.Name}
                       </Text>
                     )}
