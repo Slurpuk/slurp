@@ -91,7 +91,7 @@ async function createFakeUsers() {
 async function createCoffeeShops() {
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Kaffeine',
-    email: 'kaffeine@gmail.com',
+    email: 'energyboost@gmail.com',
     intro:
       'Inspired by the amazing coffee culture in Australia and New Zealand, Kaffeine is an independently owned, original store that will surprise you daily',
     location: new GeoPoint(51.5185167952972, -0.14044952720959036),
@@ -101,7 +101,7 @@ async function createCoffeeShops() {
   });
   await createUserWithEmailAndPassword(
     getAuth(),
-    'kaffeine@gmail.com',
+    'energyboost@gmail.com',
     'Password123',
   );
   await addDoc(collection(db, 'coffee_shops'), {
