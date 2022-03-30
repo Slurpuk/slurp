@@ -93,7 +93,6 @@ const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
       };
       if (userRef) {
         updateUserLocation(userRef, latitude, longitude).catch(error => {
-          console.log(error);
           Alerts.elseAlert();
         });
       }
