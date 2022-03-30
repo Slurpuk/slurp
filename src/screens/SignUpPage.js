@@ -90,7 +90,7 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(async () => {
-          enterApp();
+          await enterApp();
           await firestore()
             .collection('Users')
             .add({
