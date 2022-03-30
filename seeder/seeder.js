@@ -1,12 +1,17 @@
 // Import the functions you need from the SDKs you need
 import {initializeApp} from 'firebase/app';
-import {getAuth, connectAuthEmulator} from 'firebase/auth';
+import {
+  getAuth,
+  connectAuthEmulator,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
 import {
   getFirestore,
   connectFirestoreEmulator,
   collection,
-  setDoc,
+  doc,
   addDoc,
+  updateDoc,
   getDocs,
   GeoPoint,
 } from 'firebase/firestore';
@@ -23,17 +28,18 @@ const firebaseConfig = {
   storageBucket: 'independentcoffeeshops.appspot.com',
   messagingSenderId: '185382636935',
   appId: '1:185382636935:web:e905902ac500f230f75722',
+  measurementId: 'G-5WK60CC02P',
 };
 
 // Initialize Firebase
-let app = initializeApp(firebaseConfig);
-let db = getFirestore(app);
-let auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 // Switch emulator on
 if (EMULATOR_MODE_ON) {
   connectFirestoreEmulator(db, 'localhost', 8080);
-  connectAuthEmulator(auth, 'http://localhost:9099');
+  connectAuthEmulator(auth, 'http://localhost:9099', {disableWarnings: true});
 }
 
 import {createUserWithEmailAndPassword} from 'firebase/auth';
