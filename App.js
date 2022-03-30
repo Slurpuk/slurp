@@ -12,10 +12,13 @@ import {Animated} from 'react-native';
 import LoadingPage from './src/screens/LoadingPage';
 import {setUserObject} from './src/firebase/queries';
 import {Alerts} from './src/data/Alerts';
-import {getFormattedShops, refreshShops} from './src/helpers/screenHelpers';
+import {
+  calculateDistance,
+  getFormattedShops,
+  refreshShops,
+} from './src/helpers/screenHelpers';
 import {
   clearStorageBasket,
-  getCurrentShopKey,
   getIsFirstTime,
   refreshCurrentBasket,
   setCurrentShopKey,
@@ -35,6 +38,7 @@ export default function App() {
   const [isFirst, setIsFirst] = useState(true); // Is it the first time the app is downloaded
   const adaptiveOpacity = useRef(new Animated.Value(0)).current; // Animation fading value.
   const LoggedOutStack = createNativeStackNavigator(); // Stack navigator for logged out users.
+
   /**
    * Side effect that fires when App first renders to determine whether it is the first time the app is used since download
    * Sets the first time state accordingly.
@@ -79,12 +83,19 @@ export default function App() {
         .collection('Users')
         .where('Email', '==', auth().currentUser.email)
         .onSnapshot(query => {
-          let newUser = query.docs[0];
-          setCurrentUser({...newUser.data(), key: newUser.id});
+          let newUserDoc = query.docs[0];
+          let newUser = newUserDoc.data();
+          setCurrentUser({...newUser, key: newUserDoc.id});
+          shopsData.allShops.forEach(shop => {
+            shop.distanceTo = calculateDistance(shop.Location, {
+              latitude: newUser.Location._latitude,
+              longitude: newUser.Location._longitude,
+            });
+          });
         });
       return () => subscriber();
     }
-  }, [loading]);
+  }, [loading, shopsData.allShops]);
 
   /**
    * Side effect that tracks any change in the coffee shop model.

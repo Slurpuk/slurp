@@ -20,8 +20,8 @@ export const locationPress = async (context, mapCenter, clickedMarker) => {
   //update the map center to preserve the map position after rerender
   let old = mapCenter.current;
   mapCenter.current = {
-    latitude: selectedShop.Location._latitude,
-    longitude: selectedShop.Location._longitude,
+    latitude: selectedShop.Location.latitude,
+    longitude: selectedShop.Location.longitude,
     latitudeDelta: old.latitudeDelta,
     longitudeDelta: old.longitudeDelta,
   };

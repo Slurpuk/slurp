@@ -4,12 +4,10 @@ import {months} from '../data/Months';
 import {OrderStatus} from '../data/OrderStatus';
 import {
   getBasket,
-  getBasketSize,
   getCurrentShopKey,
   setBasket,
   setCurrentShopKey,
 } from './storageHelpers';
-import {useCallback} from 'react';
 
 /**
  * Format the orders to be displayed as current orders.
@@ -100,7 +98,35 @@ function calculateDistance(shopLocation, currLocation) {
   const cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa));
 
   // in metres
-  return parseInt(R * cc);
+  return parseInt(R * cc, 10);
+}
+
+/**
+ * Calculate the time between 2 coordinates with an average walking speed
+ * @return time the walking time between the 2 points
+ * @param distance
+ */
+function calculateTime(distance) {
+  const speed = 4 * 16.6667;
+  return parseInt(distance / speed, 10);
+}
+
+/**
+ * Calculate corresponding time for given distance, formats it and returns.
+ * @return time The formatted walking time between the 2 points
+ * @param distance The distance to process.
+ */
+export function processDistance(distance) {
+  let minutes = calculateTime(distance);
+  let d = Math.floor(minutes / (24 * 60));
+  let h = Math.floor((minutes % (24 * 60)) / 60);
+  let m = Math.floor(minutes % 60);
+
+  let dDisplay = d > 0 ? d + ' d ' : '';
+  let hDisplay = h > 0 ? h + ' h ' : '';
+  let mDisplay = m > 0 ? m + (m === 1 ? ' min ' : ' mins ') : '';
+
+  return dDisplay + hDisplay + mDisplay;
 }
 
 /**

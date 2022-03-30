@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Platform, Text, View, StyleSheet} from 'react-native';
 import ShopList from './ShopList';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
-import {calculateDistance} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
 
 export default function DraggableShopList({navigation}) {
@@ -14,25 +13,12 @@ export default function DraggableShopList({navigation}) {
   const [orderedShops, setOrderedShops] = useState(context.shopsData);
 
   useEffect(() => {
-    const editedShopsData = context.shopsData.map(shop => {
-      let shopLocation = {
-        latitude: shop.Location._latitude,
-        longitude: shop.Location._longitude,
-      };
-      return {
-        ...shop,
-        Location: shopLocation,
-        DistanceTo: calculateDistance(
-          shopLocation,
-          context.currentUser.Location,
-        ),
-      };
-    });
-
     //ordering the shops based on distance from user location
-    editedShopsData.sort((a, b) => a.DistanceTo > b.DistanceTo);
+    const sortedShops = context.shopsData.sort(
+      (a, b) => a.distanceTo > b.distanceTo,
+    );
     //filtering the shops based on radius limitation
-    setOrderedShops(editedShopsData.filter(item => item.DistanceTo < 10000));
+    setOrderedShops(sortedShops.filter(shop => shop.distanceTo < 10000));
   }, [context.shopsData, context.currentUser.Location]);
 
   return (
