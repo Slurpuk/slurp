@@ -19,8 +19,8 @@ export function calculateDistance(coords, currentCenterLocation) {
   return parseInt(R * cc);
 }
 
-export function processDistance(minutes){
-  minutes = Number(minutes);
+export function processDistance(meters){
+  const minutes = Number(meters)/1000*12;
   var d = Math.floor(minutes / (24*60));
   var h = Math.floor(minutes % (24*60) / 60);
   var m = Math.floor(minutes % 60);

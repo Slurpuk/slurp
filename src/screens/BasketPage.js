@@ -8,6 +8,7 @@ import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 import {NetworkInfo} from 'react-native-network-info';
+import {Alerts} from "../data/Alerts";
 
 const BasketPage = ({navigation}) => {
   const publishableKey =
@@ -57,23 +58,27 @@ const BasketPage = ({navigation}) => {
   };
 
   /*
-   * Open payment sheet if error doesn't exists.
+   * Open payment sheet if error doesn't exist.
    * @function {confirmOrder} Confirm order if payment sheet is present.
    */
   const openPaymentSheet = async () => {
-    if (context.total !== 0) {
-      const {error} = await presentPaymentSheet();
-      if (error) {
-        Alert.alert(`Error code: ${error.code}`, error.message);
+    if(!context.currentCenterLocation.isDefault) {
+      if (context.total !== 0) {
+        const { error } = await presentPaymentSheet();
+        if (error) {
+          Alert.alert(`Error code: ${error.code}`, error.message);
+        } else {
+          confirmOrder().catch(error => console.log(error));
+        }
       } else {
-        confirmOrder().catch(error => console.log(error));
+        Alert.alert('Empty basket.', 'Please add items to your basket.', [
+          {
+            text: 'OK',
+          },
+        ]);
       }
-    } else {
-      Alert.alert('Empty basket.', 'Please add items to your basket.', [
-        {
-          text: 'OK',
-        },
-      ]);
+    }else{
+      Alerts.locationAlert();
     }
   };
 

@@ -41,7 +41,7 @@ export const AlertMessage = {
   },
   LOCATION: {
     title: 'Location Error',
-    message: 'Something with the location permissions must have gone wrong. Are you under water or sth?',
+    message: 'Turn on location permission to continue.',
   },
 
 };

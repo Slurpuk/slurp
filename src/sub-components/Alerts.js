@@ -32,6 +32,10 @@ export const CustomAlerts = {
     'Registration Error',
     'This is our bad, contact technical support. Error code #0001',
   ),
+  LOCATION: new Alert(
+    'Location error',
+    'The location on your device is disabled. Turn on location permission to make an order',
+  )
 };
 
 /*
