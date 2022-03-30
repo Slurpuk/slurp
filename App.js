@@ -114,8 +114,6 @@ export default function App() {
         );
         if (loading) {
           await refreshCurrentBasket(setCurrBasket);
-        }
-        if (loading) {
           setLoading(false);
         }
       });
