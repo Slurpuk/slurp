@@ -14,4 +14,4 @@ export default function ShopDetailIcons({distanceToShop}) {
       </Text>
     </View>
   );
-};
+}

@@ -40,7 +40,7 @@ const ShopCard = ({shop, navigation}) => {
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-          <ShopDetailIcons distanceToShop={shop.distanceTo} />
+        <ShopDetailIcons distanceToShop={shop.distanceTo} />
       </ImageBackground>
     </Pressable>
   );

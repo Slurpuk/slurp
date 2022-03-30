@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alerts} from '../data/Alerts';
 
-
 /**
  * Returns the storage shop key
  * @return Number The key of the shop
