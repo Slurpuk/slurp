@@ -7,6 +7,7 @@ import {GlobalContext} from '../../../App';
 
 function SideDrawerContent(props) {
   const context = useContext(GlobalContext);
+
   async function logout() {
     try {
       await auth().signOut();

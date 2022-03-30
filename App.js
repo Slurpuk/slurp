@@ -231,8 +231,7 @@ export default function App() {
         changeShop: changeShop,
         bottomSheet: {isOpen: isShopIntro, setOpen: setIsShopIntro},
         adaptiveOpacity: adaptiveOpacity,
-      }}
-    >
+      }}>
       <NavigationContainer>
         {auth().currentUser && currentUser ? (
           !loading ? (
@@ -244,8 +243,7 @@ export default function App() {
           <LoggedOutStack.Navigator
             screenOptions={{
               headerShown: false,
-            }}
-          >
+            }}>
             {isFirst ? (
               <LoggedOutStack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
