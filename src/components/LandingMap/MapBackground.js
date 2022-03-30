@@ -31,8 +31,8 @@ export default function MapBackground({
       name: shop.Name,
       description: shop.Intro,
       coords: {
-        latitude: shop.Location._latitude,
-        longitude: shop.Location._longitude,
+        latitude: shop.Location.latitude,
+        longitude: shop.Location.longitude,
       },
       image: shop.Image,
       isOpen: shop.IsOpen,

@@ -278,9 +278,14 @@ async function getFormattedShops(shopsData) {
   const shops = [];
   await Promise.all(
     shopsData.docs.map(async documentSnapshot => {
+      const data = documentSnapshot.data();
       let shopData = {
-        ...documentSnapshot.data(),
+        ...data,
         key: documentSnapshot.id,
+        Location: {
+          latitude: data.Location._latitude,
+          longitude: data.Location._longitude,
+        },
       };
       shopData.ItemsOffered = await getFormattedItems(documentSnapshot);
       await getOptions().then(options => {
