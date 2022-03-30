@@ -1,15 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alerts} from '../data/Alerts';
 
-/**
- * Returns  the storage basket size
- * @return Number The basket size
- */
-async function getBasketSize() {
-  let basket = await getBasket();
-  console.log(basket);
-  return basket.length;
-}
 
 /**
  * Returns the storage shop key
@@ -135,6 +126,5 @@ export {
   clearStorageBasket,
   getBasket,
   setBasket,
-  getBasketSize,
   getCurrentShopKey,
 };
