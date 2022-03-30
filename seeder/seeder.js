@@ -42,33 +42,35 @@ if (EMULATOR_MODE_ON) {
   connectAuthEmulator(auth, 'http://localhost:9099', {disableWarnings: true});
 }
 
-import {createUserWithEmailAndPassword} from 'firebase/auth';
+let jeb;
+let val;
+let billie;
 
 async function createTestUsers() {
-  const email1 = 'jeb@example.org';
-  await addDoc(collection(db, 'users'), {
+  const jebEmail = 'jeb@example.org';
+  jeb = await addDoc(collection(db, 'users'), {
     first_name: 'Jebediah',
     last_name: 'Smith',
-    email: email1,
+    email: jebEmail,
     location: new GeoPoint(51.503223, -0.1275),
   });
-  await createUserWithEmailAndPassword(getAuth(app), email1, 'Password123!');
-  const email2 = 'val@example.org';
-  await addDoc(collection(db, 'users'), {
+  await createUserWithEmailAndPassword(auth, jebEmail, 'Password123!');
+  const valEmail = 'val@example.org';
+  val = await addDoc(collection(db, 'users'), {
     first_name: 'Valentina',
     last_name: 'Smith',
-    email: email2,
+    email: valEmail,
     location: new GeoPoint(51.503223, -0.1275),
   });
-  await createUserWithEmailAndPassword(getAuth(), email2, 'Password123!');
-  const email3 = 'billie@example.org';
-  await addDoc(collection(db, 'users'), {
+  await createUserWithEmailAndPassword(auth, valEmail, 'Password123!');
+  const billieEmail = 'billie@example.org';
+  billie = await addDoc(collection(db, 'users'), {
     first_name: 'Billie',
     last_name: 'Smith',
-    email: email3,
+    email: billieEmail,
     location: new GeoPoint(51.503223, -0.1275),
   });
-  await createUserWithEmailAndPassword(getAuth(), email3, 'Password123!');
+  await createUserWithEmailAndPassword(auth, billieEmail, 'Password123!');
   console.log('Test users created!');
 }
 
