@@ -1,14 +1,8 @@
 import renderer from 'react-test-renderer';
 import React from 'react';
-import {
-  fireEvent,
-  render,
-  waitFor,
-} from '@testing-library/react-native';
+
 import CustomButton from '../src/sub-components/CustomButton';
 import GreenHeader from '../src/sub-components/GreenHeader';
-import App, {GlobalContext} from '../App';
-import SignUpPage from '../src/screens/SignUpPage';
 
 describe('Custom sub-components', function () {
   describe('button', function () {
