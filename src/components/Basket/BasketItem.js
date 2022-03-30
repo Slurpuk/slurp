@@ -45,7 +45,7 @@ export default function BasketItem({item}) {
         />
       </View>
       <View style={BasketItemStyles.amount_selection_container}>
-        <Pressable onPress={() => remove()}>
+        <Pressable onPress={() => remove()} hitSlop={10}>
           <Text
             style={[
               BasketItemStyles.change_amount_button,
@@ -55,7 +55,7 @@ export default function BasketItem({item}) {
           </Text>
         </Pressable>
         <Text style={BasketItemStyles.amount}>{count}</Text>
-        <Pressable onPress={() => add()}>
+        <Pressable onPress={() => add()} hitSlop={10}>
           <Text
             style={[
               BasketItemStyles.change_amount_button,
