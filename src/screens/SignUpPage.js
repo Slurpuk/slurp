@@ -7,7 +7,9 @@ import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
 import firestore from '@react-native-firebase/firestore';
 import {CustomAlerts} from '../sub-components/Alerts';
+
 import {Alerts} from '../data/Alerts';
+import {enterApp} from '../helpers/storageHelpers';
 
 const SignUpPage = ({navigation}) => {
   const [first_name, setFirstName] = useState('');
@@ -89,12 +91,17 @@ const SignUpPage = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(async () => {
+          await enterApp();
           await firestore()
             .collection('Users')
             .add({
               Email: email,
               FirstName: first_name,
               LastName: last_name,
+              Location: new firestore.GeoPoint(
+                51.5140310233705,
+                -0.1164075624320158,
+              ),
             })
             .then(() => Alert.alert('Welcome!', 'Registered Successfully'))
             .catch(error => {

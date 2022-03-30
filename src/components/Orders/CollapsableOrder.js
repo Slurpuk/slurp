@@ -4,7 +4,7 @@ import textStyles from '../../../stylesheets/textStyles';
 import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
-import {OrderStatus} from "../../data/OrderStatus";
+import {OrderStatus} from '../../data/OrderStatus';
 
 /**
  * Component corresponding to an order that can dynamically
@@ -12,7 +12,6 @@ import {OrderStatus} from "../../data/OrderStatus";
  * @param order Order object
  */
 const CollapsableOrder = ({order}) => {
-
   //Identifies if the order is current to determine the initial height
   const isOrderCurrent =
     order.Status === OrderStatus.READY ||

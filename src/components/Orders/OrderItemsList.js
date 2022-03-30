@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
-import EmptyItemLine from "./EmptyItemLine";
-import Item from "./Item";
+import EmptyItemLine from './EmptyItemLine';
+import Item from './Item';
 
 /**
  * Component corresponding to the expanded order that

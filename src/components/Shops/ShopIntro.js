@@ -3,17 +3,13 @@ import {Animated, View, Text, ImageBackground} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
-import {ShopContext} from '../../screens/ShopPage';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
 
-export default function ShopIntro({shop}) {
-  const shopContext = useContext(ShopContext);
+export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
   const globalContext = useContext(GlobalContext);
-  const context = shopContext === undefined ? globalContext : shopContext;
-
   return (
     <Animated.View
       style={{
@@ -23,7 +19,7 @@ export default function ShopIntro({shop}) {
         fadeOpacityIn(globalContext.adaptiveOpacity, 140);
       }}>
       <ImageBackground
-        imageStyle={ShopIntroStyles.cardImgs}
+        imageStyle={!isFullScreen ? ShopIntroStyles.cardImg : null}
         style={ShopIntroStyles.container}
         source={{uri: shop.Image}}>
         <LinearGradient
@@ -32,18 +28,18 @@ export default function ShopIntro({shop}) {
           <View
             style={[
               ShopIntroStyles.back_button,
-              context.isFullScreen
+              isFullScreen
                 ? {opacity: 1}
-                : context.isShopIntro
+                : globalContext.bottomSheet.isOpen
                 ? {opacity: 0}
                 : {opacity: 1},
             ]}>
             <WhiteArrowButton
-              direction={context.isShopIntro ? 'down' : 'left'}
-              navigation={context.navigation}
+              direction={globalContext.bottomSheet.isOpen ? 'down' : 'left'}
+              navigation={navigation}
               onPressAction={
-                context.isShopIntro
-                  ? () => draggable.bottomSheetRef.current.snapTo(1)
+                globalContext.bottomSheet.isOpen
+                  ? () => sheetRef.current.snapTo(1)
                   : null
               }
             />
@@ -52,9 +48,7 @@ export default function ShopIntro({shop}) {
             <Text style={[textStyles.headingOne, ShopIntroStyles.heading]}>
               {shop.Name}
             </Text>
-            {globalContext.currentCenterLocation.isDefault || shop.DistanceTo === null ? null : (
-              <ShopDetailIcons timeToOrder={shop.DistanceTo} />
-            )}
+            <ShopDetailIcons distanceToShop={shop.distanceTo} />
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
               {shop.Intro}
             </Text>

@@ -11,12 +11,11 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import {GlobalContext} from '../../../App';
 
-
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
 
-  const shopPageDetails = () => {
-    context.setCurrShop(shop, navigation);
+  const shopPageDetails = async () => {
+    await context.changeShop(shop, navigation);
   };
 
   return !shop.IsOpen ? (
@@ -41,9 +40,7 @@ const ShopCard = ({shop, navigation}) => {
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-        {context.currentCenterLocation.isDefault || shop.DistanceTo === null ? null : (
-          <ShopDetailIcons timeToOrder={shop.DistanceTo} />
-        )}
+          <ShopDetailIcons distanceToShop={shop.distanceTo} />
       </ImageBackground>
     </Pressable>
   );

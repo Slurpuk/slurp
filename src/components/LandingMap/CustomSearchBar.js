@@ -7,7 +7,8 @@ import {
   FlatList,
   Platform,
   Dimensions,
-  Pressable, Keyboard,
+  Pressable,
+  Keyboard,
 } from 'react-native';
 
 import {GlobalContext} from '../../../App';
@@ -20,12 +21,14 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   const [query, setQuery] = useState('');
 
   //the filtered list of shops to be shown in search results
-  const [shops, setShops] = useState(context.shopsData);
+  const [shops, setShops] = useState();
 
   //focus the search bar when a letter is typed and update the filtered shops
   const updateQuery = input => {
     if (!searchBarFocused && input !== '') {
       setSearchBarFocussed(true);
+    } else if (searchBarFocused && input === '') {
+      setSearchBarFocussed(false);
     }
     setQuery(input);
     filterShops();
@@ -51,9 +54,9 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   };
 
   //set the bottom sheet to the selected shop
-  const selectShop = shop => {
+  const selectShop = async shop => {
     if (shop.IsOpen) {
-      context.switchShop(shop);
+      await context.changeShop(shop);
       setSearchBarFocussed(false);
     }
   };
@@ -61,7 +64,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   return (
     <View style={styles.view}>
       <SearchBar
-        placeholder="Where to..."
+        placeholder="Type in a coffee shop..."
         // Function to run when a letter is pressed
         onChangeText={updateQuery}
         value={query}
@@ -90,10 +93,13 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   style={[
                     styles.searchResultContainer,
                     {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}>
+                  ]}
+                >
                   <Pressable
                     onPressIn={() => {
-                      if (item.IsOpen) Keyboard.dismiss();
+                      if (item.IsOpen) {
+                        Keyboard.dismiss();
+                      }
                     }}
                     onPress={() => selectShop(item)}
                     style={({pressed}) => [
@@ -106,14 +112,16 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                             : '#C5C5C5',
                       },
                       styles.searchResult,
-                    ]}>
+                    ]}
+                  >
                     {({pressed}) => (
                       <Text
                         style={[
                           {color: pressed && item.IsOpen ? 'white' : 'black'},
 
                           styles.flatListItem,
-                        ]}>
+                        ]}
+                      >
                         {item.Name}
                       </Text>
                     )}

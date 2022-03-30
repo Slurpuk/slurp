@@ -1,21 +1,15 @@
-import React, {useEffect, useState, useContext, useRef} from 'react';
-
-import {
-  Dimensions,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Keyboard,
-} from 'react-native';
+import React, {useEffect, useContext, useRef, useMemo} from 'react';
+import {Platform, StyleSheet, Text, View, Keyboard} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
-import {locationPress, requestLocationPermission} from './locationHelpers';
+import {
+  locationPress,
+  requestLocationPermission,
+} from '../../helpers/locationHelpers';
 import mapStyles from '../../../stylesheets/mapStyles';
-import { Alerts } from "../../data/Alerts";
 
 export default function MapBackground({
   searchBarFocused,
@@ -25,20 +19,37 @@ export default function MapBackground({
   //used to watch the users location
   const watchID = useRef();
   const mapCenter = useRef({
-    latitude: context.currentCenterLocation.latitude,
-    longitude: context.currentCenterLocation.longitude,
+    latitude: context.currentUser.Location._latitude,
+    longitude: context.currentUser.Location._longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
 
+  const markers = useMemo(() => {
+    return context.shopsData.map(shop => ({
+      name: shop.Name,
+      description: shop.Intro,
+      coords: {
+        latitude: shop.Location.latitude,
+        longitude: shop.Location.longitude,
+      },
+      image: shop.Image,
+      isOpen: shop.IsOpen,
+    }));
+  }, [context.shopsData]);
+
   //setup location access on map load. remove the location access when this component is unmounted
   useEffect(() => {
-    requestLocationPermission(context, mapCenter, watchID.current).then(null).catch(() => Alerts.locationAlert);
+    let currWatch = watchID.current;
+    requestLocationPermission(
+      context.currentUser.key,
+      mapCenter,
+      watchID,
+    ).catch(error => console.log(error));
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      Geolocation.clearWatch(watchID.current);
+      Geolocation.clearWatch(currWatch);
     };
-  }, []);
+  }, [context.currentUser.key]);
 
   //dismiss the keyboard and search results when the map is clicked
   const mapPressed = () => {
@@ -70,15 +81,15 @@ export default function MapBackground({
         style={styles.map}
         region={mapCenter.current}>
         {/*//map each of the shops to a marker on the map*/}
-        {context.markers.map((marker, index) => (
+        {markers.map((marker, index) => (
           <Marker
             key={index}
             coordinate={marker.coords}
             pinColor={'navy'}
             title={marker.name}
-            onPress={() => {
+            onPress={async () => {
               if (marker.isOpen) {
-                locationPress(context, mapCenter, marker.name);
+                await locationPress(context, mapCenter, marker.name);
               }
               mapPressed();
             }}>

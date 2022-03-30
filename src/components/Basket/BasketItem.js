@@ -1,30 +1,29 @@
 import {FlatList, Pressable, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
-import {GlobalContext} from '../../../App';
 import {BasketItemStyles} from '../../../stylesheets/ShopStyles';
+import {BasketContext} from '../../screens/BasketPage';
 
 export default function BasketItem({item}) {
-  const context = useContext(GlobalContext);
+  const context = useContext(BasketContext);
   const [count, setCount] = useState(item.count);
   const [itemTotal, setItemTotal] = useState(item.Price * item.count);
-
   /**
    * Reduce the basket item's count, ensuring it does not
    * go below 0 (removed from basket).
    */
-  function remove() {
+  async function remove() {
     if (count > 0) {
-      context.removeFromBasket(item);
       setCount(count - 1);
       setItemTotal(itemTotal - item.Price);
+      await context.removeFromBasket(item);
     }
   }
 
   /**
    * Increase the basket item's count.
    */
-  function add() {
-    context.addToBasket(item);
+  async function add() {
+    await context.addToBasket(item);
     setCount(count + 1);
     setItemTotal(itemTotal + item.Price);
   }
@@ -50,7 +49,8 @@ export default function BasketItem({item}) {
             style={[
               BasketItemStyles.change_amount_button,
               BasketItemStyles.minus,
-            ]}>
+            ]}
+          >
             -
           </Text>
         </Pressable>
@@ -60,7 +60,8 @@ export default function BasketItem({item}) {
             style={[
               BasketItemStyles.change_amount_button,
               BasketItemStyles.plus,
-            ]}>
+            ]}
+          >
             +
           </Text>
         </Pressable>
