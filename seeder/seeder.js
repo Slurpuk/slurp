@@ -354,21 +354,49 @@ async function addItemsToCoffeeShops() {
 }
 
 async function createOptions() {
-  await addDoc(
-    collection(db, 'options'),
-    {
-      name: 'dairy',
-      price: 2.8,
-      type: 'milk',
-    },
-    {
-      name: 'dairy',
-      price: 2.8,
-      type: 'milk',
-    },
-  );
-  // await createUserWithEmailAndPassword(auth, email, 'Password123');
-  console.log('Coffee Shops created!');
+  await addDoc(collection(db, 'options'), {
+    name: 'Hazelnut',
+    type: 'Syrup',
+    price: '0.4',
+    has_options: true,
+  });
+  await addDoc(collection(db, 'options'), {
+    name: 'Oat',
+    type: 'Milk',
+    price: '0.3',
+    has_options: true,
+  });
+  await addDoc(collection(db, 'options'), {
+    name: 'Dairy',
+    type: 'Milk',
+    price: '0',
+    has_options: true,
+  });
+  await addDoc(collection(db, 'options'), {
+    name: 'Coconut',
+    type: 'Milk',
+    price: '0.3',
+    has_options: true,
+  });
+  await addDoc(collection(db, 'options'), {
+    name: 'Caramel',
+    type: 'Syrup',
+    price: '0.4',
+    has_options: true,
+  });
+  await addDoc(collection(db, 'options'), {
+    name: 'Vanilla',
+    type: 'Syrup',
+    price: '0.4',
+    has_options: true,
+  });
+  await addDoc(collection(db, 'options'), {
+    name: 'Soy',
+    type: 'Milk',
+    price: '0.3',
+    has_options: true,
+  });
+  console.log('Options created!');
 }
 
 async function getCoffeeShops() {
