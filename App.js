@@ -234,7 +234,7 @@ export default function App() {
       }}
     >
       <NavigationContainer>
-        {currentUser ? (
+        {auth().currentUser && currentUser ? (
           !loading ? (
             <HamburgerSlideBarNavigator />
           ) : (
