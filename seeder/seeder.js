@@ -339,43 +339,18 @@ async function createItems() {
 Function to add the items to the coffee shop. Only call when the coffee shops are seeded
  */
 async function addItemsToCoffeeShops() {
-  let loadingCoffeeShops = true;
-  let isFirstTry = true;
-  let items = [];
-
+  const items = [];
   const itemsSnapshot = await getDocs(collection(db, 'items'));
-  itemsSnapshot.forEach(doc => {
-    items.push(doc.data());
+  itemsSnapshot.forEach(document => {
+    items.push(doc(db, 'items', document.id));
   });
-
-  while (loadingCoffeeShops) {
-    const possiblyIncompleteCoffeeShops = await getDocs(
-      collection(db, 'coffee_shop'),
-    );
-
-    let i = 0;
-    possiblyIncompleteCoffeeShops.forEach(doc => {
-      i++;
-    });
-    if (!isFirstTry) {
-      function delay(time) {
-        return new Promise(resolve => setTimeout(resolve, time));
-      }
-      delay(1000).then(() => console.log('ran after 1 second passed'));
-      isFirstTry = false;
-    }
-    loadingCoffeeShops = items.length !== i;
-  }
-
-  const completeCoffeeShops = await getDocs(collection(db, 'coffee_shop'));
-
-  completeCoffeeShops.forEach(doc => {
-    let coffeeShopWithOptions = {
-      ...doc.data(),
-      items: items,
-    };
-    setDoc(doc(db, 'coffee_shop', doc.id), coffeeShopWithOptions);
-  });
+  const completeCoffeeShops = await getDocs(collection(db, 'coffee_shops'));
+  await Promise.all(
+    completeCoffeeShops.docs.map(document =>
+      updateDoc(document.ref, {items: items}),
+    ),
+  );
+  console.log('Items added to Coffee Shops!');
 }
 
 async function createOptions() {
