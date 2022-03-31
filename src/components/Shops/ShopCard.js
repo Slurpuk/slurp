@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import {GlobalContext} from '../../../App';
+import { defaultLocation } from "../../data/Locations";
 
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
@@ -40,7 +41,9 @@ const ShopCard = ({shop, navigation}) => {
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-        <ShopDetailIcons distanceToShop={shop.distanceTo} />
+        {(context.currentUser.Location.latitude === defaultLocation.latitude && context.currentUser.Location.longitude === defaultLocation.longitude ) ? null :
+          <ShopDetailIcons distanceToShop={shop.distanceTo} />
+        }
       </ImageBackground>
     </Pressable>
   );

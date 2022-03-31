@@ -14,6 +14,7 @@ import {
 import {initializePayment, openPaymentSheet} from '../helpers/paymentHelpers';
 import {Alerts} from '../data/Alerts';
 import {sendOrder} from '../firebase/queries';
+import { defaultLocation } from "../data/Locations";
 
 export const BasketContext = React.createContext();
 
@@ -64,11 +65,15 @@ const BasketPage = ({navigation}) => {
    * Checkout. If the server is ready and the basket is not empty, proceed to payment.
    */
   async function checkout() {
-    contents.length === 0
-      ? Alerts.emptyBasketAlert()
-      : readyForPayment
-      ? await proceedToPayment()
-      : Alerts.initPaymentAlert(initialize);
+    if(context.currentUser.Location.longitude === defaultLocation.longitude && context.currentUser.Location.latitude === defaultLocation.latitude){
+      Alerts.LocationAlert();
+    }else {
+      contents.length === 0
+        ? Alerts.emptyBasketAlert()
+        : readyForPayment
+          ? await proceedToPayment()
+          : Alerts.initPaymentAlert(initialize);
+    }
   }
 
   /**
