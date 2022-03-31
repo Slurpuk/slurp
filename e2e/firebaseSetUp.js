@@ -25,7 +25,7 @@ export function initialiseFirestore(app) {
   const db = getFirestore(app);
   // Switch emulator on
   if (EMULATOR_MODE_ON) {
-    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectFirestoreEmulator(db, '127.0.0.1', 8080);
   }
   return db;
 }
@@ -34,7 +34,7 @@ export function initialiseAuth(app) {
   const auth = getAuth(app);
   // Switch emulator on
   if (EMULATOR_MODE_ON) {
-    connectAuthEmulator(auth, 'http://localhost:9099', {disableWarnings: true});
+    connectAuthEmulator(auth, 'http://127.0.0.1:9099', {disableWarnings: true});
   }
   return auth;
 }
