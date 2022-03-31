@@ -10,12 +10,15 @@ import {
   connectFirestoreEmulator,
   collection,
   doc,
+  getDoc,
   addDoc,
   updateDoc,
   getDocs,
   GeoPoint,
+  Timestamp,
 } from 'firebase/firestore';
 import {faker} from '@faker-js/faker';
+import {getRandomOptions, getRandomSubarray} from './helpers.js';
 
 const EMULATOR_MODE_ON = true;
 
