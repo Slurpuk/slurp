@@ -40,7 +40,8 @@ const ShopCard = ({shop, navigation}) => {
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-        <ShopDetailIcons distanceToShop={shop.distanceTo} />
+        { context.locationIsEnabled ?
+          <ShopDetailIcons distanceToShop={shop.distanceTo} /> : null }
       </ImageBackground>
     </Pressable>
   );

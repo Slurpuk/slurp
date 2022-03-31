@@ -64,11 +64,15 @@ const BasketPage = ({navigation}) => {
    * Checkout. If the server is ready and the basket is not empty, proceed to payment.
    */
   async function checkout() {
-    contents.length === 0
-      ? Alerts.emptyBasketAlert()
-      : readyForPayment
-      ? await proceedToPayment()
-      : Alerts.initPaymentAlert(initialize);
+    if(context.isLocationEnabled){
+      contents.length === 0
+        ? Alerts.emptyBasketAlert()
+        : readyForPayment
+          ? await proceedToPayment()
+          : Alerts.initPaymentAlert(initialize);
+    }else{
+      Alerts.LocationAlert();
+    }
   }
 
   /**

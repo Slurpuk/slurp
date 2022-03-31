@@ -111,13 +111,16 @@ const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
  * @param userRef The id of the current user
  * @param mapCenter The current center point of the map
  * @param watchID The watchID for tracking the user's position
+ * @param setIsLocationIsEnabled update the location permission
  */
 export const requestLocationPermission = async (
   userRef,
   mapCenter,
   watchID,
+  setIsLocationIsEnabled,
 ) => {
   if (Platform.OS === 'ios') {
+    setIsLocationIsEnabled(true);
     getOneTimeLocation(mapCenter);
     subscribeLocationLocation(mapCenter, watchID, userRef);
   } else {
@@ -131,6 +134,7 @@ export const requestLocationPermission = async (
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         //To Check, If Permission is granted
+        setIsLocationIsEnabled(true);
         getOneTimeLocation(mapCenter);
         subscribeLocationLocation(mapCenter, watchID, userRef);
       }
