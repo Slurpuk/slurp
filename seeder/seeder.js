@@ -248,109 +248,101 @@ async function createCoffeeShops() {
 async function createItems() {
   await addDoc(collection(db, 'items'), {
     name: 'Americano',
-    price: '2.8',
+    price: 2.8,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Coffees%2FAmericano.jpeg?alt=media&token=09fefac7-ab22-414d-b917-be86c11dc88f',
     type: 'coffee',
-    has_options: 'true',
+    has_options: true,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Espresso',
-    price: '1.8',
+    price: 1.8,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Coffees%2FEspresso.png?alt=media&token=492331da-2d89-487a-b43f-bbbdcd64eb91',
     type: 'coffee',
-    has_options: 'false',
+    has_options: false,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Latte',
-    price: '3.4',
+    price: 3.4,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Coffees%2FLatte.jpeg?alt=media&token=2e5c10c3-e560-4d63-91d8-740e2a556a3a',
     type: 'coffee',
-    has_options: 'true',
+    has_options: true,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Flat White',
-    price: '2.2',
+    price: 2.2,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Coffees%2FFlatWhite.jpeg?alt=media&token=1349bc5a-f5aa-402d-b17a-2014d2e15839',
     type: 'coffee',
-    has_options: 'true',
+    has_options: true,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Cappuccino',
-    price: '2.7',
+    price: 2.7,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Coffees%2FCappuccino.jpeg?alt=media&token=2b2ba0a8-c8df-4de2-9e2d-b73ec2872771',
     type: 'coffee',
-    has_options: 'true',
-  });
-  await addDoc(collection(db, 'items'), {
-    name: 'Cappuccino',
-    price: '2.7',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Coffees%2FCappuccino.jpeg?alt=media&token=2b2ba0a8-c8df-4de2-9e2d-b73ec2872771',
-    type: 'coffee',
-    has_options: 'true',
+    has_options: true,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Apple Juice',
-    price: '2.5',
+    price: 2.5,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Drinks%2FAppleJuice.jpeg?alt=media&token=dfd54372-49d6-4029-888b-0acee6b9efa4',
     type: 'drink',
-    has_options: 'false',
+    has_options: false,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Lemonade',
-    price: '2.6',
+    price: 2.6,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Drinks%2FLemonade.jpeg?alt=media&token=69102717-f0eb-4d5f-a076-7fb9d45d19cb',
     type: 'drink',
-    has_options: 'false',
+    has_options: false,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Orange Juice',
-    price: '2.8',
+    price: 2.8,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Drinks%2FOrangeJuice.jpeg?alt=media&token=04c92cc7-c48e-40fc-9324-4e12280d0d45',
     type: 'drink',
-    has_options: 'false',
+    has_options: false,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Granola Bar',
-    price: '1.5',
+    price: 1.5,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Snacks%2FGranola.jpeg?alt=media&token=e9e5ad28-0ff8-4ed1-9977-de79bee4071c',
     type: 'snack',
-    has_options: 'false',
+    has_options: false,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Ham and Cheese',
-    price: '3.5',
+    price: 3.5,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Snacks%2FHamCheese.jpeg?alt=media&token=4d6fa98f-c74e-4667-8434-08a78b5946b7',
     type: 'snack',
-    has_options: 'false',
+    has_options: false,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Croissant',
-    price: '2',
+    price: 2,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Snacks%2FCroissant.jpeg?alt=media&token=1534c88e-490b-4fb8-8313-16a70f344caf',
     type: 'snack',
-    has_options: 'false',
+    has_options: false,
   });
   await addDoc(collection(db, 'items'), {
     name: 'Tuna Mayo',
-    price: '3.3',
+    price: 3.3,
     image:
       'https://firebasestorage.googleapis.com/v0/b/independentcoffeeshops.appspot.com/o/Snacks%2FTunaMayo.jpeg?alt=media&token=d78a9d8b-f5b4-451e-8d0a-d9808df857fc',
     type: 'snack',
-    has_options: 'false',
+    has_options: false,
   });
-  console.log('Items created');
+  console.log('Items created!');
 }
 
 /**
@@ -380,44 +372,37 @@ async function createOptions() {
   await addDoc(collection(db, 'options'), {
     name: 'Hazelnut',
     type: 'Syrup',
-    price: '0.4',
-    has_options: true,
+    price: 0.4,
   });
   await addDoc(collection(db, 'options'), {
     name: 'Oat',
     type: 'Milk',
-    price: '0.3',
-    has_options: true,
+    price: 0.3,
   });
   await addDoc(collection(db, 'options'), {
     name: 'Dairy',
     type: 'Milk',
-    price: '0',
-    has_options: true,
+    price: 0,
   });
   await addDoc(collection(db, 'options'), {
     name: 'Coconut',
     type: 'Milk',
-    price: '0.3',
-    has_options: true,
+    price: 0.3,
   });
   await addDoc(collection(db, 'options'), {
     name: 'Caramel',
     type: 'Syrup',
-    price: '0.4',
-    has_options: true,
+    price: 0.4,
   });
   await addDoc(collection(db, 'options'), {
     name: 'Vanilla',
     type: 'Syrup',
-    price: '0.4',
-    has_options: true,
+    price: 0.4,
   });
   await addDoc(collection(db, 'options'), {
     name: 'Soy',
     type: 'Milk',
-    price: '0.3',
-    has_options: true,
+    price: 0.3,
   });
   console.log('Options created!');
 }
