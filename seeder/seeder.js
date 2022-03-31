@@ -474,11 +474,15 @@ async function createOrders() {
  */
 async function seed() {
   try {
+    await createTestUsers();
     await createFakeUsers();
     await createCoffeeShops();
-    await createItems().then(async () => await addItemsToCoffeeShops());
+    await createItems();
+    await addItemsToCoffeeShops();
+    await createOptions();
+    await createOrders();
   } catch (error) {
-    console.log('Error while seeding database: ' + error.code + '. Sorry!');
+    console.log('Error while seeding database: ' + error + '. Sorry!');
   }
 }
 
