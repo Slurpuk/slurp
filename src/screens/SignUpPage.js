@@ -126,6 +126,7 @@ const SignUpPage = ({navigation}) => {
             setField={setFirstName}
             type={'name'}
             value={first_name}
+            testID={'sign_up_page_first_name'}
           />
           <FormField
             style={[styles.subNameContainer]}
@@ -134,6 +135,7 @@ const SignUpPage = ({navigation}) => {
             setField={setLastName}
             type={'name'}
             value={last_name}
+            testID={'sign_up_page_last_name'}
           />
         </View>
         <FormField
@@ -143,6 +145,7 @@ const SignUpPage = ({navigation}) => {
           setField={setEmail}
           type={'email'}
           value={email}
+          testID={'sign_up_page_email'}
         />
         <FormField
           style={styles.element}
@@ -150,6 +153,7 @@ const SignUpPage = ({navigation}) => {
           setField={setPassword}
           type={'password'}
           value={password}
+          testID={'sign_up_page_password'}
         />
         <FormField
           style={styles.element}
@@ -157,6 +161,7 @@ const SignUpPage = ({navigation}) => {
           setField={setPasswordConfirmation}
           type={'password'}
           value={password_confirmation}
+          testID={'sign_up_page_confirm_password'}
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
