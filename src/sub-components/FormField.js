@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 const FormField = ({
@@ -32,28 +32,6 @@ const FormField = ({
       autoCapitalize = 'none';
       autoCorrect = false;
       autoCompleteType = 'password';
-      break;
-    case 'cardNumber':
-      autoCapitalize = 'none';
-      autoCorrect = false;
-      autoCompleteType = 'cardComponent';
-      keyboardType = 'numeric';
-      maxLength = 16;
-      break;
-    case 'expiryDate':
-      autoCapitalize = 'none';
-      autoCorrect = false;
-      autoCompleteType = 'cardComponent';
-      keyboardType = 'numeric';
-      maxLength = 5;
-      break;
-    case 'CVC':
-      secureTextEntry = true;
-      autoCapitalize = 'none';
-      autoCorrect = false;
-      autoCompleteType = 'cardComponent';
-      keyboardType = 'numeric';
-      maxLength = 3;
       break;
   }
 
