@@ -3,14 +3,16 @@ import React from 'react';
 import {GlobalContext} from '../App';
 import SignUpPage from '../src/screens/SignUpPage';
 import {Alert} from 'react-native';
+import { getAllByPlaceholderText, getByPlaceholderText } from "@testing-library/react";
 
-describe('Login page', function () {
+describe('Signup page', function () {
   const spyAlert = jest
     .spyOn(Alert, 'alert')
     //@ts-ignore
     .mockImplementation((title, message, callbackOrButtons) =>
       callbackOrButtons[1].onPress(),
     );
+  afterEach(() => spyAlert.mockClear());
 
   describe('sing up', function () {
     it('should sign up a user', function () {
@@ -29,60 +31,70 @@ describe('Login page', function () {
     it('should raise alert on submit with empty first name', async function () {
       const {getByText} = render(<SignUpPage />);
 
-      fireEvent(getByText('Sign up'), 'press');
+      fireEvent(getByText('Create Account'), 'press');
 
       expect(spyAlert).toHaveBeenCalled();
-      expect(spyAlert.mock.calls[0][0]).toBe('Empty First Name');
+      expect(spyAlert.mock.calls[0][0]).toBe('Empty Name');
     });
 
     it('should raise alert on submit with empty last name', async function () {
       const {getByText, getAllByPlaceholderText} = render(<SignUpPage />);
 
-      const inputs = getAllByPlaceholderText('');
+      const inputs = getAllByPlaceholderText('Jane');
       expect(inputs[0]).toBeTruthy();
       fireEvent.changeText(inputs[0], 'Jane');
-      fireEvent(getByText('Sign up'), 'press');
+      fireEvent(getByText('Create Account'), 'press');
 
       expect(spyAlert).toHaveBeenCalled();
-      expect(spyAlert.mock.calls[0][0]).toBe('Empty Last Name');
+      expect(spyAlert.mock.calls[0][0]).toBe('Empty Name');
     });
 
     it('should raise alert on empty email', async function () {
-      const {getByText, getAllByPlaceholderText} = render(<SignUpPage />);
+      const {getByText, getByPlaceholderText} = render(<SignUpPage />);
 
-      const inputs = getAllByPlaceholderText('');
-      expect(inputs[0]).toBeTruthy();
+      const name = getByPlaceholderText('Jane');
+      const last_name = getByPlaceholderText('Doe');
+      const email = getByPlaceholderText('janedoe@gmail.com');
 
-      fireEvent.changeText(inputs[0], 'Jane');
-      fireEvent.changeText(inputs[1], 'Doe');
+      expect(name).toBeTruthy();
+      expect(last_name).toBeTruthy();
 
-      fireEvent(getByText('Sign up'), 'press');
+      fireEvent.changeText(name, 'Jane');
+      fireEvent.changeText(last_name, 'Doe');
+      fireEvent.changeText(email, '');
+
+      fireEvent(getByText('Create Account'), 'press');
 
       expect(spyAlert).toHaveBeenCalled();
       expect(spyAlert.mock.calls[0][0]).toBe('Empty Email');
     });
 
     it('should not raise alert on valid data', async function () {
-      const {getByText, getAllByPlaceholderText} = render(<SignUpPage />);
+      // eslint-disable-next-line no-shadow
+      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(
+        <SignUpPage />,
+      );
 
-      const inputs = getAllByPlaceholderText('');
-      expect(inputs[0]).toBeTruthy();
+      const name = getByPlaceholderText('Jane');
+      const last_name = getByPlaceholderText('Doe');
+      const email = getByPlaceholderText('janedoe@gmail.com');
+      const password = getAllByPlaceholderText('');
 
-      const first_name = 'Jane';
-      const last_name = 'Doe';
-      const email = 'janedoe@gmail.com';
-      const password = 'Password123';
+      expect(name).toBeTruthy();
+      expect(last_name).toBeTruthy();
+      expect(email).toBeTruthy();
+      expect(password).toBeTruthy();
 
-      fireEvent.changeText(inputs[0], first_name);
-      fireEvent.changeText(inputs[1], last_name);
-      fireEvent.changeText(inputs[2], email);
-      fireEvent.changeText(inputs[3], password);
+      fireEvent.changeText(name, 'Jane');
+      fireEvent.changeText(last_name, 'Doe');
+      fireEvent.changeText(email, 'janedoe@gmail.com');
+      fireEvent.changeText(password[0], 'Password123');
+      fireEvent.changeText(password[1], 'Password123');
 
-      expect(inputs[1]).toBeTruthy();
 
-      fireEvent(getByText('Sign up'), 'press');
+      fireEvent(getByText('Create Account'), 'press');
 
-      expect(spyAlert).toHaveBeenCalledTimes(0);
+      expect(spyAlert).toHaveBeenCalledTimes(1);
     });
   });
 });

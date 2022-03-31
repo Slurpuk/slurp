@@ -124,7 +124,7 @@ exports[`Custom sub-components button should render correctly with number indica
 </View>
 `;
 
-exports[`Custom sub-components green header should render correctly 1`] = `
+exports[`green header should render correctly 1`] = `
 <View
   style={
     Object {
@@ -209,7 +209,7 @@ exports[`Custom sub-components green header should render correctly 1`] = `
 </View>
 `;
 
-exports[`Custom sub-components white arrow button should render correctly 1`] = `
+exports[`white arrow button should render correctly 1`] = `
 <View
   accessible={true}
   collapsable={false}

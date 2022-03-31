@@ -5,7 +5,7 @@ import CustomButton from '../src/sub-components/CustomButton';
 import GreenHeader from '../src/sub-components/GreenHeader';
 import WhiteArrowButton from '../src/sub-components/WhiteArrowButton';
 import AnimatedCard from '../src/sub-components/AnimatedCard';
-import { fireEvent } from "@testing-library/react";
+import { fireEvent, getByText, render } from "@testing-library/react";
 import { Alert } from "react-native";
 
 
@@ -36,14 +36,9 @@ describe('Custom sub-components', function () {
       expect(tree).toMatchSnapshot();
     });
 
-    it('should navigate to landing page', function() {
-      const tree = renderer.create(<WhiteArrowButton />).toJSON();
-    })
-  });
+    it('should respond to a click', function() {
+      const { getByText } = renderer.create(<WhiteArrowButton />).toJSON();
 
-  describe('animated card', function () {
-    it('should render correctly', function () {
-      const tree = renderer.create(<AnimatedCard />).toJSON();
-      expect(tree).toMatchSnapshot();
-    });
+      fireEvent(getByText('up'), 'press');
+    })
   });
