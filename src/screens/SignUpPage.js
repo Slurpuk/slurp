@@ -103,7 +103,6 @@ const SignUpPage = ({navigation}) => {
                 -0.1164075624320158,
               ),
             })
-            .then(() => Alert.alert('Welcome!', 'Registered Successfully'))
             .catch(error => {
               handleSignUpErrorsBackEnd(error);
             });

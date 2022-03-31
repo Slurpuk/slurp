@@ -8,7 +8,7 @@ describe('Sign up', () => {
   beforeAll(async () => {
     const app = initialiseFirebase();
     db = initialiseFirestore(app);
-    auth = initialiseFirebase(app);
+    auth = initialiseAuth(app);
 
     await device.launchApp({delete: true}); // deletes async storage on launch ensuring welcome pages are displayed
   });
