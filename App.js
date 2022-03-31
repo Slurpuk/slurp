@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import HamburgerSlideBarNavigator from './src/navigation/HamburgerSlideBarNavigator';
 import SignUpPage from './src/screens/SignUpPage';
@@ -38,7 +38,6 @@ export default function App() {
   const [isFirst, setIsFirst] = useState(true); // Is it the first time the app is downloaded
   const adaptiveOpacity = useRef(new Animated.Value(0)).current; // Animation fading value.
   const LoggedOutStack = createNativeStackNavigator(); // Stack navigator for logged out users.
-
   /**
    * Side effect that fires when App first renders to determine whether it is the first time the app is used since download
    * Sets the first time state accordingly.
