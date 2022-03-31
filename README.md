@@ -51,3 +51,8 @@ When running the seeder after the first seed do:
 ```
 $ npm run seed
 ```
+All passwords are "Password123!", the following users are seeded with orders. All coffee shops are seeded with orders and items.
+
+jeb@example.org <br>
+val@example.org <br>
+billie@example.org <br>
