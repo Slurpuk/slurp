@@ -5,6 +5,16 @@ import {fadeOpacityIn, fadeOpacityOut} from '../sub-components/Animations';
 import {updateUserLocation} from '../firebase/queries';
 
 /**
+ * Compare two locations and decide if they're the same
+ * @param location1 the first location
+ * @param location2 the second location
+ * @returns {boolean} if they are the same
+ */
+export const compareLocation = (location1, location2) => {
+  return location1.latitude === location2.latitude && location1.longitude === location2.longitude;
+}
+
+/**
  * Used when a shop marker is pressed. Center the map around the marker and
  * drag the corresponding shop's intro up with a fading animation.
  * @param context

@@ -11,6 +11,7 @@ import {
 import textStyles from '../../../stylesheets/textStyles';
 import {GlobalContext} from '../../../App';
 import { defaultLocation } from "../../data/Locations";
+import { compareLocation } from "../../helpers/locationHelpers";
 
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
@@ -41,7 +42,7 @@ const ShopCard = ({shop, navigation}) => {
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.Name}
         </Text>
-        {(context.currentUser.Location.latitude === defaultLocation.latitude && context.currentUser.Location.longitude === defaultLocation.longitude ) ? null :
+        {compareLocation(context.currentUser.Location, defaultLocation)  ? null :
           <ShopDetailIcons distanceToShop={shop.distanceTo} />
         }
       </ImageBackground>

@@ -8,6 +8,7 @@ import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
 import { defaultLocation } from "../../data/Locations";
+import { compareLocation } from "../../helpers/locationHelpers";
 
 export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
   const globalContext = useContext(GlobalContext);
@@ -53,7 +54,7 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
             <Text style={[textStyles.headingOne, ShopIntroStyles.heading]}>
               {shop.Name}
             </Text>
-            {(globalContext.currentUser.Location.latitude === defaultLocation.latitude && globalContext.currentUser.Location.longitude === defaultLocation.longitude ) ? null :
+            {compareLocation(globalContext.currentUser.Location, defaultLocation) ? null :
               <ShopDetailIcons distanceToShop={shop.distanceTo} />
             }
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
