@@ -50,7 +50,7 @@ const SignUpPage = ({navigation}) => {
     } else if (password_confirmation !== password) {
       validity = false;
       Alert.alert(
-        "Passwords don't match",
+        'Passwords do not match',
         "Make sure you've entered your password correctly.",
       );
     } else if (!passwordRegex.test(password)) {

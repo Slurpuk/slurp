@@ -3,7 +3,6 @@ import React from 'react';
 import {GlobalContext} from '../App';
 import SignUpPage from '../src/screens/SignUpPage';
 import {Alert} from 'react-native';
-import { getAllByPlaceholderText, getByPlaceholderText } from "@testing-library/react";
 
 describe('Signup page', function () {
   const spyAlert = jest
@@ -69,8 +68,77 @@ describe('Signup page', function () {
       expect(spyAlert.mock.calls[0][0]).toBe('Empty Email');
     });
 
+    it('should raise alert on email with empty domain name', async function () {
+      const {getByText, getByPlaceholderText} = render(<SignUpPage />);
+
+      const name = getByPlaceholderText('Jane');
+      const last_name = getByPlaceholderText('Doe');
+      const email = getByPlaceholderText('janedoe@gmail.com');
+
+      expect(name).toBeTruthy();
+      expect(last_name).toBeTruthy();
+
+      fireEvent.changeText(name, 'Jane');
+      fireEvent.changeText(last_name, 'Doe');
+      fireEvent.changeText(email, 'email@');
+
+      fireEvent(getByText('Create Account'), 'press');
+
+      expect(spyAlert).toHaveBeenCalled();
+      expect(spyAlert.mock.calls[0][0]).toBe('Bad Email');
+    });
+
+    it('should raise alert on weak password', async function () {
+      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(<SignUpPage />);
+
+      const name = getByPlaceholderText('Jane');
+      const last_name = getByPlaceholderText('Doe');
+      const email = getByPlaceholderText('janedoe@gmail.com');
+      const password = getAllByPlaceholderText('');
+
+
+      expect(name).toBeTruthy();
+      expect(last_name).toBeTruthy();
+      expect(email).toBeTruthy();
+
+      fireEvent.changeText(name, 'Jane');
+      fireEvent.changeText(last_name, 'Doe');
+      fireEvent.changeText(email, 'janedoe@gmail.com');
+      fireEvent.changeText(password[0], 'pass');
+      fireEvent.changeText(password[1], 'pass');
+
+      fireEvent(getByText('Create Account'), 'press');
+
+      expect(spyAlert).toHaveBeenCalled();
+      expect(spyAlert.mock.calls[0][0]).toBe('Weak password');
+    });
+
+    it('should raise alert on password confirmation not matching', async function () {
+      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(<SignUpPage />);
+
+      const name = getByPlaceholderText('Jane');
+      const last_name = getByPlaceholderText('Doe');
+      const email = getByPlaceholderText('janedoe@gmail.com');
+      const password = getAllByPlaceholderText('');
+
+
+      expect(name).toBeTruthy();
+      expect(last_name).toBeTruthy();
+      expect(email).toBeTruthy();
+
+      fireEvent.changeText(name, 'Jane');
+      fireEvent.changeText(last_name, 'Doe');
+      fireEvent.changeText(email, 'janedoe@gmail.com');
+      fireEvent.changeText(password[0], 'Password123');
+      fireEvent.changeText(password[1], 'Passw');
+
+      fireEvent(getByText('Create Account'), 'press');
+
+      expect(spyAlert).toHaveBeenCalled();
+      expect(spyAlert.mock.calls[0][0]).toBe('Passwords do not match');
+    });
+
     it('should not raise alert on valid data', async function () {
-      // eslint-disable-next-line no-shadow
       const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(
         <SignUpPage />,
       );
