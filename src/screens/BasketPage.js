@@ -8,6 +8,7 @@ import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 import {NetworkInfo} from 'react-native-network-info';
+//import stripe from 'tipsi-stripe';
 
 const BasketPage = ({navigation}) => {
   const publishableKey =
@@ -16,23 +17,44 @@ const BasketPage = ({navigation}) => {
 
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
 
+  /*const token = stripe.paymentRequestWithCardForm({
+    // Only iOS support this options
+    smsAutofillDisabled: true,
+    requiredBillingAddressFields: 'full',
+    prefilledInformation: {
+      billingAddress: {
+        name: 'Enappd Store',
+        line1: 'Canary Place',
+        line2: '3',
+        city: 'Macon',
+        state: '',
+        country: 'Estonia',
+        postalCode: '31217',
+        email: 'admin@enappd.com',
+      },
+    },
+  })*/
+
   /*
    * Fetch the payments' sheet parameters from the server.
    * @return {paymentIntent} Return the encapsulated details about the transaction.
    * @return {ephemeralKey} Return the cryptographic payment key.
    * @return {customer} Return the customer.
    */
-  const fetchPaymentSheetParams = async (ipAddress) => {
-    let API_URL = 'http://192.168.0.128:7070';
+  const fetchPaymentSheetParams = async () => {
+    let API_URL = 'http://localhost:7070';
     console.log('asc', API_URL);
     let body = {amount: context.total.toFixed(2)};
-    const response = await fetch(`${API_URL}/checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      'http://localhost:5000/independentcoffeeshops/us-central1/payWithStripe',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
       },
-      body: JSON.stringify(body),
-    });
+    );
     const {paymentIntent, ephemeralKey, customer} = await response.json();
     return {
       paymentIntent,
@@ -45,9 +67,9 @@ const BasketPage = ({navigation}) => {
    * Initialize the payment sheet with customerId,
    * customerEphemeralKeySecret, paymentIntentClientSecret
    */
-  const initializePaymentSheet = async (ipAddress) => {
+  const initializePaymentSheet = async () => {
     const {paymentIntent, ephemeralKey, customer} =
-      await fetchPaymentSheetParams(ipAddress);
+      await fetchPaymentSheetParams();
     const {error} = await initPaymentSheet({
       customerId: customer,
       customerEphemeralKeySecret: ephemeralKey,
@@ -82,10 +104,7 @@ const BasketPage = ({navigation}) => {
    */
   useEffect(() => {
     if (context.total !== 0) {
-      NetworkInfo.getIPV4Address().then(currIp => {
-        console.log(currIp)
-        initializePaymentSheet(currIp);
-      });
+      initializePaymentSheet();
     }
   }, [context.total]);
 

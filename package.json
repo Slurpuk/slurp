@@ -33,6 +33,7 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/react-native": "^9.0.0",
     "@testing-library/user-event": "^12.6.0",
+    "prop-types": "^15.8.1",
     "react": "17.0.2",
     "react-input-mask": "^2.0.4",
     "react-native": "0.67.2",
@@ -57,7 +58,8 @@
     "react-native-svg": "^12.1.1",
     "react-native-tabs-section-list": "^1.0.1",
     "react-native-vector-icons": "^9.0.0",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "tipsi-stripe": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.16.12",

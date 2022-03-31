@@ -10,6 +10,7 @@ import App from "./App";
 import '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import CardFormScreen from "./src/screens/CardFormScreen";
 
 const EMULATOR_MODE_ON = false;
 
