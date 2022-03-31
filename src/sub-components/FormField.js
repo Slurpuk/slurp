@@ -52,6 +52,7 @@ const FormField = ({
         autoCorrect={autoCorrect}
         keyboardType={keyboardType}
         maxLength={maxLength}
+        textContentType={'oneTimeCode'}
         testID={testID}
       />
     </View>
