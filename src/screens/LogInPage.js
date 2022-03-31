@@ -99,7 +99,7 @@ const LogInPage = ({navigation}) => {
   }
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} testID={'emailfield'}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
       <View style={styles.form}>
@@ -108,6 +108,7 @@ const LogInPage = ({navigation}) => {
           setField={setEmail}
           type={'email'}
           value={email}
+          testID={'email'}
         />
         <FormField
           title={'Password'}
@@ -115,6 +116,7 @@ const LogInPage = ({navigation}) => {
           setField={setPassword}
           type={'password'}
           value={password}
+          testID={'password'}
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}

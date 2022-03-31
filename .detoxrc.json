@@ -8,7 +8,7 @@
       "build": "cd android && ./gradlew app:assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..",
       "type": "android.emulator",
       "device": {
-        "avdName": "Pixel_4_API_29"
+        "avdName": "876dcc08"
       }
     },
     "ios": {

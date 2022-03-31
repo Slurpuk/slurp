@@ -1,0 +1,11 @@
+{
+  "name": "seeder",
+  "type": "module",
+  "scripts": {
+    "seed": "node seeder.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^6.0.0",
+    "firebase": "^9.6.10"
+  }
+}

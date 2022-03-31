@@ -8,6 +8,7 @@ const FormField = ({
   setField,
   value = '',
   type = '',
+  testID,
 }) => {
   let secureTextEntry = false;
   let autoCapitalize = true;
@@ -73,6 +74,7 @@ const FormField = ({
         autoCorrect={autoCorrect}
         keyboardType={keyboardType}
         maxLength={maxLength}
+        testID={testID}
       />
     </View>
   );
