@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import {initializeApp} from 'firebase/app';
 import {
   getAuth,
@@ -49,6 +48,10 @@ let jeb;
 let val;
 let billie;
 
+/**
+ * Function to add some users to test the app with. Creates authentication objects as well.
+ * @returns {Promise<void>}
+ */
 async function createTestUsers() {
   const jebEmail = 'jeb@example.org';
   jeb = await addDoc(collection(db, 'users'), {
@@ -77,6 +80,10 @@ async function createTestUsers() {
   console.log('Test users created!');
 }
 
+/**
+ * Function to add a bunch of users to the database
+ * @returns {Promise<void>}
+ */
 async function createFakeUsers() {
   for (let i = 0; i < 30; i++) {
     const email = faker.internet.email();
@@ -91,6 +98,10 @@ async function createFakeUsers() {
   console.log('Users created!');
 }
 
+/**
+ * Function to add the coffee shops to the database
+ * @returns {Promise<void>}
+ */
 async function createCoffeeShops() {
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Kaffeine',
@@ -230,6 +241,10 @@ async function createCoffeeShops() {
   console.log('Coffee shops created');
 }
 
+/**
+ * Function to create the items on sale
+ * @returns {Promise<void>}
+ */
 async function createItems() {
   await addDoc(collection(db, 'items'), {
     name: 'Americano',
@@ -338,8 +353,9 @@ async function createItems() {
   console.log('Items created');
 }
 
-/*
-Function to add the items to the coffee shop. Only call when the coffee shops are seeded
+/**
+ * Function to add the items to the coffee shop. Only call when the coffee shops are seeded
+ * @returns {Promise<void>}
  */
 async function addItemsToCoffeeShops() {
   const items = [];
@@ -356,6 +372,10 @@ async function addItemsToCoffeeShops() {
   console.log('Items added to Coffee Shops!');
 }
 
+/**
+ * Function to add the possible options to the database
+ * @returns {Promise<void>}
+ */
 async function createOptions() {
   await addDoc(collection(db, 'options'), {
     name: 'Hazelnut',
@@ -460,6 +480,10 @@ async function getOptions() {
   });
 }
 
+/**
+ * Function to run all seed commands
+ * @returns {Promise<void>}
+ */
 async function seed() {
   try {
     await createFakeUsers();
