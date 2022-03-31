@@ -29,5 +29,5 @@ if (EMULATOR_MODE_ON) {
 }
 
 /*
-Delete all database
+Delete all database. WIP, for now go to localhost:4000 and delete auth and firestore data.
  */
