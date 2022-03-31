@@ -115,7 +115,7 @@ const SignUpPage = ({navigation}) => {
   }
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} testID={'sign_up_page'}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
       <View style={styles.formContainer}>
@@ -161,8 +161,7 @@ const SignUpPage = ({navigation}) => {
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('LogIn')}
-        >
+          onPress={() => navigation.navigate('LogIn')}>
           Already have an account? Log in
         </Text>
       </View>

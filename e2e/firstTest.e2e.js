@@ -10,28 +10,19 @@ describe('Sign up', () => {
     db = initialiseFirestore(app);
     auth = initialiseFirebase(app);
 
-  beforeEach(async () => {
-    await device.reloadReactNative();
+    await device.launchApp({delete: true}); // deletes async storage on launch ensuring welcome pages are displayed
   });
 
-  it('should be able to sign up', async () => {
-    await expect(element(by.id('emailfield'))).toBeVisible();
-
-    let email = 'me@liamclark.com';
-    let password = 'Password123';
-    await element(by.id('email')).typeText(email);
-    await element(by.id('password')).typeText(password);
-    await element(by.text('Log in')).tap();
-    await expect(element(by.id('emailfield'))).not.toBeVisible();
+  it('should be able to scroll through welcome pages and get to sign up page', async () => {
+    await expect(element(by.id('welcome_pages'))).toBeVisible();
+    await expect(element(by.id('welcome_page1'))).toExist();
+    await element(by.id('welcome_pages_scrollview')).scrollTo('right');
+    await expect(element(by.id('welcome_page2'))).toExist();
+    //await element(by.id('welcome_pages_scrollview')).scrollTo('right');
+    await expect(element(by.id('welcome_page3'))).toExist();
+    await expect(element(by.text('Sign Up'))).toBeVisible();
+    await element(by.text('Sign Up')).tap();
+    await expect(element(by.id('welcome_pages'))).not.toBeVisible();
+    await expect(element(by.id('sign_up_page'))).toBeVisible();
   });
-  //
-  // it('should show hello screen after tap', async () => {
-  //   await element(by.id('hello_button')).tap();
-  //   await expect(element(by.text('Hello!!!'))).toBeVisible();
-  // });
-  //
-  // it('should show world screen after tap', async () => {
-  //   await element(by.id('world_button')).tap();
-  //   await expect(element(by.text('World!!!'))).toBeVisible();
-  // });
 });
