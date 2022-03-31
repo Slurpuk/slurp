@@ -407,62 +407,65 @@ async function createOptions() {
   console.log('Options created!');
 }
 
-async function getCoffeeShops() {
-  const querySnapshot = await getDocs(collection(db, 'CoffeeShop'));
-  querySnapshot.forEach(doc => {
-    console.log("await addDoc(collection(db, 'coffee_shops'),");
-    console.log('{');
-    console.log("   name: '" + doc.data().Name + "',");
-    console.log("   email: '" + doc.data().Email.toLowerCase() + "',");
-    console.log("   intro: '" + doc.data().Intro + "',");
-    console.log(
-      '   location: new GeoPoint(' +
-        doc.data().Location.latitude +
-        ', ' +
-        doc.data().Location.longitude +
-        '),',
-    );
-    console.log("   image: '" + doc.data().Image + "',");
-    console.log('   is_open:', doc.data().IsOpen + ',');
-    console.log('   items: [],');
-    console.log('});');
-    console.log(
-      'await createUserWithEmailAndPassword(getAuth(), ' +
-        "'" +
-        doc.data().Email.toLowerCase() +
-        "'" +
-        ', ' +
-        "'Password123');",
-    );
-  });
-}
+/**
+ * Function to create the database orders. Adds one order of each status for each coffee shop.
+ * Randomises the items and options (if item can hold options). Sets the user as jeb, val or billie randomly.
+ * @returns {Promise<void>}
+ */
+async function createOrders() {
+  const completeCoffeeShops = await getDocs(collection(db, 'coffee_shops'));
+  await Promise.all(
+    completeCoffeeShops.docs.map(async coffee_shop => {
+      for (let i = 0; i < 5; i++) {
+        const shopItems = coffee_shop.data().items; // Represents a list of the items that the coffee shop offers.
+        const statuses = [
+          'incoming',
+          'accepted',
+          'rejected',
+          'ready',
+          'collected',
+        ];
+        const testUsers = [jeb, val, billie];
 
-async function getItems() {
-  const querySnapshot = await getDocs(collection(db, 'Snacks'));
-  querySnapshot.forEach(doc => {
-    console.log("await addDoc(collection(db, 'items'),");
-    console.log('{');
-    console.log("   name: '" + doc.data().Name + "',");
-    console.log("   price: '" + doc.data().Price + "',");
-    console.log("   image: '" + doc.data().Image + "',");
-    console.log("   type: 'snack',");
-    console.log("   has_options: 'false',");
-    console.log('});');
-  });
-}
+        const possibleOptions = (
+          await getDocs(collection(db, 'options'))
+        ).docs.map(option => option.data()); //Gets all the possible options to choose from
 
-async function getOptions() {
-  const querySnapshot = await getDocs(collection(db, 'Options'));
-  querySnapshot.forEach(doc => {
-    console.log("await addDoc(collection(db, 'options'),");
-    console.log('{');
-    console.log("   name: '" + doc.data().Name + "',");
-    console.log("   price: '" + doc.data().Price + "',");
-    console.log("   image: '" + doc.data().Image + "',");
-    console.log("   type: 'snack',");
-    console.log("   has_options: 'false',");
-    console.log('});');
-  });
+        const items = await Promise.all(
+          getRandomSubarray(shopItems).map(async item => {
+            let itemObject;
+            if ((await getDoc(doc(db, item.path))).data().has_options) {
+              itemObject = {
+                item: item,
+                quantity: Math.ceil(Math.random() * 3),
+                options: getRandomOptions(possibleOptions),
+              };
+            } else {
+              itemObject = {
+                item: item,
+                quantity: Math.ceil(Math.random() * 3),
+              };
+            }
+            return itemObject;
+          }),
+        );
+        const orderStatus = statuses[i % statuses.length];
+        await addDoc(collection(db, 'orders'), {
+          items: items,
+          status: orderStatus,
+          is_displayed: true,
+          shop: coffee_shop.ref,
+          user: testUsers[Math.floor(Math.random() * testUsers.length)],
+          incoming_time: Timestamp.fromDate(new Date(2022, 1, 4, 9, 30)),
+          finished_time:
+            orderStatus === 'collected' || orderStatus === 'rejected'
+              ? Timestamp.fromDate(new Date(2022, 2, 4, 10))
+              : null,
+        });
+      }
+    }),
+  );
+  console.log('Orders created!');
 }
 
 /**
