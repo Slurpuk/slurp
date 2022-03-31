@@ -88,13 +88,13 @@ const BasketPage = ({navigation}) => {
    */
   async function confirmOrder() {
     await sendOrder(
-      formatBasket(),
+      formatBasket(contents),
       context.currShop.key,
       context.currentUser.key,
       Number(getTotal()),
     );
     await context.currBasket.clear();
-    Alerts.orderSentAlert();
+    Alerts.orderSentAlert(navigation);
   }
 
   /**
