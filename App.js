@@ -38,6 +38,7 @@ export default function App() {
   const [isFirst, setIsFirst] = useState(true); // Is it the first time the app is downloaded
   const adaptiveOpacity = useRef(new Animated.Value(0)).current; // Animation fading value.
   const LoggedOutStack = createNativeStackNavigator(); // Stack navigator for logged out users.
+  const [locationIsEnabled, setLocationIsEnabled] = useState(false); // Checks if the user enabled location tracking
   /**
    * Side effect that fires when App first renders to determine whether it is the first time the app is used since download
    * Sets the first time state accordingly.
@@ -214,6 +215,8 @@ export default function App() {
   return (
     <GlobalContext.Provider
       value={{
+        locationIsEnabled: locationIsEnabled,
+        setLocationIsEnabled: setLocationIsEnabled,
         currentUser: currentUser,
         shopsData: shopsData.allShops,
         currBasket: {

@@ -7,7 +7,6 @@ import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
-import { defaultLocation } from "../../data/Locations";
 import { compareLocation } from "../../helpers/locationHelpers";
 
 export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
@@ -54,9 +53,8 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
             <Text style={[textStyles.headingOne, ShopIntroStyles.heading]}>
               {shop.Name}
             </Text>
-            {compareLocation(globalContext.currentUser.Location, defaultLocation) ? null :
-              <ShopDetailIcons distanceToShop={shop.distanceTo} />
-            }
+            { globalContext.locationIsEnabled ?
+              <ShopDetailIcons distanceToShop={shop.distanceTo} /> : null }
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
               {shop.Intro}
             </Text>

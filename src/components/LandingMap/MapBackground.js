@@ -45,6 +45,7 @@ export default function MapBackground({
       context.currentUser.key,
       mapCenter,
       watchID,
+      context.setLocationIsEnabled,
     ).catch(error => console.log(error));
     return () => {
       Geolocation.clearWatch(currWatch);

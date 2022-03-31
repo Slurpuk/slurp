@@ -5,16 +5,6 @@ import {fadeOpacityIn, fadeOpacityOut} from '../sub-components/Animations';
 import {updateUserLocation} from '../firebase/queries';
 
 /**
- * Compare two locations and decide if they're the same
- * @param location1 the first location
- * @param location2 the second location
- * @returns {boolean} if they are the same
- */
-export const compareLocation = (location1, location2) => {
-  return location1.latitude === location2.latitude && location1.longitude === location2.longitude;
-}
-
-/**
  * Used when a shop marker is pressed. Center the map around the marker and
  * drag the corresponding shop's intro up with a fading animation.
  * @param context
@@ -121,13 +111,16 @@ const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
  * @param userRef The id of the current user
  * @param mapCenter The current center point of the map
  * @param watchID The watchID for tracking the user's position
+ * @param setIsLocationIsEnabled update the location permission
  */
 export const requestLocationPermission = async (
   userRef,
   mapCenter,
   watchID,
+  setIsLocationIsEnabled,
 ) => {
   if (Platform.OS === 'ios') {
+    setIsLocationIsEnabled(true);
     getOneTimeLocation(mapCenter);
     subscribeLocationLocation(mapCenter, watchID, userRef);
   } else {
@@ -141,6 +134,7 @@ export const requestLocationPermission = async (
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         //To Check, If Permission is granted
+        setIsLocationIsEnabled(true);
         getOneTimeLocation(mapCenter);
         subscribeLocationLocation(mapCenter, watchID, userRef);
       }
