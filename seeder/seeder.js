@@ -487,5 +487,3 @@ async function seed() {
 }
 
 await seed().then(() => process.exit(0));
-
-// await getItems().then(()=>process.exit(0))
