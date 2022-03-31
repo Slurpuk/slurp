@@ -10,6 +10,8 @@
     "testCoverage": "jest --updateSnapshot && jest --coverage",
     "coverage": "jest --updateSnapshot && jest --coverage",
     "stripe": "cd server && npm start",
+    "seed": "cd seeder && npm run seed && cd ..",
+    "seed:first": "cd seeder && npm run seed && cd .. && ",
     "lint": "eslint .",
     "pod": "cd ios && pod install && cd ..",
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",

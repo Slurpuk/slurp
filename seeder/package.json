@@ -2,7 +2,8 @@
   "name": "seeder",
   "type": "module",
   "scripts": {
-    "seed": "node seeder.js"
+    "seed": "node seeder.js",
+    "seed:first": "npm install && node seeder.js"
   },
   "dependencies": {
     "@faker-js/faker": "^6.0.0",

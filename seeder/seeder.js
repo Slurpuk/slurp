@@ -474,6 +474,7 @@ async function createOrders() {
  */
 async function seed() {
   try {
+    const start = Date.now();
     await createTestUsers();
     await createFakeUsers();
     await createCoffeeShops();
@@ -481,6 +482,8 @@ async function seed() {
     await addItemsToCoffeeShops();
     await createOptions();
     await createOrders();
+    const duration = Date.now() - start;
+    console.log('Seeding completed in ' + duration / 1000 + ' seconds.');
   } catch (error) {
     console.log('Error while seeding database: ' + error + '. Sorry!');
   }
