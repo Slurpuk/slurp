@@ -10,7 +10,7 @@ import Menu from '../ShopMenu/Menu';
 function NonDraggableShopPage({shop, navigation}) {
   return (
     <>
-      <ShopIntro shop={shop} />
+      <ShopIntro shop={shop} isFullScreen={true} navigation={navigation} />
       <Menu navigation={navigation} />
     </>
   );

@@ -40,10 +40,35 @@ export const AlertMessage = {
     message: 'This is our bad, contact technical support. Error code #0001',
   },
   LOCATION: {
-    title: 'Location Error',
-    message: 'Something with the location permissions must have gone wrong. Are you under water or sth?',
+    title: 'Location inaccessible',
+    message:
+      'An error occured when accessing your current location, want to try that again ?',
   },
-
+  STORAGE: {
+    title: 'Storage error',
+    message:
+      "An error occured when accessing the app's local storage, want to try that again ?",
+  },
+  CHANGE_SHOP: {
+    title: 'Changing shop',
+    message: 'Changing shops will clear your basket. Are you sure ?',
+  },
+  NETWORK: {
+    title: 'Network error',
+    message: 'An error occurred when connecting to the payment server...',
+  },
+  INIT_PAYMENT: {
+    title: 'Payment initialization error',
+    message: 'An error occurred when initializing your payment',
+  },
+  EMPTY_BASKET: {
+    title: 'Your basket is empty!',
+    message: 'Please add items to your basket before checking out.',
+  },
+  ORDER_SENT: {
+    title: 'Order sent!',
+    message: 'Your order has been sent to the shop! Awaiting response.',
+  },
 };
 
 /*

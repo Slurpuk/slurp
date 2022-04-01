@@ -676,6 +676,8 @@ PODS:
     - React-Core
   - react-native-maps (0.30.1):
     - React-Core
+  - react-native-network-info (5.2.1):
+    - React
   - react-native-pager-view (5.4.11):
     - React-Core
   - react-native-safe-area-context (3.4.1):
@@ -756,11 +758,11 @@ PODS:
   - RNFBApp (14.7.0):
     - Firebase/CoreOnly (= 8.14.0)
     - React-Core
-  - RNFBAuth (14.5.0):
+  - RNFBAuth (14.7.0):
     - Firebase/Auth (= 8.14.0)
     - React-Core
     - RNFBApp
-  - RNFBFirestore (14.5.0):
+  - RNFBFirestore (14.7.0):
     - Firebase/Firestore (= 8.14.0)
     - React-Core
     - RNFBApp
@@ -848,6 +850,7 @@ DEPENDENCIES:
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-network-info (from `../node_modules/react-native-network-info`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -948,6 +951,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-network-info:
+    :path: "../node_modules/react-native-network-info"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
@@ -1048,6 +1053,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: c0efb872258ed9240f1003a70fca9e9757e5c785
   react-native-google-maps: 17432eb7412df3c65d7c7c52ede085d0f5624f77
   react-native-maps: d752b0dd0e1951d815b1336332835aab6b4a836f
+  react-native-network-info: d1290ffc0bd0709e11436f5b8d7f605dcc5c4530
   react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   React-perflogger: 3c9bb7372493e49036f07a82c44c8cf65cbe88db
@@ -1067,8 +1073,8 @@ SPEC CHECKSUMS:
   RNCCheckbox: ed1b4ca295475b41e7251ebae046360a703b6eb5
   RNDeviceInfo: 4944cf8787b9c5bffaf301fda68cc1a2ec003341
   RNFBApp: 097a31d372b3db15b41c7a1a5c429433b0609e12
-  RNFBAuth: 4516ce3df12382b94589e27b398fdcf4d1144a5a
-  RNFBFirestore: 52f363583f94783f2f6641bf115a074f595e63d0
+  RNFBAuth: 85b7ad91e3783dfde011702b2b747b1fd7be7234
+  RNFBFirestore: 06d06485901708c3b2c8f569433058911a82c121
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNReanimated: e28dfaa950064b674fde0a9b736e62b9dff500a7
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19

@@ -13,13 +13,9 @@ export const PastOrders = props => {
         stickySectionHeadersEnabled={false}
         keyExtractor={(item, index) => item + index}
         renderItem={({item}) => <CollapsableOrder order={item} />}
-        ListEmptyComponent={EmptyListText(props.emptyText)}
+        ListEmptyComponent={<EmptyListText text={props.emptyText} />}
         renderSectionHeader={({section: {period}}) => (
-          <Text
-            style={[textStyles.darkGreyPoppinsHeading]}
-          >
-            {period}
-          </Text>
+          <Text style={[textStyles.darkGreyPoppinsHeading]}>{period}</Text>
         )}
       />
     </>

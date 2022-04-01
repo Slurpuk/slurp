@@ -6,54 +6,38 @@ import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {GlobalContext} from '../../App';
 import firestore from '@react-native-firebase/firestore';
-import {months} from '../data/Months';
 import {ScreenOptionsStyles} from '../../stylesheets/ScreenOptionsStyles';
-import {OrderStatus} from '../data/OrderStatus';
-import {formatOrders} from '../helpers/ScreensFunctions';
+import {
+  formatCurrentOrders,
+  formatPastOrders,
+  separateOrders,
+} from '../helpers/screenHelpers';
+import {emptyCurrentOrdersText, emptyPastOrdersText} from '../data/Texts';
 
-const Tab = createMaterialTopTabNavigator();
-
+/**
+ * Screen displaying bot current and past orders
+ * @param navigation The navigation object.
+ */
 const OrderPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
-  const emptyText =
-    "Looks like you haven't made any orders yet...\n\n Head over to the " +
-    'home page to get started!';
+  const Tab = createMaterialTopTabNavigator(); // Stack navigator for the tab screens
 
-  /* load the logged-in user's orders from database */
+  /**
+   * Side effect which subscribes to the Orders model and retrieves the current user's orders and formats them.
+   */
   useEffect(() => {
     const fetchData = firestore()
-      .collection('Orders')
-      .where('UserID', '==', context.currentUser.key)
-      .onSnapshot(querySnapshot => {
-        let currentOrdersLocal = [];
-        let pastOrdersLocal = [];
-        querySnapshot.forEach(documentSnapshot => {
-          let firebaseOrder = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          };
-
-          firebaseOrder.period =
-            months[firebaseOrder.DateTime.toDate().getMonth()] +
-            ' ' +
-            firebaseOrder.DateTime.toDate().getFullYear();
-
-          if (
-            firebaseOrder.Status === OrderStatus.REJECTED ||
-            firebaseOrder.Status === OrderStatus.COLLECTED
-          ) {
-            pastOrdersLocal.push(firebaseOrder);
-          } else {
-            currentOrdersLocal.push(firebaseOrder);
-          }
-        });
-        formatOrders(currentOrdersLocal, true, setCurrentOrders, setPastOrders);
-        formatOrders(pastOrdersLocal, false, setCurrentOrders, setPastOrders);
+      .collection('orders')
+      .where('user', '==', context.currentUser.ref)
+      .onSnapshot(async querySnapshot => {
+        let newOrders = await separateOrders(querySnapshot);
+        await formatCurrentOrders(newOrders.currentOrders, setCurrentOrders);
+        await formatPastOrders(newOrders.pastOrders, setPastOrders);
       });
     return () => fetchData();
-  }, [context.currentUser.key]);
+  }, [context.currentUser.ref]);
 
   return (
     <View style={styles.container}>
@@ -66,12 +50,17 @@ const OrderPage = ({navigation}) => {
           {() => (
             <CurrentOrders
               currentOrders={currentOrders}
-              emptyText={emptyText}
+              emptyText={emptyCurrentOrdersText}
             />
           )}
         </Tab.Screen>
         <Tab.Screen name="Past">
-          {() => <PastOrders pastOrders={pastOrders} emptyText={emptyText} />}
+          {() => (
+            <PastOrders
+              pastOrders={pastOrders}
+              emptyText={emptyPastOrdersText}
+            />
+          )}
         </Tab.Screen>
       </Tab.Navigator>
     </View>

@@ -1,21 +1,16 @@
-import React, {useEffect, useState, useContext, useRef} from 'react';
-
-import {
-  Dimensions,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Keyboard,
-} from 'react-native';
+import React, {useEffect, useContext, useRef, useMemo} from 'react';
+import {Platform, StyleSheet, Text, View, Keyboard} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GlobalContext} from '../../../App';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
-import {locationPress, requestLocationPermission} from './locationHelpers';
+import {
+  locationPress,
+  requestLocationPermission,
+} from '../../helpers/locationHelpers';
 import mapStyles from '../../../stylesheets/mapStyles';
-import { Alerts } from "../../data/Alerts";
+import {Alerts} from '../../data/Alerts';
 
 export default function MapBackground({
   searchBarFocused,
@@ -25,20 +20,38 @@ export default function MapBackground({
   //used to watch the users location
   const watchID = useRef();
   const mapCenter = useRef({
-    latitude: context.currentCenterLocation.latitude,
-    longitude: context.currentCenterLocation.longitude,
+    latitude: context.currentUser.location._latitude,
+    longitude: context.currentUser.location._longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
 
+  const markers = useMemo(() => {
+    return context.shopsData.map(shop => ({
+      name: shop.name,
+      description: shop.intro,
+      coords: {
+        latitude: shop.location.latitude,
+        longitude: shop.location.longitude,
+      },
+      image: shop.image,
+      is_open: shop.is_open,
+    }));
+  }, [context.shopsData]);
+
   //setup location access on map load. remove the location access when this component is unmounted
   useEffect(() => {
-    requestLocationPermission(context, mapCenter, watchID.current).then(null).catch(() => Alerts.locationAlert);
+    let currWatch = watchID.current;
+    requestLocationPermission(
+      context.currentUser.ref,
+      mapCenter,
+      watchID,
+      context.setLocationIsEnabled,
+    ).catch(error => Alerts.elseAlert());
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      Geolocation.clearWatch(watchID.current);
+      Geolocation.clearWatch(currWatch);
     };
-  }, []);
+  }, [context.currentUser.ref, context.setLocationIsEnabled]);
 
   //dismiss the keyboard and search results when the map is clicked
   const mapPressed = () => {
@@ -49,7 +62,7 @@ export default function MapBackground({
   return (
     <View style={styles.container}>
       <MapView
-        onRegionChangeComplete={(region) => {
+        onRegionChangeComplete={region => {
           if (Platform.OS === 'ios') {
             if (
               region.latitude.toFixed(6) !==
@@ -68,26 +81,28 @@ export default function MapBackground({
         onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter.current}>
+        region={mapCenter.current}
+      >
         {/*//map each of the shops to a marker on the map*/}
-        {context.markers.map((marker, index) => (
+        {markers.map((marker, index) => (
           <Marker
             key={index}
             coordinate={marker.coords}
             pinColor={'navy'}
             title={marker.name}
-            onPress={() => {
-              if (marker.isOpen) {
-                locationPress(context, mapCenter, marker.name);
+            onPress={async () => {
+              if (marker.is_open) {
+                await locationPress(context, mapCenter, marker.name);
               }
               mapPressed();
-            }}>
+            }}
+          >
             {/*//closed markers appear grey*/}
             <View style={styles.markerStyle}>
               <Text style={{color: 'coral', fontWeight: 'bold', top: 0}}>
-                {!marker.isOpen ? 'Closed' : ''}
+                {!marker.is_open ? 'Closed' : ''}
               </Text>
-              <CustomMapIcon isOpen={marker.isOpen} />
+              <CustomMapIcon isOpen={marker.is_open} />
             </View>
           </Marker>
         ))}

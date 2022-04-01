@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
-import EmptyItemLine from "./EmptyItemLine";
-import Item from "./Item";
+import EmptyItemLine from './EmptyItemLine';
+import Item from './Item';
 
 /**
  * Component corresponding to the expanded order that
@@ -12,7 +12,7 @@ const OrderItemsList = ({order}) => {
   return (
     <View>
       <FlatList
-        data={order.Items}
+        data={order.items}
         renderItem={({item}) => <Item item={item} />}
       />
       <EmptyItemLine />

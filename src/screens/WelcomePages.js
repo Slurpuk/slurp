@@ -13,10 +13,8 @@ import CoffeeShopSvg from '../assets/svgs/CoffeeShopSvg';
 import CoffeeCupSvg from '../assets/svgs/CoffeeCupSvg';
 import CoffeeBeanSvg from '../assets/svgs/CoffeeBeanSvg';
 import {getTightPadding} from '../../stylesheets/StyleFunction';
-import {GlobalContext} from '../../App';
 
 const WelcomePages = ({navigation}) => {
-  const appContext = useContext(GlobalContext);
   const [sliderState, setSliderState] = useState({currentPage: 0});
   const width = Dimensions.get('window');
 
@@ -33,12 +31,10 @@ const WelcomePages = ({navigation}) => {
   };
 
   function proceedToLogIn() {
-    appContext.enterApp();
     navigation.navigate('LogIn');
   }
 
   function proceedToSignUp() {
-    appContext.enterApp();
     navigation.navigate('SignUp');
   }
 
@@ -96,7 +92,8 @@ const WelcomePages = ({navigation}) => {
           />
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={proceedToLogIn}>
+            onPress={proceedToLogIn}
+          >
             Already have an account? Log in
           </Text>
         </View>

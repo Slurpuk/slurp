@@ -5,16 +5,17 @@ import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ShopContext} from '../../screens/ShopPage';
-import {GlobalContext} from '../../../App';
 import {OptionPopUpStyles, screenWidth} from '../../../stylesheets/ShopStyles';
+import {addToBasket} from '../../helpers/screenHelpers';
+import {GlobalContext} from '../../../App';
 
 export const OptionsContext = React.createContext();
 
 export default function OptionsPopUp({data, renderer, item}) {
-  const context = useContext(ShopContext);
+  const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
-  const [totalPrice, setTotalPrice] = useState(item.Price);
-  const [milk, setMilk] = useState(context.menuData.defaultMilk); // List of options currently selected
+  const [totalPrice, setTotalPrice] = useState(item.price);
+  const [milk, setMilk] = useState(shopContext.menuData.defaultMilk);
   const [syrups, setSyrups] = useState([]);
 
   /**
@@ -25,9 +26,9 @@ export default function OptionsPopUp({data, renderer, item}) {
    */
   function updateOptions(option, isAdd) {
     if (isAdd) {
-      const newPrice = totalPrice + option.Price;
+      const newPrice = totalPrice + option.price;
       setTotalPrice(newPrice);
-      if (option.Type === 'Milk') {
+      if (option.type === 'Milk') {
         setMilk(option);
       } else {
         let temp = syrups;
@@ -35,9 +36,9 @@ export default function OptionsPopUp({data, renderer, item}) {
         setSyrups(temp);
       }
     } else {
-      const newPrice = totalPrice - option.Price;
+      const newPrice = totalPrice - option.price;
       setTotalPrice(newPrice);
-      if (option.Type === 'Milk') {
+      if (option.type === 'Milk') {
         milk === option ? setMilk(null) : setMilk(milk);
       } else {
         const index = syrups.findIndex(obj => obj.key === option.key);
@@ -52,7 +53,7 @@ export default function OptionsPopUp({data, renderer, item}) {
    * Ensures a milk option is selected, along with any number of syrups
    * and will update the items customisation and total.
    */
-  function addToBasket() {
+  async function addToCurrentBasket() {
     if (milk === null) {
       Alert.alert(
         'No milk selected.',
@@ -66,17 +67,21 @@ export default function OptionsPopUp({data, renderer, item}) {
       );
     } else {
       // Sort syrups by alphabetical order
-      syrups.sort((a, b) => a.Name.localeCompare(b.Name));
+      syrups.sort((a, b) => a.name.localeCompare(b.name));
       // Add the selected at the start of the array
       syrups.unshift(milk);
       let newItem = {
         ...item,
         options: syrups,
-        Price: totalPrice,
       };
-      globalContext.addToBasket(newItem);
-      context.setOptionsVisible(false);
-      context.setCurrItem(null);
+      shopContext.setOptionsVisible(false);
+      shopContext.setCurrItem(null);
+      await addToBasket(
+        newItem,
+        globalContext.currShop,
+        globalContext.currBasket.data,
+        globalContext.currBasket.setContent,
+      );
     }
   }
 
@@ -85,12 +90,13 @@ export default function OptionsPopUp({data, renderer, item}) {
       <View style={OptionPopUpStyles.container}>
         <View style={OptionPopUpStyles.header}>
           <Text style={[textStyles.headingOne, OptionPopUpStyles.product_name]}>
-            {item.Name}
+            {item.name}
           </Text>
           <TouchableHighlight
             style={OptionPopUpStyles.icon}
             underlayColor={'white'}
-            onPress={() => context.setOptionsVisible(false)}>
+            onPress={() => shopContext.setOptionsVisible(false)}
+          >
             <Icon size={30} color="black" name="close" />
           </TouchableHighlight>
         </View>
@@ -105,7 +111,7 @@ export default function OptionsPopUp({data, renderer, item}) {
           text={`Add To Order  £${totalPrice.toPrecision(3)}`}
           priority={'primary'}
           width={screenWidth * 0.79}
-          onPress={() => addToBasket()}
+          onPress={() => addToCurrentBasket()}
         />
       </View>
     </OptionsContext.Provider>
