@@ -8,7 +8,7 @@ async function fetchPaymentSheetParams(ipAddress, total) {
   let API_URL = `http://${ipAddress}:7070`;
   let body = {amount: total};
   const response = await fetch(
-    'http://localhost:5000/independentcoffeeshops/us-central1/payWithStripe',
+    'https://us-central1-independentcoffeeshops.cloudfunctions.net/payWithStripe',
     {
       method: 'POST',
       headers: {
