@@ -19,7 +19,7 @@ import {
 import {faker} from '@faker-js/faker';
 import {getRandomOptions, getRandomSubarray} from './helpers.js';
 
-const EMULATOR_MODE_ON = true;
+const EMULATOR_MODE_ON = false;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAr1toS2gSr-_6cMS4Jh0R2NhzI70g5nWk',
@@ -116,7 +116,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'energyboost@gmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Espresso Room',
@@ -131,7 +131,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'espresso@gmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Eten & Driken',
@@ -146,7 +146,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'eten@gmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Unit Six',
@@ -161,7 +161,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'unitsix@gmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Black Penny Covent Garden',
@@ -176,7 +176,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'theblackpenny@gmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Vagabond',
@@ -191,7 +191,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'jamesvagabond@gmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Tramstore',
@@ -206,7 +206,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'tramstore@hotmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Cafe Combi',
@@ -221,7 +221,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'cafecombi@gmail.com',
-    'Password123',
+    'Password123!',
   );
   await addDoc(collection(db, 'coffee_shops'), {
     name: 'Arcade Cafe',
@@ -236,7 +236,7 @@ async function createCoffeeShops() {
   await createUserWithEmailAndPassword(
     getAuth(),
     'arcade.cafe@gmail.com',
-    'Password123',
+    'Password123!',
   );
   console.log('Coffee shops created');
 }
