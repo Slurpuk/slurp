@@ -18,15 +18,14 @@ const ShopCard = ({shop, navigation}) => {
     await context.changeShop(shop, navigation);
   };
 
-  return !shop.IsOpen ? (
+  return !shop.is_open ? (
     <ImageBackground
       style={styles.item}
       imageStyle={styles.image}
-      source={{uri: shop.Image}}
+      source={{uri: shop.image}}
       resizeMode="cover"
-      blurRadius={4}
-    >
-      <Text style={[textStyles.headingOne, styles.shopName]}>{shop.Name}</Text>
+      blurRadius={4}>
+      <Text style={[textStyles.headingOne, styles.shopName]}>{shop.name}</Text>
       <Text style={[textStyles.bodyText]}> CLOSED </Text>
     </ImageBackground>
   ) : (
@@ -34,14 +33,14 @@ const ShopCard = ({shop, navigation}) => {
       <ImageBackground
         style={styles.item}
         imageStyle={styles.image}
-        source={{uri: shop.Image}}
-        resizeMode="cover"
-      >
+        source={{uri: shop.image}}
+        resizeMode="cover">
         <Text style={[textStyles.headingOne, styles.shopName]}>
-          {shop.Name}
+          {shop.name}
         </Text>
-        { context.locationIsEnabled ?
-          <ShopDetailIcons distanceToShop={shop.distanceTo} /> : null }
+        {context.locationIsEnabled ? (
+          <ShopDetailIcons distanceToShop={shop.distanceTo} />
+        ) : null}
       </ImageBackground>
     </Pressable>
   );

@@ -89,7 +89,7 @@ const UpdateDetailsPage = ({navigation}) => {
             title={'First Name'}
             setField={setFirstName}
             value={first_name}
-            placeholder={context.currentUser.FirstName}
+            placeholder={context.currentUser.first_name}
             type={'name'}
           />
           <FormField
@@ -97,7 +97,7 @@ const UpdateDetailsPage = ({navigation}) => {
             title={'Last Name'}
             setField={setLastName}
             value={last_name}
-            placeholder={context.currentUser.LastName}
+            placeholder={context.currentUser.last_name}
             type={'name'}
           />
         </View>

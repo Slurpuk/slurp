@@ -12,6 +12,7 @@ import {ShopContext} from '../../screens/ShopPage';
 import {menuItemStyles} from './shopStyles';
 import {addToBasket} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
+import {context} from "msw";
 
 /**
  * Menu item component displayed in a shop's menu.
@@ -27,7 +28,7 @@ const MenuItem = ({item}) => {
   useEffect(() => {
     const basket = globalContext.currBasket.data;
     let newCount = 0;
-    if (item.hasOwnProperty('Bean')) {
+    if (item.has_options) {
       for (let it of basket) {
         if (it.key === item.key) {
           newCount += it.count;
@@ -57,12 +58,13 @@ const MenuItem = ({item}) => {
    * @param newItem The item to be added.
    */
   async function add(newItem) {
-    if (newItem.hasOwnProperty('Bean')) {
+    if (newItem.has_options) {
       showOptions();
     } else {
       await addToBasket(
         newItem,
         globalContext.currShop,
+        globalContext.currBasket.data,
         globalContext.currBasket.setContent,
       );
     }
@@ -71,26 +73,21 @@ const MenuItem = ({item}) => {
   return (
     <TouchableOpacity style={menuItemStyles.item} onPress={() => add(item)}>
       <ImageBackground
-        source={{uri: item.Image}}
+        source={{uri: item.image}}
         imageStyle={menuItemStyles.image}
-        style={menuItemStyles.imageContainer}
-      >
+        style={menuItemStyles.imageContainer}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={menuItemStyles.linearGradient}
-        >
+          style={menuItemStyles.linearGradient}>
           <View style={menuItemStyles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, menuItemStyles.title]}>
-              {item.Name}
+              {item.name}
             </Text>
-            <Text style={textStyles.coffeePrice}>
-              £{Number(item.Price).toFixed(2)}
-            </Text>
+            <Text style={textStyles.coffeePrice}>£{item.price.toFixed(2)}</Text>
           </View>
           <Pressable
             onPress={() => add(item)}
-            style={menuItemStyles.menuCardPopupTrigger}
-          >
+            style={menuItemStyles.menuCardPopupTrigger}>
             <Text style={[textStyles.iconText, menuItemStyles.counter]}>
               {' '}
               {count === 0 ? '+' : count}

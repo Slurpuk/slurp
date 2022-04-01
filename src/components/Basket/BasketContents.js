@@ -5,9 +5,9 @@ import {basketContentStyles} from './basketStyles';
 
 const BasketContents = ({Items}) => {
   function keyExtract(it) {
-    if (it.hasOwnProperty('Bean')) {
+    if (it.has_options) {
       let newKey = it.key;
-      it.options.forEach(option => (newKey += option.Name));
+      it.options.forEach(option => (newKey += option.name));
       return newKey;
     } else {
       return it.key;

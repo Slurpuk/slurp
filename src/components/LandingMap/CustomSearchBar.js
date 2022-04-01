@@ -38,7 +38,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   const filterShops = useCallback(() => {
     setShops(
       context.shopsData.filter(shop =>
-        shop.Name.toLowerCase().includes(query.toLowerCase()),
+        shop.name.toLowerCase().includes(query.toLowerCase()),
       ),
     );
   }, [context.shopsData, query]);
@@ -55,7 +55,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
 
   //set the bottom sheet to the selected shop
   const selectShop = async shop => {
-    if (shop.IsOpen) {
+    if (shop.is_open) {
       await context.changeShop(shop);
       setSearchBarFocussed(false);
     }
@@ -93,11 +93,10 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   style={[
                     styles.searchResultContainer,
                     {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}
-                >
+                  ]}>
                   <Pressable
                     onPressIn={() => {
-                      if (item.IsOpen) {
+                      if (item.is_open) {
                         Keyboard.dismiss();
                       }
                     }}
@@ -105,24 +104,22 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                     style={({pressed}) => [
                       {
                         backgroundColor:
-                          pressed && item.IsOpen
+                          pressed && item.is_open
                             ? '#087562'
-                            : item.IsOpen
+                            : item.is_open
                             ? 'white'
                             : '#C5C5C5',
                       },
                       styles.searchResult,
-                    ]}
-                  >
+                    ]}>
                     {({pressed}) => (
                       <Text
                         style={[
-                          {color: pressed && item.IsOpen ? 'white' : 'black'},
+                          {color: pressed && item.is_open ? 'white' : 'black'},
 
                           styles.flatListItem,
-                        ]}
-                      >
-                        {item.Name}
+                        ]}>
+                        {item.name}
                       </Text>
                     )}
                   </Pressable>

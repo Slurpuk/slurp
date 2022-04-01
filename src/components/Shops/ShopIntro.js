@@ -7,7 +7,6 @@ import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
 import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
-import { compareLocation } from "../../helpers/locationHelpers";
 
 export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
   const globalContext = useContext(GlobalContext);
@@ -18,17 +17,14 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
       }}
       onLayout={() => {
         fadeOpacityIn(globalContext.adaptiveOpacity, 140);
-      }}
-    >
+      }}>
       <ImageBackground
         imageStyle={!isFullScreen ? ShopIntroStyles.cardImg : null}
         style={ShopIntroStyles.container}
-        source={{uri: shop.Image}}
-      >
+        source={{uri: shop.image}}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={ShopIntroStyles.linearGradient}
-        >
+          style={ShopIntroStyles.linearGradient}>
           <View
             style={[
               ShopIntroStyles.back_button,
@@ -37,8 +33,7 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
                 : globalContext.bottomSheet.isOpen
                 ? {opacity: 0}
                 : {opacity: 1},
-            ]}
-          >
+            ]}>
             <WhiteArrowButton
               direction={globalContext.bottomSheet.isOpen ? 'down' : 'left'}
               navigation={navigation}
@@ -51,12 +46,13 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
           </View>
           <View style={ShopIntroStyles.content}>
             <Text style={[textStyles.headingOne, ShopIntroStyles.heading]}>
-              {shop.Name}
+              {shop.name}
             </Text>
-            { globalContext.locationIsEnabled ?
-              <ShopDetailIcons distanceToShop={shop.distanceTo} /> : null }
+            {globalContext.locationIsEnabled ? (
+              <ShopDetailIcons distanceToShop={shop.distanceTo} />
+            ) : null}
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
-              {shop.Intro}
+              {shop.intro}
             </Text>
           </View>
         </LinearGradient>
