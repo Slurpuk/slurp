@@ -126,10 +126,15 @@ async function getOrderItem(orderItem) {
   return newItem;
 }
 
-async function getOrderOption(option) {
+/**
+ * Async function that retrieves the data of an option reference
+ * @param optionRef The reference to the option
+ * @returns Object The option data
+ */
+async function getOrderOption(optionRef) {
   let newOption;
   await firestore()
-    .doc(option.path)
+    .doc(optionRef.path)
     .get()
     .then(doc => {
       newOption = {
