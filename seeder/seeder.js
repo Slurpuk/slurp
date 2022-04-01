@@ -427,9 +427,7 @@ async function createOrders() {
         ];
         const testUsers = [jeb, val, billie];
 
-        const possibleOptions = (
-          await getDocs(collection(db, 'options'))
-        ).docs.map(option => option.data()); //Gets all the possible options to choose from
+        const possibleOptions = (await getDocs(collection(db, 'options'))).docs; //Gets all the possible options to choose from
 
         const items = await Promise.all(
           getRandomSubarray(shopItems).map(async item => {

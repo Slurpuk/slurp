@@ -29,9 +29,9 @@ export function getRandomSubarray(arr, canHaveZeroItems = false) {
  * @returns {*} list with one milk and 0 to x options
  */
 export function getRandomOptions(options) {
-  const milks = options.filter(option => option.type === 'Milk');
-  const syrups = options.filter(option => option.type === 'Syrup');
+  const milks = options.filter(option => option.data().type === 'Milk');
+  const syrups = options.filter(option => option.data().type === 'Syrup');
   const optionSelection = getRandomSubarray(syrups, true);
   optionSelection.push(milks[Math.floor(Math.random() * milks.length)]);
-  return optionSelection;
+  return optionSelection.map(optionDocSnap => optionDocSnap.ref);
 }
