@@ -7,9 +7,7 @@ import {getItemFullPrice, getOptionsPrice} from '../../helpers/screenHelpers';
 export default function BasketItem({item}) {
   const context = useContext(BasketContext);
   const [count, setCount] = useState(item.count);
-  const [itemTotal, setItemTotal] = useState(
-      getItemFullPrice(item),
-  );
+  const [itemTotal, setItemTotal] = useState(getItemFullPrice(item));
   /**
    * Reduce the basket item's count, ensuring it does not
    * go below 0 (removed from basket).
@@ -52,7 +50,8 @@ export default function BasketItem({item}) {
             style={[
               BasketItemStyles.change_amount_button,
               BasketItemStyles.minus,
-            ]}>
+            ]}
+          >
             -
           </Text>
         </Pressable>
@@ -62,7 +61,8 @@ export default function BasketItem({item}) {
             style={[
               BasketItemStyles.change_amount_button,
               BasketItemStyles.plus,
-            ]}>
+            ]}
+          >
             +
           </Text>
         </Pressable>

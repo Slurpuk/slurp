@@ -5,7 +5,7 @@ import OrderDetailsView from './OrderDetailsView';
 import OrderItemsList from './OrderItemsList';
 import AnimatedCard from '../../sub-components/AnimatedCard';
 import {OrderStatus} from '../../data/OrderStatus';
-import {calculateOrderTotal} from "../../helpers/screenHelpers";
+import {calculateOrderTotal} from '../../helpers/screenHelpers';
 
 /**
  * Component corresponding to an order that can dynamically

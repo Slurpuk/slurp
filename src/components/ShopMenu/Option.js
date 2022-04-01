@@ -36,7 +36,8 @@ export default function Option({option, updateOptions}) {
           toggleCheckBox
             ? OptionStyles.checkedCheckBoxView
             : OptionStyles.checkBoxView,
-        ]}>
+        ]}
+      >
         <CheckBox
           hideBox
           style={OptionStyles.checkBox}
@@ -52,7 +53,8 @@ export default function Option({option, updateOptions}) {
         <Text
           style={
             toggleCheckBox ? textStyles.optionsTextBold : textStyles.optionsText
-          }>
+          }
+        >
           {option.name}
         </Text>
         {option.price !== 0 && (
@@ -61,7 +63,8 @@ export default function Option({option, updateOptions}) {
               toggleCheckBox
                 ? textStyles.optionsTextBold
                 : textStyles.optionsText
-            }>
+            }
+          >
             {' '}
             +{option.price < 1 ? option.price * 100 : option.price}p
           </Text>

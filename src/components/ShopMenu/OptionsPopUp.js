@@ -95,7 +95,8 @@ export default function OptionsPopUp({data, renderer, item}) {
           <TouchableHighlight
             style={OptionPopUpStyles.icon}
             underlayColor={'white'}
-            onPress={() => shopContext.setOptionsVisible(false)}>
+            onPress={() => shopContext.setOptionsVisible(false)}
+          >
             <Icon size={30} color="black" name="close" />
           </TouchableHighlight>
         </View>

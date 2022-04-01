@@ -93,7 +93,8 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   style={[
                     styles.searchResultContainer,
                     {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}>
+                  ]}
+                >
                   <Pressable
                     onPressIn={() => {
                       if (item.is_open) {
@@ -111,14 +112,16 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                             : '#C5C5C5',
                       },
                       styles.searchResult,
-                    ]}>
+                    ]}
+                  >
                     {({pressed}) => (
                       <Text
                         style={[
                           {color: pressed && item.is_open ? 'white' : 'black'},
 
                           styles.flatListItem,
-                        ]}>
+                        ]}
+                      >
                         {item.name}
                       </Text>
                     )}

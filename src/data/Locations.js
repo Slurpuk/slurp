@@ -1,4 +1,4 @@
-import firestore from "@react-native-firebase/firestore";
+import firestore from '@react-native-firebase/firestore';
 
 export const defaultLocation = new firestore.GeoPoint(
   51.5140310233705,

@@ -56,7 +56,8 @@ const ShopPage = ({navigation}) => {
           snacks: menuData[2].list,
           defaultMilk: getDefaultMilk(),
         },
-      }}>
+      }}
+    >
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
           {context.bottomSheet.isOpen ? (

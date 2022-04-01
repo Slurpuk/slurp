@@ -118,7 +118,8 @@ const BasketPage = ({navigation}) => {
         value={{
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
-        }}>
+        }}
+      >
         <View style={styles.basket}>
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.name}
