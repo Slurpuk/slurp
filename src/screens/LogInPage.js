@@ -6,6 +6,7 @@ import CustomButton from '../sub-components/CustomButton';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import textStyles from '../../stylesheets/textStyles';
 import {Alerts} from '../data/Alerts';
+import {enterApp} from '../helpers/storageHelpers';
 
 const LogInPage = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -95,6 +96,7 @@ const LogInPage = ({navigation}) => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .catch(error => handleLogInErrorsBackEnd(error.code));
+      await enterApp();
     }
   }
 
@@ -120,14 +122,12 @@ const LogInPage = ({navigation}) => {
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={forgotPassword}
-        >
+          onPress={forgotPassword}>
           Forgot your password?
         </Text>
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('SignUp')}
-        >
+          onPress={() => navigation.navigate('SignUp')}>
           New? Create an account
         </Text>
       </View>
