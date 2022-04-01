@@ -1,20 +1,15 @@
-import React, {useContext} from 'react';
-import {LogBox, StyleSheet} from 'react-native';
+import React from 'react';
+import {LogBox} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useState} from 'react';
 import SideDrawerContent from '../components/HamburgerMenu/SideDrawerContent';
 import HamburgerButton from '../components/HamburgerMenu/HamburgerButton';
-import LogInPage from '../screens/LogInPage';
 import {
   ChangeDetailsStackNavigator,
   ChangePasswordStackNavigator,
   HomeStackNavigator,
   OrderHistoryStackNavigator,
-  PaymentAccountsNavigator,
 } from './StackNavigator';
-import {GlobalContext} from '../../App';
-import textStyles from '../../stylesheets/textStyles';
-import auth from '@react-native-firebase/auth';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",

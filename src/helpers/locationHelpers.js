@@ -14,14 +14,14 @@ import {updateUserLocation} from '../firebase/queries';
 export const locationPress = async (context, mapCenter, clickedMarker) => {
   //map the clicked marker to a shop from the shops on firebase
   let selectedShop = context.shopsData.find(
-    shop => shop.Name === clickedMarker,
+    shop => shop.name === clickedMarker,
   );
 
   //update the map center to preserve the map position after rerender
   let old = mapCenter.current;
   mapCenter.current = {
-    latitude: selectedShop.Location.latitude,
-    longitude: selectedShop.Location.longitude,
+    latitude: selectedShop.location.latitude,
+    longitude: selectedShop.location.longitude,
     latitudeDelta: old.latitudeDelta,
     longitudeDelta: old.longitudeDelta,
   };
@@ -48,6 +48,7 @@ export const locationPress = async (context, mapCenter, clickedMarker) => {
  * @param mapCenter The current center point of the map
  */
 const getOneTimeLocation = mapCenter => {
+  let success;
   Geolocation.getCurrentPosition(
     //Will give you the current location
     position => {
@@ -60,15 +61,18 @@ const getOneTimeLocation = mapCenter => {
         latitudeDelta: old.latitudeDelta,
         longitudeDelta: old.longitudeDelta,
       };
+      success = true;
     },
     error => {
       Alerts.LocationAlert();
+      success = false;
     },
     {
       enableHighAccuracy: true,
       timeout: 30000,
     },
   );
+  return success;
 };
 
 /**
@@ -121,8 +125,10 @@ export const requestLocationPermission = async (
 ) => {
   if (Platform.OS === 'ios') {
     setIsLocationIsEnabled(true);
-    getOneTimeLocation(mapCenter);
-    subscribeLocationLocation(mapCenter, watchID, userRef);
+    let positionAccess = getOneTimeLocation(mapCenter);
+    if (positionAccess === true) {
+      subscribeLocationLocation(mapCenter, watchID, userRef);
+    }
   } else {
     try {
       const granted = await PermissionsAndroid.request(
@@ -135,8 +141,10 @@ export const requestLocationPermission = async (
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         //To Check, If Permission is granted
         setIsLocationIsEnabled(true);
-        getOneTimeLocation(mapCenter);
-        subscribeLocationLocation(mapCenter, watchID, userRef);
+        let positionAccess = getOneTimeLocation(mapCenter);
+        if (positionAccess === true) {
+          subscribeLocationLocation(mapCenter, watchID, userRef);
+        }
       }
     } catch (err) {
       if (err === 'auth/network-request-failed') {

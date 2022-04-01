@@ -1,5 +1,5 @@
 import CheckboxSectionList from './CheckboxSectionList';
-import React, {useContext, useMemo, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Alert, Text, TouchableHighlight, View} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
@@ -14,7 +14,7 @@ export const OptionsContext = React.createContext();
 export default function OptionsPopUp({data, renderer, item}) {
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
-  const [totalPrice, setTotalPrice] = useState(item.Price);
+  const [totalPrice, setTotalPrice] = useState(item.price);
   const [milk, setMilk] = useState(shopContext.menuData.defaultMilk);
   const [syrups, setSyrups] = useState([]);
 
@@ -26,9 +26,9 @@ export default function OptionsPopUp({data, renderer, item}) {
    */
   function updateOptions(option, isAdd) {
     if (isAdd) {
-      const newPrice = totalPrice + option.Price;
+      const newPrice = totalPrice + option.price;
       setTotalPrice(newPrice);
-      if (option.Type === 'Milk') {
+      if (option.type === 'Milk') {
         setMilk(option);
       } else {
         let temp = syrups;
@@ -36,9 +36,9 @@ export default function OptionsPopUp({data, renderer, item}) {
         setSyrups(temp);
       }
     } else {
-      const newPrice = totalPrice - option.Price;
+      const newPrice = totalPrice - option.price;
       setTotalPrice(newPrice);
-      if (option.Type === 'Milk') {
+      if (option.type === 'Milk') {
         milk === option ? setMilk(null) : setMilk(milk);
       } else {
         const index = syrups.findIndex(obj => obj.key === option.key);
@@ -67,19 +67,19 @@ export default function OptionsPopUp({data, renderer, item}) {
       );
     } else {
       // Sort syrups by alphabetical order
-      syrups.sort((a, b) => a.Name.localeCompare(b.Name));
+      syrups.sort((a, b) => a.name.localeCompare(b.name));
       // Add the selected at the start of the array
       syrups.unshift(milk);
       let newItem = {
         ...item,
         options: syrups,
-        Price: totalPrice,
       };
       shopContext.setOptionsVisible(false);
       shopContext.setCurrItem(null);
       await addToBasket(
         newItem,
         globalContext.currShop,
+        globalContext.currBasket.data,
         globalContext.currBasket.setContent,
       );
     }
@@ -90,7 +90,7 @@ export default function OptionsPopUp({data, renderer, item}) {
       <View style={OptionPopUpStyles.container}>
         <View style={OptionPopUpStyles.header}>
           <Text style={[textStyles.headingOne, OptionPopUpStyles.product_name]}>
-            {item.Name}
+            {item.name}
           </Text>
           <TouchableHighlight
             style={OptionPopUpStyles.icon}

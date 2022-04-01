@@ -16,7 +16,7 @@ const OrderDetailsView = ({order}) => {
       <View style={styles.orderDetails}>
         <View>
           <ImageBackground
-            source={{uri: order.shop.Image}}
+            source={{uri: order.shop.image}}
             imageStyle={{borderRadius: 7, overflow: 'hidden'}}
             style={styles.picture}
           />
@@ -25,7 +25,7 @@ const OrderDetailsView = ({order}) => {
           <Text
             style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
           >
-            {order.shop.Name}
+            {order.shop.name}
           </Text>
           {getStatusAndDateComponent(order)}
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
@@ -46,12 +46,12 @@ const OrderDetailsView = ({order}) => {
  */
 function getItemsText(order) {
   let itemsComponent = '';
-  if (order.Items.length === 1) {
-    let singleItem = order.Items[0];
-    itemsComponent = singleItem.quantity + ' ' + singleItem.Name;
+  if (order.items.length === 1) {
+    let singleItem = order.items[0];
+    itemsComponent = singleItem.quantity + ' ' + singleItem.name;
   } else {
     let numberOfItems = 0;
-    order.Items.forEach(item => (numberOfItems += item.quantity));
+    order.items.forEach(item => (numberOfItems += item.quantity));
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
@@ -64,7 +64,7 @@ function getItemsText(order) {
  * @return Component
  */
 function getStatusAndDateComponent(order) {
-  let dateAndTime = order.DateTime.toDate().toDateString();
+  let dateAndTime = order.incoming_time.toDate().toDateString();
   if (
     order.Status === OrderStatus.COLLECTED ||
     order.Status === OrderStatus.REJECTED
@@ -77,7 +77,7 @@ function getStatusAndDateComponent(order) {
           styles.finishedOrder,
         ]}
       >
-        {order.Status} {dateAndTime}
+        {order.status} {dateAndTime}
       </Text>
     );
   } else {
@@ -95,11 +95,11 @@ function getStatusAndDateComponent(order) {
  * @return Text-Component
  */
 function getCurrentOrderStatusComponent(order) {
-  if (order.Status === OrderStatus.INCOMING) {
+  if (order.status === OrderStatus.INCOMING) {
     return <Text style={textStyles.pendingBluePoppins}>Pending</Text>;
-  } else if (order.Status === OrderStatus.ACCEPTED) {
+  } else if (order.status === OrderStatus.ACCEPTED) {
     return <Text style={textStyles.pendingBluePoppins}>Accepted</Text>;
-  } else if (order.Status === OrderStatus.READY) {
+  } else if (order.status === OrderStatus.READY) {
     return <Text style={textStyles.readyGreenPoppins}>Ready to Collect</Text>;
   }
 }

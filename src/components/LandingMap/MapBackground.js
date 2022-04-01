@@ -10,6 +10,7 @@ import {
   requestLocationPermission,
 } from '../../helpers/locationHelpers';
 import mapStyles from '../../../stylesheets/mapStyles';
+import {Alerts} from '../../data/Alerts';
 
 export default function MapBackground({
   searchBarFocused,
@@ -19,22 +20,22 @@ export default function MapBackground({
   //used to watch the users location
   const watchID = useRef();
   const mapCenter = useRef({
-    latitude: context.currentUser.Location._latitude,
-    longitude: context.currentUser.Location._longitude,
+    latitude: context.currentUser.location._latitude,
+    longitude: context.currentUser.location._longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
 
   const markers = useMemo(() => {
     return context.shopsData.map(shop => ({
-      name: shop.Name,
-      description: shop.Intro,
+      name: shop.name,
+      description: shop.intro,
       coords: {
-        latitude: shop.Location.latitude,
-        longitude: shop.Location.longitude,
+        latitude: shop.location.latitude,
+        longitude: shop.location.longitude,
       },
-      image: shop.Image,
-      isOpen: shop.IsOpen,
+      image: shop.image,
+      is_open: shop.is_open,
     }));
   }, [context.shopsData]);
 
@@ -42,15 +43,15 @@ export default function MapBackground({
   useEffect(() => {
     let currWatch = watchID.current;
     requestLocationPermission(
-      context.currentUser.key,
+      context.currentUser.ref,
       mapCenter,
       watchID,
       context.setLocationIsEnabled,
-    ).catch(error => console.log(error));
+    ).catch(error => Alerts.elseAlert());
     return () => {
       Geolocation.clearWatch(currWatch);
     };
-  }, [context.currentUser.key]);
+  }, [context.currentUser.ref, context.setLocationIsEnabled]);
 
   //dismiss the keyboard and search results when the map is clicked
   const mapPressed = () => {
@@ -90,7 +91,7 @@ export default function MapBackground({
             pinColor={'navy'}
             title={marker.name}
             onPress={async () => {
-              if (marker.isOpen) {
+              if (marker.is_open) {
                 await locationPress(context, mapCenter, marker.name);
               }
               mapPressed();
@@ -99,9 +100,9 @@ export default function MapBackground({
             {/*//closed markers appear grey*/}
             <View style={styles.markerStyle}>
               <Text style={{color: 'coral', fontWeight: 'bold', top: 0}}>
-                {!marker.isOpen ? 'Closed' : ''}
+                {!marker.is_open ? 'Closed' : ''}
               </Text>
-              <CustomMapIcon isOpen={marker.isOpen} />
+              <CustomMapIcon isOpen={marker.is_open} />
             </View>
           </Marker>
         ))}

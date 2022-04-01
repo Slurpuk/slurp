@@ -7,18 +7,18 @@ import textStyles from '../../../stylesheets/textStyles';
 
 export default function Option({option, updateOptions}) {
   const context = useContext(OptionsContext);
-  const [toggleCheckBox, setToggleCheckBox] = useState(option.Name === 'Dairy');
+  const [toggleCheckBox, setToggleCheckBox] = useState(option.name === 'Dairy');
   const isDisabled = false;
 
   /**
    * useEffect tracking the choice of milk to ensure only 1 milk is selected at any one time.
    */
   useEffect(() => {
-    if (option.Type === 'Milk' && context.milk !== option && toggleCheckBox) {
+    if (option.type === 'Milk' && context.milk !== option && toggleCheckBox) {
       setToggleCheckBox(false);
       updateOptions(option, !toggleCheckBox);
     }
-  }, [context.milk]);
+  }, [context.milk, option, toggleCheckBox, updateOptions]);
 
   /**
    * Update option checkbox.
@@ -55,9 +55,9 @@ export default function Option({option, updateOptions}) {
             toggleCheckBox ? textStyles.optionsTextBold : textStyles.optionsText
           }
         >
-          {option.Name}
+          {option.name}
         </Text>
-        {option.Price !== 0 && (
+        {option.price !== 0 && (
           <Text
             style={
               toggleCheckBox
@@ -66,7 +66,7 @@ export default function Option({option, updateOptions}) {
             }
           >
             {' '}
-            +{option.Price < 1 ? option.Price * 100 : option.Price}p
+            +{option.price < 1 ? option.price * 100 : option.price}p
           </Text>
         )}
       </View>

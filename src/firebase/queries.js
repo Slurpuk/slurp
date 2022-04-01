@@ -13,24 +13,25 @@ async function getOptions() {
   ];
   let dairy;
   await firestore()
-    .collection('Options')
+    .collection('options')
     .get()
     .then(querySnapShot => {
       querySnapShot.forEach(documentSnapshot => {
         let option = {
           ...documentSnapshot.data(),
           key: documentSnapshot.id,
+          ref: documentSnapshot.ref,
         };
         let index = 0;
-        option.Type === 'Syrup' ? (index = 1) : (index = 0);
-        if (option.Name === 'Dairy') {
+        option.type === 'Syrup' ? (index = 1) : (index = 0);
+        if (option.name === 'Dairy') {
           dairy = option;
         } else {
           options[index].data.push(option);
         }
       });
-      options[1].data.sort((a, b) => a.Name.localeCompare(b.Name));
-      options[0].data.sort((a, b) => a.Name.localeCompare(b.Name));
+      options[1].data.sort((a, b) => a.name.localeCompare(b.name));
+      options[0].data.sort((a, b) => a.name.localeCompare(b.name));
       options[0].data.unshift(dairy);
     })
     .catch(error => {
@@ -40,7 +41,6 @@ async function getOptions() {
         Alerts.databaseErrorAlert();
       }
     });
-
   return options;
 }
 
@@ -52,9 +52,8 @@ async function getOptions() {
  */
 async function updateUserLocation(userRef, latitude, longitude) {
   await firestore()
-    .collection('Users')
-    .doc(userRef)
-    .update({Location: new firestore.GeoPoint(latitude, longitude)})
+    .doc(userRef.path)
+    .update({location: new firestore.GeoPoint(latitude, longitude)})
     .catch(error => {
       if (error === 'auth/network-request-failed') {
         Alerts.connectionErrorAlert();
@@ -71,12 +70,16 @@ async function updateUserLocation(userRef, latitude, longitude) {
  */
 async function setUserObject(user, setUser) {
   await firestore()
-    .collection('Users')
-    .where('Email', '==', user.email)
+    .collection('users')
+    .where('email', '==', user.email)
     .get()
     .then(querySnapshot => {
       let userModel = querySnapshot.docs[0];
-      let newUser = {...userModel.data(), key: userModel.id};
+      let newUser = {
+        ...userModel.data(),
+        key: userModel.id,
+        ref: userModel.ref,
+      };
       setUser(newUser);
     })
     .catch(error => {
@@ -91,23 +94,26 @@ async function setUserObject(user, setUser) {
 /**
  * Retrieve the backend instance of the given item and return a formatted version of it.
  * Suitable for orderPage display
- * @param item
  * @return Object The formatted item for being displayed as part of an order.
+ * @param orderItem
  */
-async function getOrderItem(item) {
+async function getOrderItem(orderItem) {
   let newItem;
   await firestore()
-    .collection(item.Type + 's')
-    .doc(item.ItemRef)
+    .doc(orderItem.item.path)
     .get()
-    .then(doc => {
+    .then(async doc => {
+      let item = doc.data();
       newItem = {
-        ...doc.data(),
-        type: item.Type,
+        ...item,
         key: doc.id,
-        quantity: item.Quantity,
-        options: item.Options,
+        quantity: orderItem.quantity,
       };
+      if (item.has_options) {
+        newItem.options = await Promise.all(
+          orderItem.options.map(async option => await getOrderOption(option)),
+        );
+      }
     })
     .catch(error => {
       if (error.code === 'auth/network-request-failed') {
@@ -120,6 +126,27 @@ async function getOrderItem(item) {
   return newItem;
 }
 
+async function getOrderOption(option) {
+  let newOption;
+  await firestore()
+    .doc(option.path)
+    .get()
+    .then(doc => {
+      newOption = {
+        ...doc.data(),
+        key: doc.id,
+      };
+    })
+    .catch(error => {
+      if (error.code === 'auth/network-request-failed') {
+        Alerts.connectionErrorAlert();
+      } else {
+        Alerts.databaseErrorAlert();
+      }
+    });
+  return newOption;
+}
+
 /**
  * Retrieve and return the backend instance of the order's shop.
  * @return Object The shop to which the order was sent
@@ -128,8 +155,7 @@ async function getOrderItem(item) {
 async function getOrderShop(order) {
   let shop;
   await firestore()
-    .collection('CoffeeShop')
-    .doc(order.ShopID)
+    .doc(order.shop.path)
     .get()
     .then(document => {
       shop = document.data();
@@ -147,20 +173,20 @@ async function getOrderShop(order) {
 /**
  * Send a new order to the database.
  * @param items List of items in the order
- * @param shopID The id of the shop to which the order is sent
- * @param userID The id of the user sending the order
+ * @param shopRef The reference to the shop
+ * @param userRef The reference to the user
  * @param total The total amount of the order
  */
-async function sendOrder(items, shopID, userID, total) {
+async function sendOrder(items, shopRef, userRef, total) {
   await firestore()
-    .collection('Orders')
+    .collection('orders')
     .add({
-      DateTime: new firestore.Timestamp.now(),
-      Items: items,
-      Status: 'incoming',
-      ShopID: shopID,
-      UserID: userID,
-      Total: total,
+      incoming_time: new firestore.Timestamp.now(),
+      items: items,
+      status: 'incoming',
+      shop: shopRef,
+      user: userRef,
+      is_displayed: true,
     })
     .catch(error => {
       if (error === 'auth/network-request-failed') {

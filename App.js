@@ -39,6 +39,7 @@ export default function App() {
   const adaptiveOpacity = useRef(new Animated.Value(0)).current; // Animation fading value.
   const LoggedOutStack = createNativeStackNavigator(); // Stack navigator for logged out users.
   const [locationIsEnabled, setLocationIsEnabled] = useState(false); // Checks if the user enabled location tracking
+
   /**
    * Side effect that fires when App first renders to determine whether it is the first time the app is used since download
    * Sets the first time state accordingly.
@@ -80,16 +81,16 @@ export default function App() {
   useEffect(() => {
     if (!loading && auth().currentUser) {
       const subscriber = firestore()
-        .collection('Users')
-        .where('Email', '==', auth().currentUser.email)
+        .collection('users')
+        .where('email', '==', auth().currentUser.email)
         .onSnapshot(query => {
           let newUserDoc = query.docs[0];
           let newUser = newUserDoc.data();
-          setCurrentUser({...newUser, key: newUserDoc.id});
+          setCurrentUser({...newUser, key: newUserDoc.id, ref: newUserDoc.ref});
           shopsData.allShops.forEach(shop => {
-            shop.distanceTo = calculateDistance(shop.Location, {
-              latitude: newUser.Location._latitude,
-              longitude: newUser.Location._longitude,
+            shop.distanceTo = calculateDistance(shop.location, {
+              latitude: newUser.location._latitude,
+              longitude: newUser.location._longitude,
             });
           });
         });
@@ -103,7 +104,7 @@ export default function App() {
    */
   useEffect(() => {
     const subscriber = firestore()
-      .collection('CoffeeShop')
+      .collection('coffee_shops')
       .onSnapshot(async querySnapshot => {
         let formattedShops = await getFormattedShops(querySnapshot);
         await refreshShops(

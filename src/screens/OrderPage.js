@@ -29,15 +29,15 @@ const OrderPage = ({navigation}) => {
    */
   useEffect(() => {
     const fetchData = firestore()
-      .collection('Orders')
-      .where('UserID', '==', context.currentUser.key)
+      .collection('orders')
+      .where('user', '==', context.currentUser.ref)
       .onSnapshot(async querySnapshot => {
         let newOrders = await separateOrders(querySnapshot);
         await formatCurrentOrders(newOrders.currentOrders, setCurrentOrders);
         await formatPastOrders(newOrders.pastOrders, setPastOrders);
       });
     return () => fetchData();
-  }, [context.currentUser.key]);
+  }, [context.currentUser.ref]);
 
   return (
     <View style={styles.container}>

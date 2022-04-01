@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
@@ -9,6 +9,8 @@ import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeP
 import {
   addToBasket,
   formatBasket,
+  getItemFullPrice,
+  getOptionsPrice,
   removeFromBasket,
 } from '../helpers/screenHelpers';
 import {initializePayment, openPaymentSheet} from '../helpers/paymentHelpers';
@@ -24,28 +26,9 @@ const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const [contents, setContents] = useState(context.currBasket.data);
   const [total, setTotal] = useState(getTotal());
-  const [readyForPayment, setReadyForPayment] = useState(false); // Is the payment server ready
   const {initPaymentSheet, presentPaymentSheet} = useStripe(); // Stripe hook payment methods
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
-
-  /**
-   * Callback for initializing the stripe payment sheet.
-   * If initialization is successful, set ready to true.
-   */
-  const initialize = useCallback(async () => {
-    const ready = await initializePayment(initPaymentSheet, total);
-    setReadyForPayment(ready);
-  }, [initPaymentSheet, total]);
-
-  /**
-   * Side effect that dynamically initializes the payment sheet if the basket is not empty.
-   */
-  useEffect(() => {
-    if (contents.length !== 0) {
-      initialize().catch(error => Alerts.elseAlert());
-    }
-  }, [contents.length, initialize]);
 
   /**
    * Return a string formatted version of the basket's total amount.
@@ -53,25 +36,24 @@ const BasketPage = ({navigation}) => {
    */
   function getTotal(newBasket = null) {
     let basket = newBasket ? newBasket : context.currBasket.data;
-    return basket
-      .reduce(function (acc, item) {
-        return acc + item.Price * item.count;
-      }, 0)
-      .toFixed(2);
+    return basket.reduce(function (acc, item) {
+      return acc + getItemFullPrice(item);
+    }, 0);
   }
 
   /**
    * Checkout. If the server is ready and the basket is not empty, proceed to payment.
    */
   async function checkout() {
-    if(context.isLocationEnabled){
-      contents.length === 0
-        ? Alerts.emptyBasketAlert()
-        : readyForPayment
-          ? await proceedToPayment()
-          : Alerts.initPaymentAlert(initialize);
-    }else{
+    if (contents.length === 0) {
+      Alerts.emptyBasketAlert();
+    } else if (!context.isLocationEnabled) {
       Alerts.LocationAlert();
+    } else {
+      const ready = await initializePayment(initPaymentSheet, total);
+      ready
+        ? await proceedToPayment()
+        : Alerts.initPaymentAlert(() => checkout());
     }
   }
 
@@ -83,7 +65,7 @@ const BasketPage = ({navigation}) => {
     if (successful) {
       await confirmOrder();
     } else {
-      Alerts.initPaymentAlert(initialize);
+      Alerts.initPaymentAlert(() => checkout());
     }
   }
 
@@ -93,9 +75,9 @@ const BasketPage = ({navigation}) => {
   async function confirmOrder() {
     await sendOrder(
       formatBasket(contents),
-      context.currShop.key,
-      context.currentUser.key,
-      Number(getTotal()),
+      context.currShop.ref,
+      context.currentUser.ref,
+      getTotal(),
     );
     await context.currBasket.clear();
     Alerts.orderSentAlert(navigation);
@@ -109,6 +91,7 @@ const BasketPage = ({navigation}) => {
     let newBasket = await addToBasket(
       item,
       context.currShop,
+      context.currBasket.data,
       context.currBasket.setContent,
     );
     setContents(newBasket);
@@ -120,7 +103,11 @@ const BasketPage = ({navigation}) => {
    * @param item The item to remove
    */
   async function removeFromCurrentBasket(item) {
-    let newBasket = await removeFromBasket(item, context.currBasket.setContent);
+    let newBasket = await removeFromBasket(
+      item,
+      context.currBasket.data,
+      context.currBasket.setContent,
+    );
     setContents(newBasket);
     setTotal(getTotal(newBasket));
   }
@@ -135,7 +122,7 @@ const BasketPage = ({navigation}) => {
       >
         <View style={styles.basket}>
           <GreenHeader
-            headerText={'My Basket - ' + context.currShop.Name}
+            headerText={'My Basket - ' + context.currShop.name}
             navigation={navigation}
           />
           <View style={styles.main_container}>
@@ -144,13 +131,13 @@ const BasketPage = ({navigation}) => {
 
           <View style={styles.order_summary}>
             <Text style={styles.total_text}>TOTAL</Text>
-            <Text style={styles.total_amount}>£{total}</Text>
+            <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
           </View>
           <View style={[styles.lastButton, styles.buttons]}>
             <CustomButton
               priority={'primary'}
               text={'Checkout'}
-              onPress={checkout}
+              onPress={confirmOrder}
             />
           </View>
         </View>

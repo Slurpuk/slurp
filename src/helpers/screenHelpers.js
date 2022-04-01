@@ -63,11 +63,11 @@ async function formatOrdersItems(orders) {
   await Promise.all(
     orders.map(async order => {
       let newItems = [];
-      for (let item of order.Items) {
+      for (let item of order.items) {
         let newItem = await getOrderItem(item);
         newItems.push(newItem);
       }
-      order.Items = newItems;
+      order.items = newItems;
       newOrders.push(order);
     }),
   );
@@ -117,7 +117,7 @@ function calculateTime(distance) {
  * @param distance The distance to process.
  */
 export function processDistance(distance) {
-  let minutes = calculateTime(distance)/1000*12;
+  let minutes = (calculateTime(distance) / 1000) * 12;
   let d = Math.floor(minutes / (24 * 60));
   let h = Math.floor((minutes % (24 * 60)) / 60);
   let m = Math.floor(minutes % 60);
@@ -136,11 +136,11 @@ export function processDistance(distance) {
  * @return boolean Whether the 2 items are identical
  */
 function isSameItem(item1, item2) {
-  if (item2.hasOwnProperty('Bean') && item1.hasOwnProperty('Bean')) {
+  if (item2.has_options && item1.has_options) {
     let itOptions = '';
-    item1.options.forEach(option => (itOptions += option.Name));
+    item1.options.forEach(option => (itOptions += option.name));
     let currItOptions = '';
-    item2.options.forEach(option => (currItOptions += option.Name));
+    item2.options.forEach(option => (currItOptions += option.name));
     return item1.key === item2.key && itOptions === currItOptions;
   } else {
     return item1.key === item2.key;
@@ -151,29 +151,20 @@ function isSameItem(item1, item2) {
  * Add an item to both the current basket and the storage basket
  * @param item The item to add
  * @param currShop The currently selected shop
+ * @param currBasket
  * @param setCurrBasket The setState method for the current basket
  * @return Object The resulting basket
  */
-async function addToBasket(item, currShop, setCurrBasket) {
-  let basket = await getBasket();
+async function addToBasket(item, currShop, currBasket, setCurrBasket) {
+  let basket = currBasket ? currBasket : [];
   const exist = basket.find(x => isSameItem(x, item));
-  let type;
-  if (item.hasOwnProperty('Bean')) {
-    type = 'Coffee';
-  } else if (
-    currShop.ItemsOffered.Drinks.filter(x => x.Name === item.Name).length !== 0
-  ) {
-    type = 'Drink';
-  } else {
-    type = 'Snack';
-  }
   let newBasket;
   if (exist) {
     newBasket = basket.map(x =>
       isSameItem(x, item) ? {...exist, count: exist.count + 1} : x,
     );
   } else {
-    newBasket = [...basket, {...item, count: 1, type: type}];
+    newBasket = [...basket, {...item, count: 1}];
   }
   setCurrBasket(newBasket);
   await setBasket(newBasket);
@@ -183,11 +174,12 @@ async function addToBasket(item, currShop, setCurrBasket) {
 /**
  * Remove an item from both the current basket and the storage basket
  * @param item The item to add
+ * @param currBasket
  * @param setCurrBasket The setState method for the current basket
  * @return Object The resulting basket
  */
-async function removeFromBasket(item, setCurrBasket) {
-  let basket = await getBasket();
+async function removeFromBasket(item, currBasket, setCurrBasket) {
+  let basket = currBasket ? currBasket : [];
   const exist = basket.find(x => isSameItem(x, item));
   let newBasket;
   if (exist.count === 1) {
@@ -252,22 +244,27 @@ async function getFormattedItems(shop) {
   let drinks = [];
   let snacks = [];
   await Promise.all(
-    shop.data().ItemsOffered.map(async itemRef => {
+    shop.data().items.map(async itemRef => {
       await firestore()
         .doc(itemRef.path)
         .get()
-        .then(item => {
-          if (itemRef.path.includes('Coffees')) {
-            coffees.push({...item.data(), key: item.id});
-          } else if (itemRef.path.includes('Drinks')) {
-            drinks.push({...item.data(), key: item.id});
-          } else {
-            snacks.push({...item.data(), key: item.id});
+        .then(itemDoc => {
+          const item = itemDoc.data();
+          switch (item.type) {
+            case 'coffee':
+              coffees.push({...item, key: itemDoc.id, ref: itemDoc.ref});
+              break;
+            case 'drink':
+              drinks.push({...item, key: itemDoc.id, ref: itemDoc.ref});
+              break;
+            case 'snack':
+              snacks.push({...item, key: itemDoc.id, ref: itemDoc.ref});
+              break;
           }
         });
     }),
   );
-  return {Coffees: coffees, Drinks: drinks, Snacks: snacks};
+  return {coffees: coffees, drinks: drinks, snacks: snacks};
 }
 
 /**
@@ -282,12 +279,13 @@ async function getFormattedShops(shopsData) {
       let shopData = {
         ...data,
         key: documentSnapshot.id,
-        Location: {
-          latitude: data.Location._latitude,
-          longitude: data.Location._longitude,
+        ref: documentSnapshot.ref,
+        location: {
+          latitude: data.location._latitude,
+          longitude: data.location._longitude,
         },
       };
-      shopData.ItemsOffered = await getFormattedItems(documentSnapshot);
+      shopData.items = await getFormattedItems(documentSnapshot);
       await getOptions().then(options => {
         shopData.options = options;
         shops.push(shopData);
@@ -311,13 +309,13 @@ async function separateOrders(orders) {
     };
 
     firebaseOrder.period =
-      months[firebaseOrder.DateTime.toDate().getMonth()] +
+      months[firebaseOrder.incoming_time.toDate().getMonth()] +
       ' ' +
-      firebaseOrder.DateTime.toDate().getFullYear();
+      firebaseOrder.incoming_time.toDate().getFullYear();
 
     if (
-      firebaseOrder.Status === OrderStatus.REJECTED ||
-      firebaseOrder.Status === OrderStatus.COLLECTED
+      firebaseOrder.status === OrderStatus.REJECTED ||
+      firebaseOrder.status === OrderStatus.COLLECTED
     ) {
       pastOrdersLocal.push(firebaseOrder);
     } else {
@@ -333,17 +331,51 @@ async function separateOrders(orders) {
  * @return items The list of formatted items
  */
 function formatBasket(contents) {
-  let items = contents.map(item => {
-    let options = item.hasOwnProperty('options') ? item.options : [];
-    return {
-      ItemRef: item.key,
-      Quantity: item.count,
-      Price: Number(item.Price.toFixed(2)),
-      Type: item.type,
-      Options: options,
-    };
+  let newItems = [];
+  contents.forEach(item => {
+    let orderItem = {item: item.ref, quantity: item.count};
+    if (item.has_options) {
+      let options = item.options.map(option => option.ref);
+      newItems.push({...orderItem, options: options});
+    } else {
+      newItems.push(orderItem);
+    }
   });
-  return items;
+  return newItems;
+}
+
+/**
+ * Calculate and return the total price of the given order.
+ * @return Number The total price of the order
+ * @param items The list of items in the order
+ */
+function calculateOrderTotal(items) {
+  return items.reduce(function (acc, item) {
+    return acc + getItemFullPrice(item);
+  }, 0);
+}
+
+/**
+ * Calculate and return the total price of the options of an item
+ * @param item The target item
+ * @return Number The total price for the item's options
+ */
+function getOptionsPrice(item) {
+  return item.has_options
+    ? item.options.reduce(function (acc, option) {
+        return acc + option.price;
+      }, 0)
+    : 0;
+}
+
+/**
+ * Calculate and return the total price of an item (including options)
+ * @param item The target item
+ * @return Number The total price of the item
+ */
+function getItemFullPrice(item) {
+  let count = item.hasOwnProperty('count') ? item.count : item.quantity;
+  return count * (item.price + getOptionsPrice(item));
 }
 
 export {
@@ -356,4 +388,7 @@ export {
   separateOrders,
   getFormattedShops,
   formatBasket,
+  calculateOrderTotal,
+  getItemFullPrice,
+  getOptionsPrice,
 };
