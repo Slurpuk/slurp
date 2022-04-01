@@ -47,6 +47,7 @@ const WelcomePages = ({navigation}) => {
     <View style={styles.wrapper}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <ScrollView
+        testID="welcome-wrapper"
         style={{display: 'flex'}}
         horizontal={true}
         scrollEventThrottle={16}
@@ -55,8 +56,10 @@ const WelcomePages = ({navigation}) => {
         onScroll={(event: any) => {
           setSliderPage(event);
         }}>
-        <View style={styles.component}>
-          <Text style={[textStyles.blueJosefinHeading, styles.title]}>
+        <View style={styles.component} testID="welcome-one">
+          <Text
+            style={[textStyles.blueJosefinHeading, styles.title]}
+            testID="welcome-header-one">
             Welcome to Slurp!
           </Text>
           <CoffeeShopSvg style={[styles.circle]} />
