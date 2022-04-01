@@ -11,7 +11,7 @@ import {CustomAlerts} from '../sub-components/Alerts';
 import {Alerts} from '../data/Alerts';
 import {enterApp} from '../helpers/storageHelpers';
 
-const SignUpPage = ({navigation}) => {
+const SignUpPage = ({navigation, setLoading}) => {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -90,26 +90,25 @@ const SignUpPage = ({navigation}) => {
     if (handleSignUpErrorsFrontEnd()) {
       await auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(async () => {
-          await enterApp();
-          await firestore()
-            .collection('users')
-            .add({
-              email: email,
-              first_name: first_name,
-              last_name: last_name,
-              location: new firestore.GeoPoint(
-                51.5140310233705,
-                -0.1164075624320158,
-              ),
-            })
-            .catch(error => {
-              handleSignUpErrorsBackEnd(error);
-            });
-        })
         .catch(error => {
           handleSignUpErrorsBackEnd(error.code);
         });
+      await firestore()
+        .collection('users')
+        .add({
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          location: new firestore.GeoPoint(
+            51.5140310233705,
+            -0.1164075624320158,
+          ),
+        })
+        .catch(error => {
+          handleSignUpErrorsBackEnd(error);
+        });
+      setLoading(prevState => ({...prevState, user: false}));
+      await enterApp();
     }
   }
 

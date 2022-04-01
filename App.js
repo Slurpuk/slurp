@@ -29,7 +29,10 @@ export const GlobalContext = React.createContext();
  * Root component rendered when the application boots.
  */
 export default function App() {
-  const [loading, setLoading] = useState(true); // Is the app still fetching backend data.
+  const [loading, setLoading] = useState({
+    shops: true,
+    user: true,
+  }); // Is the app still fetching backend data.
   const [currentUser, setCurrentUser] = useState(null);
   const [shopsData, setShopsData] = useState({allShops: [], currShopIndex: -1});
   const staticShopsData = useRef(shopsData);
@@ -50,7 +53,7 @@ export default function App() {
       setIsFirst(isFirstTime);
     }
 
-    setIsFirstTime().catch(error => Alerts.elseAlert());
+    setIsFirstTime().catch(() => Alerts.elseAlert());
   }, []);
 
   /**
@@ -65,21 +68,24 @@ export default function App() {
    * Sets the current user object accordingly.
    */
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(async user => {
-      user
-        ? setUserObject(user, setCurrentUser).catch(error => Alerts.elseAlert())
-        : setCurrentUser(null);
-    });
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
+    if (!loading.user) {
+      const subscriber = auth().onAuthStateChanged(async user => {
+        console.log('Auth created!');
+        user
+          ? setUserObject(user, setCurrentUser).catch(() => Alerts.elseAlert())
+          : setCurrentUser(null);
+      });
+      // Unsubscribe from events when no longer in use
+      return () => subscriber();
+    }
+  }, [loading.user]);
 
   /**
    * Side effect that tracks changes in the model instance of the user in the database and updates the state accordingly
    * Sets the current user object accordingly.
    */
   useEffect(() => {
-    if (!loading && auth().currentUser) {
+    if (!loading.shops && auth().currentUser) {
       const subscriber = firestore()
         .collection('users')
         .where('email', '==', auth().currentUser.email)
@@ -96,7 +102,7 @@ export default function App() {
         });
       return () => subscriber();
     }
-  }, [loading, shopsData.allShops]);
+  }, [loading.shops, shopsData.allShops]);
 
   /**
    * Side effect that tracks any change in the coffee shop model.
@@ -113,14 +119,14 @@ export default function App() {
           clearBasket,
           setShopsData,
         );
-        if (loading) {
+        if (loading.shops) {
           await refreshCurrentBasket(setCurrBasket);
-          setLoading(false);
+          setLoading(prevState => ({...prevState, shops: false}));
         }
       });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, [loading]);
+  }, [loading.shops]);
 
   /**
    * Set the current shop state and the storage instance to the given shop.
@@ -129,7 +135,7 @@ export default function App() {
   async function setNewShop(shop) {
     let newIndex = shopsData.allShops.findIndex(curr => curr.key === shop.key);
     setShopsData(prevState => ({...prevState, currShopIndex: newIndex}));
-    await setCurrentShopKey(shop.key).catch(error => Alerts.elseAlert());
+    await setCurrentShopKey(shop.key).catch(() => Alerts.elseAlert());
   }
 
   /**
@@ -235,12 +241,12 @@ export default function App() {
       }}>
       <NavigationContainer>
         {auth().currentUser && currentUser ? (
-          !loading ? (
+          !loading.shops ? (
             <HamburgerSlideBarNavigator />
           ) : (
             <LoadingPage />
           )
-        ) : !loading ? (
+        ) : !loading.shops ? (
           <LoggedOutStack.Navigator
             screenOptions={{
               headerShown: false,
@@ -249,7 +255,12 @@ export default function App() {
               <LoggedOutStack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
             <LoggedOutStack.Screen name="LogIn" component={LogInPage} />
-            <LoggedOutStack.Screen name="SignUp" component={SignUpPage} />
+            <LoggedOutStack.Screen
+              name="SignUp"
+              children={props => (
+                <SignUpPage {...props} setLoading={setLoading} />
+              )}
+            />
           </LoggedOutStack.Navigator>
         ) : null}
       </NavigationContainer>
