@@ -3,7 +3,7 @@
  * https://stackoverflow.com/questions/11935175/sampling-a-random-subset-from-an-array
  * @param arr array to shuffle and reduce.
  * @param canHaveZeroItems use ceil or floor function to have possibly yield no items
- * @returns new subarray of random size
+ * @returns Array subarray of random size
  */
 export function getRandomSubarray(arr, canHaveZeroItems = false) {
   let shuffled = arr.slice(0),
