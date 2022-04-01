@@ -12,7 +12,7 @@ const OrderItemsList = ({order}) => {
   return (
     <View>
       <FlatList
-        data={order.Items}
+        data={order.items}
         renderItem={({item}) => <Item item={item} />}
       />
       <EmptyItemLine />

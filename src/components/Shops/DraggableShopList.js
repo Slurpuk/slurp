@@ -19,7 +19,7 @@ export default function DraggableShopList({navigation}) {
     );
     //filtering the shops based on radius limitation
     setOrderedShops(sortedShops.filter(shop => shop.distanceTo < 10000));
-  }, [context.shopsData, context.currentUser.Location]);
+  }, [context.shopsData, context.currentUser.location]);
 
   return (
     <ScrollBottomSheet

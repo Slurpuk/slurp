@@ -93,12 +93,12 @@ const SignUpPage = ({navigation}) => {
         .then(async () => {
           await enterApp();
           await firestore()
-            .collection('Users')
+            .collection('users')
             .add({
-              Email: email,
-              FirstName: first_name,
-              LastName: last_name,
-              Location: new firestore.GeoPoint(
+              email: email,
+              first_name: first_name,
+              last_name: last_name,
+              location: new firestore.GeoPoint(
                 51.5140310233705,
                 -0.1164075624320158,
               ),

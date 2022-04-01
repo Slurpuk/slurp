@@ -9,7 +9,6 @@ import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
 import EmptyListText from '../../sub-components/EmptyListText';
 import {menuStyles} from './shopStyles';
-import {getBasketSize} from '../../helpers/screenHelpers';
 
 const Tab = createMaterialTopTabNavigator();
 

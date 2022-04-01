@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {Path, Circle} from 'react-native-svg';
+import Svg, {Path} from 'react-native-svg';
 
 const CustomMapIcon = props =>
   props.isOpen ? (
