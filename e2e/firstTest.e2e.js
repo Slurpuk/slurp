@@ -51,4 +51,60 @@ describe('Sign up', () => {
     await expect(element(by.id('welcome_pages'))).not.toBeVisible();
     await expect(element(by.id('sign_up_page'))).toBeVisible();
   });
+  it('should be able to navigate to log in page and back', async () => {
+    await expect(
+      element(by.text('Already have an account? Log in')),
+    ).toBeVisible();
+    await element(by.text('Already have an account? Log in')).tap();
+    await expect(element(by.id('sign_up_page'))).not.toBeVisible();
+    await expect(element(by.id('log_in_page'))).toBeVisible();
+    await expect(element(by.text('New? Create an account'))).toBeVisible();
+    await element(by.text('New? Create an account')).tap();
+    await expect(element(by.id('sign_up_page'))).toBeVisible();
+    await expect(element(by.id('log_in_page'))).not.toBeVisible();
+  });
+  it('should not be able to sign up with existing user', async () => {
+    const usedFirstName = 'Boris';
+    const usedLastName = 'Johnson';
+    const usedEmail = 'getbrexitdone@example.org';
+    const password = 'Password123!';
+    await addDoc(collection(db, 'users'), {
+      first_name: usedFirstName,
+      last_name: usedLastName,
+      email: usedEmail,
+      location: new GeoPoint(51.503223, -0.1275),
+    });
+    await createUserWithEmailAndPassword(auth, usedEmail, password);
+    await element(by.id('sign_up_page_first_name')).typeText(usedFirstName);
+    await element(by.id('sign_up_page_last_name')).typeText(usedLastName);
+    await element(by.id('sign_up_page_email')).typeText(usedEmail);
+    await element(by.id('sign_up_page_password')).typeText(password);
+    await element(by.id('sign_up_page_confirm_password')).typeText(password);
+    await element(by.text('Create Account')).tap();
+    await expect(
+      element(by.type('_UIAlertControllerActionView')),
+    ).toBeVisible(); // Check raises alert
+    await element(by.type('_UIAlertControllerActionView')).tap();
+    await expect(element(by.id('sign_up_page'))).toBeVisible();
+    auth.currentUser.delete;
+    await element(by.id('sign_up_page_first_name')).replaceText('');
+    await element(by.id('sign_up_page_last_name')).replaceText('');
+    await element(by.id('sign_up_page_email')).replaceText('');
+    await element(by.id('sign_up_page_password')).replaceText('');
+    await element(by.id('sign_up_page_confirm_password')).replaceText('');
+  });
+  it('should be able to sign up with new user', async () => {
+    const firstName = 'Joe';
+    const lastName = 'Biden';
+    const email = 'brandon@example.org';
+    const password = 'Password123!';
+
+    await element(by.id('sign_up_page_first_name')).typeText(firstName);
+    await element(by.id('sign_up_page_last_name')).typeText(lastName);
+    await element(by.id('sign_up_page_email')).typeText(email);
+    await element(by.id('sign_up_page_password')).typeText(password);
+    await element(by.id('sign_up_page_confirm_password')).typeText(password);
+    // await element(by.text('Create Account')).tap();
+    // await expect(element(by.id('sign_up_page'))).not.toBeVisible();
+  });
 });
