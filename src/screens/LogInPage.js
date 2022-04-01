@@ -99,7 +99,7 @@ const LogInPage = ({navigation}) => {
   }
 
   return (
-    <View style={styles.wrapper} testID={'emailfield'}>
+    <View style={styles.wrapper} testID={'log_in_page'}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
       <View style={styles.form}>
@@ -120,14 +120,12 @@ const LogInPage = ({navigation}) => {
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={forgotPassword}
-        >
+          onPress={forgotPassword}>
           Forgot your password?
         </Text>
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('SignUp')}
-        >
+          onPress={() => navigation.navigate('SignUp')}>
           New? Create an account
         </Text>
       </View>
