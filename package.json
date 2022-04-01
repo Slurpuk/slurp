@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "pod": "cd ios && pod install && cd ..",
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",
-    "softRefresh": "npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd .."
+    "softRefresh": "npm ci && npm audit fix && cd android && ./gradlew clean && cd .. && cd ios && pod install && cd .."
   },
   "dependencies": {
     "@mdi/font": "^6.5.95",
