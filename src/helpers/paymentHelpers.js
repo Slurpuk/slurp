@@ -7,13 +7,16 @@ import {Alerts} from '../data/Alerts';
 async function fetchPaymentSheetParams(ipAddress, total) {
   let API_URL = `http://${ipAddress}:7070`;
   let body = {amount: total};
-  const response = await fetch(`${API_URL}/checkout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    'https://us-central1-independentcoffeeshops.cloudfunctions.net/payWithStripe',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
     },
-    body: JSON.stringify(body),
-  }).catch(error => {
+  ).catch(error => {
     if (error.toString() === 'TypeError: Network request failed') {
       Alerts.networkAlert();
     } else {
