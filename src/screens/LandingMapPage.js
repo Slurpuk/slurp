@@ -57,7 +57,7 @@ export default function LandingMapPage({navigation}) {
       </View>
 
       {/*show the relevant bottom sheet*/}
-      {context.isShopIntro ? (
+      {context.bottomSheet.isOpen ? (
         <ShopPage navigation={navigation} />
       ) : (
         <DraggableShopList navigation={navigation} />

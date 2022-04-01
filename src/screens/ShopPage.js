@@ -1,8 +1,4 @@
-import React, {
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import renderers from '../renderers';
 import {BlurView} from '@react-native-community/blur';
@@ -12,15 +8,19 @@ import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
 import {GlobalContext} from '../../App';
 
 export const ShopContext = React.createContext();
+
+/**
+ * Display a draggable or non-draggable shop page.
+ * @param navigation The navigation object.
+ */
 const ShopPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const shop = context.currShop;
-  console.log(shop)
   const [optionsVisible, setOptionsVisible] = useState(false); // Is the options popup visible
   const [currItem, setCurrItem] = useState(null); // Current item displayed in the shop.
 
   /**
-   * Hook that divdes the items offered by the shop into 3 sections: coffees, drinks and snacks and memoizes it.
+   * Hook that divides the items offered by the shop into 3 sections: coffees, drinks and snacks and memoizes it.
    * Formats the data before passing it to the flatlists.
    * @return The formatted menu data
    */
@@ -30,19 +30,19 @@ const ShopPage = ({navigation}) => {
       {title: 'Drinks', list: [], key: 2},
       {title: 'Snacks', list: [], key: 3},
     ];
-    const items = shop.ItemsOffered;
-    data[0].list = items.Coffees;
-    data[1].list = items.Drinks;
-    data[2].list = items.Snacks;
+    const items = shop.items;
+    data[0].list = items.coffees;
+    data[1].list = items.drinks;
+    data[2].list = items.snacks;
     return data;
-  }, [shop.ItemsOffered]);
+  }, [shop.items]);
 
   /**
    * Get the default milk
    * @return Object The default milk
    */
   function getDefaultMilk() {
-    return shop.options[0].data.find(el => el.Name === 'Dairy');
+    return shop.options[0].data.find(el => el.name === 'Dairy');
   }
 
   return (
@@ -50,22 +50,18 @@ const ShopPage = ({navigation}) => {
       value={{
         setOptionsVisible: setOptionsVisible,
         setCurrItem: setCurrItem,
-        shop: shop,
-        navigation: navigation,
         menuData: {
           coffees: menuData[0].list,
           drinks: menuData[1].list,
           snacks: menuData[2].list,
           defaultMilk: getDefaultMilk(),
         },
-      }}>
+      }}
+    >
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
-          {context.isShopIntro ? (
-            <DraggableShopPage
-              shop={shop}
-              navigation={navigation}
-            />
+          {context.bottomSheet.isOpen ? (
+            <DraggableShopPage shop={shop} navigation={navigation} />
           ) : (
             <NonDraggableShopPage shop={shop} navigation={navigation} />
           )}

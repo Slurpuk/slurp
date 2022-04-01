@@ -1,24 +1,34 @@
 import React, {useContext, useEffect, useState} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
-import {View, Text, Pressable, ImageBackground} from 'react-native';
-import {TouchableOpacity as RNGHTouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
-import {GlobalContext} from '../../../App';
 import {menuItemStyles} from './shopStyles';
+import {addToBasket} from '../../helpers/screenHelpers';
+import {GlobalContext} from '../../../App';
+import {context} from 'msw';
 
+/**
+ * Menu item component displayed in a shop's menu.
+ */
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
   const shopContext = useContext(ShopContext);
   const globalContext = useContext(GlobalContext);
 
-  /*
-   * Dynamically update the menuItem counter based on the current basket content.
+  /**
+   * Side effect to dynamically update the menuItem counter based on the current basket content.
    */
   useEffect(() => {
-    const basket = globalContext.basketContent;
+    const basket = globalContext.currBasket.data;
     let newCount = 0;
-    if (item.hasOwnProperty('Bean')) {
+    if (item.has_options) {
       for (let it of basket) {
         if (it.key === item.key) {
           newCount += it.count;
@@ -32,12 +42,11 @@ const MenuItem = ({item}) => {
         }
       }
     }
-
     setCount(newCount);
-  }, [globalContext.basketContent, item]);
+  }, [globalContext.currBasket.data, item]);
 
-  /*
-   * Show current item options.
+  /**
+   * Show current item options on a popup.
    */
   const showOptions = () => {
     shopContext.setCurrItem(item);
@@ -48,49 +57,48 @@ const MenuItem = ({item}) => {
    * Add new item to the global context.
    * @param newItem The item to be added.
    */
-  function add(newItem) {
-    newItem.hasOwnProperty('Bean')
-      ? showOptions()
-      : globalContext.addToBasket(newItem);
+  async function add(newItem) {
+    if (newItem.has_options) {
+      showOptions();
+    } else {
+      await addToBasket(
+        newItem,
+        globalContext.currShop,
+        globalContext.currBasket.data,
+        globalContext.currBasket.setContent,
+      );
+    }
   }
 
   return (
-    <RNGHTouchableOpacity style={menuItemStyles.item} onPress={() => add(item)}>
+    <TouchableOpacity style={menuItemStyles.item} onPress={() => add(item)}>
       <ImageBackground
-        source={{uri: item.Image}}
-        imageStyle={{borderRadius: 10, overflow: 'hidden'}}
-        style={{width: '100%', height: '100%'}}>
+        source={{uri: item.image}}
+        imageStyle={menuItemStyles.image}
+        style={menuItemStyles.imageContainer}
+      >
         <LinearGradient
           colors={['transparent', 'black']}
-          style={menuItemStyles.linearGradient}>
+          style={menuItemStyles.linearGradient}
+        >
           <View style={menuItemStyles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, menuItemStyles.title]}>
-              {item.Name}
+              {item.name}
             </Text>
-            <Text style={textStyles.coffeePrice}>
-              £{Number(item.Price).toFixed(2)}
-            </Text>
+            <Text style={textStyles.coffeePrice}>£{item.price.toFixed(2)}</Text>
           </View>
           <Pressable
             onPress={() => add(item)}
-            style={menuItemStyles.menuCardPopupTrigger}>
-            <Text
-              style={[
-                textStyles.iconText,
-                {
-                  marginLeft: 1,
-                  marginTop: 2,
-                  color: 'black',
-                  textAlign: 'center',
-                },
-              ]}>
+            style={menuItemStyles.menuCardPopupTrigger}
+          >
+            <Text style={[textStyles.iconText, menuItemStyles.counter]}>
               {' '}
               {count === 0 ? '+' : count}
             </Text>
           </Pressable>
         </LinearGradient>
       </ImageBackground>
-    </RNGHTouchableOpacity>
+    </TouchableOpacity>
   );
 };
 export default MenuItem;

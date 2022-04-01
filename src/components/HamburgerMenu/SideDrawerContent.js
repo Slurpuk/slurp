@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
 import {StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import {GlobalContext} from '../../../App';
 
 function SideDrawerContent(props) {
+  const context = useContext(GlobalContext);
+
   async function logout() {
     try {
       await auth().signOut();
@@ -24,7 +27,7 @@ function SideDrawerContent(props) {
         style={styles.close_button}
       />
       <DrawerItem
-        label="View order history"
+        label="My orders"
         onPress={() => props.navigation.navigate('View order history')}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
@@ -33,16 +36,18 @@ function SideDrawerContent(props) {
         style={styles.drawer_item}
         labelStyle={styles.drawer_item_label}
       />
-      <DrawerItem
-        label="View basket"
-        onPress={() => props.navigation.navigate('Basket page')}
-        activeTintColor="#2196f3"
-        activeBackgroundColor="rgba(0, 0, 0, .04)"
-        inactiveTintColor="rgba(0, 0, 0, .87)"
-        inactiveBackgroundColor="transparent"
-        style={styles.drawer_item}
-        labelStyle={styles.drawer_item_label}
-      />
+      {context.currBasket.data.length !== 0 ? (
+        <DrawerItem
+          label="My basket"
+          onPress={() => props.navigation.navigate('Basket page')}
+          activeTintColor="#2196f3"
+          activeBackgroundColor="rgba(0, 0, 0, .04)"
+          inactiveTintColor="rgba(0, 0, 0, .87)"
+          inactiveBackgroundColor="transparent"
+          style={styles.drawer_item}
+          labelStyle={styles.drawer_item_label}
+        />
+      ) : null}
       <DrawerItem
         label="Change details"
         onPress={() => props.navigation.navigate('Change name')}

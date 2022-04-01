@@ -1,179 +1,152 @@
-import firestore from '@react-native-firebase/firestore';
-import React, {useContext, useEffect, useMemo, useState} from 'react';
-import {StyleSheet, Text, View, Alert} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
 import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
-import {NetworkInfo} from 'react-native-network-info';
+import {
+  addToBasket,
+  formatBasket,
+  getItemFullPrice,
+  getOptionsPrice,
+  removeFromBasket,
+} from '../helpers/screenHelpers';
+import {initializePayment, openPaymentSheet} from '../helpers/paymentHelpers';
+import {Alerts} from '../data/Alerts';
+import {sendOrder} from '../firebase/queries';
 
+export const BasketContext = React.createContext();
+
+/**
+ * Screen to display the basket contents.
+ */
 const BasketPage = ({navigation}) => {
+  const context = useContext(GlobalContext);
+  const [contents, setContents] = useState(context.currBasket.data);
+  const [total, setTotal] = useState(getTotal());
+  const {initPaymentSheet, presentPaymentSheet} = useStripe(); // Stripe hook payment methods
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
-  const context = useContext(GlobalContext);
 
-  const {initPaymentSheet, presentPaymentSheet} = useStripe();
-
-  /*
-   * Fetch the payments' sheet parameters from the server.
-   * @return {paymentIntent} Return the encapsulated details about the transaction.
-   * @return {ephemeralKey} Return the cryptographic payment key.
-   * @return {customer} Return the customer.
+  /**
+   * Return a string formatted version of the basket's total amount.
+   * @param newBasket An optional newBasket possibly different from the current one.
    */
-  const fetchPaymentSheetParams = async (ipAddress) => {
-    let API_URL = 'http://192.168.0.128:7070';
-    console.log('asc', API_URL);
-    let body = {amount: context.total.toFixed(2)};
-    const response = await fetch(`${API_URL}/checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    const {paymentIntent, ephemeralKey, customer} = await response.json();
-    return {
-      paymentIntent,
-      ephemeralKey,
-      customer,
-    };
-  };
-
-  /*
-   * Initialize the payment sheet with customerId,
-   * customerEphemeralKeySecret, paymentIntentClientSecret
-   */
-  const initializePaymentSheet = async (ipAddress) => {
-    const {paymentIntent, ephemeralKey, customer} =
-      await fetchPaymentSheetParams(ipAddress);
-    const {error} = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-      merchantDisplayName: 'Slurp',
-    });
-  };
-
-  /*
-   * Open payment sheet if error doesn't exists.
-   * @function {confirmOrder} Confirm order if payment sheet is present.
-   */
-  const openPaymentSheet = async () => {
-    if (context.total !== 0) {
-      const {error} = await presentPaymentSheet();
-      if (error) {
-        Alert.alert(`Error code: ${error.code}`, error.message);
-      } else {
-        confirmOrder().catch(error => console.log(error));
-      }
-    } else {
-      Alert.alert('Empty basket.', 'Please add items to your basket.', [
-        {
-          text: 'OK',
-        },
-      ]);
-    }
-  };
-
-  /*
-   * Dynamically initialise the payment sheet if the total price is greater than 0.
-   */
-  useEffect(() => {
-    if (context.total !== 0) {
-      NetworkInfo.getIPV4Address().then(currIp => {
-        console.log(currIp)
-        initializePaymentSheet(currIp);
-      });
-    }
-  }, [context.total]);
-
-  /*
-   * Send data to firebase.
-   * DateTime, Items, Status, ShopID, UserID,Total are added to the
-   * firestore collection 'Orders'.
-   */
-  async function confirmOrder() {
-    await firestore()
-      .collection('Orders')
-      .add({
-        DateTime: firestore.Timestamp.now(),
-        Items: formatBasket(),
-        Status: 'incoming',
-        ShopID: context.currShop.key,
-        UserID: context.currentUser.key,
-        Total: Number(context.total.toPrecision(2)),
-      })
-      .then(() => {
-        context.clearBasket();
-        Alert.alert(
-          'Order received.',
-          'Your order has been sent to the shop! Awaiting response.',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('Order history'),
-            },
-          ],
-        );
-      });
+  function getTotal(newBasket = null) {
+    let basket = newBasket ? newBasket : context.currBasket.data;
+    return basket.reduce(function (acc, item) {
+      return acc + getItemFullPrice(item);
+    }, 0);
   }
 
-  /*
-   * Format basket contents to match a precision.
-   * @return {ItemRef} The item key.
-   * @return {Quantity} The item quantity.
-   * @return {Price} The price of the item.
-   * @return {Type} The type of the item.
-   * @ return {Options} the Options of the item.
+  /**
+   * Checkout. If the server is ready and the basket is not empty, proceed to payment.
    */
-  function formatBasket() {
-    let items = context.basketContent.map(item => {
-      console.log(item);
-      return {
-        ItemRef: item.key,
-        Quantity: item.count,
-        Price: Number(item.Price.toPrecision(2)),
-        Type: item.type,
-        Options: item.options,
-      };
-    });
-    return items;
+  async function checkout() {
+    if (contents.length === 0) {
+      Alerts.emptyBasketAlert();
+    } else if (!context.isLocationEnabled) {
+      Alerts.LocationAlert();
+    } else {
+      const ready = await initializePayment(initPaymentSheet, total);
+      ready
+        ? await proceedToPayment()
+        : Alerts.initPaymentAlert(() => checkout());
+    }
+  }
+
+  /**
+   * Proceed to payment. Open the payment sheet if no error occurs.
+   */
+  async function proceedToPayment() {
+    const successful = await openPaymentSheet(presentPaymentSheet);
+    if (successful) {
+      await confirmOrder();
+    } else {
+      Alerts.initPaymentAlert(() => checkout());
+    }
+  }
+
+  /**
+   * Create and send a new order based on the current basket. Clear the basket and inform the user.
+   */
+  async function confirmOrder() {
+    await sendOrder(
+      formatBasket(contents),
+      context.currShop.ref,
+      context.currentUser.ref,
+      getTotal(),
+    );
+    await context.currBasket.clear();
+    Alerts.orderSentAlert(navigation);
+  }
+
+  /**
+   * Add given item from current basket and storage basket.
+   * @param item The item to add
+   */
+  async function addToCurrentBasket(item) {
+    let newBasket = await addToBasket(
+      item,
+      context.currShop,
+      context.currBasket.data,
+      context.currBasket.setContent,
+    );
+    setContents(newBasket);
+    setTotal(getTotal(newBasket));
+  }
+
+  /**
+   * Remove given item from current basket and storage basket.
+   * @param item The item to remove
+   */
+  async function removeFromCurrentBasket(item) {
+    let newBasket = await removeFromBasket(
+      item,
+      context.currBasket.data,
+      context.currBasket.setContent,
+    );
+    setContents(newBasket);
+    setTotal(getTotal(newBasket));
   }
 
   return (
     <StripeProvider publishableKey={publishableKey}>
-      <View style={styles.basket}>
-        <GreenHeader
-          headerText={'My Basket - ' + context.currShop.Name}
-          navigation={navigation}
-        />
-        <View style={styles.main_container}>
-          <BasketContents Items={context.basketContent} />
-        </View>
-
-        <View style={styles.order_summary}>
-          <Text style={styles.total_text}>TOTAL</Text>
-          <Text style={styles.total_amount}>£{context.total.toFixed(2)}</Text>
-        </View>
-        <View style={[styles.lastButton, styles.buttons]}>
-          <CustomButton
-            priority={'primary'}
-            text={'Checkout'}
-            onPress={openPaymentSheet}
+      <BasketContext.Provider
+        value={{
+          addToBasket: addToCurrentBasket,
+          removeFromBasket: removeFromCurrentBasket,
+        }}
+      >
+        <View style={styles.basket}>
+          <GreenHeader
+            headerText={'My Basket - ' + context.currShop.name}
+            navigation={navigation}
           />
+          <View style={styles.main_container}>
+            <BasketContents Items={contents} />
+          </View>
+
+          <View style={styles.order_summary}>
+            <Text style={styles.total_text}>TOTAL</Text>
+            <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
+          </View>
+          <View style={[styles.lastButton, styles.buttons]}>
+            <CustomButton
+              priority={'primary'}
+              text={'Checkout'}
+              onPress={confirmOrder}
+            />
+          </View>
         </View>
-      </View>
+      </BasketContext.Provider>
     </StripeProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  safe_header: {
-    flex: 0,
-    backgroundColor: '#046D66',
-  },
   basket: {
     flex: 1,
     display: 'flex',
@@ -196,67 +169,6 @@ const styles = StyleSheet.create({
   lastButton: {
     marginBottom: '6%',
   },
-  basket_content: {
-    display: 'flex',
-    height: '100%',
-  },
-  my_order: {
-    fontWeight: '700',
-    fontSize: 26,
-    color: '#212121',
-    paddingBottom: '5%',
-  },
-  items_list: {
-    display: 'flex',
-    flex: 2,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#C0C0C0',
-  },
-  item_container: {
-    flex: 1,
-    borderColor: '#C0C0C0',
-    borderStyle: 'solid',
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    borderWidth: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    paddingVertical: '5%',
-    justifyContent: 'space-between',
-  },
-  item_information: {
-    alignSelf: 'flex-start',
-    flex: 1,
-  },
-  item_name: {
-    color: '#173C4F',
-    fontSize: 21,
-    fontWeight: '600',
-    paddingBottom: '2%',
-    alignSelf: 'flex-start',
-  },
-  item_specification_list: {},
-  item_specification: {
-    color: '#717171',
-    fontWeight: '300',
-    fontSize: 13,
-  },
-  price: {
-    paddingVertical: '2%',
-    paddingHorizontal: '3%',
-    minWidth: 30,
-    flex: 0.25,
-    display: 'flex',
-    fontWeight: '600',
-    fontSize: 17,
-    textAlign: 'right',
-    alignSelf: 'flex-start',
-    color: '#434343',
-  },
   order_summary: {
     display: 'flex',
     flexDirection: 'row',
@@ -275,26 +187,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#173C4F',
     fontWeight: '900',
-  },
-  amount_selection_container: {
-    display: 'flex',
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    backgroundColor: '#1B947E',
-    borderRadius: 3,
-    paddingVertical: '2%',
-    paddingHorizontal: '3%',
-    flex: 0.15,
-    marginEnd: '5%',
-    justifyContent: 'space-between',
-  },
-  amount: {
-    color: '#F1F1F1',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  change_amount_button: {
-    color: '#FFFFFF',
   },
 });
 

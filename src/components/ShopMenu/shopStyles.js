@@ -133,6 +133,23 @@ export const menuItemStyles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 3,
   },
+
+  image: {
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+
+  imageContainer: {
+    width: '100%',
+    height: '100%',
+  },
+
+  counter: {
+    marginLeft: 1,
+    marginTop: 2,
+    color: 'black',
+    textAlign: 'center',
+  },
 });
 
 export const menuSectionStyles = StyleSheet.create({
