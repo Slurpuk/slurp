@@ -1,33 +1,34 @@
-// Import the functions you need from the SDKs you need
-import {initializeApp} from 'firebase/app';
-import {getAuth, connectAuthEmulator} from 'firebase/auth';
-import {getFirestore, connectFirestoreEmulator} from 'firebase/firestore';
+import admin from 'firebase-admin';
+import serviceAccount from './independentcoffeeshops-firebase-adminsdk-xudgy-4d88ba3c6a.json' assert {type: "json"};
+const databaseURL =
+  'https://independentcoffeeshops-default-rtdb.europe-west1.firebasedatabase.app';
 
-const EMULATOR_MODE_ON = true;
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: databaseURL,
+});
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyAr1toS2gSr-_6cMS4Jh0R2NhzI70g5nWk',
-  authDomain: 'independentcoffeeshops.firebaseapp.com',
-  databaseURL:
-    'https://independentcoffeeshops-default-rtdb.europe-west1.firebasedatabase.app',
-  projectId: 'independentcoffeeshops',
-  storageBucket: 'independentcoffeeshops.appspot.com',
-  messagingSenderId: '185382636935',
-  appId: '1:185382636935:web:e905902ac500f230f75722',
-  measurementId: 'G-5WK60CC02P',
+
+const deleteAllUsers = nextPageToken => {
+  let uids = [];
+  admin
+    .auth()
+    .listUsers(100, nextPageToken)
+    .then(listUsersResult => {
+      uids = uids.concat(
+        listUsersResult.users.map(userRecord => userRecord.uid),
+      );
+      console.log(uids);
+      if (listUsersResult.pageToken) {
+        deleteAllUsers(listUsersResult.pageToken);
+      }
+    })
+    .catch(error => {
+      console.log('Error listing users:', error);
+    })
+    .finally(() => {
+      admin.auth().deleteUsers(uids);
+    });
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Switch emulator on
-if (EMULATOR_MODE_ON) {
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  connectAuthEmulator(auth, 'http://localhost:9099');
-}
-
-/*
-Delete all database. WIP, for now go to localhost:4000 and delete auth and firestore data.
- */
+deleteAllUsers();
