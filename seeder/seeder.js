@@ -40,8 +40,8 @@ const auth = getAuth(app);
 
 // Switch emulator on
 if (EMULATOR_MODE_ON) {
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  connectAuthEmulator(auth, 'http://localhost:9099', {disableWarnings: true});
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099', {disableWarnings: true});
 }
 
 let jeb;
@@ -86,7 +86,7 @@ async function createTestUsers() {
  */
 async function createFakeUsers() {
   for (let i = 0; i < 30; i++) {
-    const email = faker.internet.email();
+    const email = faker.internet.email().toLowerCase();
     await addDoc(collection(db, 'users'), {
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),
