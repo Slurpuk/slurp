@@ -20,7 +20,10 @@ let auth;
  * a) The emulator works offline anyway so the only way to trigger a no network
  * error would be to disconnect the emulator but this has to be done from the
  * terminal.
- * b)
+ * b) Even if one used the cloud database, there is no way of disconnecting
+ * the emulator from the internet because it runs on the same network as the
+ * computer, so it would require disconnecting your computer from the network.
+ * Source: https://github.com/wix/Detox/issues/1501
  * As in many other cases, there are untested catch or else alerts that should
  * never be raised but exist a safety and therefore cannot be tested.
  */
