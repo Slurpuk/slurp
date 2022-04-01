@@ -1,5 +1,10 @@
-import {initialiseFirebase, initialiseFirestore} from './firebaseSetUp';
+import {
+  initialiseAuth,
+  initialiseFirebase,
+  initialiseFirestore,
+} from './firebaseSetUp';
 import {addDoc, collection, GeoPoint} from 'firebase/firestore';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
 
 let db;
 let auth;
