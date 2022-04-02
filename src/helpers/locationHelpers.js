@@ -118,13 +118,13 @@ export const requestLocationPermission = async (
   setIsLocationIsEnabled,
 ) => {
   if (Platform.OS === 'ios') {
-    Geolocation.requestAuthorization('whenInUse').then(() =>
-      setIsLocationIsEnabled(true),
-    );
-    let positionAccess = getOneTimeLocation(setMapCenter);
-    if (positionAccess === true) {
-      subscribeLocationLocation(setMapCenter, watchID, userRef);
-    }
+    Geolocation.requestAuthorization('whenInUse').then(() => {
+      setIsLocationIsEnabled(true);
+      let positionAccess = getOneTimeLocation(setMapCenter);
+      if (positionAccess === true) {
+        subscribeLocationLocation(setMapCenter, watchID, userRef);
+      }
+    });
   } else {
     try {
       const granted = await PermissionsAndroid.request(
@@ -143,11 +143,7 @@ export const requestLocationPermission = async (
         }
       }
     } catch (err) {
-      if (err === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.LocationAlert();
-      }
+      Alerts.LocationAlert();
     }
   }
 };
