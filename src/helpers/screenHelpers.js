@@ -3,7 +3,6 @@ import {getOptions, getOrderItem, getOrderShop} from '../firebase/queries';
 import {months} from '../data/Months';
 import {OrderStatus} from '../data/OrderStatus';
 import {
-  getBasket,
   getCurrentShopKey,
   setBasket,
   setCurrentShopKey,
@@ -244,7 +243,7 @@ async function getFormattedItems(shop) {
   let drinks = [];
   let snacks = [];
   await Promise.all(
-    shop.data().items.map(async itemRef => {
+    shop.items.map(async itemRef => {
       await firestore()
         .doc(itemRef.path)
         .get()
@@ -285,7 +284,7 @@ async function getFormattedShops(shopsData) {
           longitude: data.location._longitude,
         },
       };
-      shopData.items = await getFormattedItems(documentSnapshot);
+      shopData.items = await getFormattedItems(documentSnapshot.data());
       await getOptions().then(options => {
         shopData.options = options;
         shops.push(shopData);
