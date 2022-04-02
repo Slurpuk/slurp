@@ -111,7 +111,7 @@ const LogInPage = ({navigation, setLoading}) => {
           setField={setEmail}
           type={'email'}
           value={email}
-          testID={'email'}
+          testID={'log_in_page_email'}
         />
         <FormField
           title={'Password'}
@@ -119,7 +119,7 @@ const LogInPage = ({navigation, setLoading}) => {
           setField={setPassword}
           type={'password'}
           value={password}
-          testID={'password'}
+          testID={'log_in_page_password'}
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
