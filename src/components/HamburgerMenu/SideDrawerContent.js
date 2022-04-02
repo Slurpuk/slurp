@@ -26,7 +26,6 @@ function SideDrawerContent(props) {
           size={25}
           style={styles.close_button}
         />
-      <Image source={require('../../assets/svgs/coffee_cup.png')} style={styles.coffee}/>
       <Text style={styles.welcome_text}>Hi {context.currentUser.first_name}!</Text>
       <DrawerItem
         label="My orders"
@@ -100,16 +99,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
   },
   welcome_text: {
-    alignSelf: "center",
+    marginLeft: '6%',
+    fontWeight: 'bold',
     fontSize: 25,
     color: '#173C4F',
     marginVertical: 20,
   },
-  coffee: {
-    width: 80,
-    height: 80,
-    alignSelf: 'center',
-  }
 });
 
 export default SideDrawerContent;
