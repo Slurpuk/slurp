@@ -259,6 +259,42 @@ function handleSignUpErrorsBackEnd(errorCode) {
   }
 }
 
+/**
+ * Get the reference to an item given its key
+ * @param item The target item
+ */
+async function getItemRef(item) {
+  let itemRef;
+  await firestore()
+    .collection('items')
+    .doc(item.key)
+    .get()
+    .then(doc => {
+      itemRef = doc.ref;
+    })
+    .catch(() => Alerts.databaseErrorAlert());
+
+  return itemRef;
+}
+
+/**
+ * Get the reference to an option given its key
+ * @param option The target option
+ */
+async function getOptionRef(option) {
+  let optionRef;
+  await firestore()
+    .collection('options')
+    .doc(option.key)
+    .get()
+    .then(doc => {
+      optionRef = doc.ref;
+    })
+    .catch(() => Alerts.databaseErrorAlert());
+
+  return optionRef;
+}
+
 export {
   getOptions,
   updateUserLocation,
@@ -268,4 +304,6 @@ export {
   sendOrder,
   createUserModel,
   createUserAuth,
+  getItemRef,
+  getOptionRef,
 };

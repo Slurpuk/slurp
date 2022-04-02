@@ -215,12 +215,14 @@ async function refreshShops(
   clearBasket,
   setShopsData,
 ) {
-  if (staticShopsData.currShopIndex !== -1) {
-    let previous = staticShopsData.allShops[staticShopsData.currShopIndex];
-    let newCurrShop = formattedShops.findIndex(
-      shop => shop.key === previous.key,
-    );
-    setShopsData({allShops: formattedShops, currShopIndex: newCurrShop});
+  if (staticShopsData.currShopKey !== '') {
+    let newCurrShop =
+      formattedShops.findIndex(
+        shop => shop.key === staticShopsData.currShopKey,
+      ) === -1
+        ? ''
+        : staticShopsData.currShopKey;
+    setShopsData({allShops: formattedShops, currShopKey: newCurrShop});
     if (newCurrShop === -1) {
       await setCurrentShopKey('');
       await clearBasket;
@@ -228,12 +230,13 @@ async function refreshShops(
   } else {
     let storageKey = await getCurrentShopKey();
     if (storageKey !== '') {
-      let storageShop = formattedShops.findIndex(
-        shop => shop.key === storageKey,
-      );
+      let storageShop =
+        formattedShops.findIndex(shop => shop.key === storageKey) === -1
+          ? ''
+          : storageKey;
       setShopsData({
         allShops: formattedShops,
-        currShopIndex: storageShop,
+        currShopKey: storageKey,
       });
       if (storageShop === -1) {
         await clearBasket();
