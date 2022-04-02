@@ -28,7 +28,7 @@ const OrderDetailsView = ({order}) => {
             {order.shop.name}
           </Text>
           {getStatusAndDateComponent(order)}
-          <Text style={{fontSize: 10}}>
+          <Text style={styles.id}>
             ID: {order.key}
           </Text>
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
@@ -121,7 +121,9 @@ const styles = StyleSheet.create({
     height: 74,
     marginRight: 15,
   },
-
+  id: {
+    fontSize: 10,
+  },
   textFlex: {
     flex: 1,
     overflow: 'hidden',
