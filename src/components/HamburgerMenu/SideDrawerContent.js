@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
-import {StyleSheet} from 'react-native';
+import { Image, StyleSheet, Text, View } from "react-native";
 import auth from '@react-native-firebase/auth';
 import {GlobalContext} from '../../../App';
 
@@ -17,15 +17,17 @@ function SideDrawerContent(props) {
   }
   return (
     <DrawerContentScrollView {...props}>
-      <Close.Button
-        onPress={() => props.navigation.closeDrawer()}
-        name="close"
-        color={'#173C4F'}
-        underlayColor={'transparent'}
-        backgroundColor={'transparent'}
-        size={25}
-        style={styles.close_button}
-      />
+        <Close.Button
+          onPress={() => props.navigation.closeDrawer()}
+          name="close"
+          color={'#173C4F'}
+          underlayColor={'transparent'}
+          backgroundColor={'transparent'}
+          size={25}
+          style={styles.close_button}
+        />
+      <Image source={require('../../assets/svgs/coffee_cup.png')} style={styles.coffee}/>
+      <Text style={styles.welcome_text}>Hi {context.currentUser.first_name}!</Text>
       <DrawerItem
         label="My orders"
         onPress={() => props.navigation.navigate('View order history')}
@@ -97,6 +99,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Poppins',
   },
+  welcome_text: {
+    alignSelf: "center",
+    fontSize: 25,
+    color: '#173C4F',
+    marginVertical: 20,
+  },
+  coffee: {
+    width: 80,
+    height: 80,
+    alignSelf: 'center',
+  }
 });
 
 export default SideDrawerContent;
