@@ -64,8 +64,8 @@ export default function MapBackground({
       <MapView
         onRegionChangeComplete={region => {
           if (Platform.OS === 'ios') {
-            Geolocation.requestAuthorization('whenInUse').then(r =>
-              console.log('Location granted!'),
+            Geolocation.requestAuthorization('whenInUse').then(
+              () => (context.setLocationIsEnabled = true),
             );
             if (
               region.latitude.toFixed(6) !==

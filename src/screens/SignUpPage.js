@@ -11,7 +11,7 @@ import {CustomAlerts} from '../sub-components/Alerts';
 import {Alerts} from '../data/Alerts';
 import {enterApp} from '../helpers/storageHelpers';
 
-const SignUpPage = ({navigation}) => {
+const SignUpPage = ({navigation, setLoading}) => {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -90,32 +90,30 @@ const SignUpPage = ({navigation}) => {
     if (handleSignUpErrorsFrontEnd()) {
       await auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(async () => {
-          await enterApp();
-          await firestore()
-            .collection('users')
-            .add({
-              email: email,
-              first_name: first_name,
-              last_name: last_name,
-              location: new firestore.GeoPoint(
-                51.5140310233705,
-                -0.1164075624320158,
-              ),
-            })
-            .then(() => Alert.alert('Welcome!', 'Registered Successfully'))
-            .catch(error => {
-              handleSignUpErrorsBackEnd(error);
-            });
-        })
         .catch(error => {
           handleSignUpErrorsBackEnd(error.code);
         });
+      await firestore()
+        .collection('users')
+        .add({
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          location: new firestore.GeoPoint(
+            51.5140310233705,
+            -0.1164075624320158,
+          ),
+        })
+        .catch(error => {
+          handleSignUpErrorsBackEnd(error);
+        });
+      setLoading(prevState => ({...prevState, user: false}));
+      await enterApp();
     }
   }
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} testID={'sign_up_page'}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <Text style={[textStyles.blueJosefinHeading]}>Sign Up</Text>
       <View style={styles.formContainer}>
@@ -127,6 +125,7 @@ const SignUpPage = ({navigation}) => {
             setField={setFirstName}
             type={'name'}
             value={first_name}
+            testID={'sign_up_page_first_name'}
           />
           <FormField
             style={[styles.subNameContainer]}
@@ -135,6 +134,7 @@ const SignUpPage = ({navigation}) => {
             setField={setLastName}
             type={'name'}
             value={last_name}
+            testID={'sign_up_page_last_name'}
           />
         </View>
         <FormField
@@ -144,6 +144,7 @@ const SignUpPage = ({navigation}) => {
           setField={setEmail}
           type={'email'}
           value={email}
+          testID={'sign_up_page_email'}
         />
         <FormField
           style={styles.element}
@@ -151,6 +152,7 @@ const SignUpPage = ({navigation}) => {
           setField={setPassword}
           type={'password'}
           value={password}
+          testID={'sign_up_page_password'}
         />
         <FormField
           style={styles.element}
@@ -158,11 +160,11 @@ const SignUpPage = ({navigation}) => {
           setField={setPasswordConfirmation}
           type={'password'}
           value={password_confirmation}
+          testID={'sign_up_page_confirm_password'}
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('LogIn')}
-        >
+          onPress={() => navigation.navigate('LogIn')}>
           Already have an account? Log in
         </Text>
       </View>

@@ -22,7 +22,7 @@ async function getOptions() {
           key: documentSnapshot.id,
           ref: documentSnapshot.ref,
         };
-        let index = 0;
+        let index;
         option.type === 'Syrup' ? (index = 1) : (index = 0);
         if (option.name === 'Dairy') {
           dairy = option;
@@ -73,7 +73,9 @@ async function setUserObject(user, setUser) {
     .collection('users')
     .where('email', '==', user.email)
     .get()
-    .then(querySnapshot => {
+    .then(async querySnapshot => {
+      if (querySnapshot.docs.length === 0) {
+      }
       let userModel = querySnapshot.docs[0];
       let newUser = {
         ...userModel.data(),

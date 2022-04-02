@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -40,7 +40,7 @@ const WelcomePages = ({navigation}) => {
 
   const {currentPage: pageIndex} = sliderState;
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} testID={'welcome_pages'}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <ScrollView
         style={{display: 'flex'}}
@@ -51,8 +51,8 @@ const WelcomePages = ({navigation}) => {
         onScroll={(event: any) => {
           setSliderPage(event);
         }}
-      >
-        <View style={styles.component}>
+        testID={'welcome_pages_scrollview'}>
+        <View style={styles.component} testID={'welcome_page1'}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
             Welcome to Slurp!
           </Text>
@@ -62,7 +62,7 @@ const WelcomePages = ({navigation}) => {
             skip the line!
           </Text>
         </View>
-        <View style={styles.component}>
+        <View style={styles.component} testID={'welcome_page2'}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
             Why Slurp?
           </Text>
@@ -74,7 +74,7 @@ const WelcomePages = ({navigation}) => {
             and enjoy your favourite drink as soon as you walk in!
           </Text>
         </View>
-        <View style={styles.component}>
+        <View style={styles.component} testID={'welcome_page3'}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
             Become a Slurpy today!
           </Text>
@@ -90,8 +90,7 @@ const WelcomePages = ({navigation}) => {
           />
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={proceedToLogIn}
-          >
+            onPress={proceedToLogIn}>
             Already have an account? Log in
           </Text>
         </View>

@@ -483,7 +483,16 @@ async function seed() {
     const duration = Date.now() - start;
     console.log('Seeding completed in ' + duration / 1000 + ' seconds.');
   } catch (error) {
-    console.log('Error while seeding database: ' + error + '. Sorry!');
+    if (error.code === 'auth/email-already-in-use') {
+      console.log(
+        'An email is already in use, you have probably already seeded the database. Try npm run unseed.',
+      );
+      console.log(
+        "If you still get this error after unseeding you may be connected to the cloud database instead of the emulator, make sure the EMULATOR_MODE_ON variable is set to 'true' in seeder/seeder.js.",
+      );
+    } else {
+      console.log('Error while seeding database: ' + error + '. Sorry!');
+    }
   }
 }
 
