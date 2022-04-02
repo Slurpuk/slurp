@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Custom sub-components button should render correctly 1`] = `
+exports[`Components Custom sub-components button should render correctly 1`] = `
 <View>
   <View
     collapsable={false}
@@ -53,7 +53,7 @@ exports[`Custom sub-components button should render correctly 1`] = `
 </View>
 `;
 
-exports[`Custom sub-components button should render correctly with number indicator 1`] = `
+exports[`Components Custom sub-components button should render correctly with number indicator 1`] = `
 <View>
   <View
     collapsable={false}
@@ -124,7 +124,7 @@ exports[`Custom sub-components button should render correctly with number indica
 </View>
 `;
 
-exports[`Custom sub-components green header should render correctly 1`] = `
+exports[`Components green header should render correctly 1`] = `
 <View
   style={
     Object {
@@ -160,6 +160,7 @@ exports[`Custom sub-components green header should render correctly 1`] = `
           Object {},
         ]
       }
+      title=""
       underlayColor="transparent"
     >
       <Text
@@ -206,5 +207,279 @@ exports[`Custom sub-components green header should render correctly 1`] = `
       }
     />
   </View>
+</View>
+`;
+
+exports[`Components white arrow button Renders an icon 1`] = `
+<Text
+  allowFontScaling={false}
+  selectable={false}
+  style={
+    Array [
+      Object {
+        "color": undefined,
+        "fontSize": 12,
+      },
+      undefined,
+      Object {
+        "fontFamily": undefined,
+        "fontStyle": "normal",
+        "fontWeight": "normal",
+      },
+      Object {},
+    ]
+  }
+>
+  
+</Text>
+`;
+
+exports[`Components white arrow button renders correctly if the arrow points down 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button renders correctly if the arrow points left 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button renders correctly if the arrow points right 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button renders correctly if the arrow points up 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button should render correctly 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
 </View>
 `;

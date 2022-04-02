@@ -32,7 +32,12 @@ const SignUpPage = ({navigation}) => {
     if (first_name === '') {
       validity = false;
       Alert.alert('Empty Name', 'Please enter a first name.');
-    } else if (email === '') {
+    }
+    else if (last_name == ''){
+      validity = false;
+      Alert.alert('Empty Name', 'Please enter your surname.')
+    }
+    else if (email === '') {
       validity = false;
       Alert.alert('Empty Email', 'Please enter your email.');
     } else if (!emailRegex.test(email)) {
@@ -47,7 +52,7 @@ const SignUpPage = ({navigation}) => {
     } else if (password_confirmation !== password) {
       validity = false;
       Alert.alert(
-        "Passwords don't match",
+        'Passwords do not match',
         "Make sure you've entered your password correctly.",
       );
     } else if (!passwordRegex.test(password)) {
@@ -148,6 +153,7 @@ const SignUpPage = ({navigation}) => {
         <FormField
           style={styles.element}
           title={'Password'}
+          placeholder={''}
           setField={setPassword}
           type={'password'}
           value={password}
@@ -155,6 +161,7 @@ const SignUpPage = ({navigation}) => {
         <FormField
           style={styles.element}
           title={'Confirm Password'}
+          placeholder={''}
           setField={setPasswordConfirmation}
           type={'password'}
           value={password_confirmation}

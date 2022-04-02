@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {BackHandler, Pressable} from 'react-native';
+import React from 'react';
+import {Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const WhiteArrowButton = ({
@@ -34,6 +34,7 @@ const WhiteArrowButton = ({
 
   return (
     <Pressable
+      title={''}
       underlayColor={'transparent'}
       onPress={handleBackButtonClick}
       style={({pressed}) => [

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`sing up should sign up a user 1`] = `
+exports[`Signup page sing up should sign up a user 1`] = `
 <View
   style={
     Object {
