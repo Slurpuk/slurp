@@ -46,7 +46,6 @@ export const locationPress = async (context, setMapCenter, clickedMarker) => {
  * @param setMapCenter The setState method for the current center point of the map
  */
 const getOneTimeLocation = setMapCenter => {
-  let success;
   Geolocation.getCurrentPosition(
     //Will give you the current location
     position => {
@@ -57,18 +56,17 @@ const getOneTimeLocation = setMapCenter => {
         latitude: latitude,
         longitude: longitude,
       }));
-      success = true;
+      console.log('yes');
     },
     error => {
       Alerts.LocationAlert();
-      success = false;
+      console.log('no');
     },
     {
       enableHighAccuracy: true,
       timeout: 30000,
     },
   );
-  return success;
 };
 
 /**
@@ -80,6 +78,7 @@ const getOneTimeLocation = setMapCenter => {
 const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
   watchID.current = Geolocation.watchPosition(
     async position => {
+      console.log('sdwwdwfsffqeffewef');
       //Will give you the location on location change
       const longitude = position.coords.longitude;
       const latitude = position.coords.latitude;
@@ -118,12 +117,10 @@ export const requestLocationPermission = async (
   setIsLocationIsEnabled,
 ) => {
   if (Platform.OS === 'ios') {
-    Geolocation.requestAuthorization('whenInUse').then(() => {
+    Geolocation.requestAuthorization('whenInUse').then(async () => {
       setIsLocationIsEnabled(true);
-      let positionAccess = getOneTimeLocation(setMapCenter);
-      if (positionAccess === true) {
-        subscribeLocationLocation(setMapCenter, watchID, userRef);
-      }
+      getOneTimeLocation(setMapCenter);
+      subscribeLocationLocation(setMapCenter, watchID, userRef);
     });
   } else {
     try {
@@ -137,10 +134,8 @@ export const requestLocationPermission = async (
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         //To Check, If Permission is granted
         setIsLocationIsEnabled(true);
-        let positionAccess = getOneTimeLocation(setMapCenter);
-        if (positionAccess === true) {
-          subscribeLocationLocation(setMapCenter, watchID, userRef);
-        }
+        getOneTimeLocation(setMapCenter);
+        subscribeLocationLocation(setMapCenter, watchID, userRef);
       }
     } catch (err) {
       Alerts.LocationAlert();
