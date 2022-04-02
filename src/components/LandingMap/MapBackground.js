@@ -64,14 +64,9 @@ export default function MapBackground({
       <MapView
         onRegionChangeComplete={region => {
           if (Platform.OS === 'ios') {
-            Geolocation.requestAuthorization('whenInUse').then(
-              () => (context.setLocationIsEnabled = true),
-            );
             if (
-              region.latitude.toFixed(6) !==
-                mapCenter.latitude.toFixed(6) &&
-              region.longitude.toFixed(6) !==
-                mapCenter.longitude.toFixed(6)
+              region.latitude.toFixed(6) !== mapCenter.latitude.toFixed(6) &&
+              region.longitude.toFixed(6) !== mapCenter.longitude.toFixed(6)
             ) {
               setMapCenter(region);
             }
