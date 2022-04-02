@@ -118,8 +118,7 @@ const BasketPage = ({navigation}) => {
         value={{
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
-        }}
-      >
+        }}>
         <View style={styles.basket}>
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.name}
@@ -137,7 +136,7 @@ const BasketPage = ({navigation}) => {
             <CustomButton
               priority={'primary'}
               text={'Checkout'}
-              onPress={confirmOrder}
+              onPress={checkout}
             />
           </View>
         </View>

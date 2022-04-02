@@ -62,8 +62,8 @@ export default function MapBackground({
   return (
     <View style={styles.container}>
       <MapView
-          testID="map-background"
-        onRegionChangeComplete={(region) => {
+        testID="map-background"
+        onRegionChangeComplete={region => {
           if (Platform.OS === 'ios') {
             if (
               region.latitude.toFixed(6) !==
@@ -82,12 +82,11 @@ export default function MapBackground({
         onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter.current}
-      >
+        region={mapCenter.current}>
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
-              testID="marker"
+            testID="marker"
             key={index}
             coordinate={marker.coords}
             pinColor={'navy'}
@@ -97,9 +96,7 @@ export default function MapBackground({
                 await locationPress(context, mapCenter, marker.name);
               }
               mapPressed();
-            }}
-          >
-
+            }}>
             <View style={styles.markerStyle} testID="marker-inner-view">
               <Text style={{color: 'coral', fontWeight: 'bold', top: 0}}>
                 {!marker.is_open ? 'Closed' : ''}
