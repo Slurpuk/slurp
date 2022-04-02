@@ -39,11 +39,12 @@ async function formatPastOrders(orders, setPastOrders) {
     }
   });
   let newOrders = await formatOrdersItems(orders);
+  console.log('afq')
   let finalOrders = [];
   await Promise.all(
     newOrders.map(async order => {
       order.shop = await getOrderShop(order);
-      let curr = newOrders.find(x => x.period === order.period);
+      let curr = finalOrders.find(x => x.period === order.period);
       curr
         ? curr.data.push(order)
         : finalOrders.push({period: order.period, data: [order]});
