@@ -116,7 +116,7 @@ function calculateTime(distance) {
  * @param distance The distance to process.
  */
 export function processDistance(distance) {
-  let minutes = (calculateTime(distance) / 1000) * 12;
+  let minutes = calculateTime(distance);
   let d = Math.floor(minutes / (24 * 60));
   let h = Math.floor((minutes % (24 * 60)) / 60);
   let m = Math.floor(minutes % 60);
@@ -124,7 +124,7 @@ export function processDistance(distance) {
   let dDisplay = d > 0 ? d + ' d ' : '';
   let hDisplay = h > 0 ? h + ' h ' : '';
   let mDisplay = m > 0 ? m + (m === 1 ? ' min ' : ' mins ') : '';
-
+  console.log(minutes);
   return dDisplay + hDisplay + mDisplay;
 }
 
