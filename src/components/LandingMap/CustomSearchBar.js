@@ -158,13 +158,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noResultsText: {
-    width: screenWidth,
-    maxWidth: screenWidth,
     fontSize: 16,
     textAlignVertical: 'center',
     textAlign: 'center',
     paddingVertical: 15,
-    borderRadius: 0,
     fontFamily: 'Poppins',
     borderBottomColor: '#DDDDDD',
     borderBottomWidth: 1,
@@ -172,8 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'whitesmoke',
     color: '#046D66',
   },
-  searchResultContainer: {
-    width: screenWidth * 0.7,
+  searchResultContainer: { width: screenWidth * 0.7,
   },
 
   container: {
