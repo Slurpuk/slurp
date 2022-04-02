@@ -94,7 +94,7 @@ describe('Sign up', () => {
     ).toBeVisible(); // Check raises alert
     await element(by.type('_UIAlertControllerActionView')).tap();
     await expect(element(by.id('sign_up_page'))).toBeVisible();
-    auth.currentUser.delete;
+
     await element(by.id('sign_up_page_first_name')).replaceText('');
     await element(by.id('sign_up_page_last_name')).replaceText('');
     await element(by.id('sign_up_page_email')).replaceText('');
@@ -112,7 +112,20 @@ describe('Sign up', () => {
     await element(by.id('sign_up_page_email')).typeText(email);
     await element(by.id('sign_up_page_password')).typeText(password);
     await element(by.id('sign_up_page_confirm_password')).typeText(password);
-    // await element(by.text('Create Account')).tap();
-    // await expect(element(by.id('sign_up_page'))).not.toBeVisible();
+
+    await element(by.text('Create Account')).tap();
+
+    await expect(element(by.id('sign_up_page'))).not.toBeVisible();
+    await expect(element(by.id('landing_map_page'))).toBeVisible();
+  });
+  /**
+   * Also implicitly tests that the menu triggered by the hamburger button is visible.
+   */
+  it('should be able to log out', async () => {
+    await expect(element(by.id('hamburger_menu_button'))).toBeVisible();
+    await element(by.id('hamburger_menu_button')).tap();
+    await expect(element(by.text('logout'))).toBeVisible();
+    await element(by.text('logout')).tap();
+    await expect(element(by.id('log_in_page'))).toBeVisible();
   });
 });
