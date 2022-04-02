@@ -45,53 +45,58 @@ describe('Log in', () => {
     });
     await createUserWithEmailAndPassword(auth, usedEmail, password);
     await expect(element(by.id('log_in_page'))).toBeVisible();
+
     await element(by.id('log_in_page_email')).typeText(usedEmail);
-    await expect(element(by.text('Forgot your password?'))).toBeVisible();
     await element(by.text('Forgot your password?')).tap();
+    await expect(element(by.text('Reset Sent'))).toBeVisible();
     await expect(
       element(by.type('_UIAlertControllerActionView')),
     ).toBeVisible(); // Check raises alert
     await element(by.type('_UIAlertControllerActionView')).tap();
     await expect(element(by.id('log_in_page'))).toBeVisible();
+
+    await element(by.id('log_in_page_email')).replaceText('');
   });
+
   it('should also raise alert if forgot password with non-existent email', async () => {
     const email = 'thisemaildoesnotexist@example.org';
-    await expect(element(by.id('log_in_page'))).toBeVisible();
+
     await element(by.id('log_in_page_email')).typeText(email);
-    await expect(element(by.text('Forgot your password?'))).toBeVisible();
     await element(by.text('Forgot your password?')).tap();
+    await expect(element(by.text('Reset Sent'))).toBeVisible();
     await expect(
       element(by.type('_UIAlertControllerActionView')),
     ).toBeVisible(); // Check raises alert
     await element(by.type('_UIAlertControllerActionView')).tap();
     await expect(element(by.id('log_in_page'))).toBeVisible();
+
+    await element(by.id('log_in_page_email')).replaceText('');
   });
   it('should raise alert if log in wrong password', async () => {
-    const usedFirstName = 'Boris';
-    const usedLastName = 'Johnson';
-    const usedEmail = 'getbrexitdone@example.org';
+    const firstName = 'Emmanuel';
+    const lastName = 'Macron';
+    const email = 'enmarche@example.org';
     const password = 'Password123!';
     const wrongPassword = 'WrongPassword';
     await addDoc(collection(db, 'users'), {
-      first_name: usedFirstName,
-      last_name: usedLastName,
-      email: usedEmail,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
       location: new GeoPoint(51.503223, -0.1275),
     });
-    await createUserWithEmailAndPassword(auth, usedEmail, password);
-    await element(by.id('sign_up_page_email')).typeText(usedEmail);
-    await element(by.id('sign_up_page_password')).typeText(password);
-    await element(by.text('Create Account')).tap();
+    await createUserWithEmailAndPassword(auth, email, password);
+
+    await element(by.id('log_in_page_email')).typeText(email);
+    await element(by.id('log_in_page_password')).typeText(wrongPassword);
+    await element(by.text('Log in')).tap();
+
+    await expect(element(by.text('Wrong Password'))).toBeVisible();
     await expect(
       element(by.type('_UIAlertControllerActionView')),
     ).toBeVisible(); // Check raises alert
     await element(by.type('_UIAlertControllerActionView')).tap();
-    await expect(element(by.id('sign_up_page'))).toBeVisible();
-    auth.currentUser.delete;
-    await element(by.id('sign_up_page_first_name')).replaceText('');
-    await element(by.id('sign_up_page_last_name')).replaceText('');
-    await element(by.id('sign_up_page_email')).replaceText('');
-    await element(by.id('sign_up_page_password')).replaceText('');
-    await element(by.id('sign_up_page_confirm_password')).replaceText('');
+    await expect(element(by.id('log_in_page'))).toBeVisible();
+
+    await element(by.id('log_in_page_password')).replaceText('');
   });
 });
