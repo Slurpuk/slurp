@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useRef, useMemo} from 'react';
+import React, {useEffect, useContext, useRef, useMemo, useState} from 'react';
 import {Platform, StyleSheet, Text, View, Keyboard} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
@@ -19,9 +19,9 @@ export default function MapBackground({
   const context = useContext(GlobalContext);
   //used to watch the users location
   const watchID = useRef();
-  const mapCenter = useRef({
-    latitude: context.currentUser.location._latitude,
-    longitude: context.currentUser.location._longitude,
+  const [mapCenter, setMapCenter] = useState({
+    latitude: context.currentUser.location.latitude,
+    longitude: context.currentUser.location.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
@@ -44,7 +44,7 @@ export default function MapBackground({
     let currWatch = watchID.current;
     requestLocationPermission(
       context.currentUser.ref,
-      mapCenter,
+      setMapCenter,
       watchID,
       context.setLocationIsEnabled,
     ).catch(error => Alerts.elseAlert());
@@ -69,14 +69,14 @@ export default function MapBackground({
             );
             if (
               region.latitude.toFixed(6) !==
-                mapCenter.current.latitude.toFixed(6) &&
+                mapCenter.latitude.toFixed(6) &&
               region.longitude.toFixed(6) !==
-                mapCenter.current.longitude.toFixed(6)
+                mapCenter.longitude.toFixed(6)
             ) {
-              mapCenter.current = region;
+              setMapCenter(region);
             }
           } else {
-            mapCenter.current = region;
+            setMapCenter(region);
           }
         }}
         //focus only on map when map pressed
@@ -84,7 +84,7 @@ export default function MapBackground({
         onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter.current}>
+        region={mapCenter}>
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -94,7 +94,7 @@ export default function MapBackground({
             title={marker.name}
             onPress={async () => {
               if (marker.is_open) {
-                await locationPress(context, mapCenter, marker.name);
+                await locationPress(context, setMapCenter, marker.name);
               }
               mapPressed();
             }}>
