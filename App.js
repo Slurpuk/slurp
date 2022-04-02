@@ -31,7 +31,7 @@ export const GlobalContext = React.createContext();
 export default function App() {
   const [loading, setLoading] = useState({
     shops: true,
-    user: true,
+    user: false,
   }); // Is the app still fetching backend data.
   const [currentUser, setCurrentUser] = useState(null);
   const [shopsData, setShopsData] = useState({allShops: [], currShopIndex: -1});

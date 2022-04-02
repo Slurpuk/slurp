@@ -88,25 +88,9 @@ const SignUpPage = ({navigation, setLoading}) => {
    */
   async function registerUser() {
     if (handleSignUpErrorsFrontEnd()) {
-      await auth()
-        .createUserWithEmailAndPassword(email, password)
-        .catch(error => {
-          handleSignUpErrorsBackEnd(error.code);
-        });
-      await firestore()
-        .collection('users')
-        .add({
-          email: email,
-          first_name: first_name,
-          last_name: last_name,
-          location: new firestore.GeoPoint(
-            51.5140310233705,
-            -0.1164075624320158,
-          ),
-        })
-        .catch(error => {
-          handleSignUpErrorsBackEnd(error);
-        });
+      setLoading(prevState => ({...prevState, user: true}));
+      await createUserAuth(email, password);
+      await createUserModel(email, first_name, last_name);
       setLoading(prevState => ({...prevState, user: false}));
       await enterApp();
     }
