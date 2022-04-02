@@ -10,7 +10,6 @@ import {
   addToBasket,
   formatBasket,
   getItemFullPrice,
-  getOptionsPrice,
   removeFromBasket,
 } from '../helpers/screenHelpers';
 import {initializePayment, openPaymentSheet} from '../helpers/paymentHelpers';
@@ -47,7 +46,7 @@ const BasketPage = ({navigation}) => {
   async function checkout() {
     if (contents.length === 0) {
       Alerts.emptyBasketAlert();
-    } else if (!context.isLocationEnabled) {
+    } else if (!context.locationIsEnabled) {
       Alerts.LocationAlert();
     } else {
       const ready = await initializePayment(initPaymentSheet, total);
@@ -137,7 +136,7 @@ const BasketPage = ({navigation}) => {
             <CustomButton
               priority={'primary'}
               text={'Checkout'}
-              onPress={confirmOrder}
+              onPress={checkout}
             />
           </View>
         </View>
