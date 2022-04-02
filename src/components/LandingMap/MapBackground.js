@@ -41,17 +41,23 @@ export default function MapBackground({
 
   //setup location access on map load. remove the location access when this component is unmounted
   useEffect(() => {
-    let currWatch = watchID.current;
-    requestLocationPermission(
-      context.currentUser.ref,
-      setMapCenter,
-      watchID,
-      context.setLocationIsEnabled,
-    ).catch(error => Alerts.elseAlert());
-    return () => {
-      Geolocation.clearWatch(currWatch);
-    };
-  }, [context.currentUser.ref, context.setLocationIsEnabled]);
+    if (!context.locationIsEnabled) {
+      let currWatch = watchID.current;
+      requestLocationPermission(
+        context.currentUser.ref,
+        setMapCenter,
+        watchID,
+        context.setLocationIsEnabled,
+      ).catch(error => Alerts.elseAlert());
+      return () => {
+        Geolocation.clearWatch(currWatch);
+      };
+    }
+  }, [
+    context.currentUser.ref,
+    context.setLocationIsEnabled,
+    context.locationIsEnabled,
+  ]);
 
   //dismiss the keyboard and search results when the map is clicked
   const mapPressed = () => {
@@ -112,5 +118,5 @@ const styles = StyleSheet.create({
   map: mapStyles.mapWithAbsoluteFill,
   markerBg: mapStyles.markerBg,
   markerStyle: mapStyles.markerStyle,
-  closed:{color: 'coral', fontWeight: 'bold', top: 0}
+  closed: {color: 'coral', fontWeight: 'bold', top: 0},
 });
