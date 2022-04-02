@@ -8,7 +8,11 @@ admin.initializeApp({
   databaseURL: databaseURL,
 });
 
-
+/**
+ * Uses firebase admin tools to delete all users from the cloud version.
+ * PLEASE DO NOT RUN THIS FUNCTION. As it will mess with the database of the deployed app.
+ * @param nextPageToken
+ */
 const deleteAllUsers = nextPageToken => {
   let uids = [];
   admin
