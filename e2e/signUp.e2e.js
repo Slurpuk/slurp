@@ -124,8 +124,7 @@ describe('Sign up', () => {
   it('should be able to log out', async () => {
     await expect(element(by.id('hamburger_menu_button'))).toBeVisible();
     await element(by.id('hamburger_menu_button')).tap();
-    await expect(element(by.text('logout'))).toBeVisible();
-    await element(by.text('logout')).tap();
-    await expect(element(by.id('log_in_page'))).toBeVisible();
+    await expect(element(by.text('Logout'))).toBeVisible();
+    await element(by.text('Logout')).tap();
   });
 });
