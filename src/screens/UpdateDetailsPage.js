@@ -12,10 +12,10 @@ import firestore from '@react-native-firebase/firestore';
 import { Alerts } from "../data/Alerts";
 
 const UpdateDetailsPage = ({navigation}) => {
-  const context = useContext(GlobalContext);
-  const [first_name, setFirstName] = useState(context.currentUser.FirstName);
-  const [last_name, setLastName] = useState(context.currentUser.LastName);
-  const [password, setPassword] = useState();
+  const context = useContext(GlobalContext)
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [password, setPassword] = useState('');
 
   const resetFields = () => {
     setFirstName('');
@@ -71,16 +71,16 @@ Deal with bad or empty inputs before sending request
   async function changeUserDetails() {
     if (handleChangeDetailsErrorsFrontEnd()) {
       let updated = {
-        FirstName: first_name,
-        LastName: last_name,
+        first_name: first_name,
+        last_name: last_name,
       };
-
+      let currentUser = auth().currentUser;
       await firebase
           .auth()
-          .signInWithEmailAndPassword(context.currentUser.Email, password)
+          .signInWithEmailAndPassword(currentUser.email, password)
           .then(() => {
             firestore()
-                .collection('Users')
+                .collection('users')
                 .doc(context.currentUser.key)
                 .update(updated)
                 .then(() => {
@@ -108,6 +108,7 @@ Deal with bad or empty inputs before sending request
             title={'First Name'}
             setField={setFirstName}
             value={first_name}
+            placeholder={context.currentUser.first_name}
             type={'name'}
           />
           <FormField
@@ -115,6 +116,7 @@ Deal with bad or empty inputs before sending request
             title={'Last Name'}
             setField={setLastName}
             value={last_name}
+            placeholder={context.currentUser.last_name}
             type={'name'}
           />
         </View>

@@ -10,9 +10,9 @@ import firebase from '@react-native-firebase/app';
 
 
 function ChangePasswordPage({navigation}){
-  const [oldPassword, setOldPassword] = useState();
-  const [newPassword, setNewPassword] = useState();
-  const [passwordConfirmation, setPasswordConfirmation] = useState();
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordRegex =
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/;
 
@@ -37,15 +37,15 @@ Deal with bad or empty inputs before sending request
 */
   function handleChangePasswordErrorsFrontEnd() {
     let validity = true;
-    if (passwordConfirmation !== newPassword) {
-      validity = false;
-      Alert.alert('Password Mismatch', 'Please try again.');
-    } else if (oldPassword === '') {
+    if (oldPassword === '') {
       validity = false;
       Alert.alert('Empty Password', 'Please enter your current password.');
     } else if (newPassword === '') {
       validity = false;
       Alert.alert('Empty Password Confirmation', 'Please enter your password confirmation.');
+    } else if (passwordConfirmation !== newPassword) {
+      validity = false;
+      Alert.alert('Password Mismatch', 'Please try again.');
     }
     else if (!passwordRegex.test(newPassword)) {
       validity = false;
