@@ -11,7 +11,7 @@ let auth;
 
 /**
  * This set of tests intends to test the transition from welcome pages to
- * sign up and the possible backend errors one may encounter.
+ * sign up and the possible backend errors one may encounter as well as log out.
  * The 'too many requests' error is untestable as:
  * a) It would require making 101 sign up attempts.
  * b) Firebase emulator doesn't actually consider this rule, this only applies

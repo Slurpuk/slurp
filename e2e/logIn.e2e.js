@@ -9,6 +9,14 @@ import {createUserWithEmailAndPassword} from 'firebase/auth';
 let db;
 let auth;
 
+/**
+ * This set of tests intends to test the login and forgot password features.
+ * Verifying reset password email is received and resetting password is
+ * untestable for obvious reasons.
+ * No network errors are untestable (see signUp.e2e.js doc for more info)
+ * As in many other cases, there are untested catch or else alerts that should
+ * never be raised but exist a safety and therefore cannot be tested.
+ */
 describe('Log in', () => {
   beforeAll(async () => {
     const app = initialiseFirebase();
