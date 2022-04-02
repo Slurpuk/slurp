@@ -34,7 +34,7 @@ export default function App() {
     user: false,
   }); // Is the app still fetching backend data.
   const [currentUser, setCurrentUser] = useState(null);
-  const [shopsData, setShopsData] = useState({allShops: [], currShopIndex: -1});
+  const [shopsData, setShopsData] = useState({allShops: [], currShopKey: ''});
   const staticShopsData = useRef(shopsData);
   const [currBasket, setCurrBasket] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false); // Is the shop page bottom sheet up.
@@ -61,7 +61,7 @@ export default function App() {
    */
   useEffect(() => {
     staticShopsData.current = shopsData;
-  });
+  }, [shopsData]);
 
   /**
    * Side effect that tracks the authentication state of the current user.
@@ -132,8 +132,7 @@ export default function App() {
    * @param shop The new shop
    */
   async function setNewShop(shop) {
-    let newIndex = shopsData.allShops.findIndex(curr => curr.key === shop.key);
-    setShopsData(prevState => ({...prevState, currShopIndex: newIndex}));
+    setShopsData(prevState => ({...prevState, currShopKey: shop.key}));
     await setCurrentShopKey(shop.key).catch(() => Alerts.elseAlert());
   }
 
@@ -175,8 +174,8 @@ export default function App() {
     let basketSize = currBasket.length;
     // Pops up an alert if the new shop is different from the current one and the basket is not empty.
     if (
-      shopsData.currShopIndex !== -1 &&
-      shopsData.allShops[shopsData.currShopIndex].key !== shop.key &&
+      shopsData.currShopKey !== '' &&
+      shopsData.currShopKey !== shop.key &&
       basketSize !== 0
     ) {
       Alerts.changeShopAlertV2(cardSwitchShop, shop, navigation);
@@ -194,8 +193,8 @@ export default function App() {
     let basketSize = currBasket.length;
     // Pops up an alert if the new shop is different from the current one and the basket is not empty.
     if (
-      shopsData.currShopIndex !== -1 &&
-      shopsData.allShops[shopsData.currShopIndex].key !== shop.key &&
+      shopsData.currShopKey !== '' &&
+      shopsData.currShopKey !== shop.key &&
       basketSize !== 0
     ) {
       await Alerts.changeShopAlertV1(markerSwitchShop, shop);
@@ -218,6 +217,16 @@ export default function App() {
       : await changeShopFromMarker(newShop);
   }
 
+  /**
+   * Returns the current shop object based on its key.
+   * @return Object return the current shop object if the key is not empty, null otherwise
+   */
+  function getCurrShop() {
+    return shopsData.currShopKey === ''
+      ? null
+      : shopsData.allShops.find(shop => shop.key === shopsData.currShopKey);
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -230,10 +239,7 @@ export default function App() {
           setContent: setCurrBasket,
           clear: clearBasket,
         },
-        currShop:
-          shopsData.currShopIndex === -1
-            ? null
-            : shopsData.allShops[shopsData.currShopIndex],
+        currShop: getCurrShop(),
         changeShop: changeShop,
         bottomSheet: {isOpen: isShopIntro, setOpen: setIsShopIntro},
         adaptiveOpacity: adaptiveOpacity,

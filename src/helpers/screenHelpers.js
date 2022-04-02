@@ -39,7 +39,6 @@ async function formatPastOrders(orders, setPastOrders) {
     }
   });
   let newOrders = await formatOrdersItems(orders);
-  console.log('afq')
   let finalOrders = [];
   await Promise.all(
     newOrders.map(async order => {
@@ -167,7 +166,16 @@ async function addToBasket(item, currShop, currBasket, setCurrBasket) {
     newBasket = [...basket, {...item, count: 1}];
   }
   setCurrBasket(newBasket);
-  await setBasket(newBasket);
+  let storageBasket = newBasket.map(basketItem => {
+    return basketItem.has_options
+      ? {
+          ...basketItem,
+          ref: null,
+          options: basketItem.options.map(option => ({...option, ref: null})),
+        }
+      : {...basketItem, ref: null};
+  });
+  await setBasket(storageBasket);
   return newBasket;
 }
 
