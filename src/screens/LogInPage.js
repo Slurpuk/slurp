@@ -8,7 +8,7 @@ import textStyles from '../../stylesheets/textStyles';
 import {Alerts} from '../data/Alerts';
 import {enterApp} from '../helpers/storageHelpers';
 
-const LogInPage = ({navigation}) => {
+const LogInPage = ({navigation, setLoading}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRegex = new RegExp(
@@ -96,6 +96,7 @@ const LogInPage = ({navigation}) => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .catch(error => handleLogInErrorsBackEnd(error.code));
+      setLoading(prevState => ({...prevState, user: false}));
       await enterApp();
     }
   }

@@ -254,7 +254,12 @@ export default function App() {
             {isFirst ? (
               <LoggedOutStack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
-            <LoggedOutStack.Screen name="LogIn" component={LogInPage} />
+            <LoggedOutStack.Screen
+              name="LogIn"
+              children={props => (
+                <LogInPage {...props} setLoading={setLoading} />
+              )}
+            />
             <LoggedOutStack.Screen
               name="SignUp"
               children={props => (
