@@ -17,10 +17,25 @@ describe('Log in', () => {
 
     await device.launchApp({permissions: {location: 'inuse'}}); // deletes async storage on launch ensuring welcome pages are displayed
   });
-  it('should raise alert if forgot password with existing email', async () => {
-    const usedFirstName = 'Boris';
-    const usedLastName = 'Johnson';
-    const usedEmail = 'getbrexitdone@example.org';
+
+  afterAll(async () => {
+    await element(by.id('hamburger_menu_button')).tap();
+    await element(by.text('Logout')).tap();
+  });
+
+  it('should be able to navigate to log in page from welcome pages', async function () {
+    await element(by.id('welcome_pages_scrollview')).swipe('left');
+    await element(by.id('welcome_pages_scrollview')).swipe('left');
+    await expect(
+      element(by.text('Already have an account? Log in')),
+    ).toBeVisible();
+    await element(by.text('Already have an account? Log in')).tap();
+  });
+
+  it('should raise confirmatory alert if forgot password with existing email', async () => {
+    const usedFirstName = 'Xi';
+    const usedLastName = 'Jinping';
+    const usedEmail = 'winniethepooh@example.org';
     const password = 'Password123!';
     await addDoc(collection(db, 'users'), {
       first_name: usedFirstName,
