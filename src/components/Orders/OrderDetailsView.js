@@ -28,6 +28,9 @@ const OrderDetailsView = ({order}) => {
             {order.shop.name}
           </Text>
           {getStatusAndDateComponent(order)}
+          <Text style={{fontSize: 10}}>
+            ID: {order.key}
+          </Text>
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
             {getItemsText(order)}
           </Text>
