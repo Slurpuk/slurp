@@ -82,6 +82,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
       {searchBarFocused ? (
         <View style={styles.activeElementsWrapper}>
           <View style={styles.cover} />
+          {shops.length > 0 ?
           <FlatList
             // Only display the filtered shops in the results
             keyboardShouldPersistTaps="handled"
@@ -129,7 +130,11 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                 </View>
               );
             }}
-          />
+          /> : <Text style={styles.noResultsText}>
+              Sorry! {'\n\n'}
+              Nothing seems to match this phrase. {'\n'}
+              Please try a different query
+            </Text> }
         </View>
       ) : null}
     </View>
@@ -152,7 +157,21 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flex: 1,
   },
-
+  noResultsText: {
+    width: screenWidth,
+    maxWidth: screenWidth,
+    fontSize: 16,
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    paddingVertical: 15,
+    borderRadius: 0,
+    fontFamily: 'Poppins',
+    borderBottomColor: '#DDDDDD',
+    borderBottomWidth: 1,
+    position: 'relative',
+    backgroundColor: 'whitesmoke',
+    color: '#046D66',
+  },
   searchResultContainer: {
     width: screenWidth * 0.7,
   },
