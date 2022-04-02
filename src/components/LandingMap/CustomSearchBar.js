@@ -64,6 +64,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   return (
     <View style={styles.view}>
       <SearchBar
+        testID="search-bar"
         placeholder="Type in a coffee shop..."
         // Function to run when a letter is pressed
         onChangeText={updateQuery}
@@ -93,8 +94,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   style={[
                     styles.searchResultContainer,
                     {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}
-                >
+                  ]}>
                   <Pressable
                     onPressIn={() => {
                       if (item.is_open) {
@@ -112,16 +112,14 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                             : '#C5C5C5',
                       },
                       styles.searchResult,
-                    ]}
-                  >
+                    ]}>
                     {({pressed}) => (
                       <Text
                         style={[
                           {color: pressed && item.is_open ? 'white' : 'black'},
 
                           styles.flatListItem,
-                        ]}
-                      >
+                        ]}>
                         {item.name}
                       </Text>
                     )}
