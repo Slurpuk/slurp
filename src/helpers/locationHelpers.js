@@ -58,7 +58,7 @@ const getOneTimeLocation = setMapCenter => {
       }));
     },
     error => {
-      Alerts.LocationAlert();
+      console.log(error);
     },
     {
       enableHighAccuracy: true,
@@ -79,20 +79,35 @@ const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
       //Will give you the location on location change
       const longitude = position.coords.longitude;
       const latitude = position.coords.latitude;
-      //Setting Longitude state
-      setMapCenter(prevState => ({
-        ...prevState,
-        latitude: latitude,
-        longitude: longitude,
-      }));
-      if (userRef) {
+
+      let BigChange = false;
+      setMapCenter(prevState => {
+        if (
+          isBigChange(
+            prevState.latitude,
+            latitude,
+            prevState.longitude,
+            longitude,
+          )
+        ) {
+          BigChange = true;
+          return {
+            ...prevState,
+            latitude: latitude,
+            longitude: longitude,
+          };
+        } else {
+          return prevState;
+        }
+      });
+      if (userRef && BigChange) {
         updateUserLocation(userRef, latitude, longitude).catch(error => {
           Alerts.elseAlert();
         });
       }
     },
     error => {
-      Alerts.LocationAlert();
+      console.log(error);
     },
     {
       enableHighAccuracy: true,
@@ -135,7 +150,14 @@ export const requestLocationPermission = async (
         subscribeLocationLocation(setMapCenter, watchID, userRef);
       }
     } catch (err) {
-      Alerts.LocationAlert();
+      console.log(err);
     }
   }
 };
+
+function isBigChange(prevLat, newLat, prevLong, newLong) {
+  return (
+    prevLat.toPrecision(4) !== newLat.toPrecision(4) &&
+    prevLong.toPrecision(4) !== newLong.toPrecision(4)
+  );
+}
