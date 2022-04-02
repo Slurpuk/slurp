@@ -9,6 +9,7 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "stripe": "cd server && npm start",
+    "emulator": "firebase emulators:start --only firestore,auth",
     "seed": "cd seeder && npm run seed && cd ..",
     "seed:first": "cd seeder && npm run seed:first && cd ..",
     "unseed": "cd seeder && npm run unseed && cd ..",
