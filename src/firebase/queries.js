@@ -1,5 +1,8 @@
 import firestore from '@react-native-firebase/firestore';
 import {Alerts} from '../data/Alerts';
+import auth from '@react-native-firebase/auth';
+import {Alert} from 'react-native';
+import {CustomAlerts} from '../sub-components/Alerts';
 
 /**
  * Separates the items offered by the shop into 3 sections: coffees, drinks and snacks.
@@ -128,10 +131,14 @@ async function getOrderItem(orderItem) {
   return newItem;
 }
 
-async function getOrderOption(option) {
+/**
+ * Retrives the data of an option using its reference.
+ * @param optionRef The reference to the option
+ */
+async function getOrderOption(optionRef) {
   let newOption;
   await firestore()
-    .doc(option.path)
+    .doc(optionRef.path)
     .get()
     .then(doc => {
       newOption = {
@@ -199,6 +206,95 @@ async function sendOrder(items, shopRef, userRef, total) {
     });
 }
 
+/**
+ * Creates a  user model instance with the given parameters
+ * @param email The email
+ * @param first_name The first name
+ * @param last_name The last name
+ */
+async function createUserModel(email, first_name, last_name) {
+  await firestore()
+    .collection('users')
+    .add({
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      location: new firestore.GeoPoint(51.5140310233705, -0.1164075624320158),
+    })
+    .catch(error => {
+      Alerts.databaseErrorAlert();
+    });
+}
+
+/**
+ * Create and signs in a new user to the firebase authentication.
+ * @param email The email
+ * @param password The password
+ */
+async function createUserAuth(email, password) {
+  await auth()
+    .createUserWithEmailAndPassword(email, password)
+    .catch(error => {
+      handleSignUpErrorsBackEnd(error.code);
+    });
+}
+
+/**
+ * Handle errors once received an error code from the database
+ * @param errorCode Firebase error code
+ */
+function handleSignUpErrorsBackEnd(errorCode) {
+  if (errorCode === 'auth/network-request-failed') {
+    Alert.alert(CustomAlerts.NO_NETWORK.title, CustomAlerts.NO_NETWORK.message);
+  } else if (errorCode === 'auth/email-already-in-use') {
+    Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    // This is not ideal, implementing a confirm email feature would allow us to show the same message as if a confirmation email had been sent.
+  } else if (errorCode === 'auth/too-many-requests') {
+    Alert.alert(
+      CustomAlerts.MANY_REQUESTS.title,
+      CustomAlerts.MANY_REQUESTS.message,
+    );
+  } else {
+    Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+  }
+}
+
+/**
+ * Get the reference to an item given its key
+ * @param item The target item
+ */
+async function getItemRef(item) {
+  let itemRef;
+  await firestore()
+    .collection('items')
+    .doc(item.key)
+    .get()
+    .then(doc => {
+      itemRef = doc.ref;
+    })
+    .catch(() => Alerts.databaseErrorAlert());
+
+  return itemRef;
+}
+
+/**
+ * Get the reference to an option given its key
+ * @param option The target option
+ */
+async function getOptionRef(option) {
+  let optionRef;
+  await firestore()
+    .collection('options')
+    .doc(option.key)
+    .get()
+    .then(doc => {
+      optionRef = doc.ref;
+    })
+    .catch(() => Alerts.databaseErrorAlert());
+
+  return optionRef;
+}
+
 export {
   getOptions,
   updateUserLocation,
@@ -206,4 +302,8 @@ export {
   getOrderItem,
   getOrderShop,
   sendOrder,
+  createUserModel,
+  createUserAuth,
+  getItemRef,
+  getOptionRef,
 };

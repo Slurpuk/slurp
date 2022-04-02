@@ -3,7 +3,6 @@ import {getOptions, getOrderItem, getOrderShop} from '../firebase/queries';
 import {months} from '../data/Months';
 import {OrderStatus} from '../data/OrderStatus';
 import {
-  getBasket,
   getCurrentShopKey,
   setBasket,
   setCurrentShopKey,
@@ -44,7 +43,7 @@ async function formatPastOrders(orders, setPastOrders) {
   await Promise.all(
     newOrders.map(async order => {
       order.shop = await getOrderShop(order);
-      let curr = newOrders.find(x => x.period === order.period);
+      let curr = finalOrders.find(x => x.period === order.period);
       curr
         ? curr.data.push(order)
         : finalOrders.push({period: order.period, data: [order]});
@@ -167,7 +166,16 @@ async function addToBasket(item, currShop, currBasket, setCurrBasket) {
     newBasket = [...basket, {...item, count: 1}];
   }
   setCurrBasket(newBasket);
-  await setBasket(newBasket);
+  let storageBasket = newBasket.map(basketItem => {
+    return basketItem.has_options
+      ? {
+          ...basketItem,
+          ref: null,
+          options: basketItem.options.map(option => ({...option, ref: null})),
+        }
+      : {...basketItem, ref: null};
+  });
+  await setBasket(storageBasket);
   return newBasket;
 }
 
@@ -207,12 +215,14 @@ async function refreshShops(
   clearBasket,
   setShopsData,
 ) {
-  if (staticShopsData.currShopIndex !== -1) {
-    let previous = staticShopsData.allShops[staticShopsData.currShopIndex];
-    let newCurrShop = formattedShops.findIndex(
-      shop => shop.key === previous.key,
-    );
-    setShopsData({allShops: formattedShops, currShopIndex: newCurrShop});
+  if (staticShopsData.currShopKey !== '') {
+    let newCurrShop =
+      formattedShops.findIndex(
+        shop => shop.key === staticShopsData.currShopKey,
+      ) === -1
+        ? ''
+        : staticShopsData.currShopKey;
+    setShopsData({allShops: formattedShops, currShopKey: newCurrShop});
     if (newCurrShop === -1) {
       await setCurrentShopKey('');
       await clearBasket;
@@ -220,12 +230,13 @@ async function refreshShops(
   } else {
     let storageKey = await getCurrentShopKey();
     if (storageKey !== '') {
-      let storageShop = formattedShops.findIndex(
-        shop => shop.key === storageKey,
-      );
+      let storageShop =
+        formattedShops.findIndex(shop => shop.key === storageKey) === -1
+          ? ''
+          : storageKey;
       setShopsData({
         allShops: formattedShops,
-        currShopIndex: storageShop,
+        currShopKey: storageKey,
       });
       if (storageShop === -1) {
         await clearBasket();
@@ -244,7 +255,7 @@ async function getFormattedItems(shop) {
   let drinks = [];
   let snacks = [];
   await Promise.all(
-    shop.data().items.map(async itemRef => {
+    shop.items.map(async itemRef => {
       await firestore()
         .doc(itemRef.path)
         .get()
@@ -285,7 +296,7 @@ async function getFormattedShops(shopsData) {
           longitude: data.location._longitude,
         },
       };
-      shopData.items = await getFormattedItems(documentSnapshot);
+      shopData.items = await getFormattedItems(documentSnapshot.data());
       await getOptions().then(options => {
         shopData.options = options;
         shops.push(shopData);
