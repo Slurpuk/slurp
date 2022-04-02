@@ -5,7 +5,11 @@ import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
 import {GlobalContext} from '../../App';
 import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
+
+
 import firestore from '@react-native-firebase/firestore';
+import { Alerts } from "../data/Alerts";
 
 const UpdateDetailsPage = ({navigation}) => {
   const context = useContext(GlobalContext);
@@ -29,54 +33,69 @@ const UpdateDetailsPage = ({navigation}) => {
     resetFields();
   }
 
-  function invalidCredentialsMessage() {
-    Alert.alert(
-      'Cannot Authenticate',
-      'Please enter your credentials correctly.',
-      [
-        {
-          text: 'OK',
-        },
-      ],
-    );
+
+
+  /*
+Deal with bad or empty inputs before sending request
+ */
+  function handleChangeDetailsErrorsFrontEnd() {
+    let validity = true;
+    if (first_name === '') {
+      validity = false;
+      Alert.alert('Empty First Name', 'Please enter your first name.');
+    } else if (password === '') {
+      validity = false;
+      Alert.alert('Empty Password', 'Please enter your password.');
+    }
+    return validity;
   }
 
-  const invalidMessage = error => {
-    Alert.alert(
-      'Invalid',
-      'Something went wrong. Please renter your credentials.',
-      [
-        {
-          text: 'OK',
-        },
-      ],
-    );
-  };
+  /*
+  Manage response to database failure
+   */
+  function handleChangeDetailsErrorsBackEnd(errorCode) {
+    if (
+      errorCode === 'auth/wrong-password' ||
+      errorCode === 'auth/user-not-found'
+    ) {
+      Alerts.wrongCredentialsAlert();
+    } else if (errorCode === 'auth/network-request-failed') {
+      Alerts.connectionErrorAlert();
+    } else {
+      //Anything else
+      Alerts.elseAlert();
+    }
+  }
 
   //Update user details in the database
-  function changeUserDetails() {
-    const updated = {
-      FirstName: first_name,
-      LastName: last_name,
-    };
-    auth()
-      .signInWithEmailAndPassword(context.currentUser.Email, password)
-      .then(() => {
-        firestore()
-          .collection('Users')
-          .doc(context.currentUser.key)
-          .update(updated)
+  async function changeUserDetails() {
+    if (handleChangeDetailsErrorsFrontEnd()) {
+      let updated = {
+        FirstName: first_name,
+        LastName: last_name,
+      };
+
+      await firebase
+          .auth()
+          .signInWithEmailAndPassword(context.currentUser.Email, password)
           .then(() => {
-            resetFields();
-            changeDetailsConfirm();
+            firestore()
+                .collection('Users')
+                .doc(context.currentUser.key)
+                .update(updated)
+                .then(() => {
+                  resetFields();
+                  changeDetailsConfirm();
+                })
+                .catch(error => {
+                  handleChangeDetailsErrorsBackEnd(error.code);
+                });
           })
           .catch(error => {
-            invalidMessage(error);
+            handleChangeDetailsErrorsBackEnd(error.code);
           });
-      })
-      .catch(error => {
-        invalidCredentialsMessage();
-      });
+    }
+
   }
 
   return (
