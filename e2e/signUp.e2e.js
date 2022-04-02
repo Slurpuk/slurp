@@ -33,7 +33,7 @@ describe('Sign up', () => {
     db = initialiseFirestore(app);
     auth = initialiseAuth(app);
 
-    await device.launchApp({delete: true}); // deletes async storage on launch ensuring welcome pages are displayed
+    await device.launchApp({permissions: {location: 'inuse'}}); // deletes async storage on launch ensuring welcome pages are displayed
   });
 
   it('should be able to scroll through welcome pages and get to sign up page', async () => {

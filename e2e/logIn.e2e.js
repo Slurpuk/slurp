@@ -15,7 +15,7 @@ describe('Log in', () => {
     db = initialiseFirestore(app);
     auth = initialiseAuth(app);
 
-    await device.launchApp(); // deletes async storage on launch ensuring welcome pages are displayed
+    await device.launchApp({permissions: {location: 'inuse'}}); // deletes async storage on launch ensuring welcome pages are displayed
   });
   it('should raise alert if forgot password with existing email', async () => {
     const usedFirstName = 'Boris';
