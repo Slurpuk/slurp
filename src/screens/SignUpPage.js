@@ -2,14 +2,12 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
-import auth from '@react-native-firebase/auth';
 import {getCushyPaddingTop} from '../../stylesheets/StyleFunction';
 import CustomButton from '../sub-components/CustomButton';
-import firestore from '@react-native-firebase/firestore';
-import {CustomAlerts} from '../sub-components/Alerts';
 
 import {Alerts} from '../data/Alerts';
 import {enterApp} from '../helpers/storageHelpers';
+import {createUserAuth, createUserModel} from '../firebase/queries';
 
 const SignUpPage = ({navigation, setLoading}) => {
   const [first_name, setFirstName] = useState('');
@@ -61,52 +59,13 @@ const SignUpPage = ({navigation, setLoading}) => {
   }
 
   /**
-   * Handle errors once received an error code from the database
-   * @param errorCode Firebase error code
-   */
-  function handleSignUpErrorsBackEnd(errorCode) {
-    if (errorCode === 'auth/network-request-failed') {
-      Alert.alert(
-        CustomAlerts.NO_NETWORK.title,
-        CustomAlerts.NO_NETWORK.message,
-      );
-    } else if (errorCode === 'auth/email-already-in-use') {
-      Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
-      // This is not ideal, implementing a confirm email feature would allow us to show the same message as if a confirmation email had been sent.
-    } else if (errorCode === 'auth/too-many-requests') {
-      Alert.alert(
-        CustomAlerts.MANY_REQUESTS.title,
-        CustomAlerts.MANY_REQUESTS.message,
-      );
-    } else {
-      Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
-    }
-  }
-
-  /**
    *  Create a new user for authentication and firestore model.
    */
   async function registerUser() {
     if (handleSignUpErrorsFrontEnd()) {
-      await auth()
-        .createUserWithEmailAndPassword(email, password)
-        .catch(error => {
-          handleSignUpErrorsBackEnd(error.code);
-        });
-      await firestore()
-        .collection('users')
-        .add({
-          email: email,
-          first_name: first_name,
-          last_name: last_name,
-          location: new firestore.GeoPoint(
-            51.5140310233705,
-            -0.1164075624320158,
-          ),
-        })
-        .catch(error => {
-          handleSignUpErrorsBackEnd(error);
-        });
+      setLoading(prevState => ({...prevState, user: true}));
+      await createUserAuth(email, password);
+      await createUserModel(email, first_name, last_name);
       setLoading(prevState => ({...prevState, user: false}));
       await enterApp();
     }

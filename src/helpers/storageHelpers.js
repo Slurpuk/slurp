@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alerts} from '../data/Alerts';
+import {getItemRef, getOptionRef} from '../firebase/queries';
 
 /**
  * Returns the storage shop key
@@ -53,28 +54,12 @@ async function getBasket() {
 }
 
 /**
- * Circular replacer to solve the circular dependencies in the JSON before stringification
- */
-function getCircularReplacer() {
-  const seen = new WeakSet();
-  return (key, value) => {
-    if (typeof value === 'object' && value !== null) {
-      if (seen.has(value)) {
-        return;
-      }
-      seen.add(value);
-    }
-    return value;
-  };
-}
-
-/**
  * Set the storage basket to the given new basket.
  * @param newBasket The new basket
  */
 async function setBasket(newBasket) {
   try {
-    const jsonValue = JSON.stringify(newBasket, getCircularReplacer());
+    const jsonValue = JSON.stringify(newBasket);
     await AsyncStorage.setItem('@Basket', jsonValue);
   } catch (err) {
     Alerts.StorageAlert();
@@ -89,12 +74,37 @@ async function clearStorageBasket() {
 }
 
 /**
- * Set the current basket state to the storage instance.
+ * Set the current basket state to the storage instance after retrieving the necessary references.
  * @param setCurrBasket The setState method for the current basket state
  */
 async function refreshCurrentBasket(setCurrBasket) {
   let storageBasket = await getBasket();
-  setCurrBasket(storageBasket);
+  let currBasket = [];
+  await Promise.all(
+    storageBasket.map(async basketItem => {
+      let itemRef = await getItemRef(basketItem);
+      if (basketItem.has_options) {
+        let options = [];
+        await Promise.all(
+          basketItem.options.map(async option => {
+            let optionRef = await getOptionRef(option);
+            options.push({...option, ref: optionRef});
+          }),
+        );
+        currBasket.push({
+          ...basketItem,
+          ref: itemRef,
+          options: options,
+        });
+      } else {
+        currBasket.push({
+          ...basketItem,
+          ref: itemRef,
+        });
+      }
+    }),
+  );
+  setCurrBasket(currBasket);
 }
 
 /**

@@ -13,7 +13,6 @@ exports.payWithStripe = functions.https.onRequest(async (request, response) => {
 
   let customer = await stripe.customers.create();
   let amount = (request.body.amount * 100).toFixed(0);
-  console.log(amount);
 
   //Create ephemeral key and assign it to the customer.
   const ephemeralKey = await stripe.ephemeralKeys.create(
