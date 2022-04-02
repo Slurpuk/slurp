@@ -54,7 +54,7 @@ export default function App() {
     }
 
     setIsFirstTime().catch(() => Alerts.elseAlert());
-  }, []);
+  }, [currentUser]);
 
   /**
    * Side effect that updates the static shops data on every render.
