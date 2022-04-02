@@ -24,9 +24,9 @@ describe('Change password page', function () {
             const newPassConfirmation = 'Password124!'
 
             fireEvent.changeText(inputs[1], newPass);
-            fireEvent.changeText(inputs[1], newPassConfirmation);
+            fireEvent.changeText(inputs[2], newPassConfirmation);
 
-            fireEvent(getByText('Change password'), 'press');
+            fireEvent(getByText('Update Password'), 'press');
 
             expect(spyAlert).toHaveBeenCalled();
             expect(spyAlert.mock.calls[0][0]).toBe('Empty Password');
@@ -48,7 +48,7 @@ describe('Change password page', function () {
 
             expect(inputs[1]).toBeTruthy();
 
-            fireEvent(getByText('Change password'), 'press');
+            fireEvent(getByText('Update Password'), 'press');
 
             expect(spyAlert).toHaveBeenCalled();
             expect(spyAlert.mock.calls[0][0]).toBe('Password Mismatch');
@@ -69,7 +69,7 @@ describe('Change password page', function () {
 
 
 
-            fireEvent(getByText('Change password'), 'press');
+            fireEvent(getByText('Update Password'), 'press');
 
             expect(spyAlert).toHaveBeenCalled();
             expect(spyAlert.mock.calls[0][0]).toBe('Weak password');
@@ -89,7 +89,7 @@ describe('Change password page', function () {
             fireEvent.changeText(inputs[2], newPassConfirmation);
 
 
-            fireEvent(getByText('Change password'), 'press');
+            fireEvent(getByText('Update Password'), 'press');
 
             expect(spyAlert).toHaveBeenCalledTimes(0);
         });
