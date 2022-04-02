@@ -56,11 +56,9 @@ const getOneTimeLocation = setMapCenter => {
         latitude: latitude,
         longitude: longitude,
       }));
-      console.log('yes');
     },
     error => {
       Alerts.LocationAlert();
-      console.log('no');
     },
     {
       enableHighAccuracy: true,
