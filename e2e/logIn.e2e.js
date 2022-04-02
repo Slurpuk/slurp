@@ -99,4 +99,13 @@ describe('Log in', () => {
 
     await element(by.id('log_in_page_password')).replaceText('');
   });
+  it('should be able to log in with valid details', async () => {
+    const password = 'Password123!';
+
+    await element(by.id('log_in_page_password')).typeText(password);
+    await element(by.text('Log in')).tap();
+
+    await expect(element(by.id('log_in_page'))).not.toBeVisible();
+    await expect(element(by.id('landing_map_page'))).toBeVisible();
+  });
 });
