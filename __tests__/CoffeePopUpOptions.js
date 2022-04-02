@@ -97,6 +97,7 @@ import {Alert} from 'react-native';
 import OptionsPopUp from '../src/components/ShopMenu/OptionsPopUp';
 import renderers from '../src/renderers';
 import {ShopContext} from '../src/screens/ShopPage';
+import { addToBasket } from "../src/helpers/screenHelpers";
 
 describe('Coffee Pop Up', function () {
   const spyAlert = jest
@@ -140,4 +141,33 @@ describe('Coffee Pop Up', function () {
       expect(toJSON()).toMatchSnapshot();
     });
   });
+
+  it('should add a milk', function () {
+    const globalContextMock = {
+      isFirstTime: false,
+    };
+    const {toJSON} = render(
+      <GlobalContext.Provider value={globalContextMock}>
+        <ShopContext.Provider value={shopContextMock}>
+          <OptionsPopUp
+            data={[]}
+            item={{
+              name: 'Latte',
+              price: 2.5,
+              quantity: 2,
+              has_options: true,
+            }}
+            renderer={renderers.renderOption}
+          />
+        </ShopContext.Provider>
+      </GlobalContext.Provider>,
+    );
+    expect(true).toBe(true);
+    expect(toJSON()).toMatchSnapshot();
+  });
+
+
+});
+
+
 });
