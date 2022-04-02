@@ -78,7 +78,6 @@ const getOneTimeLocation = setMapCenter => {
 const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
   watchID.current = Geolocation.watchPosition(
     async position => {
-      console.log('sdwwdwfsffqeffewef');
       //Will give you the location on location change
       const longitude = position.coords.longitude;
       const latitude = position.coords.latitude;
