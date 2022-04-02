@@ -59,6 +59,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
       await context.changeShop(shop);
       setSearchBarFocussed(false);
     }
+
   };
 
   return (

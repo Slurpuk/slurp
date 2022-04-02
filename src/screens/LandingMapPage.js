@@ -14,7 +14,7 @@ LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
 
-export default function LandingMapPage({navigation}) {
+const LandingMapPage = ({navigation}) => {
   //determine if the hamburger icon is pressable or not
   const setHamburgerVisible = useContext(VisibleContext);
   const context = useContext(GlobalContext);
@@ -73,3 +73,5 @@ const styles = StyleSheet.create({
   newHamburger: mapStyles.newHamburger,
   searchBar: mapStyles.searchBar,
 });
+
+export default LandingMapPage;
