@@ -2,8 +2,11 @@
   "name": "seeder",
   "type": "module",
   "scripts": {
+    "start": "firebase emulators:start --only firestore,auth",
     "seed": "node seeder.js",
-    "seed:first": "npm install && node seeder.js"
+    "seed:first": "npm install && node seeder.js",
+    "unseed": "curl -v -X DELETE \"http://127.0.0.1:8080/emulator/v1/projects/independentcoffeeshops/databases/(default)/documents\" && curl -H 'Authorization: Bearer owner' -X DELETE http://127.0.0.1:9099/emulator/v1/projects/independentcoffeeshops/accounts && echo \"\nDatabase un-seeded :)\"",
+    "unseed:cloud": "node unseeder.js && firebase firestore:delete --all-collections"
   },
   "dependencies": {
     "@faker-js/faker": "^6.0.0",
