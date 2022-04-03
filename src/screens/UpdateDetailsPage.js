@@ -78,8 +78,7 @@ const UpdateDetailsPage = ({navigation}) => {
               changeDetailsConfirm();
               setPassword('');
             })
-            .catch(error => {
-              console.log(context.currentUser);
+            .catch(() => {
               Alerts.elseAlert();
             });
         })
