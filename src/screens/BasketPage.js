@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
@@ -10,12 +10,15 @@ import {
   addToBasket,
   formatBasket,
   getItemFullPrice,
-  getOptionsPrice,
   removeFromBasket,
 } from '../helpers/screenHelpers';
-import {initializePayment, openPaymentSheet} from '../helpers/paymentHelpers';
+import {
+  initializePaymentSheet,
+  openPaymentSheet,
+} from '../helpers/paymentHelpers';
 import {Alerts} from '../data/Alerts';
 import {sendOrder} from '../firebase/queries';
+import {BlurView} from '@react-native-community/blur';
 
 export const BasketContext = React.createContext();
 
@@ -26,6 +29,7 @@ const BasketPage = ({navigation}) => {
   const context = useContext(GlobalContext);
   const [contents, setContents] = useState(context.currBasket.data);
   const [total, setTotal] = useState(getTotal());
+  const [loading, setLoading] = useState(false);
   const {initPaymentSheet, presentPaymentSheet} = useStripe(); // Stripe hook payment methods
   const publishableKey =
     'pk_test_51KRjSVGig6SwlicvL06FM1BDNZr1539SwuDNXond8v6Iaigyq1NRZsleWNK5PTPEwo1bAWfTQqYHEfXCJ4OWq348000jVuI6u1';
@@ -45,16 +49,19 @@ const BasketPage = ({navigation}) => {
    * Checkout. If the server is ready and the basket is not empty, proceed to payment.
    */
   async function checkout() {
+    setLoading(true);
     if (contents.length === 0) {
       Alerts.emptyBasketAlert();
-    } else if (!context.isLocationEnabled) {
+    } else if (!context.locationIsEnabled) {
       Alerts.LocationAlert();
     } else {
-      const ready = await initializePayment(initPaymentSheet, total);
-      ready
-        ? await proceedToPayment()
-        : Alerts.initPaymentAlert(() => checkout());
+      const ready = await initializePaymentSheet(initPaymentSheet, total);
+      if (ready) {
+        setLoading(false);
+        await proceedToPayment();
+      }
     }
+    setLoading(false);
   }
 
   /**
@@ -64,8 +71,6 @@ const BasketPage = ({navigation}) => {
     const successful = await openPaymentSheet(presentPaymentSheet);
     if (successful) {
       await confirmOrder();
-    } else {
-      Alerts.initPaymentAlert(() => checkout());
     }
   }
 
@@ -73,14 +78,18 @@ const BasketPage = ({navigation}) => {
    * Create and send a new order based on the current basket. Clear the basket and inform the user.
    */
   async function confirmOrder() {
-    await sendOrder(
+    setLoading(true);
+    const sent = await sendOrder(
       formatBasket(contents),
       context.currShop.ref,
       context.currentUser.ref,
       getTotal(),
     );
-    await context.currBasket.clear();
-    Alerts.orderSentAlert(navigation);
+    if (sent) {
+      await context.currBasket.clear();
+      Alerts.orderSentAlert(navigation);
+    }
+    setLoading(false);
   }
 
   /**
@@ -137,10 +146,25 @@ const BasketPage = ({navigation}) => {
             <CustomButton
               priority={'primary'}
               text={'Checkout'}
-              onPress={confirmOrder}
+              onPress={checkout}
             />
           </View>
+          {loading ? (
+            <BlurView
+              style={styles.absolute}
+              blurType="light"
+              blurAmount={2}
+              reducedTransparencyFallbackColor="white"
+            />
+          ) : null}
         </View>
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color="#046D66"
+            style={styles.absolute}
+          />
+        ) : null}
       </BasketContext.Provider>
     </StripeProvider>
   );
@@ -152,6 +176,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#E5E5E5',
+  },
+
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderRadius: 20,
   },
 
   main_container: {

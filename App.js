@@ -29,9 +29,12 @@ export const GlobalContext = React.createContext();
  * Root component rendered when the application boots.
  */
 export default function App() {
-  const [loading, setLoading] = useState(true); // Is the app still fetching backend data.
+  const [loading, setLoading] = useState({
+    shops: true,
+    user: false,
+  }); // Is the app still fetching backend data.
   const [currentUser, setCurrentUser] = useState(null);
-  const [shopsData, setShopsData] = useState({allShops: [], currShopIndex: -1});
+  const [shopsData, setShopsData] = useState({allShops: [], currShopKey: ''});
   const staticShopsData = useRef(shopsData);
   const [currBasket, setCurrBasket] = useState([]);
   const [isShopIntro, setIsShopIntro] = useState(false); // Is the shop page bottom sheet up.
@@ -50,36 +53,38 @@ export default function App() {
       setIsFirst(isFirstTime);
     }
 
-    setIsFirstTime().catch(error => Alerts.elseAlert());
-  }, []);
+    setIsFirstTime().catch(() => Alerts.elseAlert());
+  }, [currentUser]);
 
   /**
    * Side effect that updates the static shops data on every render.
    */
   useEffect(() => {
     staticShopsData.current = shopsData;
-  });
+  }, [shopsData]);
 
   /**
    * Side effect that tracks the authentication state of the current user.
    * Sets the current user object accordingly.
    */
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(async user => {
-      user
-        ? setUserObject(user, setCurrentUser).catch(error => Alerts.elseAlert())
-        : setCurrentUser(null);
-    });
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
+    if (!loading.user) {
+      const subscriber = auth().onAuthStateChanged(async user => {
+        user
+          ? setUserObject(user, setCurrentUser).catch(() => Alerts.elseAlert())
+          : setCurrentUser(null);
+      });
+      // Unsubscribe from events when no longer in use
+      return () => subscriber();
+    }
+  }, [loading.user]);
 
   /**
    * Side effect that tracks changes in the model instance of the user in the database and updates the state accordingly
    * Sets the current user object accordingly.
    */
   useEffect(() => {
-    if (!loading && auth().currentUser) {
+    if (!loading.shops && auth().currentUser) {
       const subscriber = firestore()
         .collection('users')
         .where('email', '==', auth().currentUser.email)
@@ -96,7 +101,7 @@ export default function App() {
         });
       return () => subscriber();
     }
-  }, [loading, shopsData.allShops]);
+  }, [loading.shops, shopsData.allShops]);
 
   /**
    * Side effect that tracks any change in the coffee shop model.
@@ -113,23 +118,22 @@ export default function App() {
           clearBasket,
           setShopsData,
         );
-        if (loading) {
+        if (loading.shops) {
           await refreshCurrentBasket(setCurrBasket);
-          setLoading(false);
+          setLoading(prevState => ({...prevState, shops: false}));
         }
       });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, [loading]);
+  }, [loading.shops]);
 
   /**
    * Set the current shop state and the storage instance to the given shop.
    * @param shop The new shop
    */
   async function setNewShop(shop) {
-    let newIndex = shopsData.allShops.findIndex(curr => curr.key === shop.key);
-    setShopsData(prevState => ({...prevState, currShopIndex: newIndex}));
-    await setCurrentShopKey(shop.key).catch(error => Alerts.elseAlert());
+    setShopsData(prevState => ({...prevState, currShopKey: shop.key}));
+    await setCurrentShopKey(shop.key).catch(() => Alerts.elseAlert());
   }
 
   /**
@@ -170,8 +174,8 @@ export default function App() {
     let basketSize = currBasket.length;
     // Pops up an alert if the new shop is different from the current one and the basket is not empty.
     if (
-      shopsData.currShopIndex !== -1 &&
-      shopsData.allShops[shopsData.currShopIndex].key !== shop.key &&
+      shopsData.currShopKey !== '' &&
+      shopsData.currShopKey !== shop.key &&
       basketSize !== 0
     ) {
       Alerts.changeShopAlertV2(cardSwitchShop, shop, navigation);
@@ -189,8 +193,8 @@ export default function App() {
     let basketSize = currBasket.length;
     // Pops up an alert if the new shop is different from the current one and the basket is not empty.
     if (
-      shopsData.currShopIndex !== -1 &&
-      shopsData.allShops[shopsData.currShopIndex].key !== shop.key &&
+      shopsData.currShopKey !== '' &&
+      shopsData.currShopKey !== shop.key &&
       basketSize !== 0
     ) {
       await Alerts.changeShopAlertV1(markerSwitchShop, shop);
@@ -213,6 +217,16 @@ export default function App() {
       : await changeShopFromMarker(newShop);
   }
 
+  /**
+   * Returns the current shop object based on its key.
+   * @return Object return the current shop object if the key is not empty, null otherwise
+   */
+  function getCurrShop() {
+    return shopsData.currShopKey === ''
+      ? null
+      : shopsData.allShops.find(shop => shop.key === shopsData.currShopKey);
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -225,31 +239,40 @@ export default function App() {
           setContent: setCurrBasket,
           clear: clearBasket,
         },
-        currShop:
-          shopsData.currShopIndex === -1
-            ? null
-            : shopsData.allShops[shopsData.currShopIndex],
+        currShop: getCurrShop(),
         changeShop: changeShop,
         bottomSheet: {isOpen: isShopIntro, setOpen: setIsShopIntro},
         adaptiveOpacity: adaptiveOpacity,
-      }}>
+      }}
+    >
       <NavigationContainer>
         {auth().currentUser && currentUser ? (
-          !loading ? (
+          !loading.shops ? (
             <HamburgerSlideBarNavigator />
           ) : (
             <LoadingPage />
           )
-        ) : !loading ? (
+        ) : !loading.shops ? (
           <LoggedOutStack.Navigator
             screenOptions={{
               headerShown: false,
-            }}>
+            }}
+          >
             {isFirst ? (
               <LoggedOutStack.Screen name="Welcome" component={WelcomePages} />
             ) : null}
-            <LoggedOutStack.Screen name="LogIn" component={LogInPage} />
-            <LoggedOutStack.Screen name="SignUp" component={SignUpPage} />
+            <LoggedOutStack.Screen
+              name="LogIn"
+              children={props => (
+                <LogInPage {...props} setLoading={setLoading} />
+              )}
+            />
+            <LoggedOutStack.Screen
+              name="SignUp"
+              children={props => (
+                <SignUpPage {...props} setLoading={setLoading} />
+              )}
+            />
           </LoggedOutStack.Navigator>
         ) : null}
       </NavigationContainer>

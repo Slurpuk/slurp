@@ -1,5 +1,13 @@
-import React, {useContext, useState} from 'react';
-import {StyleSheet, View, LogBox, StatusBar} from 'react-native';
+import React, {useContext, useRef, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  LogBox,
+  StatusBar,
+  Button,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
@@ -20,11 +28,12 @@ export default function LandingMapPage({navigation}) {
   const context = useContext(GlobalContext);
   //do search results and cover need showing
   const [searchBarFocused, setSearchBarFocused] = useState(false);
+  const setFocusMarker = useRef();
+  const [recenterVisible, setRecenterVisible] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
       setHamburgerVisible(true);
-
       return () => {
         setHamburgerVisible(false);
       };
@@ -32,7 +41,7 @@ export default function LandingMapPage({navigation}) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={'landing_map_page'}>
       {/*allows full screen map on devices with a notch*/}
       <StatusBar translucent={true} backgroundColor="transparent" />
 
@@ -40,8 +49,9 @@ export default function LandingMapPage({navigation}) {
       <View style={styles.map}>
         {/*//the map component*/}
         <MapBackground
-          searchBarFocused={searchBarFocused}
+          setFocusMarker={setFocusMarker}
           setSearchBarFocussed={setSearchBarFocused}
+          setRecenterVisible={setRecenterVisible}
         />
 
         {/*wrapper for aligning hamburger menu with search bar*/}
@@ -54,6 +64,17 @@ export default function LandingMapPage({navigation}) {
             setSearchBarFocussed={setSearchBarFocused}
           />
         </View>
+        {recenterVisible ? (
+          <TouchableOpacity
+            style={styles.recenterButton}
+            onPress={() => setFocusMarker.current()}
+          >
+            <Image
+              source={require('../../src/assets/images/recenter-icon.png')}
+              style={styles.recenterImage}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
 
       {/*show the relevant bottom sheet*/}
@@ -72,4 +93,19 @@ const styles = StyleSheet.create({
   searchWrapper: mapStyles.searchWrapper,
   newHamburger: mapStyles.newHamburger,
   searchBar: mapStyles.searchBar,
+  recenterButton: {
+    position: 'absolute',
+    bottom: 100,
+    right: 20,
+    alignSelf: 'center',
+    backgroundColor: '#087562',
+    borderRadius: 20,
+    width: 50,
+    height: 50,
+    paddingRight: 10,
+  },
+  recenterImage: {
+    width: 50,
+    height: 50,
+  },
 });

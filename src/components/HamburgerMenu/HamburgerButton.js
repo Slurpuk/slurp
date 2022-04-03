@@ -3,10 +3,16 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
+/**
+ * Hamburger button used to open the slide bar.
+ */
 const HamburgerButton = ({navigation}) => {
   return (
     <View style={styles.header}>
-      <Pressable style={styles.floating_button}>
+      <Pressable
+        style={styles.floating_button}
+        testID={'hamburger_menu_button'}
+      >
         <Icon.Button
           onPress={() => navigation.openDrawer()}
           name="bars"

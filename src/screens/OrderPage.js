@@ -13,6 +13,7 @@ import {
   separateOrders,
 } from '../helpers/screenHelpers';
 import {emptyCurrentOrdersText, emptyPastOrdersText} from '../data/Texts';
+import LoadingPage from './LoadingPage';
 
 /**
  * Screen displaying bot current and past orders
@@ -23,47 +24,71 @@ const OrderPage = ({navigation}) => {
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
   const Tab = createMaterialTopTabNavigator(); // Stack navigator for the tab screens
+  const [loading, setLoading] = useState({current: true, past: true});
 
   /**
    * Side effect which subscribes to the Orders model and retrieves the current user's orders and formats them.
    */
   useEffect(() => {
+    let isActive = true;
     const fetchData = firestore()
       .collection('orders')
       .where('user', '==', context.currentUser.ref)
       .onSnapshot(async querySnapshot => {
         let newOrders = await separateOrders(querySnapshot);
-        await formatCurrentOrders(newOrders.currentOrders, setCurrentOrders);
-        await formatPastOrders(newOrders.pastOrders, setPastOrders);
+        let currOrders = await formatCurrentOrders(newOrders.currentOrders);
+        if (isActive) {
+          setCurrentOrders(currOrders);
+          setLoading(prevState => ({...prevState, current: false}));
+        }
+        let prevOrders = await formatPastOrders(newOrders.pastOrders);
+        if (isActive) {
+          setPastOrders(prevOrders);
+          setLoading(prevState => ({...prevState, past: false}));
+        }
       });
-    return () => fetchData();
-  }, [context.currentUser.ref]);
+    return () => {
+      isActive = false;
+      fetchData();
+    };
+  }, [context.currentUser.ref, loading]);
 
   return (
-    <View style={styles.container}>
-      <GreenHeader headerText={'ORDERS'} navigation={navigation} />
-      <Tab.Navigator
-        style={styles.navigatorContent}
-        screenOptions={ScreenOptionsStyles}
-      >
-        <Tab.Screen name="Current">
-          {() => (
-            <CurrentOrders
-              currentOrders={currentOrders}
-              emptyText={emptyCurrentOrdersText}
-            />
-          )}
-        </Tab.Screen>
-        <Tab.Screen name="Past">
-          {() => (
-            <PastOrders
-              pastOrders={pastOrders}
-              emptyText={emptyPastOrdersText}
-            />
-          )}
-        </Tab.Screen>
-      </Tab.Navigator>
-    </View>
+      <View style={styles.container}>
+        <GreenHeader
+          headerText={'ORDERS'}
+          navigation={navigation}
+          testID={'orders_page'}
+        />
+        <Tab.Navigator
+          style={styles.navigatorContent}
+          screenOptions={ScreenOptionsStyles}>
+          <Tab.Screen name="Current">
+            {() =>
+              !loading.current ? (
+                <CurrentOrders
+                  currentOrders={currentOrders}
+                  emptyText={emptyCurrentOrdersText}
+                />
+              ) : (
+                <LoadingPage />
+              )
+            }
+          </Tab.Screen>
+          <Tab.Screen name="Past">
+            {() =>
+              !loading.past ? (
+                <PastOrders
+                  pastOrders={pastOrders}
+                  emptyText={emptyPastOrdersText}
+                />
+              ) : (
+                <LoadingPage />
+              )
+            }
+          </Tab.Screen>
+        </Tab.Navigator>
+      </View>
   );
 };
 

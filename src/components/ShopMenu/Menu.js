@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
 import {FlatList} from 'react-native-gesture-handler';
-import renderers from '../../renderers';
+import renderers from './renderers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
@@ -41,8 +41,7 @@ const Menu = ({navigation}) => {
             elevation: 0,
           },
         }}
-        containerStyle={menuStyles.container}
-      >
+        containerStyle={menuStyles.container}>
         <Tab.Screen
           name="Coffees"
           children={() => (
@@ -54,6 +53,7 @@ const Menu = ({navigation}) => {
               ListEmptyComponent={EmptyListText(emptyText)}
               columnWrapperStyle={menuStyles.row}
               contentContainerStyle={menuStyles.content}
+              testID={'coffee_list'}
             />
           )}
         />
@@ -90,8 +90,7 @@ const Menu = ({navigation}) => {
       <View style={menuStyles.absoluteArea}>
         <LinearGradient
           colors={['transparent', '#EDEBE7', '#EDEBE7']}
-          style={menuStyles.linearGradient}
-        >
+          style={menuStyles.linearGradient}>
           <CustomButton
             text="View Basket"
             priority="primary"

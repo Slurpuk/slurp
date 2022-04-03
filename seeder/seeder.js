@@ -85,7 +85,7 @@ async function createTestUsers() {
  * @returns {Promise<void>}
  */
 async function createFakeUsers() {
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 15; i++) {
     const email = faker.internet.email().toLowerCase();
     await addDoc(collection(db, 'users'), {
       first_name: faker.name.firstName(),
@@ -164,7 +164,7 @@ async function createCoffeeShops() {
     'Password123',
   );
   await addDoc(collection(db, 'coffee_shops'), {
-    name: 'Black Penny Covent Garden',
+    name: 'Black Penny',
     email: 'theblackpenny@gmail.com',
     intro:
       'The Black Penny is a true gem among the coffee shops. Single origin beans only. We prepare our drinks with care and full attention',
@@ -483,7 +483,16 @@ async function seed() {
     const duration = Date.now() - start;
     console.log('Seeding completed in ' + duration / 1000 + ' seconds.');
   } catch (error) {
-    console.log('Error while seeding database: ' + error + '. Sorry!');
+    if (error.code === 'auth/email-already-in-use') {
+      console.log(
+        'An email is already in use, you have probably already seeded the database. Try npm run unseed.',
+      );
+      console.log(
+        "If you still get this error after unseeding you may be connected to the cloud database instead of the emulator, make sure the EMULATOR_MODE_ON variable is set to 'true' in seeder/seeder.js.",
+      );
+    } else {
+      console.log('Error while seeding database: ' + error + '. Sorry!');
+    }
   }
 }
 

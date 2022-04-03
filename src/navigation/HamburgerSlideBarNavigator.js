@@ -1,15 +1,12 @@
 import React from 'react';
-import {LogBox} from 'react-native';
+import { LogBox, Text } from "react-native";
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useState} from 'react';
 import SideDrawerContent from '../components/HamburgerMenu/SideDrawerContent';
 import HamburgerButton from '../components/HamburgerMenu/HamburgerButton';
-import {
-  ChangeDetailsStackNavigator,
-  ChangePasswordStackNavigator,
-  HomeStackNavigator,
-  OrderHistoryStackNavigator,
-} from './StackNavigator';
+import {HomeStackNavigator} from './HomeStackNavigator';
+import UpdateDetailsPage from '../screens/UpdateDetailsPage';
+import ChangePasswordPage from '../screens/ChangePasswordPage';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -17,6 +14,10 @@ LogBox.ignoreLogs([
 
 const Drawer = createDrawerNavigator();
 export const VisibleContext = React.createContext();
+
+/**
+ * Slide bar navigator containing the appropriate screens and allowing navigation between them
+ */
 function HamburgerSlideBarNavigator() {
   const [isHeaderVisible, setVisible] = useState(true);
 
@@ -31,18 +32,8 @@ function HamburgerSlideBarNavigator() {
         })}
       >
         <Drawer.Screen name="Home" children={() => <HomeStackNavigator />} />
-        <Drawer.Screen
-          name="View order history"
-          children={() => <OrderHistoryStackNavigator />}
-        />
-        <Drawer.Screen
-          name="Change name"
-          children={() => <ChangeDetailsStackNavigator />}
-        />
-        <Drawer.Screen
-          name="Change password"
-          children={() => <ChangePasswordStackNavigator />}
-        />
+        <Drawer.Screen name="Change details" component={UpdateDetailsPage} />
+        <Drawer.Screen name="Change password" component={ChangePasswordPage} />
       </Drawer.Navigator>
     </VisibleContext.Provider>
   );

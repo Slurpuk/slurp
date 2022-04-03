@@ -10,7 +10,7 @@ import '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-const EMULATOR_MODE_ON = false;
+const EMULATOR_MODE_ON = true;
 
 if (__DEV__ && EMULATOR_MODE_ON) {
   try {
@@ -21,5 +21,4 @@ if (__DEV__ && EMULATOR_MODE_ON) {
   }
 }
 
-const db = firestore(); //I'm 99% certain we don't need this line.
 AppRegistry.registerComponent(appName, () => App);

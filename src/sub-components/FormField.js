@@ -1,6 +1,17 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
+
+/**
+ * Custom form field reused throughout the app.
+ * @param style
+ * @param title
+ * @param placeholder
+ * @param setField
+ * @param value
+ * @param type
+ * @param testID
+ */
 const FormField = ({
   style,
   title = 'Title',
@@ -33,28 +44,6 @@ const FormField = ({
       autoCorrect = false;
       autoCompleteType = 'password';
       break;
-    case 'cardNumber':
-      autoCapitalize = 'none';
-      autoCorrect = false;
-      autoCompleteType = 'cardComponent';
-      keyboardType = 'numeric';
-      maxLength = 16;
-      break;
-    case 'expiryDate':
-      autoCapitalize = 'none';
-      autoCorrect = false;
-      autoCompleteType = 'cardComponent';
-      keyboardType = 'numeric';
-      maxLength = 5;
-      break;
-    case 'CVC':
-      secureTextEntry = true;
-      autoCapitalize = 'none';
-      autoCorrect = false;
-      autoCompleteType = 'cardComponent';
-      keyboardType = 'numeric';
-      maxLength = 3;
-      break;
   }
 
   return (
@@ -74,6 +63,7 @@ const FormField = ({
         autoCorrect={autoCorrect}
         keyboardType={keyboardType}
         maxLength={maxLength}
+        textContentType={'oneTimeCode'}
         testID={testID}
       />
     </View>

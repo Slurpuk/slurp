@@ -8,7 +8,7 @@ import textStyles from '../../stylesheets/textStyles';
 import {Alerts} from '../data/Alerts';
 import {enterApp} from '../helpers/storageHelpers';
 
-const LogInPage = ({navigation}) => {
+const LogInPage = ({navigation, setLoading}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRegex = new RegExp(
@@ -96,12 +96,13 @@ const LogInPage = ({navigation}) => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .catch(error => handleLogInErrorsBackEnd(error.code));
+      setLoading(prevState => ({...prevState, user: false}));
       await enterApp();
     }
   }
 
   return (
-    <View style={styles.wrapper} testID={'emailfield'}>
+    <View style={styles.wrapper} testID={'log_in_page'}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <Text style={[textStyles.blueJosefinHeading]}>Log In</Text>
       <View style={styles.form}>
@@ -110,7 +111,7 @@ const LogInPage = ({navigation}) => {
           setField={setEmail}
           type={'email'}
           value={email}
-          testID={'email'}
+          testID={'log_in_page_email'}
         />
         <FormField
           title={'Password'}
@@ -118,7 +119,7 @@ const LogInPage = ({navigation}) => {
           setField={setPassword}
           type={'password'}
           value={password}
-          testID={'password'}
+          testID={'log_in_page_password'}
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
