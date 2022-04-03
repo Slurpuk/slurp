@@ -1,5 +1,13 @@
 import React, {useEffect, useContext, useRef, useMemo, useState} from 'react';
-import {Platform, StyleSheet, Text, View, Keyboard} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Keyboard,
+  Image,
+  Button,
+} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
@@ -15,6 +23,7 @@ import {Alerts} from '../../data/Alerts';
 export default function MapBackground({
   searchBarFocused,
   setSearchBarFocussed,
+    setFocusMarker,
 }) {
   const context = useContext(GlobalContext);
   const watchID = useRef(); //used to watch the users location
@@ -25,6 +34,7 @@ export default function MapBackground({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
+
 
   const markers = useMemo(() => {
     return context.shopsData.map(shop => ({
@@ -43,6 +53,7 @@ export default function MapBackground({
    * Setup location access on map load. Remove the location access when this component is unmounted
    */
   useEffect(() => {
+    setFocusMarker.current = focusMarker;
     if (!context.locationIsEnabled) {
       let currWatch = watchID.current;
       requestLocationPermission(
@@ -72,6 +83,14 @@ export default function MapBackground({
     Keyboard.dismiss();
   };
 
+  const focusMarker = () => {
+    setMapCenter(prevState => ({
+      ...prevState,
+      latitude: context.currentUser.location.latitude,
+      longitude: context.currentUser.location.longitude,
+    }));
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -92,7 +111,8 @@ export default function MapBackground({
         onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter}>
+        region={mapCenter}
+      >
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -105,7 +125,8 @@ export default function MapBackground({
                 await locationPress(context, setMapCenter, marker.name);
               }
               mapPressed();
-            }}>
+            }}
+          >
             {/*//closed markers appear grey*/}
             <View
               style={styles.markerStyle}
@@ -117,6 +138,20 @@ export default function MapBackground({
             </View>
           </Marker>
         ))}
+        <Marker
+          draggable
+          coordinate={{
+            latitude: context.currentUser.location.latitude,
+            longitude: context.currentUser.location.longitude,
+          }}
+          onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
+          onPress={() => focusMarker()}
+          title={'Current Location'}>
+          <Image
+            source={require('../../assets/images/dot.png')}
+            style={{height: 45, width: 45}}
+          />
+        </Marker>
       </MapView>
     </View>
   );
