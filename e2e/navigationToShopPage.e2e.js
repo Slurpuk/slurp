@@ -62,4 +62,36 @@ describe('Navigation to shop menu in diferent ways', () => {
     await element(by.id('hamburger_menu_button')).tap();
     await element(by.text('Logout')).tap();
   });
+  describe('Navigation to shop page via shop list', function () {
+    it('should be able to slide the bottom sheet up', async function () {
+      await expect(element(by.id('shop_list'))).not.toBeVisible();
+
+      await element(by.id('scroll_bottom_page')).swipe('up', 'fast', 1, 0.5, 0);
+      await expect(element(by.id('shop_list'))).toBeVisible();
+    });
+    it('should show nearest by cafe in bottom page', async function () {
+      await expect(element(by.text('LIZ CAFE'))).toBeVisible();
+    });
+    it('should show show page on clicking on cafe', async function () {
+      await element(by.text('LIZ CAFE')).tap();
+
+      await expect(element(by.id('shop_list'))).not.toBeVisible();
+      await expect(element(by.id('shop_intro'))).toBeVisible();
+      await expect(element(by.text('LIZ CAFE'))).toBeVisible();
+    });
+    it('should navigate to the shop list when clicking on the back button', async function () {
+      await element(by.id('back_arrow')).tap();
+
+      await expect(element(by.id('shop_list'))).toBeVisible();
+      await expect(element(by.id('shop_intro'))).not.toBeVisible();
+
+      await element(by.id('scroll_bottom_page')).swipe(
+        'down',
+        'fast',
+        1,
+        0.5,
+        0,
+      );
+    });
+  });
 });
