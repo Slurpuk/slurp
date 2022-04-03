@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../../sub-components/CustomButton';
 import {FlatList} from 'react-native-gesture-handler';
-import renderers from '../../renderers';
+import renderers from './renderers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ShopContext} from '../../screens/ShopPage';
 import {GlobalContext} from '../../../App';
