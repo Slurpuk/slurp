@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
-import {StyleSheet} from 'react-native';
+import { StyleSheet, Text } from "react-native";
 import {GlobalContext} from '../../../App';
 import {Alerts} from '../../data/Alerts';
 import {logout} from '../../firebase/queries';

@@ -16,6 +16,7 @@ import ShopPage from './ShopPage';
 import {GlobalContext} from '../../App';
 import CustomSearchBar from '../components/LandingMap/CustomSearchBar';
 import LandingHamburgerIcon from '../assets/svgs/LandingHamburgerIcon';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import mapStyles from '../../stylesheets/mapStyles';
 
 LogBox.ignoreLogs([
@@ -69,10 +70,7 @@ export default function LandingMapPage({navigation}) {
             style={styles.recenterButton}
             onPress={() => setFocusMarker.current()}
           >
-            <Image
-              source={require('../../src/assets/images/recenter-icon.png')}
-              style={styles.recenterImage}
-            />
+            <Icon size={40} color="#087562" name="crosshairs-gps"/>
           </TouchableOpacity>
         ) : null}
       </View>
@@ -95,17 +93,12 @@ const styles = StyleSheet.create({
   searchBar: mapStyles.searchBar,
   recenterButton: {
     position: 'absolute',
-    bottom: 100,
-    right: 20,
+    bottom: 70,
+    right: 10,
     alignSelf: 'center',
-    backgroundColor: '#087562',
     borderRadius: 20,
     width: 50,
     height: 50,
     paddingRight: 10,
-  },
-  recenterImage: {
-    width: 50,
-    height: 50,
   },
 });
