@@ -137,7 +137,7 @@ export default function MapBackground({
           onPress={() => focusMarker()}
           title={'Current Location'}>
           <Image
-            source={require('../LandingMap/dot.png')}
+            source={require('../../assets/images/dot.png')}
             style={{height: 45, width: 45}}
           />
         </Marker>
