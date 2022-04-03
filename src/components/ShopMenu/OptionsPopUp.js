@@ -1,6 +1,6 @@
 import CheckboxSectionList from './CheckboxSectionList';
 import React, {useContext, useState} from 'react';
-import {Alert, Text, TextInput, TouchableHighlight, View} from 'react-native';
+import {Alert, Text, TouchableHighlight, View} from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import CustomButton from '../../sub-components/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -95,7 +95,8 @@ export default function OptionsPopUp({data, renderer, item}) {
           <TouchableHighlight
             style={OptionPopUpStyles.icon}
             underlayColor={'white'}
-            onPress={() => shopContext.setOptionsVisible(false)}>
+            onPress={() => shopContext.setOptionsVisible(false)}
+          >
             <Icon size={30} color="black" name="close" />
           </TouchableHighlight>
         </View>
@@ -106,14 +107,12 @@ export default function OptionsPopUp({data, renderer, item}) {
             renderItem={renderer}
           />
         </View>
-        <TextInput testID="foo">
-          <CustomButton
-            text={`Add To Order  £${totalPrice.toPrecision(3)}`}
-            priority={'primary'}
-            width={screenWidth * 0.79}
-            onPress={() => addToCurrentBasket()}
-          />
-        </TextInput>
+        <CustomButton
+          text={`Add To Order  £${totalPrice.toPrecision(3)}`}
+          priority={'primary'}
+          width={screenWidth * 0.79}
+          onPress={() => addToCurrentBasket()}
+        />
       </View>
     </OptionsContext.Provider>
   );
