@@ -50,9 +50,9 @@ const BasketPage = ({navigation}) => {
       Alerts.LocationAlert();
     } else {
       const ready = await initializePayment(initPaymentSheet, total);
-      ready
-        ? await proceedToPayment()
-        : Alerts.initPaymentAlert(() => checkout());
+      if (ready) {
+        await proceedToPayment();
+      }
     }
   }
 
@@ -119,8 +119,7 @@ const BasketPage = ({navigation}) => {
         value={{
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
-        }}
-      >
+        }}>
         <View style={styles.basket}>
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.name}
