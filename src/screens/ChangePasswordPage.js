@@ -21,7 +21,7 @@ function ChangePasswordPage({navigation}) {
   };
 
   function successMessage() {
-    Alert.alert('Success!', 'Password Updated', [
+    Alert.alert('Password Updated!', '', [
       {
         text: 'OK',
         onPress: () => navigation.goBack(),
@@ -108,18 +108,21 @@ function ChangePasswordPage({navigation}) {
           setField={setOldPassword}
           value={oldPassword}
           type={'password'}
+          testID={'change_password_page_old_password'}
         />
         <FormField
           title={'New Password'}
           setField={setNewPassword}
           value={newPassword}
           type={'password'}
+          testID={'change_password_page_new_password'}
         />
         <FormField
           title={'Confirm Password'}
           setField={setPasswordConfirmation}
           value={passwordConfirmation}
           type={'password'}
+          testID={'change_password_page_new_password_confirmation'}
         />
       </View>
       <View style={styles.button}>
