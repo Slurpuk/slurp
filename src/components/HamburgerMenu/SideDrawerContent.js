@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, Alert } from "react-native";
 import auth from '@react-native-firebase/auth';
 import {GlobalContext} from '../../../App';
 
@@ -15,6 +15,18 @@ function SideDrawerContent(props) {
       console.log(e);
     }
   }
+
+  function logoutPrompt() {
+    Alert.alert('Log Out', 'Are you sure you want to log out', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Yes', onPress: () => logout()},
+    ]);
+  }
+
   return (
     <DrawerContentScrollView {...props}>
         <Close.Button
@@ -71,7 +83,7 @@ function SideDrawerContent(props) {
       />
       <DrawerItem
         label="Logout"
-        onPress={() => logout()}
+        onPress={() => logoutPrompt()}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
         inactiveTintColor="rgba(0, 0, 0, .87)"

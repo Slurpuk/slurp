@@ -3,9 +3,9 @@ import {Alerts} from '../data/Alerts';
 /**
  * Fetch the payments' sheet parameters from the server.
  * @return  Return the encapsulated details about the transaction.
+ * @param total The total amount to pay
  */
-async function fetchPaymentSheetParams(ipAddress, total) {
-  let API_URL = `http://${ipAddress}:7070`;
+async function fetchPaymentSheetParams(total) {
   let body = {amount: total};
   const response = await fetch(
     'https://us-central1-independentcoffeeshops.cloudfunctions.net/payWithStripe',
@@ -35,12 +35,11 @@ async function fetchPaymentSheetParams(ipAddress, total) {
 
 /**
  * Initialize the stripe payment sheet.
- * @param ipAddress The address to which to send the payment intent.
  * @param initPaymentSheet The method for initiating the payment sheet.
  * @param total The total amount to pay
  */
-async function initializePaymentSheet(ipAddress, initPaymentSheet, total) {
-  const response = await fetchPaymentSheetParams(ipAddress, total);
+async function initializePaymentSheet(initPaymentSheet, total) {
+  const response = await fetchPaymentSheetParams(total);
   if (response) {
     const {error} = await initPaymentSheet({
       customerId: response.customer,
@@ -60,24 +59,17 @@ async function initializePaymentSheet(ipAddress, initPaymentSheet, total) {
 }
 
 /**
- * Initialize the user's payment.
- * @param initPaymentSheet The method for initiating the payment sheet.
- * @param total The total amount to pay
- * @return boolean Return true if initialization is successful, false otherwise.
- */
-async function initializePayment(initPaymentSheet, total) {
-  let currIp = 0; // Get the current device IP address
-  return await initializePaymentSheet(currIp, initPaymentSheet, total);
-}
-
-/**
  * Open the payment sheet if no error occurs
  * @param presentPaymentSheet Function for opening the payment sheet.
  * @return boolean Return true if the payment sheet can be open, false otherwise.
  */
 async function openPaymentSheet(presentPaymentSheet) {
-  const {error} = await presentPaymentSheet();
+  const response = await presentPaymentSheet();
+  const error = response.error;
   if (error) {
+    if (error.code === 'Canceled') {
+      return false;
+    }
     Alerts.networkAlert();
     return false;
   } else {
@@ -85,4 +77,4 @@ async function openPaymentSheet(presentPaymentSheet) {
   }
 }
 
-export {initializePayment, openPaymentSheet};
+export {initializePaymentSheet, openPaymentSheet};
