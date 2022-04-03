@@ -17,8 +17,9 @@ export default function DraggableShopList({navigation}) {
     const sortedShops = context.shopsData.sort(
       (a, b) => a.distanceTo > b.distanceTo,
     );
+    const filteredShops = sortedShops.filter(shop => shop.distanceTo < 10000);
     //filtering the shops based on radius limitation
-    setOrderedShops(sortedShops.filter(shop => shop.distanceTo < 10000));
+    setOrderedShops(filteredShops);
   }, [context.shopsData, context.currentUser.location]);
 
   return (

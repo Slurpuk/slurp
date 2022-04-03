@@ -5,7 +5,6 @@ import {Alerts} from '../data/Alerts';
  * @return  Return the encapsulated details about the transaction.
  */
 async function fetchPaymentSheetParams(ipAddress, total) {
-  let API_URL = `http://${ipAddress}:7070`;
   let body = {amount: total};
   const response = await fetch(
     'https://us-central1-independentcoffeeshops.cloudfunctions.net/payWithStripe',
@@ -76,8 +75,12 @@ async function initializePayment(initPaymentSheet, total) {
  * @return boolean Return true if the payment sheet can be open, false otherwise.
  */
 async function openPaymentSheet(presentPaymentSheet) {
-  const {error} = await presentPaymentSheet();
+  const response = await presentPaymentSheet();
+  const error = response.error;
   if (error) {
+    if (error.code === 'Canceled') {
+      return true;
+    }
     Alerts.networkAlert();
     return false;
   } else {

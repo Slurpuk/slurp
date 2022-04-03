@@ -32,7 +32,7 @@ const LandingMapPage = ({navigation}) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={'landing_map_page'}>
       {/*allows full screen map on devices with a notch*/}
       <StatusBar translucent={true} backgroundColor="transparent" />
 
