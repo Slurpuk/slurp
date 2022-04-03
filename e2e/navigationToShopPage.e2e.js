@@ -135,4 +135,15 @@ describe('Navigation to shop menu in diferent ways', () => {
       await expect(element(by.text('Top Picks Nearby'))).toBeVisible();
     });
   });
+  describe('Navigation to shop page via search bar', function () {
+    it('should display shop minimised shop intro when clicking searching for cafe and clicking on it', async function () {
+      await expect(element(by.id('shop_intro'))).not.toBeVisible();
+
+      await element(by.id('search_bar')).typeText('Liz Cafe');
+      await element(by.id('search_item_Liz Cafe')).tap();
+
+      await expect(element(by.id('shop_intro'))).toBeVisible();
+      await expect(element(by.id('coffee_list'))).not.toBeVisible();
+    });
+  });
 });
