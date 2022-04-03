@@ -135,7 +135,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
               No shop goes by this name. {'\n'}
               Please try a different one.
             </Text>
-          )}
+          }
         </View>
       ) : null}
     </View>
