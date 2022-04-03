@@ -1,11 +1,9 @@
 import renderer from 'react-test-renderer';
 import React from 'react';
-
 import CustomButton from '../src/sub-components/CustomButton';
 import GreenHeader from '../src/sub-components/GreenHeader';
 import WhiteArrowButton from '../src/sub-components/WhiteArrowButton';
 import Icon from 'react-native-vector-icons/Ionicons';
-
 import {Alert} from 'react-native';
 
 describe('Components', function () {
@@ -40,12 +38,7 @@ describe('Components', function () {
   });
 
   describe('white arrow button', function () {
-    it('should render correctly', function () {
-      const tree = renderer.create(<WhiteArrowButton />).toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-
-    jest.mock('react-native-vector-icons/MaterialIcons', () => 'Icon');
+    jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
 
     it('Renders an icon', () => {
       const tree = renderer
@@ -54,40 +47,94 @@ describe('Components', function () {
       expect(tree).toMatchSnapshot();
     });
 
-    it('renders correctly if the arrow points left', function () {
+    it('should render correctly', function () {
+      // const handleBackButtonClick = jest.fn();
+
+      const tree = renderer.create(
+        <WhiteArrowButton
+          direction={'back'}
+          navigation={jest.fn()}
+          onPressAction={jest.fn()}
+          customStyle={[]}
+        />,
+      );
+      expect(tree).toMatchInlineSnapshot(`
+        <View
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "opacity": 1,
+                "underlayColor": "gray",
+              },
+              Array [],
+            ]
+          }
+          title=""
+          underlayColor="transparent"
+        >
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "white",
+                  "fontSize": 34,
+                },
+                undefined,
+                Object {
+                  "fontFamily": undefined,
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      `);
+    });
+
+    it('should render correctly if the arrow points back', function () {
       const tree = renderer
         .create(<WhiteArrowButton direction={'left'} />)
         .toJSON();
       expect(tree).toMatchSnapshot();
     });
 
-    it('renders correctly if the arrow points right', function () {
+    it('should render correctly if the arrow points right', function () {
       const tree = renderer
         .create(<WhiteArrowButton direction={'right'} />)
         .toJSON();
       expect(tree).toMatchSnapshot();
     });
 
-    it('renders correctly if the arrow points up', function () {
+    it('should render correctly if the arrow points up', function () {
       const tree = renderer
         .create(<WhiteArrowButton direction={'up'} />)
         .toJSON();
       expect(tree).toMatchSnapshot();
     });
 
-    it('renders correctly if the arrow points down', function () {
+    it('should render correctly if the arrow points down', function () {
       const tree = renderer
         .create(<WhiteArrowButton direction={'down'} />)
         .toJSON();
       expect(tree).toMatchSnapshot();
     });
-
-    // it('should respond to a click', function () {
-    //   const {getByTitle} = renderer.create(<WhiteArrowButton direction={'left'}/>).toJSON();
-    //
-    //   fireEvent(getByTitle(''), 'press');
-    //   expect('handleBackButtonClick').toHaveBeenCalledTimes(1);
-    //   // expect(spyAlert).toBeCalledTimes(0);
-    // });
   });
 });
