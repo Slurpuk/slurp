@@ -121,10 +121,34 @@ describe('Sign up', () => {
   /**
    * Also implicitly tests that the menu triggered by the hamburger button is visible.
    */
-  it('should be able to log out', async () => {
+  it('should raise confirmatory alert on attempting log out', async () => {
     await expect(element(by.id('hamburger_menu_button'))).toBeVisible();
     await element(by.id('hamburger_menu_button')).tap();
     await expect(element(by.text('Logout'))).toBeVisible();
+
     await element(by.text('Logout')).tap();
+
+    await expect(
+      element(by.label('Cancel').and(by.type('_UIAlertControllerActionView'))),
+    ).toBeVisible();
+
+    await element(
+      by.label('Cancel').and(by.type('_UIAlertControllerActionView')),
+    ).tap();
+  });
+  it('should be able to log out', async () => {
+    await expect(element(by.id('log_in_page'))).not.toBeVisible();
+
+    await element(by.text('Logout')).tap();
+
+    await element(
+      by.label('Yes').and(by.type('_UIAlertControllerActionView')),
+    ).tap();
+  });
+  /**
+   * Thanks to AsyncStorage a user should not be redirected to the welcome pages but to the login page.
+   */
+  it('should log out redirects to log in page (not to welcome pages)', async () => {
+    await expect(element(by.id('log_in_page'))).toBeVisible();
   });
 });
