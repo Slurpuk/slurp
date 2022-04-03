@@ -1,12 +1,14 @@
 import React, {useRef, useState} from 'react';
-import {Animated, View, StyleSheet, Pressable} from 'react-native';
+import {
+  Animated,
+  View,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-/**
- * Animated card sub-component with a reduced and expanded version with corresponding contents to display
- */
 const AnimatedCard = ({
   initialHeight,
   collapsableContent,
@@ -37,6 +39,7 @@ const AnimatedCard = ({
 
   const shrinkHeight = () => {
     setExpanded(!isExpanded);
+    let isFlipped = '180deg';
 
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(adaptiveHeight, {
@@ -56,6 +59,9 @@ const AnimatedCard = ({
             height: adaptiveHeight,
           },
         ]}
+        onLayout={event => {
+          let {x, y, width, height} = event.nativeEvent.layout;
+        }}
       >
         <AnimatedPressable onPress={toggleheight}>
           <View
