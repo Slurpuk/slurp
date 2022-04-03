@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useRef, useMemo, useState} from 'react';
-import {Platform, StyleSheet, Text, View, Keyboard} from 'react-native';
+import {Platform, StyleSheet, Text, View, Keyboard, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
@@ -108,6 +108,19 @@ export default function MapBackground({
             </View>
           </Marker>
         ))}
+        <Marker
+          draggable
+          coordinate={{
+            latitude: context.currentUser.location.latitude,
+            longitude: context.currentUser.location.longitude,
+          }}
+          onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
+          title={'Current Location'}>
+          <Image
+            source={require('../LandingMap/dot.png')}
+            style={{height: 45, width: 45}}
+          />
+        </Marker>
       </MapView>
     </View>
   );
