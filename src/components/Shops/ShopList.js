@@ -12,7 +12,7 @@ const SHOP_LIST_HEIGHT_ANDROID = '78%';
 
 const ShopList = ({navigation, data}) => {
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} testID={'shop_list'}>
       <FlatList
         style={styles.container}
         data={data}

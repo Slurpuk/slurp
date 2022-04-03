@@ -21,15 +21,16 @@ function SideDrawerContent(props) {
 
   return (
     <DrawerContentScrollView {...props}>
-      <Close.Button
-        onPress={() => props.navigation.closeDrawer()}
-        name="close"
-        color={'#173C4F'}
-        underlayColor={'transparent'}
-        backgroundColor={'transparent'}
-        size={25}
-        style={styles.close_button}
-      />
+        <Close.Button
+          onPress={() => props.navigation.closeDrawer()}
+          name="close"
+          color={'#173C4F'}
+          underlayColor={'transparent'}
+          backgroundColor={'transparent'}
+          size={25}
+          style={styles.close_button}
+        />
+      <Text style={styles.welcome_text}>Hi {context.currentUser.first_name}!</Text>
       <DrawerItem
         label="My orders"
         onPress={() => {
@@ -112,6 +113,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
     fontFamily: 'Poppins',
+  },
+  welcome_text: {
+    marginLeft: '6%',
+    fontWeight: 'bold',
+    fontSize: 25,
+    color: '#173C4F',
+    marginVertical: 20,
   },
 });
 

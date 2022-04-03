@@ -29,6 +29,9 @@ describe('Log in', () => {
   afterAll(async () => {
     await element(by.id('hamburger_menu_button')).tap();
     await element(by.text('Logout')).tap();
+    await element(
+      by.label('Yes').and(by.type('_UIAlertControllerActionView')),
+    ).tap();
   });
 
   it('should be able to navigate to log in page from welcome pages', async function () {
@@ -63,7 +66,7 @@ describe('Log in', () => {
     await element(by.type('_UIAlertControllerActionView')).tap();
     await expect(element(by.id('log_in_page'))).toBeVisible();
 
-    await element(by.id('log_in_page_email')).replaceText('');
+    await element(by.id('log_in_page_email')).clearText();
   });
 
   it('should also raise alert if forgot password with non-existent email', async () => {
@@ -78,7 +81,7 @@ describe('Log in', () => {
     await element(by.type('_UIAlertControllerActionView')).tap();
     await expect(element(by.id('log_in_page'))).toBeVisible();
 
-    await element(by.id('log_in_page_email')).replaceText('');
+    await element(by.id('log_in_page_email')).clearText();
   });
   it('should raise alert if log in wrong password', async () => {
     const firstName = 'Emmanuel';
@@ -105,7 +108,7 @@ describe('Log in', () => {
     await element(by.type('_UIAlertControllerActionView')).tap();
     await expect(element(by.id('log_in_page'))).toBeVisible();
 
-    await element(by.id('log_in_page_password')).replaceText('');
+    await element(by.id('log_in_page_password')).clearText();
   });
   it('should be able to log in with valid details', async () => {
     const password = 'Password123!';
