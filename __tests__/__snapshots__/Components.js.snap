@@ -234,6 +234,56 @@ exports[`Components white arrow button Renders an icon 1`] = `
 </Text>
 `;
 
+exports[`Components white arrow button renders correctly if the arrow points back 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
 exports[`Components white arrow button renders correctly if the arrow points down 1`] = `
 <View
   accessible={true}
@@ -480,6 +530,206 @@ exports[`Components white arrow button should render correctly 1`] = `
     }
   >
     
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button should render correctly if the arrow points back 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button should render correctly if the arrow points down 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button should render correctly if the arrow points right 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Components white arrow button should render correctly if the arrow points up 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "opacity": 1,
+        "underlayColor": "gray",
+      },
+      Object {},
+    ]
+  }
+  title=""
+  underlayColor="transparent"
+>
+  <Text
+    allowFontScaling={false}
+    selectable={false}
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontSize": 34,
+        },
+        undefined,
+        Object {
+          "fontFamily": undefined,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+  >
+    
   </Text>
 </View>
 `;
