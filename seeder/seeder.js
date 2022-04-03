@@ -85,7 +85,7 @@ async function createTestUsers() {
  * @returns {Promise<void>}
  */
 async function createFakeUsers() {
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 15; i++) {
     const email = faker.internet.email().toLowerCase();
     await addDoc(collection(db, 'users'), {
       first_name: faker.name.firstName(),
