@@ -1,7 +1,10 @@
 import {View, StyleSheet, Text, ImageBackground} from 'react-native';
-import React from 'react';
+import React, { useContext } from "react";
 import textStyles from '../../../stylesheets/textStyles';
 import {OrderStatus} from '../../data/OrderStatus';
+import ShopDetailIcons from "../Shops/ShopDetailIcons";
+import { calculateDistance } from "../../helpers/screenHelpers";
+import { GlobalContext } from "../../../App";
 
 /**
  * Corresponds to the closed version of the order
@@ -10,6 +13,7 @@ import {OrderStatus} from '../../data/OrderStatus';
  */
 const OrderDetailsView = ({order}) => {
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
+  const context = useContext(GlobalContext);
 
   return (
     <View style={styles.container}>
@@ -22,18 +26,28 @@ const OrderDetailsView = ({order}) => {
           />
         </View>
         <View>
-          <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
-          >
-            {order.shop.name}
-          </Text>
+            <Text
+              style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
+            >
+              {order.shop.name}
+            </Text>
           {getStatusAndDateComponent(order)}
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
             {getItemsText(order)}
           </Text>
         </View>
       </View>
-      <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
+      <View style={styles.orderInformation}>
+        <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
+        <View style={styles.ETA}>
+          <ShopDetailIcons distanceToShop={
+            calculateDistance(order.shop.location, {
+              latitude: context.currentUser.location._latitude,
+              longitude: context.currentUser.location._longitude,
+            })
+          } iconSize={17} iconColor={'black'} fontSize={12}/>
+        </View>
+      </View>
     </View>
   );
 };
@@ -133,5 +147,13 @@ const styles = StyleSheet.create({
   cancelledOrder: {
     color: '#8C233C',
   },
+  orderInformation: {
+    flexDirection: 'row',
+  },
+  ETA: {
+    alignSelf: 'center',
+    marginTop: '2%',
+    marginLeft: '13%'
+  }
 });
 export default OrderDetailsView;
