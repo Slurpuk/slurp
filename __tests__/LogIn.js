@@ -31,7 +31,7 @@ describe('Login page', function () {
       fireEvent.changeText(inputs[0], 'emailwithoutaroba.com');
 
       fireEvent(getByText('Log in'), 'press');
-      console.log(spyAlert.mock);
+
       expect(spyAlert).toHaveBeenCalled();
       expect(spyAlert.mock.calls[0][0]).toBe('Bad Email');
     });

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 import FormField from '../sub-components/FormField';
 import GreenHeader from '../sub-components/GreenHeader';
@@ -7,22 +7,18 @@ import {GlobalContext} from '../../App';
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 
-
 import firestore from '@react-native-firebase/firestore';
-import { Alerts } from "../data/Alerts";
+import {Alerts} from '../data/Alerts';
 
 const UpdateDetailsPage = ({navigation}) => {
-  const context = useContext(GlobalContext)
-  const [first_name, setFirstName] = useState('');
-  const [last_name, setLastName] = useState('');
+  const context = useContext(GlobalContext);
+  const [first_name, setFirstName] = useState(context.currentUser.first_name);
+  const [last_name, setLastName] = useState(context.currentUser.last_name);
   const [password, setPassword] = useState('');
 
-  const resetFields = () => {
-    setFirstName('');
-    setLastName('');
-    setPassword('');
-  };
-
+  /**
+   * Alert raised when details are updated. Returns user to where they came from.
+   */
   function changeDetailsConfirm() {
     Alert.alert('Done.', 'Your details have been updated.', [
       {
@@ -30,14 +26,12 @@ const UpdateDetailsPage = ({navigation}) => {
         onPress: () => navigation.goBack(),
       },
     ]);
-    resetFields();
   }
 
-
-
-  /*
-Deal with bad or empty inputs before sending request
- */
+  /**
+   * Deal with bad or empty inputs before sending request
+   * @returns {boolean} if a user can pass to performing the operation or not
+   */
   function handleChangeDetailsErrorsFrontEnd() {
     let validity = true;
     if (first_name === '') {
@@ -50,14 +44,12 @@ Deal with bad or empty inputs before sending request
     return validity;
   }
 
-  /*
-  Manage response to database failure
+  /**
+   * Manage response to database failure
+   * @param errorCode firebase auth error code
    */
   function handleChangeDetailsErrorsBackEnd(errorCode) {
-    if (
-      errorCode === 'auth/wrong-password' ||
-      errorCode === 'auth/user-not-found'
-    ) {
+    if (errorCode === 'auth/wrong-password') {
       Alerts.wrongCredentialsAlert();
     } else if (errorCode === 'auth/network-request-failed') {
       Alerts.connectionErrorAlert();
@@ -70,36 +62,35 @@ Deal with bad or empty inputs before sending request
   //Update user details in the database
   async function changeUserDetails() {
     if (handleChangeDetailsErrorsFrontEnd()) {
-      let updated = {
-        first_name: first_name,
-        last_name: last_name,
-      };
       let currentUser = auth().currentUser;
       await firebase
-          .auth()
-          .signInWithEmailAndPassword(currentUser.email, password)
-          .then(() => {
-            firestore()
-                .collection('users')
-                .doc(context.currentUser.key)
-                .update(updated)
-                .then(() => {
-                  resetFields();
-                  changeDetailsConfirm();
-                })
-                .catch(error => {
-                  handleChangeDetailsErrorsBackEnd(error.code);
-                });
-          })
-          .catch(error => {
-            handleChangeDetailsErrorsBackEnd(error.code);
-          });
+        .auth()
+        .signInWithEmailAndPassword(currentUser.email, password)
+        .then(() => {
+          firestore()
+            .collection('users')
+            .doc(context.currentUser.key)
+            .update({
+              first_name: first_name,
+              last_name: last_name,
+            })
+            .then(() => {
+              changeDetailsConfirm();
+              setPassword('');
+            })
+            .catch(error => {
+              console.log(context.currentUser);
+              Alerts.elseAlert();
+            });
+        })
+        .catch(error => {
+          handleChangeDetailsErrorsBackEnd(error.code);
+        });
     }
-
   }
 
   return (
-    <View>
+    <View style={styles.container} testID={'update_details_page'}>
       <GreenHeader headerText={'CHANGE DETAILS'} navigation={navigation} />
       <View style={styles.form}>
         <View style={styles.DetailsContainer}>
@@ -108,7 +99,6 @@ Deal with bad or empty inputs before sending request
             title={'First Name'}
             setField={setFirstName}
             value={first_name}
-            placeholder={context.currentUser.first_name}
             type={'name'}
           />
           <FormField
@@ -116,7 +106,6 @@ Deal with bad or empty inputs before sending request
             title={'Last Name'}
             setField={setLastName}
             value={last_name}
-            placeholder={context.currentUser.last_name}
             type={'name'}
           />
         </View>
