@@ -2,7 +2,8 @@ import {collection, doc, getDocs} from 'firebase/firestore';
 
 /**
  * Get all the items to add them to the coffee shop.
- * @returns {Promise<void>}
+ * @param db firestore access
+ * @returns {Promise<[]>} items
  */
 export async function getItems(db) {
   const items = [];
