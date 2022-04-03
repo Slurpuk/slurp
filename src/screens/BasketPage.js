@@ -12,7 +12,10 @@ import {
   getItemFullPrice,
   removeFromBasket,
 } from '../helpers/screenHelpers';
-import {initializePaymentSheet, openPaymentSheet} from '../helpers/paymentHelpers';
+import {
+  initializePaymentSheet,
+  openPaymentSheet,
+} from '../helpers/paymentHelpers';
 import {Alerts} from '../data/Alerts';
 import {sendOrder} from '../firebase/queries';
 import {BlurView} from '@react-native-community/blur';
@@ -124,7 +127,8 @@ const BasketPage = ({navigation}) => {
         value={{
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
-        }}>
+        }}
+      >
         <View style={styles.basket}>
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.name}

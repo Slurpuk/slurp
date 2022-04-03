@@ -51,7 +51,8 @@ const WelcomePages = ({navigation}) => {
         onScroll={(event: any) => {
           setSliderPage(event);
         }}
-        testID={'welcome_pages_scrollview'}>
+        testID={'welcome_pages_scrollview'}
+      >
         <View style={styles.component} testID={'welcome_page1'}>
           <Text style={[textStyles.blueJosefinHeading, styles.title]}>
             Welcome to Slurp!
@@ -90,7 +91,8 @@ const WelcomePages = ({navigation}) => {
           />
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={proceedToLogIn}>
+            onPress={proceedToLogIn}
+          >
             Already have an account? Log in
           </Text>
         </View>
