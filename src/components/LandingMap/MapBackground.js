@@ -1,13 +1,12 @@
-import React, {useEffect, useContext, useRef, useMemo, useState} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Keyboard,
-  Image,
-  Button,
-} from 'react-native';
+import React, {
+  useEffect,
+  useContext,
+  useRef,
+  useMemo,
+  useState,
+  useCallback,
+} from 'react';
+import {Platform, StyleSheet, Text, View, Keyboard, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
@@ -21,21 +20,29 @@ import mapStyles from '../../../stylesheets/mapStyles';
 import {Alerts} from '../../data/Alerts';
 
 export default function MapBackground({
-  searchBarFocused,
   setSearchBarFocussed,
-    setFocusMarker,
+  setFocusMarker,
+  setRecenterVisible,
 }) {
   const context = useContext(GlobalContext);
   const watchID = useRef(); //used to watch the users location
-  const [isUserCentered, setIsUserCentered] = useState(true);
+  const [userLocation, setUserLocation] = useState(
+    context.currentUser.location,
+  );
+  const isUserCentered = useRef(true);
   const [mapCenter, setMapCenter] = useState({
-    latitude: context.currentUser.location.latitude,
-    longitude: context.currentUser.location.longitude,
+    latitude: userLocation.latitude,
+    longitude: userLocation.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-
-
+  const focusMarker = useCallback(() => {
+    setMapCenter(prevState => ({
+      ...prevState,
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+    }));
+  }, [userLocation.latitude, userLocation.longitude]);
   const markers = useMemo(() => {
     return context.shopsData.map(shop => ({
       name: shop.name,
@@ -50,18 +57,54 @@ export default function MapBackground({
   }, [context.shopsData]); // Load the shop markers on the map every time the shops data changes
 
   /**
-   * Setup location access on map load. Remove the location access when this component is unmounted
+   * Update the map center according to the current states.
+   */
+  const updateMapCenter = useCallback((latitude, longitude) => {
+    if (isUserCentered.current) {
+      setMapCenter(prevState => {
+        return {
+          ...prevState,
+          latitude: latitude,
+          longitude: longitude,
+        };
+      });
+    }
+  }, []);
+
+  /**
+   * Side effect for passing the focusMarker function to the parent component
    */
   useEffect(() => {
     setFocusMarker.current = focusMarker;
+  }, [focusMarker, setFocusMarker]);
+
+  /**
+   * Side effect for tracking whether the map is centered around the user and updating the states accordingly.
+   */
+  useEffect(() => {
+    if (
+      userLocation.latitude.toPrecision(6) ===
+        mapCenter.latitude.toPrecision(6) &&
+      userLocation.longitude.toPrecision(6) ===
+        mapCenter.longitude.toPrecision(6)
+    ) {
+      isUserCentered.current = true;
+      setRecenterVisible(false);
+    }
+  }, [mapCenter, setRecenterVisible, userLocation]);
+
+  /**
+   * Setup location access on map load. Remove the location access when this component is unmounted
+   */
+  useEffect(() => {
     if (!context.locationIsEnabled) {
       let currWatch = watchID.current;
       requestLocationPermission(
+        setUserLocation,
         context.currentUser.ref,
-        setMapCenter,
         watchID,
         context.setLocationIsEnabled,
-        isUserCentered,
+        updateMapCenter,
       ).catch(error => Alerts.elseAlert());
       return () => {
         Geolocation.clearWatch(currWatch);
@@ -71,25 +114,25 @@ export default function MapBackground({
     context.currentUser.ref,
     context.setLocationIsEnabled,
     context.locationIsEnabled,
-    isUserCentered,
+    updateMapCenter,
   ]);
 
   /**
-   * dismiss the keyboard and search results when the map is clicked
+   * Dismiss the keyboard and search results when the map is clicked
    */
   const mapPressed = () => {
-    setIsUserCentered(false);
     setSearchBarFocussed(false);
     Keyboard.dismiss();
   };
 
-  const focusMarker = () => {
-    setMapCenter(prevState => ({
-      ...prevState,
-      latitude: context.currentUser.location.latitude,
-      longitude: context.currentUser.location.longitude,
-    }));
-  };
+  /**
+   * Set appropriate states when the map is dragged
+   */
+  function mapDragged() {
+    mapPressed();
+    isUserCentered.current = false;
+    setRecenterVisible(true);
+  }
 
   return (
     <View style={styles.container}>
@@ -97,8 +140,10 @@ export default function MapBackground({
         onRegionChangeComplete={region => {
           if (Platform.OS === 'ios') {
             if (
-              region.latitude.toFixed(6) !== mapCenter.latitude.toFixed(6) &&
-              region.longitude.toFixed(6) !== mapCenter.longitude.toFixed(6)
+              region.latitude.toPrecision(6) !==
+                mapCenter.latitude.toPrecision(6) &&
+              region.longitude.toPrecision(6) !==
+                mapCenter.longitude.toPrecision(6)
             ) {
               setMapCenter(region);
             }
@@ -108,7 +153,7 @@ export default function MapBackground({
         }}
         //focus only on map when map pressed
         onPress={() => mapPressed()}
-        onPanDrag={() => mapPressed()}
+        onPanDrag={() => mapDragged()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={mapCenter}
@@ -141,15 +186,16 @@ export default function MapBackground({
         <Marker
           draggable
           coordinate={{
-            latitude: context.currentUser.location.latitude,
-            longitude: context.currentUser.location.longitude,
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
           }}
           onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
           onPress={() => focusMarker()}
-          title={'Current Location'}>
+          title={'You are here'}
+        >
           <Image
             source={require('../../assets/images/dot.png')}
-            style={{height: 45, width: 45}}
+            style={styles.userMarker}
           />
         </Marker>
       </MapView>
@@ -163,4 +209,5 @@ const styles = StyleSheet.create({
   markerBg: mapStyles.markerBg,
   markerStyle: mapStyles.markerStyle,
   closed: {color: 'coral', fontWeight: 'bold', top: 0},
+  userMarker: {height: 45, width: 45},
 });
