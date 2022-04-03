@@ -61,6 +61,9 @@ describe('Navigation to shop menu in diferent ways', () => {
   afterAll(async () => {
     await element(by.id('hamburger_menu_button')).tap();
     await element(by.text('Logout')).tap();
+    await element(
+      by.label('Yes').and(by.type('_UIAlertControllerActionView')),
+    ).tap();
   });
   describe('Navigation to shop page via shop list', function () {
     it('should be able to slide the bottom sheet up', async function () {

@@ -29,6 +29,9 @@ describe('Log in', () => {
   afterAll(async () => {
     await element(by.id('hamburger_menu_button')).tap();
     await element(by.text('Logout')).tap();
+    await element(
+      by.label('Yes').and(by.type('_UIAlertControllerActionView')),
+    ).tap();
   });
 
   it('should be able to navigate to log in page from welcome pages', async function () {
