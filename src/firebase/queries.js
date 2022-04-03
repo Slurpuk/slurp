@@ -36,13 +36,7 @@ async function getOptions() {
       options[0].data.sort((a, b) => a.name.localeCompare(b.name));
       options[0].data.unshift(dairy);
     })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
   return options;
 }
 
@@ -56,13 +50,7 @@ async function updateUserLocation(userRef, latitude, longitude) {
   await firestore()
     .doc(userRef.path)
     .update({location: new firestore.GeoPoint(latitude, longitude)})
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
@@ -76,8 +64,6 @@ async function setUserObject(user, setUser) {
     .where('email', '==', user.email)
     .get()
     .then(async querySnapshot => {
-      if (querySnapshot.docs.length === 0) {
-      }
       let userModel = querySnapshot.docs[0];
       let newUser = {
         ...userModel.data(),
@@ -86,13 +72,7 @@ async function setUserObject(user, setUser) {
       };
       setUser(newUser);
     })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
@@ -119,13 +99,7 @@ async function getOrderItem(orderItem) {
         );
       }
     })
-    .catch(error => {
-      if (error.code === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 
   return newItem;
 }
@@ -145,13 +119,7 @@ async function getOrderOption(optionRef) {
         key: doc.id,
       };
     })
-    .catch(error => {
-      if (error.code === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
   return newOption;
 }
 
@@ -168,13 +136,7 @@ async function getOrderShop(order) {
     .then(document => {
       shop = document.data();
     })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
   return shop;
 }
 
@@ -220,9 +182,7 @@ async function createUserModel(email, first_name, last_name) {
       last_name: last_name,
       location: new firestore.GeoPoint(51.5140310233705, -0.1164075624320158),
     })
-    .catch(error => {
-      Alerts.databaseErrorAlert();
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
@@ -231,11 +191,16 @@ async function createUserModel(email, first_name, last_name) {
  * @param password The password
  */
 async function createUserAuth(email, password) {
-  await auth()
+  const query = auth()
     .createUserWithEmailAndPassword(email, password)
-    .catch(error => {
-      handleSignUpErrorsBackEnd(error.code);
-    });
+    .catch(error => handleSignUpErrorsBackEnd(error.code));
+  try {
+    await asyncCallWithTimeout(query, 5000);
+  } catch (err) {
+    err.message === queryTimeOutMessage
+      ? Alerts.connectionErrorAlert()
+      : Alerts.databaseErrorAlert();
+  }
 }
 
 /**
@@ -244,17 +209,14 @@ async function createUserAuth(email, password) {
  */
 function handleSignUpErrorsBackEnd(errorCode) {
   if (errorCode === 'auth/network-request-failed') {
-    Alert.alert(CustomAlerts.NO_NETWORK.title, CustomAlerts.NO_NETWORK.message);
+    Alerts.networkAlert();
   } else if (errorCode === 'auth/email-already-in-use') {
-    Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    Alerts.elseAlert();
     // This is not ideal, implementing a confirm email feature would allow us to show the same message as if a confirmation email had been sent.
   } else if (errorCode === 'auth/too-many-requests') {
-    Alert.alert(
-      CustomAlerts.MANY_REQUESTS.title,
-      CustomAlerts.MANY_REQUESTS.message,
-    );
+    Alerts.tooManyRequestsAlert();
   } else {
-    Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    Alerts.elseAlert();
   }
 }
 
