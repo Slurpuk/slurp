@@ -7,9 +7,10 @@ import {processDistance} from '../../helpers/screenHelpers';
 
 export default function ShopDetailIcons({distanceToShop}) {
   return (
-    <View style={DetailIconsStyles.container}>
+    <View testID="shop-details" style={DetailIconsStyles.container}>
       <Icon size={24} color="#FFE" name="walk" />
-      <Text style={[textStyles.iconText, DetailIconsStyles.spacing]}>
+      <Text style={[textStyles.iconText, DetailIconsStyles.spacing]} testID="shop-distance">
+
         {processDistance(distanceToShop)}
       </Text>
     </View>
