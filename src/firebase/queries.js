@@ -1,8 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import {Alerts} from '../data/Alerts';
 import auth from '@react-native-firebase/auth';
-import {Alert} from 'react-native';
-import {CustomAlerts} from '../sub-components/Alerts';
+const queryTimeOutMessage = 'firestore query call timeout limit reached';
 
 /**
  * Separates the items offered by the shop into 3 sections: coffees, drinks and snacks.
@@ -37,13 +36,7 @@ async function getOptions() {
       options[0].data.sort((a, b) => a.name.localeCompare(b.name));
       options[0].data.unshift(dairy);
     })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
   return options;
 }
 
@@ -57,13 +50,7 @@ async function updateUserLocation(userRef, latitude, longitude) {
   await firestore()
     .doc(userRef.path)
     .update({location: new firestore.GeoPoint(latitude, longitude)})
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
@@ -77,8 +64,6 @@ async function setUserObject(user, setUser) {
     .where('email', '==', user.email)
     .get()
     .then(async querySnapshot => {
-      if (querySnapshot.docs.length === 0) {
-      }
       let userModel = querySnapshot.docs[0];
       let newUser = {
         ...userModel.data(),
@@ -87,13 +72,7 @@ async function setUserObject(user, setUser) {
       };
       setUser(newUser);
     })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
@@ -120,13 +99,7 @@ async function getOrderItem(orderItem) {
         );
       }
     })
-    .catch(error => {
-      if (error.code === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 
   return newItem;
 }
@@ -146,13 +119,7 @@ async function getOrderOption(optionRef) {
         key: doc.id,
       };
     })
-    .catch(error => {
-      if (error.code === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
   return newOption;
 }
 
@@ -169,13 +136,7 @@ async function getOrderShop(order) {
     .then(document => {
       shop = document.data();
     })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+    .catch(() => Alerts.databaseErrorAlert());
   return shop;
 }
 
@@ -187,23 +148,23 @@ async function getOrderShop(order) {
  * @param total The total amount of the order
  */
 async function sendOrder(items, shopRef, userRef, total) {
-  await firestore()
-    .collection('orders')
-    .add({
-      incoming_time: new firestore.Timestamp.now(),
-      items: items,
-      status: 'incoming',
-      shop: shopRef,
-      user: userRef,
-      is_displayed: true,
-    })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+  const query = firestore().collection('orders').add({
+    incoming_time: new firestore.Timestamp.now(),
+    items: items,
+    status: 'incoming',
+    shop: shopRef,
+    user: userRef,
+    is_displayed: true,
+  });
+  try {
+    await asyncCallWithTimeout(query, 5000);
+    return true;
+  } catch (err) {
+    err.message === queryTimeOutMessage
+      ? Alerts.connectionErrorAlert()
+      : Alerts.databaseErrorAlert();
+    return false;
+  }
 }
 
 /**
@@ -221,9 +182,7 @@ async function createUserModel(email, first_name, last_name) {
       last_name: last_name,
       location: new firestore.GeoPoint(51.5140310233705, -0.1164075624320158),
     })
-    .catch(error => {
-      Alerts.databaseErrorAlert();
-    });
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
@@ -232,11 +191,16 @@ async function createUserModel(email, first_name, last_name) {
  * @param password The password
  */
 async function createUserAuth(email, password) {
-  await auth()
+  const query = auth()
     .createUserWithEmailAndPassword(email, password)
-    .catch(error => {
-      handleSignUpErrorsBackEnd(error.code);
-    });
+    .catch(error => handleSignUpErrorsBackEnd(error.code));
+  try {
+    await asyncCallWithTimeout(query, 5000);
+  } catch (err) {
+    err.message === queryTimeOutMessage
+      ? Alerts.connectionErrorAlert()
+      : Alerts.databaseErrorAlert();
+  }
 }
 
 /**
@@ -245,17 +209,14 @@ async function createUserAuth(email, password) {
  */
 function handleSignUpErrorsBackEnd(errorCode) {
   if (errorCode === 'auth/network-request-failed') {
-    Alert.alert(CustomAlerts.NO_NETWORK.title, CustomAlerts.NO_NETWORK.message);
+    Alerts.networkAlert();
   } else if (errorCode === 'auth/email-already-in-use') {
-    Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    Alerts.elseAlert();
     // This is not ideal, implementing a confirm email feature would allow us to show the same message as if a confirmation email had been sent.
   } else if (errorCode === 'auth/too-many-requests') {
-    Alert.alert(
-      CustomAlerts.MANY_REQUESTS.title,
-      CustomAlerts.MANY_REQUESTS.message,
-    );
+    Alerts.tooManyRequestsAlert();
   } else {
-    Alert.alert(CustomAlerts.ELSE.title, CustomAlerts.ELSE.message);
+    Alerts.elseAlert();
   }
 }
 
@@ -295,6 +256,27 @@ async function getOptionRef(option) {
   return optionRef;
 }
 
+/**
+ * Call an async function with a maximum time limit (in milliseconds) for the timeout
+ * @param {Promise<any>} asyncPromise An asynchronous promise to resolve
+ * @param {number} timeLimit Time limit to attempt function in milliseconds
+ * @returns {Promise<any> | undefined} Resolved promise for async function call, or an error if time limit reached
+ */
+const asyncCallWithTimeout = async (asyncPromise, timeLimit) => {
+  let timeoutHandle;
+
+  const timeoutPromise = new Promise((_resolve, reject) => {
+    timeoutHandle = setTimeout(
+      () => reject(new Error(queryTimeOutMessage)),
+      timeLimit,
+    );
+  });
+
+  return Promise.race([asyncPromise, timeoutPromise]).then(result => {
+    clearTimeout(timeoutHandle);
+    return result;
+  });
+};
 export {
   getOptions,
   updateUserLocation,

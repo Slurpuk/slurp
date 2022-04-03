@@ -17,8 +17,8 @@ export default function MapBackground({
   setSearchBarFocussed,
 }) {
   const context = useContext(GlobalContext);
-  //used to watch the users location
-  const watchID = useRef();
+  const watchID = useRef(); //used to watch the users location
+  const [isUserCentered, setIsUserCentered] = useState(true);
   const [mapCenter, setMapCenter] = useState({
     latitude: context.currentUser.location.latitude,
     longitude: context.currentUser.location.longitude,
@@ -37,9 +37,11 @@ export default function MapBackground({
       image: shop.image,
       is_open: shop.is_open,
     }));
-  }, [context.shopsData]);
+  }, [context.shopsData]); // Load the shop markers on the map every time the shops data changes
 
-  //setup location access on map load. remove the location access when this component is unmounted
+  /**
+   * Setup location access on map load. Remove the location access when this component is unmounted
+   */
   useEffect(() => {
     if (!context.locationIsEnabled) {
       let currWatch = watchID.current;
@@ -48,6 +50,7 @@ export default function MapBackground({
         setMapCenter,
         watchID,
         context.setLocationIsEnabled,
+        isUserCentered,
       ).catch(error => Alerts.elseAlert());
       return () => {
         Geolocation.clearWatch(currWatch);
@@ -57,10 +60,14 @@ export default function MapBackground({
     context.currentUser.ref,
     context.setLocationIsEnabled,
     context.locationIsEnabled,
+    isUserCentered,
   ]);
 
-  //dismiss the keyboard and search results when the map is clicked
+  /**
+   * dismiss the keyboard and search results when the map is clicked
+   */
   const mapPressed = () => {
+    setIsUserCentered(false);
     setSearchBarFocussed(false);
     Keyboard.dismiss();
   };
