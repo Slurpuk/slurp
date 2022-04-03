@@ -69,6 +69,10 @@ export const AlertMessage = {
     title: 'Order sent!',
     message: 'Your order has been sent to the shop! Awaiting response.',
   },
+  LOGOUT: {
+    title: 'Logout',
+    message: 'You are about to logout, are you sure?',
+  },
 };
 
 /*

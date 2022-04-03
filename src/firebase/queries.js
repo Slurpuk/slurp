@@ -257,6 +257,20 @@ async function getOptionRef(option) {
 }
 
 /**
+ * Logout the current user if there's one currently logged in.
+ */
+async function logout() {
+  const query = await auth().signOut();
+  try {
+    await asyncCallWithTimeout(query, 5000);
+  } catch (err) {
+    err.message === queryTimeOutMessage
+      ? Alerts.connectionErrorAlert()
+      : Alerts.databaseErrorAlert();
+  }
+}
+
+/**
  * Call an async function with a maximum time limit (in milliseconds) for the timeout
  * @param {Promise<any>} asyncPromise An asynchronous promise to resolve
  * @param {number} timeLimit Time limit to attempt function in milliseconds
@@ -288,4 +302,5 @@ export {
   createUserAuth,
   getItemRef,
   getOptionRef,
+  logout,
 };

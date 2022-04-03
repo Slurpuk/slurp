@@ -11,9 +11,8 @@ import {
 /**
  * Format the orders to be displayed as current orders.
  * @param orders the orders to format
- * @param setCurrentOrders The setState method to set the current orders
  */
-async function formatCurrentOrders(orders, setCurrentOrders) {
+async function formatCurrentOrders(orders) {
   let newOrders = await formatOrdersItems(orders);
   let finalOrders = [];
   await Promise.all(
@@ -22,16 +21,15 @@ async function formatCurrentOrders(orders, setCurrentOrders) {
       finalOrders.push(order);
     }),
   );
-  setCurrentOrders(finalOrders);
+  return finalOrders;
 }
 
 /**
  * Format the orders to be displayed as past orders.
  * @param orders the orders to format
- * @param setPastOrders The setState method to set the past orders
  *
  */
-async function formatPastOrders(orders, setPastOrders) {
+async function formatPastOrders(orders) {
   let periods = [];
   orders.forEach(order => {
     if (!periods.find(x => x.period === order.period)) {
@@ -49,7 +47,7 @@ async function formatPastOrders(orders, setPastOrders) {
         : finalOrders.push({period: order.period, data: [order]});
     }),
   );
-  setPastOrders(finalOrders);
+  return finalOrders;
 }
 
 /**
@@ -304,10 +302,8 @@ async function getFormattedShops(shopsData) {
         },
       };
       shopData.items = await getFormattedItems(documentSnapshot.data());
-      await getOptions().then(options => {
-        shopData.options = options;
-        shops.push(shopData);
-      });
+      shopData.options = await getOptions();
+      shops.push(shopData);
     }),
   );
   return shops;

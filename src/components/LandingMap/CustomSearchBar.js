@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import {GlobalContext} from '../../../App';
-import textStyles from "../../../stylesheets/textStyles";
+import textStyles from '../../../stylesheets/textStyles';
 const screenHeight = Dimensions.get('window').height;
 
 const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
@@ -132,9 +132,10 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
             }}
           /> : <Text style={[textStyles.greyPoppins, styles.noResultsText]}>
               Sorry! {'\n\n'}
-              Nothing seems to match this phrase. {'\n'}
-              Please try a different query
-            </Text> }
+              No shop goes by this name. {'\n'}
+              Please try a different one.
+            </Text>
+          }
         </View>
       ) : null}
     </View>
@@ -166,8 +167,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: 'whitesmoke',
   },
-  searchResultContainer: { width: screenWidth * 0.7,
-  },
+  searchResultContainer: {width: screenWidth * 0.7},
 
   container: {
     borderRadius: 20,

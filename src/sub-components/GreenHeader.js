@@ -4,6 +4,11 @@ import WhiteArrowButton from './WhiteArrowButton';
 import textStyles from '../../stylesheets/textStyles';
 import {getTightPadding} from '../../stylesheets/StyleFunction';
 
+/**
+ * Custom green header reused throughout the app in most screens.
+ * @param headerText The header text
+ * @param navigation The navigation object
+ */
 const GreenHeader = ({headerText, navigation}) => {
   return (
     <View style={styles.header}>

@@ -1,6 +1,6 @@
 import React, {useContext, useMemo, useState} from 'react';
 import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
-import renderers from '../renderers';
+import renderers from '../components/ShopMenu/renderers';
 import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import DraggableShopPage from '../components/Shops/DraggableShopPage';
