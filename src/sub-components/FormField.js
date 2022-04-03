@@ -1,6 +1,17 @@
 import React from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
+
+/**
+ * Custom form field reused throughout the app.
+ * @param style
+ * @param title
+ * @param placeholder
+ * @param setField
+ * @param value
+ * @param type
+ * @param testID
+ */
 const FormField = ({
   style,
   title = 'Title',
