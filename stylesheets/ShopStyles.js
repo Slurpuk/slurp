@@ -100,7 +100,8 @@ const OptionStyles = StyleSheet.create({
       ios: {
         height: 14,
       },
-      android: {},
+      android: {
+      },
     }),
   },
 });

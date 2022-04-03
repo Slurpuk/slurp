@@ -1,4 +1,4 @@
-import {Text, View} from 'react-native';
+import { Pressable, Text, View } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
 import React, {useContext, useEffect, useState} from 'react';
 import {OptionsContext} from './OptionsPopUp';
@@ -44,32 +44,37 @@ export default function Option({option, updateOptions}) {
           disabled={isDisabled}
           value={toggleCheckBox}
           onValueChange={newValue => update(newValue)}
-          boxType="square"
+          boxType="circle"
           onCheckColor="white"
           animationDuration={0.2}
         />
       </View>
-      <View style={[OptionStyles.container]}>
-        <Text
-          style={
-            toggleCheckBox ? textStyles.optionsTextBold : textStyles.optionsText
-          }
-        >
-          {option.name}
-        </Text>
-        {option.price !== 0 && (
+      <Pressable onPress={() => {
+        setToggleCheckBox(!toggleCheckBox)
+        updateOptions(option, !toggleCheckBox)
+      }}>
+        <View style={[OptionStyles.container]}>
           <Text
             style={
-              toggleCheckBox
-                ? textStyles.optionsTextBold
-                : textStyles.optionsText
+              toggleCheckBox ? textStyles.optionsTextBold : textStyles.optionsText
             }
           >
-            {' '}
-            +{option.price < 1 ? option.price * 100 : option.price}p
+            {option.name}
           </Text>
-        )}
-      </View>
+          {option.price !== 0 && (
+            <Text
+              style={
+                toggleCheckBox
+                  ? textStyles.optionsTextBold
+                  : textStyles.optionsText
+              }
+            >
+              {' '}
+              +{option.price < 1 ? option.price * 100 : option.price}p
+            </Text>
+          )}
+        </View>
+      </Pressable>
     </View>
   );
 }
