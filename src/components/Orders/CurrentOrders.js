@@ -11,6 +11,7 @@ export const CurrentOrders = props => {
         data={props.currentOrders}
         renderItem={({item}) => <CollapsableOrder order={item} />}
         ListEmptyComponent={<EmptyListText text={props.emptyText} />}
+        testID={'current_orders_page'}
       />
     </>
   );
