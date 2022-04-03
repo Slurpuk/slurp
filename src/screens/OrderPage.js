@@ -54,41 +54,41 @@ const OrderPage = ({navigation}) => {
   }, [context.currentUser.ref, loading]);
 
   return (
-      <View style={styles.container}>
-        <GreenHeader
-          headerText={'ORDERS'}
-          navigation={navigation}
-          testID={'orders_page'}
-        />
-        <Tab.Navigator
-          style={styles.navigatorContent}
-          screenOptions={ScreenOptionsStyles}>
-          <Tab.Screen name="Current">
-            {() =>
-              !loading.current ? (
-                <CurrentOrders
-                  currentOrders={currentOrders}
-                  emptyText={emptyCurrentOrdersText}
-                />
-              ) : (
-                <LoadingPage />
-              )
-            }
-          </Tab.Screen>
-          <Tab.Screen name="Past">
-            {() =>
-              !loading.past ? (
-                <PastOrders
-                  pastOrders={pastOrders}
-                  emptyText={emptyPastOrdersText}
-                />
-              ) : (
-                <LoadingPage />
-              )
-            }
-          </Tab.Screen>
-        </Tab.Navigator>
-      </View>
+    <View style={styles.container} testID={'orders_page'}>
+      <GreenHeader
+        headerText={'ORDERS'}
+        navigation={navigation}
+        testID={'orders_page'}
+      />
+      <Tab.Navigator
+        style={styles.navigatorContent}
+        screenOptions={ScreenOptionsStyles}>
+        <Tab.Screen name="Current">
+          {() =>
+            !loading.current ? (
+              <CurrentOrders
+                currentOrders={currentOrders}
+                emptyText={emptyCurrentOrdersText}
+              />
+            ) : (
+              <LoadingPage />
+            )
+          }
+        </Tab.Screen>
+        <Tab.Screen name="Past">
+          {() =>
+            !loading.past ? (
+              <PastOrders
+                pastOrders={pastOrders}
+                emptyText={emptyPastOrdersText}
+              />
+            ) : (
+              <LoadingPage />
+            )
+          }
+        </Tab.Screen>
+      </Tab.Navigator>
+    </View>
   );
 };
 

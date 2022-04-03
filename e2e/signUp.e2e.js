@@ -129,11 +129,11 @@ describe('Sign up', () => {
     await element(by.text('Logout')).tap();
 
     await expect(
-      element(by.label('Cancel').and(by.type('_UIAlertControllerActionView'))),
+      element(by.label('No').and(by.type('_UIAlertControllerActionView'))),
     ).toBeVisible();
 
     await element(
-      by.label('Cancel').and(by.type('_UIAlertControllerActionView')),
+      by.label('No').and(by.type('_UIAlertControllerActionView')),
     ).tap();
   });
   it('should be able to log out', async () => {

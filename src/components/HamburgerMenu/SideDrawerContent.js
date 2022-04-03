@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {GlobalContext} from '../../../App';
 import {Alerts} from '../../data/Alerts';
 import {logout} from '../../firebase/queries';
@@ -21,16 +21,18 @@ function SideDrawerContent(props) {
 
   return (
     <DrawerContentScrollView {...props}>
-        <Close.Button
-          onPress={() => props.navigation.closeDrawer()}
-          name="close"
-          color={'#173C4F'}
-          underlayColor={'transparent'}
-          backgroundColor={'transparent'}
-          size={25}
-          style={styles.close_button}
-        />
-      <Text style={styles.welcome_text}>Hi {context.currentUser.first_name}!</Text>
+      <Close.Button
+        onPress={() => props.navigation.closeDrawer()}
+        name="close"
+        color={'#173C4F'}
+        underlayColor={'transparent'}
+        backgroundColor={'transparent'}
+        size={25}
+        style={styles.close_button}
+      />
+      <Text style={styles.welcome_text}>
+        Hi {context.currentUser.first_name}!
+      </Text>
       <DrawerItem
         label="My orders"
         onPress={() => {
