@@ -111,7 +111,8 @@ export default function MapBackground({
         onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter}>
+        region={mapCenter}
+      >
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -124,7 +125,8 @@ export default function MapBackground({
                 await locationPress(context, setMapCenter, marker.name);
               }
               mapPressed();
-            }}>
+            }}
+          >
             {/*//closed markers appear grey*/}
             <View style={styles.markerStyle}>
               <Text style={styles.closed}>

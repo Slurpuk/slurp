@@ -52,7 +52,8 @@ const OrderPage = ({navigation}) => {
       ) : (
         <Tab.Navigator
           style={styles.navigatorContent}
-          screenOptions={ScreenOptionsStyles}>
+          screenOptions={ScreenOptionsStyles}
+        >
           <Tab.Screen name="Current">
             {() => (
               <CurrentOrders

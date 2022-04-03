@@ -107,7 +107,7 @@ const subscribeLocationLocation = (
           return prevState;
         }
       });
-      if (userRef && BigChange && isUserCentered) {
+      if (userRef && BigChange) {
         updateUserLocation(userRef, latitude, longitude).catch(error => {
           Alerts.elseAlert();
         });
