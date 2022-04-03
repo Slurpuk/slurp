@@ -29,11 +29,11 @@ export default function LandingMapPage({navigation}) {
   //do search results and cover need showing
   const [searchBarFocused, setSearchBarFocused] = useState(false);
   const setFocusMarker = useRef();
+  const [recenterVisible, setRecenterVisible] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
       setHamburgerVisible(true);
-
       return () => {
         setHamburgerVisible(false);
       };
@@ -50,8 +50,8 @@ export default function LandingMapPage({navigation}) {
         {/*//the map component*/}
         <MapBackground
           setFocusMarker={setFocusMarker}
-          searchBarFocused={searchBarFocused}
           setSearchBarFocussed={setSearchBarFocused}
+          setRecenterVisible={setRecenterVisible}
         />
 
         {/*wrapper for aligning hamburger menu with search bar*/}
@@ -64,27 +64,16 @@ export default function LandingMapPage({navigation}) {
             setSearchBarFocussed={setSearchBarFocused}
           />
         </View>
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            bottom: 100,
-            right: 20,
-            alignSelf: 'center',
-            backgroundColor: '#087562',
-            borderRadius: 20,
-            width: 50,
-            height: 50,
-            paddingRight: 10,
-          }}
-          onPress={() => setFocusMarker.current()}>
-          <Image
-            source={require('../../src/assets/images/recenter-icon.png')}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          />
-        </TouchableOpacity>
+        {recenterVisible ? (
+          <TouchableOpacity
+            style={styles.recenterButton}
+            onPress={() => setFocusMarker.current()}>
+            <Image
+              source={require('../../src/assets/images/recenter-icon.png')}
+              style={styles.recenterImage}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
 
       {/*show the relevant bottom sheet*/}
@@ -103,4 +92,19 @@ const styles = StyleSheet.create({
   searchWrapper: mapStyles.searchWrapper,
   newHamburger: mapStyles.newHamburger,
   searchBar: mapStyles.searchBar,
+  recenterButton: {
+    position: 'absolute',
+    bottom: 100,
+    right: 20,
+    alignSelf: 'center',
+    backgroundColor: '#087562',
+    borderRadius: 20,
+    width: 50,
+    height: 50,
+    paddingRight: 10,
+  },
+  recenterImage: {
+    width: 50,
+    height: 50,
+  },
 });
