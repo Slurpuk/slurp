@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {BackHandler, Pressable} from 'react-native';
+import React from 'react';
+import {Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const WhiteArrowButton = ({
@@ -43,7 +43,7 @@ const WhiteArrowButton = ({
         },
         customStyle,
       ]}
-    >
+      testID={'back_arrow'}>
       <Icon name={iconName} color={'white'} size={34} />
     </Pressable>
   );

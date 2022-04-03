@@ -100,7 +100,9 @@ export default function MapBackground({
               mapPressed();
             }}>
             {/*//closed markers appear grey*/}
-            <View style={styles.markerStyle}>
+            <View
+              style={styles.markerStyle}
+              testID={'shop_marker_' + marker.name}>
               <Text style={styles.closed}>
                 {!marker.is_open ? 'Closed' : ''}
               </Text>
