@@ -72,8 +72,14 @@ const getOneTimeLocation = setMapCenter => {
  * @param userRef The id of the current user
  * @param setMapCenter The setState method for the current center point of the map
  * @param watchID The watchID for tracking the user's position
+ * @param isUserCentered Does the map center around the user's current location
  */
-const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
+const subscribeLocationLocation = (
+  setMapCenter,
+  watchID,
+  userRef,
+  isUserCentered,
+) => {
   watchID.current = Geolocation.watchPosition(
     async position => {
       //Will give you the location on location change
@@ -88,7 +94,8 @@ const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
             latitude,
             prevState.longitude,
             longitude,
-          )
+          ) &&
+          isUserCentered
         ) {
           BigChange = true;
           return {
@@ -100,7 +107,7 @@ const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
           return prevState;
         }
       });
-      if (userRef && BigChange) {
+      if (userRef && BigChange && isUserCentered) {
         updateUserLocation(userRef, latitude, longitude).catch(error => {
           Alerts.elseAlert();
         });
@@ -121,12 +128,14 @@ const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
  * @param setMapCenter The setState method for the current center point of the map
  * @param watchID The watchID for tracking the user's position
  * @param setIsLocationIsEnabled update the location permission
+ * @param isUserCentered Does the map center around the user's current location
  */
 export const requestLocationPermission = async (
   userRef,
   setMapCenter,
   watchID,
   setIsLocationIsEnabled,
+  isUserCentered,
 ) => {
   if (Platform.OS === 'ios') {
     Geolocation.requestAuthorization('whenInUse').then(async () => {
@@ -147,7 +156,12 @@ export const requestLocationPermission = async (
         //To Check, If Permission is granted
         setIsLocationIsEnabled(true);
         getOneTimeLocation(setMapCenter);
-        subscribeLocationLocation(setMapCenter, watchID, userRef);
+        subscribeLocationLocation(
+          setMapCenter,
+          watchID,
+          userRef,
+          isUserCentered,
+        );
       }
     } catch (err) {
       console.log(err);
