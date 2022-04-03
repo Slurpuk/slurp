@@ -27,7 +27,9 @@ const OrderDetailsView = ({order}) => {
           >
             {order.shop.name}
           </Text>
-          {getStatusAndDateComponent(order)}
+          <Text style={styles.orderId}>
+            #{order.key}
+          </Text>
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
             {getItemsText(order)}
           </Text>
@@ -55,38 +57,6 @@ function getItemsText(order) {
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
-}
-
-/**
- * Returns a component that indicates the date of completion of an order.
- * This can include the current date if the order has not been completed.
- * @param order Order object
- * @return Component
- */
-function getStatusAndDateComponent(order) {
-  let dateAndTime = order.incoming_time.toDate().toDateString();
-  if (
-    order.Status === OrderStatus.COLLECTED ||
-    order.Status === OrderStatus.REJECTED
-  ) {
-    return (
-      <Text
-        style={[
-          textStyles.lightGreyPoppins,
-          styles.textFlex,
-          styles.finishedOrder,
-        ]}
-      >
-        {order.status} {dateAndTime}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
-        {dateAndTime}
-      </Text>
-    );
-  }
 }
 
 /**
@@ -118,7 +88,6 @@ const styles = StyleSheet.create({
     height: 74,
     marginRight: 15,
   },
-
   textFlex: {
     flex: 1,
     overflow: 'hidden',
@@ -133,5 +102,8 @@ const styles = StyleSheet.create({
   cancelledOrder: {
     color: '#8C233C',
   },
+  orderId:{
+    marginVertical: '5%',
+  }
 });
 export default OrderDetailsView;
