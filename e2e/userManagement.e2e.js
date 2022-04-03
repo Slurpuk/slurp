@@ -39,7 +39,6 @@ describe('User management pages', () => {
     await element(by.id('log_in_page_email')).replaceText(email);
     await element(by.id('log_in_page_password')).replaceText(password);
     await element(by.text('Log in')).tap();
-    await element(by.id('hamburger_menu_button')).tap();
   });
 
   afterAll(async () => {
@@ -53,6 +52,7 @@ describe('User management pages', () => {
     it('should be able to navigate to page', async function () {
       await expect(element(by.id('update_details_page'))).not.toBeVisible();
 
+      await element(by.id('hamburger_menu_button')).tap();
       await element(by.label('Change details')).tap();
 
       await expect(element(by.id('update_details_page'))).toBeVisible();
