@@ -72,14 +72,16 @@ const BasketPage = ({navigation}) => {
    * Create and send a new order based on the current basket. Clear the basket and inform the user.
    */
   async function confirmOrder() {
-    await sendOrder(
+    const sent = await sendOrder(
       formatBasket(contents),
       context.currShop.ref,
       context.currentUser.ref,
       getTotal(),
     );
-    await context.currBasket.clear();
-    Alerts.orderSentAlert(navigation);
+    if (sent) {
+      await context.currBasket.clear();
+      Alerts.orderSentAlert(navigation);
+    }
   }
 
   /**

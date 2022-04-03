@@ -1,8 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import {Alerts} from '../data/Alerts';
 import auth from '@react-native-firebase/auth';
-import {Alert} from 'react-native';
-import {CustomAlerts} from '../sub-components/Alerts';
+const queryTimeOutMessage = 'firestore query call timeout limit reached';
 
 /**
  * Separates the items offered by the shop into 3 sections: coffees, drinks and snacks.
@@ -187,23 +186,23 @@ async function getOrderShop(order) {
  * @param total The total amount of the order
  */
 async function sendOrder(items, shopRef, userRef, total) {
-  await firestore()
-    .collection('orders')
-    .add({
-      incoming_time: new firestore.Timestamp.now(),
-      items: items,
-      status: 'incoming',
-      shop: shopRef,
-      user: userRef,
-      is_displayed: true,
-    })
-    .catch(error => {
-      if (error === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.databaseErrorAlert();
-      }
-    });
+  const query = firestore().collection('orders').add({
+    incoming_time: new firestore.Timestamp.now(),
+    items: items,
+    status: 'incoming',
+    shop: shopRef,
+    user: userRef,
+    is_displayed: true,
+  });
+  try {
+    await asyncCallWithTimeout(query, 5000);
+    return true;
+  } catch (err) {
+    err.message === queryTimeOutMessage
+      ? Alerts.connectionErrorAlert()
+      : Alerts.databaseErrorAlert();
+    return false;
+  }
 }
 
 /**
@@ -295,6 +294,27 @@ async function getOptionRef(option) {
   return optionRef;
 }
 
+/**
+ * Call an async function with a maximum time limit (in milliseconds) for the timeout
+ * @param {Promise<any>} asyncPromise An asynchronous promise to resolve
+ * @param {number} timeLimit Time limit to attempt function in milliseconds
+ * @returns {Promise<any> | undefined} Resolved promise for async function call, or an error if time limit reached
+ */
+const asyncCallWithTimeout = async (asyncPromise, timeLimit) => {
+  let timeoutHandle;
+
+  const timeoutPromise = new Promise((_resolve, reject) => {
+    timeoutHandle = setTimeout(
+      () => reject(new Error(queryTimeOutMessage)),
+      timeLimit,
+    );
+  });
+
+  return Promise.race([asyncPromise, timeoutPromise]).then(result => {
+    clearTimeout(timeoutHandle);
+    return result;
+  });
+};
 export {
   getOptions,
   updateUserLocation,
