@@ -1,30 +1,22 @@
 import React, {useContext} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
-import {Alert, StyleSheet} from 'react-native';
-import auth from '@react-native-firebase/auth';
+import {StyleSheet} from 'react-native';
 import {GlobalContext} from '../../../App';
+import {Alerts} from '../../data/Alerts';
+import {logout} from '../../firebase/queries';
 
+/**
+ * Sidebar drawer and its contents
+ */
 function SideDrawerContent(props) {
   const context = useContext(GlobalContext);
 
-  async function logout() {
-    try {
-      await auth().signOut();
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
+  /**
+   * Prompt the user before logging out
+   */
   function logoutPrompt() {
-    Alert.alert('Log Out', 'Are you sure you want to log out', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'Yes', onPress: () => logout()},
-    ]);
+    Alerts.logoutAlert(logout);
   }
 
   return (
@@ -40,7 +32,10 @@ function SideDrawerContent(props) {
       />
       <DrawerItem
         label="My orders"
-        onPress={() => props.navigation.navigate('View order history')}
+        onPress={() => {
+          props.navigation.closeDrawer();
+          props.navigation.navigate('Order history');
+        }}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
         inactiveTintColor="rgba(0, 0, 0, .87)"
@@ -51,7 +46,10 @@ function SideDrawerContent(props) {
       {context.currBasket.data.length !== 0 ? (
         <DrawerItem
           label="My basket"
-          onPress={() => props.navigation.navigate('Basket page')}
+          onPress={() => {
+            props.navigation.closeDrawer();
+            props.navigation.navigate('Basket page');
+          }}
           activeTintColor="#2196f3"
           activeBackgroundColor="rgba(0, 0, 0, .04)"
           inactiveTintColor="rgba(0, 0, 0, .87)"
@@ -62,7 +60,10 @@ function SideDrawerContent(props) {
       ) : null}
       <DrawerItem
         label="Change details"
-        onPress={() => props.navigation.navigate('Change name')}
+        onPress={() => {
+          props.navigation.closeDrawer();
+          props.navigation.navigate('Change details');
+        }}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
         inactiveTintColor="rgba(0, 0, 0, .87)"
@@ -72,7 +73,10 @@ function SideDrawerContent(props) {
       />
       <DrawerItem
         label="Change password"
-        onPress={() => props.navigation.navigate('Change password')}
+        onPress={() => {
+          props.navigation.closeDrawer();
+          props.navigation.navigate('Change password');
+        }}
         activeTintColor="#2196f3"
         activeBackgroundColor="rgba(0, 0, 0, .04)"
         inactiveTintColor="rgba(0, 0, 0, .87)"
