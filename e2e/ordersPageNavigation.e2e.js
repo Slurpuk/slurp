@@ -65,13 +65,13 @@ describe('Navigation to shop menu in diferent ways', () => {
     await expect(element(by.id('past_orders_page'))).not.toBeVisible();
   });
   it('should display past orders and not current orders when clicking on past', async function () {
-    await element(by.text('Past')).tap();
+    await element(by.id('orders_page')).tap({x: 300, y: 150});
 
     await expect(element(by.id('current_orders_page'))).not.toBeVisible();
     await expect(element(by.id('past_orders_page'))).toBeVisible();
   });
   it('should return to current orders when clicking on Current', async function () {
-    await element(by.text('Current')).tap();
+    await element(by.id('orders_page')).tap({x: 100, y: 150});
 
     await expect(element(by.id('current_orders_page'))).toBeVisible();
     await expect(element(by.id('past_orders_page'))).not.toBeVisible();
@@ -83,9 +83,16 @@ describe('Navigation to shop menu in diferent ways', () => {
     await expect(element(by.id('past_orders_page'))).toBeVisible();
   });
   it('should show current orders when swiping right from past', async function () {
-    await element(by.id('current_orders_page')).swipe('right');
+    await element(by.id('past_orders_page')).swipe(
+      'right',
+      'fast',
+      1,
+      0.2,
+      0.5,
+    );
 
     await expect(element(by.id('current_orders_page'))).toBeVisible();
     await expect(element(by.id('past_orders_page'))).not.toBeVisible();
+    await element(by.id('back_arrow')).tap();
   });
 });
