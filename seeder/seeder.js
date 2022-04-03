@@ -164,7 +164,7 @@ async function createCoffeeShops() {
     'Password123',
   );
   await addDoc(collection(db, 'coffee_shops'), {
-    name: 'Black Penny Covent Garden',
+    name: 'Black Penny',
     email: 'theblackpenny@gmail.com',
     intro:
       'The Black Penny is a true gem among the coffee shops. Single origin beans only. We prepare our drinks with care and full attention',
