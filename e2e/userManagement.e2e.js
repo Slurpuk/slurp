@@ -10,8 +10,9 @@ let db;
 let auth;
 
 /**
- * This set of tests intends to test the various ways of getting to the shop page
- * from the landing page and page.
+ * This set of tests intends to test the update details and change password features,
+ * including the navigation through the hamburger menu.
+ * The same limitation that sign-up page apply.
  */
 describe('User management pages', () => {
   beforeAll(async () => {
