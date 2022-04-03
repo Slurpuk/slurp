@@ -115,4 +115,82 @@ describe('User management pages', () => {
       await expect(element(by.id('landing_map_page'))).toBeVisible();
     });
   });
+  describe('Change Password page', function () {
+    it('should be able to navigate to page', async function () {
+      await element(by.id('hamburger_menu_button')).tap();
+      await expect(element(by.id('change_password_page'))).not.toBeVisible();
+
+      await element(by.label('Change password')).tap();
+
+      await expect(element(by.id('change_password_page'))).toBeVisible();
+    });
+    it('should raise alert when changing password with wrong old password', async function () {
+      const wrongPassword = 'WrongPassword';
+      const newPassword = 'Password124$';
+
+      await element(by.id('change_password_page_old_password')).typeText(
+        wrongPassword,
+      );
+      await element(by.id('change_password_page_new_password')).typeText(
+        newPassword,
+      );
+      await element(
+        by.id('change_password_page_new_password_confirmation'),
+      ).typeText(newPassword);
+      await element(by.text('Update Password')).tap();
+
+      await expect(element(by.text('Wrong Password'))).toBeVisible();
+      await expect(
+        element(by.type('_UIAlertControllerActionView')),
+      ).toBeVisible(); // Check raises alert
+
+      await element(by.type('_UIAlertControllerActionView')).tap();
+      await element(by.id('change_password_page_old_password')).clearText();
+    });
+    it('should raise confirmatory pop up when changing with correct password', async function () {
+      const password = 'Password123!';
+
+      await element(by.id('change_password_page_old_password')).typeText(
+        password,
+      );
+      await element(by.text('Update Password')).tap();
+
+      await expect(element(by.text('Password Updated!'))).toBeVisible();
+      await expect(
+        element(by.type('_UIAlertControllerActionView')),
+      ).toBeVisible(); // Check raises alert
+    });
+    it('should dismissing confirmatory pop up should navigate back to home page', async function () {
+      await expect(element(by.id('landing_map_page'))).not.toBeVisible();
+
+      await element(by.type('_UIAlertControllerActionView')).tap();
+
+      await expect(element(by.id('landing_map_page'))).toBeVisible();
+    });
+    it('should display empty fields when going back to page', async function () {
+      await element(by.id('hamburger_menu_button')).tap();
+      await expect(element(by.text('Change password'))).toBeVisible();
+      await expect(element(by.id('change_password_page'))).not.toBeVisible();
+      await element(by.label('Change password')).tap();
+
+      await expect(
+        element(by.id('change_password_page_old_password')),
+      ).toHaveText('');
+      await expect(
+        element(by.id('change_password_page_new_password')),
+      ).toHaveText('');
+      await expect(
+        element(by.id('change_password_page_new_password_confirmation')),
+      ).toHaveText('');
+    });
+    it('should go back to home page when clicking on back button', async function () {
+      await expect(element(by.id('landing_map_page'))).not.toBeVisible();
+      await expect(element(by.id('change_password_page'))).toBeVisible();
+
+      await element(by.id('back_arrow')).tap();
+
+      await expect(element(by.id('change_password_page'))).not.toBeVisible();
+      await expect(element(by.id('landing_map_page'))).toBeVisible();
+    });
+  });
 });
