@@ -1,5 +1,13 @@
-import React, {useContext, useState} from 'react';
-import {StyleSheet, View, LogBox, StatusBar} from 'react-native';
+import React, {useContext, useRef, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  LogBox,
+  StatusBar,
+  Button,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
 import {VisibleContext} from '../navigation/HamburgerSlideBarNavigator';
 import {useFocusEffect} from '@react-navigation/native';
@@ -20,6 +28,7 @@ export default function LandingMapPage({navigation}) {
   const context = useContext(GlobalContext);
   //do search results and cover need showing
   const [searchBarFocused, setSearchBarFocused] = useState(false);
+  const setFocusMarker = useRef();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -40,6 +49,7 @@ export default function LandingMapPage({navigation}) {
       <View style={styles.map}>
         {/*//the map component*/}
         <MapBackground
+          setFocusMarker={setFocusMarker}
           searchBarFocused={searchBarFocused}
           setSearchBarFocussed={setSearchBarFocused}
         />
@@ -54,6 +64,27 @@ export default function LandingMapPage({navigation}) {
             setSearchBarFocussed={setSearchBarFocused}
           />
         </View>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            bottom: 100,
+            right: 20,
+            alignSelf: 'center',
+            backgroundColor: '#087562',
+            borderRadius: 20,
+            width: 50,
+            height: 50,
+            paddingRight: 10,
+          }}
+          onPress={() => setFocusMarker.current()}>
+          <Image
+            source={require('../../src/assets/images/recenter-icon.png')}
+            style={{
+              width: 50,
+              height: 50,
+            }}
+          />
+        </TouchableOpacity>
       </View>
 
       {/*show the relevant bottom sheet*/}
