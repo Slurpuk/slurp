@@ -72,21 +72,43 @@ const getOneTimeLocation = setMapCenter => {
  * @param userRef The id of the current user
  * @param setMapCenter The setState method for the current center point of the map
  * @param watchID The watchID for tracking the user's position
+ * @param isUserCentered Does the map center around the user's current location
  */
-const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
+const subscribeLocationLocation = (
+  setMapCenter,
+  watchID,
+  userRef,
+  isUserCentered,
+) => {
   watchID.current = Geolocation.watchPosition(
     async position => {
       //Will give you the location on location change
       const longitude = position.coords.longitude;
       const latitude = position.coords.latitude;
-      //Setting Longitude state
-      setMapCenter(prevState => ({
-        ...prevState,
-        latitude: latitude,
-        longitude: longitude,
-      }));
-      if (userRef) {
-        updateUserLocation(userRef, latitude, longitude).catch(() => {
+
+      let BigChange = false;
+      setMapCenter(prevState => {
+        if (
+          isBigChange(
+            prevState.latitude,
+            latitude,
+            prevState.longitude,
+            longitude,
+          ) &&
+          isUserCentered
+        ) {
+          BigChange = true;
+          return {
+            ...prevState,
+            latitude: latitude,
+            longitude: longitude,
+          };
+        } else {
+          return prevState;
+        }
+      });
+      if (userRef && BigChange && isUserCentered) {
+        updateUserLocation(userRef, latitude, longitude).catch(error => {
           Alerts.elseAlert();
         });
       }
@@ -106,12 +128,14 @@ const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
  * @param setMapCenter The setState method for the current center point of the map
  * @param watchID The watchID for tracking the user's position
  * @param setIsLocationIsEnabled update the location permission
+ * @param isUserCentered Does the map center around the user's current location
  */
 export const requestLocationPermission = async (
   userRef,
   setMapCenter,
   watchID,
   setIsLocationIsEnabled,
+  isUserCentered,
 ) => {
   if (Platform.OS === 'ios') {
     Geolocation.requestAuthorization('whenInUse').then(async () => {
@@ -132,10 +156,22 @@ export const requestLocationPermission = async (
         //To Check, If Permission is granted
         setIsLocationIsEnabled(true);
         getOneTimeLocation(setMapCenter);
-        subscribeLocationLocation(setMapCenter, watchID, userRef);
+        subscribeLocationLocation(
+          setMapCenter,
+          watchID,
+          userRef,
+          isUserCentered,
+        );
       }
     } catch (err) {
       console.log(err);
     }
   }
 };
+
+function isBigChange(prevLat, newLat, prevLong, newLong) {
+  return (
+    prevLat.toPrecision(4) !== newLat.toPrecision(4) &&
+    prevLong.toPrecision(4) !== newLong.toPrecision(4)
+  );
+}

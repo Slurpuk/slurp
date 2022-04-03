@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import serviceAccount from './independentcoffeeshops-firebase-adminsdk-xudgy-4d88ba3c6a.json' assert {type: "json"};
+import serviceAccount from './independentcoffeeshops-firebase-adminsdk-xudgy-4d88ba3c6a.json';
 const databaseURL =
   'https://independentcoffeeshops-default-rtdb.europe-west1.firebasedatabase.app';
 
@@ -30,8 +30,8 @@ const deleteAllUsers = nextPageToken => {
     .catch(error => {
       console.log('Error listing users:', error);
     })
-    .finally(() => {
-      admin.auth().deleteUsers(uids);
+    .finally(async () => {
+      await admin.auth().deleteUsers(uids);
     });
 };
 

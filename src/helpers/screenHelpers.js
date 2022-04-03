@@ -165,16 +165,7 @@ async function addToBasket(item, currShop, currBasket, setCurrBasket) {
     newBasket = [...basket, {...item, count: 1}];
   }
   setCurrBasket(newBasket);
-  let storageBasket = newBasket.map(basketItem => {
-    return basketItem.has_options
-      ? {
-          ...basketItem,
-          ref: null,
-          options: basketItem.options.map(option => ({...option, ref: null})),
-        }
-      : {...basketItem, ref: null};
-  });
-  await setBasket(storageBasket);
+  await setBasket(getStorageBasket(newBasket));
   return newBasket;
 }
 
@@ -196,9 +187,26 @@ async function removeFromBasket(item, currBasket, setCurrBasket) {
       isSameItem(x, item) ? {...exist, count: exist.count - 1} : x,
     );
   }
-  await setBasket(newBasket);
   setCurrBasket(newBasket);
+  await setBasket(getStorageBasket(newBasket));
   return newBasket;
+}
+
+/**
+ * Return a storage-ready version of the given basket by removing firestore references.
+ * @return Object The formatted basket, ready for storage
+ * @param newBasket The basket to format.
+ */
+function getStorageBasket(newBasket) {
+  return newBasket.map(basketItem => {
+    return basketItem.has_options
+      ? {
+          ...basketItem,
+          ref: null,
+          options: basketItem.options.map(option => ({...option, ref: null})),
+        }
+      : {...basketItem, ref: null};
+  });
 }
 
 /**
