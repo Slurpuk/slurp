@@ -8,23 +8,21 @@ import {updateUserLocation} from '../firebase/queries';
  * Used when a shop marker is pressed. Center the map around the marker and
  * drag the corresponding shop's intro up with a fading animation.
  * @param context
- * @param mapCenter The current center point of the map
+ * @param setMapCenter The setState method for the current center point of the map
  * @param clickedMarker
  */
-export const locationPress = async (context, mapCenter, clickedMarker) => {
+export const locationPress = async (context, setMapCenter, clickedMarker) => {
   //map the clicked marker to a shop from the shops on firebase
   let selectedShop = context.shopsData.find(
     shop => shop.name === clickedMarker,
   );
 
   //update the map center to preserve the map position after rerender
-  let old = mapCenter.current;
-  mapCenter.current = {
+  setMapCenter(prevState => ({
+    ...prevState,
     latitude: selectedShop.location.latitude,
     longitude: selectedShop.location.longitude,
-    latitudeDelta: old.latitudeDelta,
-    longitudeDelta: old.longitudeDelta,
-  };
+  }));
 
   //if there is a current shop intro, fade it out in anticipation of the new one
   if (context.bottomSheet.isOpen) {
@@ -44,65 +42,33 @@ export const locationPress = async (context, mapCenter, clickedMarker) => {
 };
 
 /**
- * Retrieve the current user's location and set the map center to it.
- * @param mapCenter The current center point of the map
- */
-const getOneTimeLocation = mapCenter => {
-  let success;
-  Geolocation.getCurrentPosition(
-    //Will give you the current location
-    position => {
-      const longitude = position.coords.longitude;
-      const latitude = position.coords.latitude;
-      let old = mapCenter.current;
-      mapCenter.current = {
-        latitude: latitude,
-        longitude: longitude,
-        latitudeDelta: old.latitudeDelta,
-        longitudeDelta: old.longitudeDelta,
-      };
-      success = true;
-    },
-    error => {
-      Alerts.LocationAlert();
-      success = false;
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 30000,
-    },
-  );
-  return success;
-};
-
-/**
  * Track the current user's location. Update it in the backend ans set the map center accordingly.
  * @param userRef The id of the current user
- * @param mapCenter The current center point of the map
  * @param watchID The watchID for tracking the user's position
+ * @param setUserLocation SetState method for the current user location on the map
+ * @param updateMapCenter
  */
-const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
+const subscribeLocationLocation = (
+  setUserLocation,
+  updateMapCenter,
+  watchID,
+  userRef,
+) => {
   watchID.current = Geolocation.watchPosition(
     async position => {
       //Will give you the location on location change
       const longitude = position.coords.longitude;
       const latitude = position.coords.latitude;
-      //Setting Longitude state
-      let old = mapCenter.current;
-      mapCenter.current = {
-        latitude: latitude,
-        longitude: longitude,
-        latitudeDelta: old.latitudeDelta,
-        longitudeDelta: old.longitudeDelta,
-      };
+      updateMapCenter(latitude, longitude);
       if (userRef) {
-        updateUserLocation(userRef, latitude, longitude).catch(error => {
+        setUserLocation({latitude: latitude, longitude: longitude});
+        updateUserLocation(userRef, latitude, longitude).catch(() => {
           Alerts.elseAlert();
         });
       }
     },
     error => {
-      Alerts.LocationAlert();
+      console.log(error);
     },
     {
       enableHighAccuracy: true,
@@ -113,22 +79,28 @@ const subscribeLocationLocation = (mapCenter, watchID, userRef) => {
 /**
  * Platform dependant request for location access.
  * @param userRef The id of the current user
- * @param mapCenter The current center point of the map
  * @param watchID The watchID for tracking the user's position
  * @param setIsLocationIsEnabled update the location permission
+ * @param setUserLocation SetState method for the current user location on the map
+ * @param updateMapCenter
  */
 export const requestLocationPermission = async (
+  setUserLocation,
   userRef,
-  mapCenter,
   watchID,
   setIsLocationIsEnabled,
+  updateMapCenter,
 ) => {
   if (Platform.OS === 'ios') {
-    setIsLocationIsEnabled(true);
-    let positionAccess = getOneTimeLocation(mapCenter);
-    if (positionAccess === true) {
-      subscribeLocationLocation(mapCenter, watchID, userRef);
-    }
+    Geolocation.requestAuthorization('whenInUse').then(async () => {
+      setIsLocationIsEnabled(true);
+      subscribeLocationLocation(
+        setUserLocation,
+        updateMapCenter,
+        watchID,
+        userRef,
+      );
+    });
   } else {
     try {
       const granted = await PermissionsAndroid.request(
@@ -141,17 +113,15 @@ export const requestLocationPermission = async (
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         //To Check, If Permission is granted
         setIsLocationIsEnabled(true);
-        let positionAccess = getOneTimeLocation(mapCenter);
-        if (positionAccess === true) {
-          subscribeLocationLocation(mapCenter, watchID, userRef);
-        }
+        subscribeLocationLocation(
+          setUserLocation,
+          updateMapCenter,
+          watchID,
+          userRef,
+        );
       }
     } catch (err) {
-      if (err === 'auth/network-request-failed') {
-        Alerts.connectionErrorAlert();
-      } else {
-        Alerts.LocationAlert();
-      }
+      console.log(err);
     }
   }
 };

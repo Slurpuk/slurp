@@ -13,6 +13,7 @@ import {
   separateOrders,
 } from '../helpers/screenHelpers';
 import {emptyCurrentOrdersText, emptyPastOrdersText} from '../data/Texts';
+import LoadingPage from './LoadingPage';
 
 /**
  * Screen displaying bot current and past orders
@@ -23,6 +24,7 @@ const OrderPage = ({navigation}) => {
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
   const Tab = createMaterialTopTabNavigator(); // Stack navigator for the tab screens
+  const [loading, setLoading] = useState(true);
 
   /**
    * Side effect which subscribes to the Orders model and retrieves the current user's orders and formats them.
@@ -35,34 +37,40 @@ const OrderPage = ({navigation}) => {
         let newOrders = await separateOrders(querySnapshot);
         await formatCurrentOrders(newOrders.currentOrders, setCurrentOrders);
         await formatPastOrders(newOrders.pastOrders, setPastOrders);
+        if (loading) {
+          setLoading(false);
+        }
       });
     return () => fetchData();
-  }, [context.currentUser.ref]);
+  }, [context.currentUser.ref, loading]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={'orders_page'}>
       <GreenHeader headerText={'ORDERS'} navigation={navigation} />
-      <Tab.Navigator
-        style={styles.navigatorContent}
-        screenOptions={ScreenOptionsStyles}
-      >
-        <Tab.Screen name="Current">
-          {() => (
-            <CurrentOrders
-              currentOrders={currentOrders}
-              emptyText={emptyCurrentOrdersText}
-            />
-          )}
-        </Tab.Screen>
-        <Tab.Screen name="Past">
-          {() => (
-            <PastOrders
-              pastOrders={pastOrders}
-              emptyText={emptyPastOrdersText}
-            />
-          )}
-        </Tab.Screen>
-      </Tab.Navigator>
+      {loading ? (
+        <LoadingPage />
+      ) : (
+        <Tab.Navigator
+          style={styles.navigatorContent}
+          screenOptions={ScreenOptionsStyles}>
+          <Tab.Screen name="Current">
+            {() => (
+              <CurrentOrders
+                currentOrders={currentOrders}
+                emptyText={emptyCurrentOrdersText}
+              />
+            )}
+          </Tab.Screen>
+          <Tab.Screen name="Past">
+            {() => (
+              <PastOrders
+                pastOrders={pastOrders}
+                emptyText={emptyPastOrdersText}
+              />
+            )}
+          </Tab.Screen>
+        </Tab.Navigator>
+      )}
     </View>
   );
 };

@@ -8,7 +8,8 @@ const HamburgerButton = ({navigation}) => {
     <View style={styles.header}>
       <Pressable
         style={styles.floating_button}
-        testID={'hamburger_menu_button'}>
+        testID={'hamburger_menu_button'}
+      >
         <Icon.Button
           onPress={() => navigation.openDrawer()}
           name="bars"

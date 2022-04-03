@@ -70,38 +70,6 @@ function getItemsText(order) {
 }
 
 /**
- * Returns a component that indicates the date of completion of an order.
- * This can include the current date if the order has not been completed.
- * @param order Order object
- * @return Component
- */
-function getStatusAndDateComponent(order) {
-  let dateAndTime = order.incoming_time.toDate().toDateString();
-  if (
-    order.Status === OrderStatus.COLLECTED ||
-    order.Status === OrderStatus.REJECTED
-  ) {
-    return (
-      <Text
-        style={[
-          textStyles.lightGreyPoppins,
-          styles.textFlex,
-          styles.finishedOrder,
-        ]}
-      >
-        {order.status} {dateAndTime}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
-        {dateAndTime}
-      </Text>
-    );
-  }
-}
-
-/**
  * Creates a more user-friendly and descriptive version of the order status
  * @param order Order object
  * @return Text-Component
@@ -130,7 +98,6 @@ const styles = StyleSheet.create({
     height: 74,
     marginRight: 15,
   },
-
   textFlex: {
     flex: 1,
     overflow: 'hidden',

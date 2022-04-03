@@ -85,7 +85,7 @@ async function createTestUsers() {
  * @returns {Promise<void>}
  */
 async function createFakeUsers() {
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 15; i++) {
     const email = faker.internet.email().toLowerCase();
     await addDoc(collection(db, 'users'), {
       first_name: faker.name.firstName(),
@@ -164,7 +164,7 @@ async function createCoffeeShops() {
     'Password123',
   );
   await addDoc(collection(db, 'coffee_shops'), {
-    name: 'Black Penny Covent Garden',
+    name: 'Black Penny',
     email: 'theblackpenny@gmail.com',
     intro:
       'The Black Penny is a true gem among the coffee shops. Single origin beans only. We prepare our drinks with care and full attention',
