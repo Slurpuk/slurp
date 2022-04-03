@@ -94,4 +94,45 @@ describe('Navigation to shop menu in diferent ways', () => {
       );
     });
   });
+  /**
+   * This set of test is limited because it relies on the exact location of the marker with respect to the users position,
+   * the coffee shops positions and the size of the screen, meaning it is unlikely to work on a different phone,
+   * Unfortunately, detox doesn't support clicking on markers and the work-around are tricky and flacky.
+   * This means that this test is complete but not sound.
+   */
+  describe('Navigation to shop page via marker', function () {
+    it('should display minimised shop page when clicking on a green marker', async function () {
+      await expect(element(by.id('shop_marker_Liz Cafe'))).toExist();
+      await element(by.id('landing_map_page')).tap({x: 260, y: 410});
+
+      await expect(element(by.id('shop_intro'))).toBeVisible();
+      await expect(element(by.id('coffee_list'))).not.toBeVisible();
+    });
+    it('should display the whole menu when swiping up', async function () {
+      await element(by.id('shop_intro')).swipe('up', 'fast', 1, 0.5, 0.2);
+
+      await expect(element(by.id('shop_intro'))).toBeVisible();
+      await expect(element(by.id('coffee_list'))).toBeVisible();
+    });
+    it('should display minimised version when swiping down partially', async function () {
+      await element(by.id('shop_intro')).swipe('down', 'fast', 0.6, 0.5, 0);
+
+      await expect(element(by.id('shop_intro'))).toBeVisible();
+      await expect(element(by.id('coffee_list'))).not.toBeVisible();
+
+      await element(by.id('shop_intro')).swipe('up', 'fast', 1, 0.5, 0.2);
+    });
+    it('should also display minimised version when clicking on down arrow', async function () {
+      await element(by.id('back_arrow')).tap();
+
+      await expect(element(by.id('shop_intro'))).toBeVisible();
+      await expect(element(by.id('coffee_list'))).not.toBeVisible();
+    });
+    it('should remove shop intro and display top picks nearby when swiping show intro down', async function () {
+      await element(by.id('shop_intro')).swipe('down', 'fast', 1, 0.5, 0.6);
+
+      await expect(element(by.id('shop_intro'))).not.toBeVisible();
+      await expect(element(by.text('Top Picks Nearby'))).toBeVisible();
+    });
+  });
 });
