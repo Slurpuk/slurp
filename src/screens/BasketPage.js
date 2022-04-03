@@ -12,7 +12,7 @@ import {
   getItemFullPrice,
   removeFromBasket,
 } from '../helpers/screenHelpers';
-import {initializePayment, openPaymentSheet} from '../helpers/paymentHelpers';
+import {initializePaymentSheet, openPaymentSheet} from '../helpers/paymentHelpers';
 import {Alerts} from '../data/Alerts';
 import {sendOrder} from '../firebase/queries';
 import {BlurView} from '@react-native-community/blur';
@@ -52,7 +52,7 @@ const BasketPage = ({navigation}) => {
     } else if (!context.locationIsEnabled) {
       Alerts.LocationAlert();
     } else {
-      const ready = await initializePayment(initPaymentSheet, total);
+      const ready = await initializePaymentSheet(initPaymentSheet, total);
       if (ready) {
         setLoading(false);
         await proceedToPayment();
@@ -68,8 +68,6 @@ const BasketPage = ({navigation}) => {
     const successful = await openPaymentSheet(presentPaymentSheet);
     if (successful) {
       await confirmOrder();
-    } else {
-      Alerts.initPaymentAlert(() => checkout());
     }
   }
 
