@@ -1,5 +1,5 @@
 import React from 'react';
-import {LogBox} from 'react-native';
+import { LogBox, Text } from "react-native";
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useState} from 'react';
 import SideDrawerContent from '../components/HamburgerMenu/SideDrawerContent';
@@ -10,6 +10,7 @@ import {
   HomeStackNavigator,
   OrderHistoryStackNavigator,
 } from './StackNavigator';
+import { Header } from "react-native-elements";
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
