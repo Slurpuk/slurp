@@ -39,14 +39,12 @@ const OrderDetailsView = ({order}) => {
       </View>
       <View style={styles.orderInformation}>
         <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
-        <View style={styles.ETA}>
-          <ShopDetailIcons distanceToShop={
-            calculateDistance(order.shop.location, {
-              latitude: context.currentUser.location._latitude,
-              longitude: context.currentUser.location._longitude,
-            })
-          } iconSize={17} iconColor={'black'} fontSize={12}/>
-        </View>
+          {(order.Status === OrderStatus.COLLECTED ||
+            order.Status === OrderStatus.REJECTED) ? null :
+            <View style={styles.ETA}>
+              <ShopDetailIcons distanceToShop={order.ETA} iconSize={17} iconColor={'black'} fontSize={12} />
+            </View>
+          }
       </View>
     </View>
   );
