@@ -58,7 +58,7 @@ const getOneTimeLocation = setMapCenter => {
       }));
     },
     error => {
-      Alerts.LocationAlert();
+      console.log(error);
     },
     {
       enableHighAccuracy: true,
@@ -86,13 +86,13 @@ const subscribeLocationLocation = (setMapCenter, watchID, userRef) => {
         longitude: longitude,
       }));
       if (userRef) {
-        updateUserLocation(userRef, latitude, longitude).catch(error => {
+        updateUserLocation(userRef, latitude, longitude).catch(() => {
           Alerts.elseAlert();
         });
       }
     },
     error => {
-      Alerts.LocationAlert();
+      console.log(error);
     },
     {
       enableHighAccuracy: true,
@@ -135,7 +135,7 @@ export const requestLocationPermission = async (
         subscribeLocationLocation(setMapCenter, watchID, userRef);
       }
     } catch (err) {
-      Alerts.LocationAlert();
+      console.log(err);
     }
   }
 };

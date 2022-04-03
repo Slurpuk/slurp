@@ -124,7 +124,6 @@ export function processDistance(distance) {
   let dDisplay = d > 0 ? d + ' d ' : '';
   let hDisplay = h > 0 ? h + ' h ' : '';
   let mDisplay = m > 0 ? m + (m === 1 ? ' min ' : ' mins ') : '';
-  console.log(minutes);
   return dDisplay + hDisplay + mDisplay;
 }
 
