@@ -3,7 +3,6 @@ import {getOptions, getOrderItem, getOrderShop} from '../firebase/queries';
 import {months} from '../data/Months';
 import {OrderStatus} from '../data/OrderStatus';
 import {
-  getBasket,
   getCurrentShopKey,
   setBasket,
   setCurrentShopKey,
@@ -44,7 +43,7 @@ async function formatPastOrders(orders, setPastOrders) {
   await Promise.all(
     newOrders.map(async order => {
       order.shop = await getOrderShop(order);
-      let curr = newOrders.find(x => x.period === order.period);
+      let curr = finalOrders.find(x => x.period === order.period);
       curr
         ? curr.data.push(order)
         : finalOrders.push({period: order.period, data: [order]});
@@ -117,7 +116,7 @@ function calculateTime(distance) {
  * @param distance The distance to process.
  */
 export function processDistance(distance) {
-  let minutes = calculateTime(distance)
+  let minutes = calculateTime(distance);
   let d = Math.floor(minutes / (24 * 60));
   let h = Math.floor((minutes % (24 * 60)) / 60);
   let m = Math.floor(minutes % 60);
@@ -125,7 +124,6 @@ export function processDistance(distance) {
   let dDisplay = d > 0 ? d + ' d ' : '';
   let hDisplay = h > 0 ? h + ' h ' : '';
   let mDisplay = m > 0 ? m + (m === 1 ? ' min ' : ' mins ') : '';
-
   return dDisplay + hDisplay + mDisplay;
 }
 
@@ -167,7 +165,7 @@ async function addToBasket(item, currShop, currBasket, setCurrBasket) {
     newBasket = [...basket, {...item, count: 1}];
   }
   setCurrBasket(newBasket);
-  await setBasket(newBasket);
+  await setBasket(getStorageBasket(newBasket));
   return newBasket;
 }
 
@@ -189,9 +187,26 @@ async function removeFromBasket(item, currBasket, setCurrBasket) {
       isSameItem(x, item) ? {...exist, count: exist.count - 1} : x,
     );
   }
-  await setBasket(newBasket);
   setCurrBasket(newBasket);
+  await setBasket(getStorageBasket(newBasket));
   return newBasket;
+}
+
+/**
+ * Return a storage-ready version of the given basket by removing firestore references.
+ * @return Object The formatted basket, ready for storage
+ * @param newBasket The basket to format.
+ */
+function getStorageBasket(newBasket) {
+  return newBasket.map(basketItem => {
+    return basketItem.has_options
+      ? {
+          ...basketItem,
+          ref: null,
+          options: basketItem.options.map(option => ({...option, ref: null})),
+        }
+      : {...basketItem, ref: null};
+  });
 }
 
 /**
@@ -207,12 +222,14 @@ async function refreshShops(
   clearBasket,
   setShopsData,
 ) {
-  if (staticShopsData.currShopIndex !== -1) {
-    let previous = staticShopsData.allShops[staticShopsData.currShopIndex];
-    let newCurrShop = formattedShops.findIndex(
-      shop => shop.key === previous.key,
-    );
-    setShopsData({allShops: formattedShops, currShopIndex: newCurrShop});
+  if (staticShopsData.currShopKey !== '') {
+    let newCurrShop =
+      formattedShops.findIndex(
+        shop => shop.key === staticShopsData.currShopKey,
+      ) === -1
+        ? ''
+        : staticShopsData.currShopKey;
+    setShopsData({allShops: formattedShops, currShopKey: newCurrShop});
     if (newCurrShop === -1) {
       await setCurrentShopKey('');
       await clearBasket;
@@ -220,12 +237,13 @@ async function refreshShops(
   } else {
     let storageKey = await getCurrentShopKey();
     if (storageKey !== '') {
-      let storageShop = formattedShops.findIndex(
-        shop => shop.key === storageKey,
-      );
+      let storageShop =
+        formattedShops.findIndex(shop => shop.key === storageKey) === -1
+          ? ''
+          : storageKey;
       setShopsData({
         allShops: formattedShops,
-        currShopIndex: storageShop,
+        currShopKey: storageKey,
       });
       if (storageShop === -1) {
         await clearBasket();
@@ -244,7 +262,7 @@ async function getFormattedItems(shop) {
   let drinks = [];
   let snacks = [];
   await Promise.all(
-    shop.data().items.map(async itemRef => {
+    shop.items.map(async itemRef => {
       await firestore()
         .doc(itemRef.path)
         .get()
@@ -285,7 +303,7 @@ async function getFormattedShops(shopsData) {
           longitude: data.location._longitude,
         },
       };
-      shopData.items = await getFormattedItems(documentSnapshot);
+      shopData.items = await getFormattedItems(documentSnapshot.data());
       await getOptions().then(options => {
         shopData.options = options;
         shops.push(shopData);
