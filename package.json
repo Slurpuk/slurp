@@ -13,6 +13,7 @@
     "seed": "cd seeder && npm run seed && cd ..",
     "seed:first": "cd seeder && npm run seed:first && cd ..",
     "unseed": "cd seeder && npm run unseed && cd ..",
+    "reseed": "npm run unseed && npm run seed",
     "lint": "eslint .",
     "pod": "cd ios && pod install && cd ..",
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",

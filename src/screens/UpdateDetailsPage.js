@@ -20,7 +20,7 @@ const UpdateDetailsPage = ({navigation}) => {
    * Alert raised when details are updated. Returns user to where they came from.
    */
   function changeDetailsConfirm() {
-    Alert.alert('Done.', 'Your details have been updated.', [
+    Alert.alert('Details Updated!', '', [
       {
         text: 'OK',
         onPress: () => navigation.goBack(),
@@ -50,7 +50,7 @@ const UpdateDetailsPage = ({navigation}) => {
    */
   function handleChangeDetailsErrorsBackEnd(errorCode) {
     if (errorCode === 'auth/wrong-password') {
-      Alerts.wrongCredentialsAlert();
+      Alerts.wrongPasswordAlert();
     } else if (errorCode === 'auth/network-request-failed') {
       Alerts.connectionErrorAlert();
     } else {
@@ -99,6 +99,7 @@ const UpdateDetailsPage = ({navigation}) => {
             setField={setFirstName}
             value={first_name}
             type={'name'}
+            testID={'update_details_page_first_name'}
           />
           <FormField
             style={[styles.subDetails, styles.spaceLeft]}
@@ -106,6 +107,7 @@ const UpdateDetailsPage = ({navigation}) => {
             setField={setLastName}
             value={last_name}
             type={'name'}
+            testID={'update_details_page_last_name'}
           />
         </View>
         <FormField
@@ -114,6 +116,7 @@ const UpdateDetailsPage = ({navigation}) => {
           type={'password'}
           placeholder={''}
           value={password}
+          testID={'update_details_page_password'}
         />
       </View>
       <View style={styles.button}>

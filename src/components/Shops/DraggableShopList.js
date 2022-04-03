@@ -33,7 +33,7 @@ export default function DraggableShopList({navigation}) {
       ]}
       initialSnapIndex={1}
       renderHandle={() => (
-        <View style={styles.header2}>
+        <View style={styles.header2} testID={'scroll_bottom_page'}>
           <View style={styles.panelHandle} />
           <Text style={styles.headerText}>Top Picks Nearby</Text>
           <ShopList navigation={navigation} data={orderedShops} />

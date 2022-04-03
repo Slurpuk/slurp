@@ -78,6 +78,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
         leftIconContainerStyle={{color: '#046D66'}}
         rightIconContainerStyle={{color: '#046D66'}}
         searchIcon={false}
+        testID={'search_bar'}
       />
       {/*Only display search results when the search bar is focused*/}
       {searchBarFocused ? (
@@ -95,8 +96,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   style={[
                     styles.searchResultContainer,
                     {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}
-                >
+                  ]}>
                   <Pressable
                     onPressIn={() => {
                       if (item.is_open) {
@@ -115,15 +115,14 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                       },
                       styles.searchResult,
                     ]}
-                  >
+                    testID={'search_item_' + item.name}>
                     {({pressed}) => (
                       <Text
                         style={[
                           {color: pressed && item.is_open ? 'white' : 'black'},
 
                           styles.flatListItem,
-                        ]}
-                      >
+                        ]}>
                         {item.name}
                       </Text>
                     )}
@@ -213,8 +212,8 @@ const styles = StyleSheet.create({
     color: '#046D66',
   },
   flatListItem: {
-    width: screenWidth * 1,
-    maxWidth: screenWidth * 1,
+    width: screenWidth,
+    maxWidth: screenWidth,
     fontSize: 16,
     textAlignVertical: 'center',
     textAlign: 'center',

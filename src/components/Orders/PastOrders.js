@@ -17,6 +17,7 @@ export const PastOrders = props => {
         renderSectionHeader={({section: {period}}) => (
           <Text style={[textStyles.darkGreyPoppinsHeading]}>{period}</Text>
         )}
+        testID={'past_orders_page'}
       />
     </>
   );

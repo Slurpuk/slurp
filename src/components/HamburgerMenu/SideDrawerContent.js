@@ -20,7 +20,6 @@ function SideDrawerContent(props) {
     Alert.alert('Log Out', 'Are you sure you want to log out', [
       {
         text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
       {text: 'Yes', onPress: () => logout()},
