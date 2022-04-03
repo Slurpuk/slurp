@@ -67,7 +67,8 @@ export default function LandingMapPage({navigation}) {
         {recenterVisible ? (
           <TouchableOpacity
             style={styles.recenterButton}
-            onPress={() => setFocusMarker.current()}>
+            onPress={() => setFocusMarker.current()}
+          >
             <Image
               source={require('../../src/assets/images/recenter-icon.png')}
               style={styles.recenterImage}

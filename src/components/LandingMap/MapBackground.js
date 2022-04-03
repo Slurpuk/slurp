@@ -156,7 +156,8 @@ export default function MapBackground({
         onPanDrag={() => mapDragged()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter}>
+        region={mapCenter}
+      >
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -169,7 +170,8 @@ export default function MapBackground({
                 await locationPress(context, setMapCenter, marker.name);
               }
               mapPressed();
-            }}>
+            }}
+          >
             {/*//closed markers appear grey*/}
             <View style={styles.markerStyle}>
               <Text style={styles.closed}>
@@ -187,7 +189,8 @@ export default function MapBackground({
           }}
           onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
           onPress={() => focusMarker()}
-          title={'You are here'}>
+          title={'You are here'}
+        >
           <Image
             source={require('../../assets/images/dot.png')}
             style={styles.userMarker}
