@@ -12,17 +12,18 @@ import customSearchBar from '../src/components/LandingMap/CustomSearchBar';
 import {TextInput} from 'react-native';
 // import {fireEvent} from "@testing-library/react";
 
-describe('search bar', function () {
-  const globalContextMock = {
-    shopsData: [
-      {name: 'Yucky Starbucks', IsOpen: true},
-      {name: 'Black Goat', IsOpen: true},
-    ],
-    switchShop: jest.fn(),
-  };
+const globalContextMock = {
+  shopsData: [
+    {name: 'Yucky Starbucks', IsOpen: true},
+    {name: 'Black Goat', IsOpen: true},
+    {name: 'another one', is_open: false},
+  ],
+  switchShop: jest.fn(),
+};
 
+describe('search bar', function () {
   it('should render the search bar', function () {
-    const {toJSON} = render(
+    const {toJSON, getByTestId} = render(
       <GlobalContext.Provider value={globalContextMock}>
         <CustomSearchBar
           searchBarFocused={true}
@@ -31,7 +32,7 @@ describe('search bar', function () {
       </GlobalContext.Provider>,
     );
     expect(true).toBe(true);
-    expect(toJSON()).toMatchSnapshot();
+    expect(getByTestId('search-bar')).toBeTruthy();
   });
 
   it('Should be able to click on the search bar to focus it', function () {
