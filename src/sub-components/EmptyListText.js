@@ -13,7 +13,8 @@ const EmptyListText = ({text}) => {
         styles.mainContainer,
         styles.emptyText,
         textStyles.darkGreyPoppinsSubHeading,
-      ]}>
+      ]}
+    >
       {text}
     </Text>
   );

@@ -49,7 +49,8 @@ const WhiteArrowButton = ({
           opacity: pressed ? 0.6 : 1,
         },
         customStyle,
-      ]}>
+      ]}
+    >
       <Icon name={iconName} color={'white'} size={34} />
     </Pressable>
   );

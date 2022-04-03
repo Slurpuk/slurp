@@ -29,7 +29,8 @@ function HamburgerSlideBarNavigator() {
           headerShown: isHeaderVisible,
           drawerPosition: 'left',
           header: () => <HamburgerButton navigation={navigation} />,
-        })}>
+        })}
+      >
         <Drawer.Screen name="Home" children={() => <HomeStackNavigator />} />
         <Drawer.Screen name="Change details" component={UpdateDetailsPage} />
         <Drawer.Screen name="Change password" component={ChangePasswordPage} />

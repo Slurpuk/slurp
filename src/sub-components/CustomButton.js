@@ -29,14 +29,16 @@ export default function CustomButton(props) {
           activeOpacity={1}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
-          onPress={onPress}>
+          onPress={onPress}
+        >
           <Text style={buttonStyles.buttonText}>{text}</Text>
           {optionalNumber === null ? null : (
             <Text
               style={[
                 buttonStyles.optionalNumber,
                 buttonStyles[`bubble${priority}`],
-              ]}>
+              ]}
+            >
               {optionalNumber}
             </Text>
           )}

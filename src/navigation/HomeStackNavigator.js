@@ -19,7 +19,8 @@ const HomeStackNavigator = () => {
         headerShown: false,
         useNativeDriver: true,
         gestureEnabled: false,
-      }}>
+      }}
+    >
       <HomeStack.Screen name="Landing map" component={LandingMapPage} />
       <HomeStack.Screen name="Shop list" component={ShopList} />
       <HomeStack.Screen name="Basket page" component={BasketPage} />

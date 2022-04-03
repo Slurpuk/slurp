@@ -14,10 +14,7 @@ const GreenHeader = ({headerText, navigation}) => {
     <View style={styles.header}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <View style={styles.arrow}>
-        <WhiteArrowButton
-          direction={'left'}
-          navigation={navigation}
-        />
+        <WhiteArrowButton direction={'left'} navigation={navigation} />
       </View>
       <View style={styles.title}>
         <Text style={textStyles.whiteTextOnGreenHeaderText}>{headerText}</Text>
