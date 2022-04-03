@@ -23,6 +23,7 @@ import {Alerts} from '../../data/Alerts';
 export default function MapBackground({
   searchBarFocused,
   setSearchBarFocussed,
+    setFocusMarker,
 }) {
   const context = useContext(GlobalContext);
   //used to watch the users location
@@ -33,6 +34,7 @@ export default function MapBackground({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
+
 
   const markers = useMemo(() => {
     return context.shopsData.map(shop => ({
@@ -49,6 +51,7 @@ export default function MapBackground({
 
   //setup location access on map load. remove the location access when this component is unmounted
   useEffect(() => {
+    setFocusMarker.current = focusMarker;
     if (!context.locationIsEnabled) {
       let currWatch = watchID.current;
       requestLocationPermission(
@@ -71,6 +74,14 @@ export default function MapBackground({
   const mapPressed = () => {
     setSearchBarFocussed(false);
     Keyboard.dismiss();
+  };
+
+  const focusMarker = () => {
+    setMapCenter(prevState => ({
+      ...prevState,
+      latitude: context.currentUser.location.latitude,
+      longitude: context.currentUser.location.longitude,
+    }));
   };
 
   return (
@@ -123,6 +134,7 @@ export default function MapBackground({
             longitude: context.currentUser.location.longitude,
           }}
           onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
+          onPress={() => focusMarker()}
           title={'Current Location'}>
           <Image
             source={require('../LandingMap/dot.png')}
