@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import {GlobalContext} from '../../../App';
+import textStyles from "../../../stylesheets/textStyles";
 const screenHeight = Dimensions.get('window').height;
 
 const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
@@ -82,6 +83,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
       {searchBarFocused ? (
         <View style={styles.activeElementsWrapper}>
           <View style={styles.cover} />
+          {shops.length > 0 ?
           <FlatList
             // Only display the filtered shops in the results
             keyboardShouldPersistTaps="handled"
@@ -129,7 +131,11 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                 </View>
               );
             }}
-          />
+          /> : <Text style={[textStyles.greyPoppins, styles.noResultsText]}>
+              Sorry! {'\n\n'}
+              Nothing seems to match this phrase. {'\n'}
+              Please try a different query
+            </Text> }
         </View>
       ) : null}
     </View>
@@ -152,9 +158,16 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flex: 1,
   },
-
-  searchResultContainer: {
-    width: screenWidth * 0.7,
+  noResultsText: {
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    paddingVertical: 15,
+    borderBottomColor: '#DDDDDD',
+    borderBottomWidth: 1,
+    position: 'relative',
+    backgroundColor: 'whitesmoke',
+  },
+  searchResultContainer: { width: screenWidth * 0.7,
   },
 
   container: {
