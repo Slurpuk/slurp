@@ -95,11 +95,11 @@ describe('Sign up', () => {
     await element(by.type('_UIAlertControllerActionView')).tap();
     await expect(element(by.id('sign_up_page'))).toBeVisible();
 
-    await element(by.id('sign_up_page_first_name')).replaceText('');
-    await element(by.id('sign_up_page_last_name')).replaceText('');
-    await element(by.id('sign_up_page_email')).replaceText('');
-    await element(by.id('sign_up_page_password')).replaceText('');
-    await element(by.id('sign_up_page_confirm_password')).replaceText('');
+    await element(by.id('sign_up_page_first_name')).clearText();
+    await element(by.id('sign_up_page_last_name')).clearText();
+    await element(by.id('sign_up_page_email')).clearText();
+    await element(by.id('sign_up_page_password')).clearText();
+    await element(by.id('sign_up_page_confirm_password')).clearText();
   });
   it('should be able to sign up with new user', async () => {
     const firstName = 'Joe';
