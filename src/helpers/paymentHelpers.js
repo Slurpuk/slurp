@@ -58,16 +58,6 @@ async function initializePaymentSheet(initPaymentSheet, total) {
   }
 }
 
-// /**
-//  * Initialize the user's payment.
-//  * @param initPaymentSheet The method for initiating the payment sheet.
-//  * @param total The total amount to pay
-//  * @return boolean Return true if initialization is successful, false otherwise.
-//  */
-// async function initializePayment(initPaymentSheet, total) {
-//   return await initializePaymentSheet(initPaymentSheet, total);
-// }
-
 /**
  * Open the payment sheet if no error occurs
  * @param presentPaymentSheet Function for opening the payment sheet.
