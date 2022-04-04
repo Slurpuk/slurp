@@ -27,7 +27,7 @@ const OrderDetailsView = ({order}) => {
           >
             {order.shop.name}
           </Text>
-          <Text style={styles.orderId}>
+          <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
             #{order.key}
           </Text>
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
