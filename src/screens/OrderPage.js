@@ -56,7 +56,7 @@ const OrderPage = ({navigation}) => {
   }, [context.currentUser.ref, loading]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={'orders_page'}>
       <GreenHeader
         headerText={'ORDERS'}
         navigation={navigation}
@@ -64,8 +64,7 @@ const OrderPage = ({navigation}) => {
       />
       <Tab.Navigator
         style={styles.navigatorContent}
-        screenOptions={ScreenOptionsStyles}
-      >
+        screenOptions={ScreenOptionsStyles}>
         <Tab.Screen name="Current">
           {() =>
             !loading.current.current ? (

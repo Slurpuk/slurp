@@ -127,9 +127,8 @@ const BasketPage = ({navigation}) => {
         value={{
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
-        }}
-      >
-        <View style={styles.basket}>
+        }}>
+        <View style={styles.basket} testID={'basket_page'}>
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.name}
             navigation={navigation}
@@ -140,7 +139,11 @@ const BasketPage = ({navigation}) => {
 
           <View style={styles.order_summary}>
             <Text style={styles.total_text}>TOTAL</Text>
-            <Text style={styles.total_amount}>£{total.toFixed(2)}</Text>
+            <Text
+              style={styles.total_amount}
+              testID={'basket_page_total_price'}>
+              £{total.toFixed(2)}
+            </Text>
           </View>
           <View style={[styles.lastButton, styles.buttons]}>
             <CustomButton

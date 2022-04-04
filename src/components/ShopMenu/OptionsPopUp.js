@@ -87,7 +87,7 @@ export default function OptionsPopUp({data, renderer, item}) {
 
   return (
     <OptionsContext.Provider value={{milk: milk}}>
-      <View style={OptionPopUpStyles.container}>
+      <View style={OptionPopUpStyles.container} testID={'options_pop_up'}>
         <View style={OptionPopUpStyles.header}>
           <Text style={[textStyles.headingOne, OptionPopUpStyles.product_name]}>
             {item.name}
@@ -96,7 +96,7 @@ export default function OptionsPopUp({data, renderer, item}) {
             style={OptionPopUpStyles.icon}
             underlayColor={'white'}
             onPress={() => shopContext.setOptionsVisible(false)}
-          >
+            testID={'options_pop_up_close_button'}>
             <Icon size={30} color="black" name="close" />
           </TouchableHighlight>
         </View>
@@ -108,7 +108,7 @@ export default function OptionsPopUp({data, renderer, item}) {
           />
         </View>
         <CustomButton
-          text={`Add To Order  £${totalPrice.toPrecision(3)}`}
+          text={`Add To Order  £${totalPrice.toFixed(2)}`}
           priority={'primary'}
           width={screenWidth * 0.79}
           onPress={() => addToCurrentBasket()}

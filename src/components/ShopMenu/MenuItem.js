@@ -71,36 +71,34 @@ const MenuItem = ({item}) => {
 
   return (
     <TouchableOpacity
-        testID={'overallButtonMenuItem'}
-        style={menuItemStyles.item} onPress={() => add(item)}>
+      testID={'menu_item_' + item.name}
+      style={menuItemStyles.item}
+      onPress={() => add(item)}>
       <ImageBackground
         testID={'menuItemImage'}
         source={{uri: item.image}}
         imageStyle={menuItemStyles.image}
-        style={menuItemStyles.imageContainer}
-      >
+        style={menuItemStyles.imageContainer}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={menuItemStyles.linearGradient}
-        >
+          style={menuItemStyles.linearGradient}>
           <View style={menuItemStyles.menuCardTextWrapper}>
             <Text
-                testID={'menuItemName'}
-                style={[textStyles.headingOne, menuItemStyles.title]}>
+              testID={'menuItemName'}
+              style={[textStyles.headingOne, menuItemStyles.title]}>
               {item.name}
             </Text>
-            <Text
-                testID={'menuItemPrice'}
-                style={textStyles.coffeePrice}>£{item.price.toFixed(2)}</Text>
+            <Text testID={'menuItemPrice'} style={textStyles.coffeePrice}>
+              £{item.price.toFixed(2)}
+            </Text>
           </View>
           <Pressable
             testID={'buttonMenuItem'}
             onPress={() => add(item)}
-            style={menuItemStyles.menuCardPopupTrigger}
-          >
+            style={menuItemStyles.menuCardPopupTrigger}>
             <Text
-                testID={'menuItemAddIcon'}
-                style={[textStyles.iconText, menuItemStyles.counter]}>
+              testID={'menuItemAddIcon'}
+              style={[textStyles.iconText, menuItemStyles.counter]}>
               {' '}
               {count === 0 ? '+' : count}
             </Text>
