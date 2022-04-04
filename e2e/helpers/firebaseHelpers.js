@@ -6,7 +6,7 @@ import {
   getDocs,
   Timestamp,
 } from 'firebase/firestore';
-import {getRandomOptions, getRandomSubarray} from '../seeder/helpers';
+import {getRandomOptions, getRandomSubarray} from '../../seeder/helpers';
 
 /**
  * Get all the items to add them to the coffee shop.
