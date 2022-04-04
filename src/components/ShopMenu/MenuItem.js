@@ -71,7 +71,7 @@ const MenuItem = ({item}) => {
 
   return (
     <TouchableOpacity
-      testID={'overallButtonMenuItem'}
+      testID={'menu_item_' + item.name}
       style={menuItemStyles.item}
       onPress={() => add(item)}>
       <ImageBackground
