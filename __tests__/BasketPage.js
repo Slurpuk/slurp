@@ -43,14 +43,14 @@ describe('Basket page', function () {
 
   afterEach(() => spyAlert.mockClear());
 
-  it('Should render correctly', function () {
-    const {getByTestId, getByText, queryByTestId, toJSON} = render(
+  it('Should render the page', function () {
+    const {getByTestId, getByText, queryByTestId} = render(
       <GlobalContext.Provider value={globalContextMock}>
         <BasketPage />
       </GlobalContext.Provider>,
     );
     expect(true).toBe(true);
-    expect(toJSON()).toMatchSnapshot();
+    expect(getByTestId('basket-page')).toBeTruthy();
   });
 
   it('Should render the price rounded to 2 decimal places', function () {

@@ -2,28 +2,10 @@ import {fireEvent, render} from '@testing-library/react-native';
 import React from 'react';
 import {CurrentOrders} from '../src/components/Orders/CurrentOrders';
 import {OrderStatus} from '../src/data/OrderStatus';
-import {
-  getAllByTestId,
-  getByText,
-  queryByTestId,
-  queryByText,
-} from '@testing-library/react';
-import OrderItemsList from '../src/components/Orders/OrderItemsList';
 import CollapsableOrder from '../src/components/Orders/CollapsableOrder';
 import {PastOrders} from '../src/components/Orders/PastOrders';
-import {SectionList, SectionListData, Text, View} from 'react-native';
 
 describe('Order Page', function () {
-  it('Should show the empty text when current orders is empty', function () {
-    const {toJSON, getByText} = render(
-      <CurrentOrders emptyText="no current orders" currentOrders={[]} />,
-    );
-
-    expect(true).toBeTruthy();
-    expect(toJSON()).toMatchSnapshot();
-    expect(getByText('no current orders')).toBeTruthy();
-  });
-
   it('Should show a number of items equal to length of currentOrders', function () {
     const {getAllByTestId, queryByText} = render(
       <CurrentOrders
@@ -45,7 +27,6 @@ describe('Order Page', function () {
       />,
     );
 
-    expect(true).toBeTruthy();
     expect(queryByText('no current orders')).toBeFalsy();
     expect(getAllByTestId('order-card')).toHaveLength(2);
     expect(queryByText('no current orders')).toBeFalsy();
@@ -124,7 +105,7 @@ describe('Order Page', function () {
     ).toBeTruthy();
 
     //check quantity is correct
-    expect(getAllByText('3', {exact: false})).toHaveLength(2);
+    expect(getAllByText('3', {exact: false})).toHaveLength(1);
 
     //check that options are correct on the item
     expect(getByText('Caramel', {exact: false})).toBeTruthy();
@@ -133,66 +114,43 @@ describe('Order Page', function () {
     expect(queryByText('Hazelnut', {exact: false})).toBeFalsy();
   });
 
-  // it('Should display the no past orders text when past orders is empty', function () {
-  //   const {getByText, getByTestId, queryByTestId, queryByText} = render(
-  //     <PastOrders
-  //       emptyText="no past orders"
-  //       pastOrders={[
-  //         {
-  //           title: 'January',
-  //           data: [{name: 'Latte', price: 2, quantity: 1, has_options: false}],
-  //         },
-  //         {
-  //           title: 'February',
-  //           data: [{name: 'Flat', price: 2.5, quantity: 1, has_options: false}],
-  //         },
-  //       ]}
-  //     />,
-  //   );
-  //
-  //   expect(getByText('no past orders', {exact: false})).toBeTruthy();
-  // });
-    //Can someone well versed in section lists please help me out here
-});
-
-export default function TestingScreen() {
-  const _renderItem = ({section}: {section: SectionListData<any>}) => {
-    return (
-      <View style={{width: '100%', height: 10}}>
-        {/*<Text>{'Hi! ' + section.data[0].id}</Text>*/}
-      </View>
-    );
-  };
-
-  return (
-    <View>
-      <SectionList
-        renderItem={_renderItem}
-        sections={[
+  it('Should display items wheen they are passed in as props', function () {
+    const {getByText, getByTestId, queryAllByText, queryByText} = render(
+      <PastOrders
+        emptyText="no past orders"
+        pastOrders={[
           {
-            title: 'Section1',
-            data: [{name: 'Flat', price: 2.5, quantity: 1, has_options: false}],
-          },
-          {
-            title: 'Section2',
-            data: [{name: 'Flat', price: 2.5, quantity: 1, has_options: false}],
+            title: 'January',
+            data: [
+              {
+                shop: {name: 'cafe combi'},
+                incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
+                status: OrderStatus.INCOMING,
+                items: [
+                  {
+                    name: 'My Special latte',
+                    price: 2,
+                    quantity: 1,
+                    has_options: false,
+                  },
+                ],
+              },
+            ],
           },
         ]}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item: any) => item.id}
-      />
-    </View>
-  );
-}
+      />,
+    );
 
-// Tests ------
+    expect(queryByText('no past orders', {exact: false})).toBeFalsy();
+    expect(queryAllByText('My Special latte', {exact: false})).toBeTruthy();
+  });
 
-test('Testing sectionlist', async () => {
-  const wrapper = <TestingScreen />;
+  it('Should render the empty text when there are no past orders', function () {
+    const {getByText, queryByText} = render(
+      <PastOrders emptyText="no past orders" pastOrders={[]} />,
+    );
 
-  const {debug, unmount} = render(wrapper);
-
-  debug();
-
-  unmount();
+    expect(getByText('no past orders')).toBeTruthy();
+    expect(queryByText('My Special latte')).toBeFalsy();
+  });
 });

@@ -15,7 +15,7 @@ describe('Shop card', function () {
       </GlobalContext.Provider>,
     );
 
-    //SHould render correct title but be closed when closed
+    //Should render correct title but be closed when closed
     expect(true).toBe(true);
     expect(getByTestId('shop-card-closed')).toBeTruthy();
     expect(getByText('CLOSED')).toBeTruthy();

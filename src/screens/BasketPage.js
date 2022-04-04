@@ -127,7 +127,7 @@ const BasketPage = ({navigation}) => {
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
         }}>
-        <View style={styles.basket}>
+        <View style={styles.basket} testID="basket-page">
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.name}
             navigation={navigation}

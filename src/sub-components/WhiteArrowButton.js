@@ -34,6 +34,7 @@ const WhiteArrowButton = ({
 
   return (
     <Pressable
+        testID="white-arrow-pressable"
       underlayColor={'transparent'}
       onPress={handleBackButtonClick}
       style={({pressed}) => [
