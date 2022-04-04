@@ -27,7 +27,7 @@ const OrderDetailsView = ({order}) => {
           >
             {order.shop.name}
           </Text>
-          <Text style={styles.orderId}>
+          <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
             #{order.key}
           </Text>
           <Text style={[textStyles.greyPoppins, styles.textFlex]}>
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
   cancelledOrder: {
     color: '#8C233C',
   },
-  orderId:{
+  orderId: {
     marginVertical: '5%',
-  }
+  },
 });
 export default OrderDetailsView;

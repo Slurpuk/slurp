@@ -20,5 +20,4 @@ if (__DEV__ && EMULATOR_MODE_ON) {
     console.log(e);
   }
 }
-
 AppRegistry.registerComponent(appName, () => App);

@@ -90,6 +90,9 @@ export default function MapBackground({
     ) {
       isUserCentered.current = true;
       setRecenterVisible(false);
+    } else {
+      isUserCentered.current = false;
+      setRecenterVisible(true);
     }
   }, [mapCenter, setRecenterVisible, userLocation]);
 
@@ -105,7 +108,7 @@ export default function MapBackground({
         watchID,
         context.setLocationIsEnabled,
         updateMapCenter,
-      ).catch(error => Alerts.elseAlert());
+      ).catch(() => Alerts.elseAlert());
       return () => {
         Geolocation.clearWatch(currWatch);
       };
@@ -124,15 +127,6 @@ export default function MapBackground({
     setSearchBarFocussed(false);
     Keyboard.dismiss();
   };
-
-  /**
-   * Set appropriate states when the map is dragged
-   */
-  function mapDragged() {
-    mapPressed();
-    isUserCentered.current = false;
-    setRecenterVisible(true);
-  }
 
   return (
     <View style={styles.container}>
@@ -153,7 +147,7 @@ export default function MapBackground({
         }}
         //focus only on map when map pressed
         onPress={() => mapPressed()}
-        onPanDrag={() => mapDragged()}
+        onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={mapCenter}
@@ -175,7 +169,8 @@ export default function MapBackground({
             {/*//closed markers appear grey*/}
             <View
               style={styles.markerStyle}
-              testID={'shop_marker_' + marker.name}>
+              testID={'shop_marker_' + marker.name}
+            >
               <Text style={styles.closed}>
                 {!marker.is_open ? 'Closed' : ''}
               </Text>

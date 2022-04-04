@@ -1,4 +1,4 @@
-import {SectionList, Text} from 'react-native';
+import {SectionList, Text, StyleSheet} from 'react-native';
 import CollapsableOrder from './CollapsableOrder';
 import EmptyListText from '../../sub-components/EmptyListText';
 import textStyles from '../../../stylesheets/textStyles';
@@ -8,7 +8,7 @@ export const PastOrders = props => {
   return (
     <>
       <SectionList
-        contentContainerStyle={{backgroundColor: '#EDEBE7', flexGrow: 1}}
+        contentContainerStyle={styles.container}
         sections={props.pastOrders}
         stickySectionHeadersEnabled={false}
         keyExtractor={(item, index) => item + index}
@@ -22,3 +22,11 @@ export const PastOrders = props => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#EDEBE7',
+    flexGrow: 1,
+    paddingTop: '5%',
+  },
+});

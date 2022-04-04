@@ -17,14 +17,17 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
       }}
       onLayout={() => {
         fadeOpacityIn(globalContext.adaptiveOpacity, 140);
-      }}>
+      }}
+    >
       <ImageBackground
         imageStyle={!isFullScreen ? ShopIntroStyles.cardImg : null}
         style={ShopIntroStyles.container}
-        source={{uri: shop.image}}>
+        source={{uri: shop.image}}
+      >
         <LinearGradient
           colors={['transparent', 'black']}
-          style={ShopIntroStyles.linearGradient}>
+          style={ShopIntroStyles.linearGradient}
+        >
           <View
             style={[
               ShopIntroStyles.back_button,
@@ -34,7 +37,8 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
                 ? {opacity: 0}
                 : {opacity: 1},
             ]}
-            testID={'shop_intro'}>
+            testID={'shop_intro'}
+          >
             <WhiteArrowButton
               direction={globalContext.bottomSheet.isOpen ? 'down' : 'left'}
               navigation={navigation}

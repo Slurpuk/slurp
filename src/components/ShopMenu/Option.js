@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import {Pressable, Text, View} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import React, {useContext, useEffect, useState} from 'react';
 import {OptionsContext} from './OptionsPopUp';
@@ -49,14 +49,18 @@ export default function Option({option, updateOptions}) {
           animationDuration={0.2}
         />
       </View>
-      <Pressable onPress={() => {
-        setToggleCheckBox(!toggleCheckBox)
-        updateOptions(option, !toggleCheckBox)
-      }}>
+      <Pressable
+        onPress={() => {
+          setToggleCheckBox(!toggleCheckBox);
+          updateOptions(option, !toggleCheckBox);
+        }}
+      >
         <View style={[OptionStyles.container]}>
           <Text
             style={
-              toggleCheckBox ? textStyles.optionsTextBold : textStyles.optionsText
+              toggleCheckBox
+                ? textStyles.optionsTextBold
+                : textStyles.optionsText
             }
           >
             {option.name}
