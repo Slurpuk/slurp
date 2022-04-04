@@ -33,7 +33,7 @@ const DraggableShopPage = ({shop, navigation}) => {
       onSettle={index => updatePage(index)}
       initialSnapIndex={1}
       renderHandle={() => (
-        <View style={styles.header1}>
+        <View style={styles.header1} testID={'draggable_shop_page'}>
           <View
             style={[
               styles.panelHandle,

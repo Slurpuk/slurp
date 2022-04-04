@@ -12,7 +12,6 @@ import {ShopContext} from '../../screens/ShopPage';
 import {menuItemStyles} from './shopStyles';
 import {addToBasket} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
-import {context} from 'msw';
 
 /**
  * Menu item component displayed in a shop's menu.
@@ -71,16 +70,17 @@ const MenuItem = ({item}) => {
   }
 
   return (
-    <TouchableOpacity style={menuItemStyles.item} onPress={() => add(item)}>
+    <TouchableOpacity
+      style={menuItemStyles.item}
+      testID={'menu_item_' + item.name}
+      onPress={() => add(item)}>
       <ImageBackground
         source={{uri: item.image}}
         imageStyle={menuItemStyles.image}
-        style={menuItemStyles.imageContainer}
-      >
+        style={menuItemStyles.imageContainer}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={menuItemStyles.linearGradient}
-        >
+          style={menuItemStyles.linearGradient}>
           <View style={menuItemStyles.menuCardTextWrapper}>
             <Text style={[textStyles.headingOne, menuItemStyles.title]}>
               {item.name}
@@ -89,8 +89,7 @@ const MenuItem = ({item}) => {
           </View>
           <Pressable
             onPress={() => add(item)}
-            style={menuItemStyles.menuCardPopupTrigger}
-          >
+            style={menuItemStyles.menuCardPopupTrigger}>
             <Text style={[textStyles.iconText, menuItemStyles.counter]}>
               {' '}
               {count === 0 ? '+' : count}
