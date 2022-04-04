@@ -42,6 +42,7 @@ const WhiteArrowButton = ({
   return (
     <Pressable
       title={''}
+        testID="white-arrow-pressable"
       underlayColor={'transparent'}
       onPress={handleBackButtonClick}
       style={({pressed}) => [
@@ -51,7 +52,6 @@ const WhiteArrowButton = ({
         },
         customStyle,
       ]}
-      testID={'back_arrow'}
     >
       <Icon name={iconName} color={'white'} size={34} />
     </Pressable>

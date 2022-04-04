@@ -43,6 +43,7 @@ const WelcomePages = ({navigation}) => {
     <View style={styles.wrapper} testID={'welcome_pages'}>
       <StatusBar translucent={true} backgroundColor="transparent" />
       <ScrollView
+        testID="welcome-wrapper"
         style={{display: 'flex'}}
         horizontal={true}
         scrollEventThrottle={16}
@@ -53,8 +54,10 @@ const WelcomePages = ({navigation}) => {
         }}
         testID={'welcome_pages_scrollview'}
       >
-        <View style={styles.component} testID={'welcome_page1'}>
-          <Text style={[textStyles.blueJosefinHeading, styles.title]}>
+        <View style={styles.component} testID="welcome-one">
+          <Text
+            style={[textStyles.blueJosefinHeading, styles.title]}
+            testID="welcome-header-one">
             Welcome to Slurp!
           </Text>
           <CoffeeShopSvg style={[styles.circle]} />
@@ -91,8 +94,7 @@ const WelcomePages = ({navigation}) => {
           />
           <Text
             style={[textStyles.bluePoppinsBody, styles.footer]}
-            onPress={proceedToLogIn}
-          >
+            onPress={proceedToLogIn}>
             Already have an account? Log in
           </Text>
         </View>

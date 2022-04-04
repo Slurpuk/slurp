@@ -26,7 +26,7 @@ function getOptionsText(item) {
  */
 const Item = ({item}) => {
   return (
-    <View>
+    <View testID="item-wrapper">
       <View style={styles.singleElement}>
         <View style={styles.elementDetails}>
           <Text style={textStyles.bluePoppinsSubHeading}>

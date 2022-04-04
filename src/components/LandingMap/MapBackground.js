@@ -131,6 +131,7 @@ export default function MapBackground({
   return (
     <View style={styles.container}>
       <MapView
+        testID="map-background"
         onRegionChangeComplete={region => {
           if (Platform.OS === 'ios') {
             if (
@@ -155,6 +156,7 @@ export default function MapBackground({
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
+            testID="marker"
             key={index}
             coordinate={marker.coords}
             pinColor={'navy'}
@@ -171,7 +173,7 @@ export default function MapBackground({
               style={styles.markerStyle}
               testID={'shop_marker_' + marker.name}
             >
-              <Text style={styles.closed}>
+              <Text style={styles.closed} testID="marker-inner-view">
                 {!marker.is_open ? 'Closed' : ''}
               </Text>
               <CustomMapIcon isOpen={marker.is_open} />

@@ -166,16 +166,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flex: 1,
   },
-  noResultsText: {
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    paddingVertical: 15,
-    borderBottomColor: '#DDDDDD',
-    borderBottomWidth: 1,
-    position: 'relative',
-    backgroundColor: 'whitesmoke',
+
+  searchResultContainer: {
+    width: screenWidth * 0.7,
   },
-  searchResultContainer: {width: screenWidth * 0.7},
 
   container: {
     borderRadius: 20,
@@ -220,8 +214,8 @@ const styles = StyleSheet.create({
     color: '#046D66',
   },
   flatListItem: {
-    width: screenWidth,
-    maxWidth: screenWidth,
+    width: screenWidth * 1,
+    maxWidth: screenWidth * 1,
     fontSize: 16,
     textAlignVertical: 'center',
     textAlign: 'center',
