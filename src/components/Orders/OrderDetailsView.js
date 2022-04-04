@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
   cancelledOrder: {
     color: '#8C233C',
   },
-  orderId:{
+  orderId: {
     marginVertical: '5%',
-  }
+  },
 });
 export default OrderDetailsView;

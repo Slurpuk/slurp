@@ -84,58 +84,66 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
       {searchBarFocused ? (
         <View style={styles.activeElementsWrapper}>
           <View style={styles.cover} />
-          {shops.length > 0 ?
-          <FlatList
-            // Only display the filtered shops in the results
-            keyboardShouldPersistTaps="handled"
-            data={shops}
-            styles={styles.flatList}
-            renderItem={({item}) => {
-              return (
-                <View
-                  style={[
-                    styles.searchResultContainer,
-                    {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}>
-                  <Pressable
-                    onPressIn={() => {
-                      if (item.is_open) {
-                        Keyboard.dismiss();
-                      }
-                    }}
-                    onPress={() => selectShop(item)}
-                    style={({pressed}) => [
-                      {
-                        backgroundColor:
-                          pressed && item.is_open
-                            ? '#087562'
-                            : item.is_open
-                            ? 'white'
-                            : '#C5C5C5',
-                      },
-                      styles.searchResult,
+          {shops.length > 0 ? (
+            <FlatList
+              // Only display the filtered shops in the results
+              keyboardShouldPersistTaps="handled"
+              data={shops}
+              styles={styles.flatList}
+              renderItem={({item}) => {
+                return (
+                  <View
+                    style={[
+                      styles.searchResultContainer,
+                      {display: searchBarFocused ? 'flex' : 'none'},
                     ]}
-                    testID={'search_item_' + item.name}>
-                    {({pressed}) => (
-                      <Text
-                        style={[
-                          {color: pressed && item.is_open ? 'white' : 'black'},
+                  >
+                    <Pressable
+                      onPressIn={() => {
+                        if (item.is_open) {
+                          Keyboard.dismiss();
+                        }
+                      }}
+                      onPress={() => selectShop(item)}
+                      style={({pressed}) => [
+                        {
+                          backgroundColor:
+                            pressed && item.is_open
+                              ? '#087562'
+                              : item.is_open
+                              ? 'white'
+                              : '#C5C5C5',
+                        },
+                        styles.searchResult,
+                      ]}
+                      testID={'search_item_' + item.name}
+                    >
+                      {({pressed}) => (
+                        <Text
+                          style={[
+                            {
+                              color:
+                                pressed && item.is_open ? 'white' : 'black',
+                            },
 
-                          styles.flatListItem,
-                        ]}>
-                        {item.name}
-                      </Text>
-                    )}
-                  </Pressable>
-                </View>
-              );
-            }}
-          /> : <Text style={[textStyles.greyPoppins, styles.noResultsText]}>
+                            styles.flatListItem,
+                          ]}
+                        >
+                          {item.name}
+                        </Text>
+                      )}
+                    </Pressable>
+                  </View>
+                );
+              }}
+            />
+          ) : (
+            <Text style={[textStyles.greyPoppins, styles.noResultsText]}>
               Sorry! {'\n\n'}
               No shop goes by this name. {'\n'}
               Please try a different one.
             </Text>
-          }
+          )}
         </View>
       ) : null}
     </View>

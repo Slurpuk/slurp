@@ -41,7 +41,8 @@ const Menu = ({navigation}) => {
             elevation: 0,
           },
         }}
-        containerStyle={menuStyles.container}>
+        containerStyle={menuStyles.container}
+      >
         <Tab.Screen
           name="Coffees"
           children={() => (
@@ -90,7 +91,8 @@ const Menu = ({navigation}) => {
       <View style={menuStyles.absoluteArea}>
         <LinearGradient
           colors={['transparent', '#EDEBE7', '#EDEBE7']}
-          style={menuStyles.linearGradient}>
+          style={menuStyles.linearGradient}
+        >
           <CustomButton
             text="View Basket"
             priority="primary"

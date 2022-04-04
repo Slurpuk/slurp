@@ -108,7 +108,7 @@ export default function MapBackground({
         watchID,
         context.setLocationIsEnabled,
         updateMapCenter,
-      ).catch(error => Alerts.elseAlert());
+      ).catch(() => Alerts.elseAlert());
       return () => {
         Geolocation.clearWatch(currWatch);
       };
@@ -150,7 +150,8 @@ export default function MapBackground({
         onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter}>
+        region={mapCenter}
+      >
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -163,11 +164,13 @@ export default function MapBackground({
                 await locationPress(context, setMapCenter, marker.name);
               }
               mapPressed();
-            }}>
+            }}
+          >
             {/*//closed markers appear grey*/}
             <View
               style={styles.markerStyle}
-              testID={'shop_marker_' + marker.name}>
+              testID={'shop_marker_' + marker.name}
+            >
               <Text style={styles.closed}>
                 {!marker.is_open ? 'Closed' : ''}
               </Text>
@@ -183,7 +186,8 @@ export default function MapBackground({
           }}
           onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
           onPress={() => focusMarker()}
-          title={'You are here'}>
+          title={'You are here'}
+        >
           <Image
             source={require('../../assets/images/dot.png')}
             style={styles.userMarker}
