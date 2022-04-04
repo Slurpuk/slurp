@@ -18,6 +18,7 @@ async function getOptions() {
     .collection('options')
     .get()
     .then(querySnapShot => {
+      console.log(querySnapShot.docs.length);
       querySnapShot.forEach(documentSnapshot => {
         let option = {
           ...documentSnapshot.data(),
@@ -28,7 +29,7 @@ async function getOptions() {
         option.type === 'Syrup' ? (index = 1) : (index = 0);
         if (option.name === 'Dairy') {
           dairy = option;
-        } else {
+        } else if (!options[index].data.find(opt => opt.name === option.name)) {
           options[index].data.push(option);
         }
       });
