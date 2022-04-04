@@ -71,8 +71,11 @@ const MenuItem = ({item}) => {
   }
 
   return (
-    <TouchableOpacity style={menuItemStyles.item} onPress={() => add(item)}>
+    <TouchableOpacity
+        testID={'overallButtonMenuItem'}
+        style={menuItemStyles.item} onPress={() => add(item)}>
       <ImageBackground
+        testID={'menuItemImage'}
         source={{uri: item.image}}
         imageStyle={menuItemStyles.image}
         style={menuItemStyles.imageContainer}
@@ -82,16 +85,23 @@ const MenuItem = ({item}) => {
           style={menuItemStyles.linearGradient}
         >
           <View style={menuItemStyles.menuCardTextWrapper}>
-            <Text style={[textStyles.headingOne, menuItemStyles.title]}>
+            <Text
+                testID={'menuItemName'}
+                style={[textStyles.headingOne, menuItemStyles.title]}>
               {item.name}
             </Text>
-            <Text style={textStyles.coffeePrice}>£{item.price.toFixed(2)}</Text>
+            <Text
+                testID={'menuItemPrice'}
+                style={textStyles.coffeePrice}>£{item.price.toFixed(2)}</Text>
           </View>
           <Pressable
+            testID={'buttonMenuItem'}
             onPress={() => add(item)}
             style={menuItemStyles.menuCardPopupTrigger}
           >
-            <Text style={[textStyles.iconText, menuItemStyles.counter]}>
+            <Text
+                testID={'menuItemAddIcon'}
+                style={[textStyles.iconText, menuItemStyles.counter]}>
               {' '}
               {count === 0 ? '+' : count}
             </Text>
