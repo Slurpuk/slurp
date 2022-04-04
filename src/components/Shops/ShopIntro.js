@@ -54,7 +54,7 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
               {shop.name}
             </Text>
             {globalContext.locationIsEnabled ? (
-              <ShopDetailIcons distanceToShop={shop.distanceTo} />
+              <ShopDetailIcons distanceToShop={shop.distanceTo} iconColor={'#FFE'} iconSize={24}/>
             ) : null}
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
               {shop.intro}

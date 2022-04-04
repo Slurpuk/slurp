@@ -5,11 +5,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {DetailIconsStyles} from '../../../stylesheets/ShopStyles';
 import {processDistance} from '../../helpers/screenHelpers';
 
-export default function ShopDetailIcons({distanceToShop}) {
+export default function ShopDetailIcons({distanceToShop, iconColor, iconSize, fontSize}) {
   return (
     <View style={DetailIconsStyles.container}>
-      <Icon size={24} color="#FFE" name="walk" />
-      <Text style={[textStyles.iconText, DetailIconsStyles.spacing]}>
+      <Icon size={iconSize} color={iconColor} name="walk" />
+      <Text style={[textStyles.iconText, DetailIconsStyles.spacing, {color: iconColor, fontSize: fontSize}]}>
         {processDistance(distanceToShop)}
       </Text>
     </View>
