@@ -1,12 +1,12 @@
-import { View, StyleSheet, Text, ImageBackground, Pressable } from "react-native";
-import React, { useContext } from "react";
+import {View, StyleSheet, Text, ImageBackground, Pressable} from 'react-native';
+import React, {useContext} from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {OrderStatus} from '../../data/OrderStatus';
-import ShopDetailIcons from "../Shops/ShopDetailIcons";
-import { GlobalContext } from "../../../App";
-import { ShopIntroStyles } from "../../../stylesheets/ShopStyles";
-import { LinearGradient } from "react-native-svg";
-import { menuItemStyles } from "../ShopMenu/shopStyles";
+import ShopDetailIcons from '../Shops/ShopDetailIcons';
+import {GlobalContext} from '../../../App';
+import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
+import {LinearGradient} from 'react-native-svg';
+import {menuItemStyles} from '../ShopMenu/shopStyles';
 
 /**
  * Corresponds to the closed version of the order
@@ -20,30 +20,39 @@ const OrderDetailsView = ({order}) => {
   return (
     <View style={styles.container}>
       <View style={styles.orderDetails}>
-          <ImageBackground
-            source={{uri: order.shop.image}}
-            imageStyle={{borderRadius: 7, overflow: 'hidden'}}
-            style={styles.picture}
-          >
-          </ImageBackground>
+        <ImageBackground
+          source={{uri: order.shop.image}}
+          imageStyle={{borderRadius: 7, overflow: 'hidden'}}
+          style={styles.picture}
+        />
         <View>
-            <Text
-              style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
-            >
-              {order.shop.name}
-            </Text>
+          <Text
+            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}>
+            {order.shop.name}
+          </Text>
           {getStatusAndDateComponent(order)}
           <View style={styles.orderInformation}>
             <Text style={[textStyles.greyPoppins, styles.textFlex]}>
               {getItemsText(order)}
             </Text>
-            {(order.Status === OrderStatus.COLLECTED ||
-              order.Status === OrderStatus.REJECTED) ? null :
-              <View style={[styles.ETA, order.ETA < 800 ? {backgroundColor: '#C12E48'} : {backgroundColor: '#046D66'}]}>
-                <ShopDetailIcons distanceToShop={order.ETA} iconSize={17} iconColor={'#ffe'} fontSize={12} />
+            {order.status === OrderStatus.COLLECTED ||
+            order.status === OrderStatus.REJECTED ? null : (
+              <View
+                style={[
+                  styles.ETA,
+                  order.ETA < 800
+                    ? {backgroundColor: '#C12E48'}
+                    : {backgroundColor: '#046D66'},
+                ]}>
+                <ShopDetailIcons
+                  distanceToShop={order.ETA}
+                  iconSize={17}
+                  iconColor={'#ffe'}
+                  fontSize={12}
+                />
               </View>
-            }
-        </View>
+            )}
+          </View>
         </View>
       </View>
       <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
@@ -88,8 +97,7 @@ function getStatusAndDateComponent(order) {
           textStyles.lightGreyPoppins,
           styles.textFlex,
           styles.finishedOrder,
-        ]}
-      >
+        ]}>
         {order.status} {dateAndTime}
       </Text>
     );
@@ -158,6 +166,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 0,
     marginRight: '1%',
-  }
+  },
 });
 export default OrderDetailsView;

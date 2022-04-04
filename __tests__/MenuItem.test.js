@@ -135,7 +135,11 @@ describe('Menu Item Component', function () {
 
     const buttonMenuItem = getByTestId('buttonMenuItem');
     fireEvent(buttonMenuItem, 'press');
-    const overallButtonMenuItem = getByTestId('overallButtonMenuItem');
+
+    const overallButtonMenuItem = getByTestId(
+      'menu_item_' + myOptionsItem.name,
+    );
+
     fireEvent(overallButtonMenuItem, 'press');
   });
   it('Should call respective function item doesnt have options', function () {
@@ -149,7 +153,10 @@ describe('Menu Item Component', function () {
 
     const buttonMenuItem = getByTestId('buttonMenuItem');
     fireEvent(buttonMenuItem, 'press');
-    const overallButtonMenuItem = getByTestId('overallButtonMenuItem');
+
+    const overallButtonMenuItem = getByTestId(
+      'menu_item_' + myOptionsItem.name,
+    );
     fireEvent(overallButtonMenuItem, 'press');
   });
 });
