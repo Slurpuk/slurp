@@ -152,8 +152,3 @@ export const menuItemStyles = StyleSheet.create({
   },
 });
 
-export const menuSectionStyles = StyleSheet.create({
-  sectionContainer: {
-    marginHorizontal: '3%',
-  },
-});
