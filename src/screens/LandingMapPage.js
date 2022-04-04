@@ -4,8 +4,6 @@ import {
   View,
   LogBox,
   StatusBar,
-  Button,
-  Image,
   TouchableOpacity,
 } from 'react-native';
 import MapBackground from '../components/LandingMap/MapBackground';
