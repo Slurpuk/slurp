@@ -39,7 +39,7 @@ const OrderDetailsView = ({order}) => {
             </Text>
             {(order.Status === OrderStatus.COLLECTED ||
               order.Status === OrderStatus.REJECTED) ? null :
-              <View style={styles.ETA}>
+              <View style={[styles.ETA, order.ETA < 800 ? {backgroundColor: '#C12E48'} : {backgroundColor: '#046D66'}]}>
                 <ShopDetailIcons distanceToShop={order.ETA} iconSize={17} iconColor={'#ffe'} fontSize={12} />
               </View>
             }
@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 0,
     marginRight: '1%',
-    backgroundColor: '#046D66',
     alignItems: 'baseline',
   }
 });
