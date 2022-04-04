@@ -4,27 +4,47 @@ import {CurrentOrders} from '../src/components/Orders/CurrentOrders';
 import {OrderStatus} from '../src/data/OrderStatus';
 import CollapsableOrder from '../src/components/Orders/CollapsableOrder';
 import {PastOrders} from '../src/components/Orders/PastOrders';
+import {GlobalContext} from '../App';
 
 describe('Order Page', function () {
+  const globalContextMock = {
+    currentUser: {
+      location: {
+        _latitude: 51,
+        _longitude: 0.01,
+      },
+    },
+  };
+
   it('Should show a number of items equal to length of currentOrders', function () {
     const {getAllByTestId, queryByText} = render(
-      <CurrentOrders
-        emptyText="no current orders"
-        currentOrders={[
-          {
-            status: OrderStatus.INCOMING,
-            items: [],
-            shop: {name: 'Yucky Starbucks', image: null},
-            incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
-          },
-          {
-            status: OrderStatus.INCOMING,
-            items: [],
-            shop: {name: 'Black Goat', image: null},
-            incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
-          },
-        ]}
-      />,
+      <GlobalContext.Provider value={globalContextMock}>
+        <CurrentOrders
+          emptyText="no current orders"
+          currentOrders={[
+            {
+              status: OrderStatus.INCOMING,
+              items: [],
+              shop: {
+                name: 'Yucky Starbucks',
+                image: null,
+                location: {latitude: 51, longitude: -0.01},
+              },
+              incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
+            },
+            {
+              status: OrderStatus.INCOMING,
+              items: [],
+              shop: {
+                name: 'Black Goat',
+                image: null,
+                location: {latitude: 51, longitude: -0.01},
+              },
+              incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
+            },
+          ]}
+        />
+      </GlobalContext.Provider>,
     );
 
     expect(queryByText('no current orders')).toBeFalsy();
@@ -34,40 +54,62 @@ describe('Order Page', function () {
 
   it('Should show the correct title based on the passed in value', function () {
     const {getByText, queryByText} = render(
-      <CurrentOrders
-        emptyText="no current orders"
-        currentOrders={[
-          {
-            status: OrderStatus.INCOMING,
-            items: [],
-            shop: {name: 'Yucky Starbucks', image: null},
-            incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
-          },
-        ]}
-      />,
+      <GlobalContext.Provider value={globalContextMock}>
+        <CurrentOrders
+          emptyText="no current orders"
+          currentOrders={[
+            {
+              status: OrderStatus.INCOMING,
+              items: [],
+              shop: {
+                name: 'Yucky Starbucks',
+                image: null,
+                location: {latitude: 51, longitude: -0.01},
+              },
+              incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
+            },
+          ]}
+        />
+      </GlobalContext.Provider>,
     );
     expect(getByText('Yucky Starbucks')).toBeTruthy();
   });
 
   it('Should be pressable', function () {
     const {getByText, getAllByTestId, getByTestId} = render(
-      <CurrentOrders
-        emptyText="no current orders"
-        currentOrders={[
-          {
-            status: OrderStatus.ACCEPTED,
-            items: [{name: 'Latte', quantity: 1, has_options: false}],
-            shop: {name: 'Yucky Starbucks', image: null},
-            incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
-          },
-          {
-            status: OrderStatus.READY,
-            items: [],
-            shop: {name: 'Black Goat', image: null},
-            incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
-          },
-        ]}
-      />,
+      <GlobalContext.Provider value={globalContextMock}>
+        <CurrentOrders
+          emptyText="no current orders"
+          currentOrders={[
+            {
+              status: OrderStatus.ACCEPTED,
+              items: [{name: 'Latte', quantity: 1, has_options: false}],
+              shop: {
+                name: 'Yucky Starbucks',
+                image: null,
+                location: {
+                  longitude: 51.2,
+                  latitude: 0.011,
+                },
+              },
+              incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
+            },
+            {
+              status: OrderStatus.READY,
+              items: [],
+              shop: {
+                name: 'Black Goat',
+                image: null,
+                location: {
+                  longitude: 51.21,
+                  latitude: 0.013,
+                },
+              },
+              incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
+            },
+          ]}
+        />
+      </GlobalContext.Provider>,
     );
     expect(getByText('Yucky Starbucks')).toBeTruthy();
     fireEvent(getAllByTestId('order-card')[0], 'press');
@@ -91,7 +133,14 @@ describe('Order Page', function () {
               options: [{name: 'Caramel', type: 'Syrup'}],
             },
           ],
-          shop: {name: 'Yucky Starbucks', image: null},
+          shop: {
+            name: 'Yucky Starbucks',
+            image: null,
+            location: {
+              longitude: 51.2,
+              latitude: 0.011,
+            },
+          },
           incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
         }}
       />,
@@ -123,7 +172,13 @@ describe('Order Page', function () {
             title: 'January',
             data: [
               {
-                shop: {name: 'cafe combi'},
+                shop: {
+                  name: 'cafe combi',
+                  location: {
+                    longitude: 51.2,
+                    latitude: 0.011,
+                  },
+                },
                 incoming_time: {toDate: jest.fn(() => new Date(Date.now()))},
                 status: OrderStatus.INCOMING,
                 items: [

@@ -22,7 +22,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   const [query, setQuery] = useState('');
 
   //the filtered list of shops to be shown in search results
-  const [shops, setShops] = useState();
+  const [shops, setShops] = useState([]);
 
   //focus the search bar when a letter is typed and update the filtered shops
   const updateQuery = input => {

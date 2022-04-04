@@ -87,7 +87,7 @@ export default function OptionsPopUp({data, renderer, item}) {
 
   return (
     <OptionsContext.Provider value={{milk: milk}}>
-      <View style={OptionPopUpStyles.container}>
+      <View style={OptionPopUpStyles.container} testID="options-popup">
         <View style={OptionPopUpStyles.header}>
           <Text style={[textStyles.headingOne, OptionPopUpStyles.product_name]}>
             {item.name}

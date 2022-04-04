@@ -5,6 +5,7 @@ import {Alert} from 'react-native';
 import OptionsPopUp from '../src/components/ShopMenu/OptionsPopUp';
 import renderers from '../src/components/ShopMenu/renderers';
 import {ShopContext} from '../src/screens/ShopPage';
+import {getByTestId} from '@testing-library/react';
 
 describe('Coffee Pop Up', function () {
   const spyAlert = jest
@@ -28,7 +29,7 @@ describe('Coffee Pop Up', function () {
       const globalContextMock = {
         isFirstTime: false,
       };
-      const {toJSON} = render(
+      const {getByTestId} = render(
         <GlobalContext.Provider value={globalContextMock}>
           <ShopContext.Provider value={shopContextMock}>
             <OptionsPopUp
@@ -44,8 +45,7 @@ describe('Coffee Pop Up', function () {
           </ShopContext.Provider>
         </GlobalContext.Provider>,
       );
-      expect(true).toBe(true);
-      expect(toJSON()).toMatchSnapshot();
+      expect(getByTestId('options-popup')).toBeTruthy();
     });
   });
 });

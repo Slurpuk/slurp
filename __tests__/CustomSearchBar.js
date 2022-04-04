@@ -31,8 +31,7 @@ describe('search bar', function () {
         />
       </GlobalContext.Provider>,
     );
-    expect(true).toBe(true);
-    expect(getByTestId('search-bar')).toBeTruthy();
+    expect(getByTestId('search_bar')).toBeTruthy();
   });
 
   it('Should be able to click on the search bar to focus it', function () {
@@ -46,7 +45,7 @@ describe('search bar', function () {
     );
 
     expect(queryAllByText('Yucky Starbucks')).toHaveLength(0);
-    fireEvent(getByTestId('search-bar'), 'press');
+    fireEvent(getByTestId('search_bar'), 'press');
 
     rerender(
       <GlobalContext.Provider value={globalContextMock}>
@@ -85,7 +84,7 @@ describe('search bar', function () {
           marginLeft: 10,
           minHeight: 40,
         }}
-        testID="search-bar"
+        testID="search_bar"
         underlineColorAndroid="transparent"
         value=""
       />,

@@ -12,12 +12,13 @@ import {check} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import {getAllByTestId, getByTestId} from '@testing-library/react';
 import {Alert} from 'react-native';
+import dot from '../src/assets/images/dot.png';
 
 const globalContextMock = {
   basketContent: null,
   currShop: {Name: 'Eten & Driken', key: 1},
   total: 2.5,
-  currentUser: {key: 1, location: {_latitude: 51, _longitude: -0.01}},
+  currentUser: {key: 1, location: {latitude: 51, longitude: -0.01}},
   clearBasket: null,
   addToBasket: jest.fn(),
   removeFromBasket: jest.fn(),
@@ -40,6 +41,8 @@ const globalContextMock = {
 };
 
 describe('Map page', function () {
+  jest.mock('../../assets/images/dot.png', () => 'dot.png');
+
   const spyAlert = jest
     .spyOn(Alert, 'alert')
     //@ts-ignore
@@ -49,12 +52,16 @@ describe('Map page', function () {
 
   afterEach(() => spyAlert.mockClear());
 
+  jest.mock('../../assets/images/dot.png', () => 1);
+
   test('Should render correctly and not give an alert if location permission is given', async () => {
     const {getByTestId} = render(
       <GlobalContext.Provider value={globalContextMock}>
         <MapBackground
           searchBarFocused={false}
           setSearchBarFocussed={jest.fn()}
+          setFocusMarker={{current: jest.fn()}}
+          setRecenterVisible={jest.fn()}
         />
       </GlobalContext.Provider>,
     );
@@ -81,6 +88,8 @@ describe('Map page', function () {
         <MapBackground
           searchBarFocused={false}
           setSearchBarFocussed={jest.fn()}
+          setFocusMarker={{current: jest.fn()}}
+          setRecenterVisible={jest.fn()}
         />
       </GlobalContext.Provider>,
     );
@@ -93,11 +102,16 @@ describe('Map page', function () {
   });
 
   it('Should display that a marker is closed, if the shop is not open', async () => {
-    globalContextMock.markers[0].isOpen = false;
+    globalContextMock.markers[0].is_open = false;
 
     const {getAllByTestId, getAllByText, queryByTestId, toJSON} = render(
       <GlobalContext.Provider value={globalContextMock}>
-        <MapBackground />
+        <MapBackground
+          searchBarFocused={false}
+          setSearchBarFocussed={jest.fn()}
+          setFocusMarker={{current: jest.fn()}}
+          setRecenterVisible={jest.fn()}
+        />
       </GlobalContext.Provider>,
     );
 
