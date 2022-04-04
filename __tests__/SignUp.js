@@ -3,6 +3,7 @@ import React from 'react';
 import {GlobalContext} from '../App';
 import SignUpPage from '../src/screens/SignUpPage';
 import {Alert} from 'react-native';
+import {getByTestId} from "@testing-library/react";
 
 describe('Signup page', function () {
   const spyAlert = jest
@@ -18,13 +19,12 @@ describe('Signup page', function () {
       const globalContextMock = {
         isFirstTime: false,
       };
-      const {toJSON} = render(
+      const {getByTestId} = render(
         <GlobalContext.Provider value={globalContextMock}>
           <SignUpPage />
         </GlobalContext.Provider>,
       );
-      expect(true).toBe(true);
-      expect(toJSON()).toMatchSnapshot();
+      expect(getByTestId('sign_up_page')).toBeTruthy();
     });
 
     it('should raise alert on submit with empty first name', async function () {
