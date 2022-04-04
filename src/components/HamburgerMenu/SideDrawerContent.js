@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext, useState } from "react";
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
 import {StyleSheet, Text} from 'react-native';
@@ -11,6 +11,7 @@ import {logout} from '../../firebase/queries';
  */
 function SideDrawerContent(props) {
   const context = useContext(GlobalContext);
+  const userName = useState(context.currentUser.first_name);
 
   /**
    * Prompt the user before logging out
@@ -31,7 +32,7 @@ function SideDrawerContent(props) {
         style={styles.close_button}
       />
       <Text style={styles.welcome_text}>
-        Hi {context.currentUser.first_name}!
+        Hi {userName}!
       </Text>
       <DrawerItem
         label="My orders"
