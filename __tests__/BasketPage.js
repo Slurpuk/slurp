@@ -50,7 +50,7 @@ describe('Basket page', function () {
       </GlobalContext.Provider>,
     );
     expect(true).toBe(true);
-    expect(getByTestId('basket-page')).toBeTruthy();
+    expect(getByTestId('basket_page')).toBeTruthy();
   });
 
   it('Should render the price rounded to 2 decimal places', function () {
