@@ -302,7 +302,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				9F45B524DE8C5FF19E1D0479 /* [CP] Embed Pods Frameworks */,
 				8504DBBE3E42ECB114737B78 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -325,7 +324,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				0D64EA8F7C56D65726107BB6 /* [CP] Embed Pods Frameworks */,
 				01018FB4B459376C6625B912 /* [CP] Copy Pods Resources */,
 				7183D48D8149C40270934378 /* [CP-User] [RNFB] Core Configuration */,
 			);
@@ -446,23 +444,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Slurp/Pods-Slurp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0D64EA8F7C56D65726107BB6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Slurp/Pods-Slurp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Slurp/Pods-Slurp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Slurp/Pods-Slurp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7183D48D8149C40270934378 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -491,23 +472,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Slurp-SlurpTests/Pods-Slurp-SlurpTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9F45B524DE8C5FF19E1D0479 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Slurp-SlurpTests/Pods-Slurp-SlurpTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Slurp-SlurpTests/Pods-Slurp-SlurpTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Slurp-SlurpTests/Pods-Slurp-SlurpTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B21532268A3B1CB7E1C684C6 /* [CP] Check Pods Manifest.lock */ = {
