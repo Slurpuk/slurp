@@ -12,7 +12,6 @@ import {ShopContext} from '../../screens/ShopPage';
 import {menuItemStyles} from './shopStyles';
 import {addToBasket} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
-import {context} from 'msw';
 
 /**
  * Menu item component displayed in a shop's menu.
