@@ -90,6 +90,9 @@ export default function MapBackground({
     ) {
       isUserCentered.current = true;
       setRecenterVisible(false);
+    } else {
+      isUserCentered.current = false;
+      setRecenterVisible(true);
     }
   }, [mapCenter, setRecenterVisible, userLocation]);
 
@@ -125,15 +128,6 @@ export default function MapBackground({
     Keyboard.dismiss();
   };
 
-  /**
-   * Set appropriate states when the map is dragged
-   */
-  function mapDragged() {
-    mapPressed();
-    isUserCentered.current = false;
-    setRecenterVisible(true);
-  }
-
   return (
     <View style={styles.container}>
       <MapView
@@ -153,11 +147,10 @@ export default function MapBackground({
         }}
         //focus only on map when map pressed
         onPress={() => mapPressed()}
-        onPanDrag={() => mapDragged()}
+        onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter}
-      >
+        region={mapCenter}>
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -170,8 +163,7 @@ export default function MapBackground({
                 await locationPress(context, setMapCenter, marker.name);
               }
               mapPressed();
-            }}
-          >
+            }}>
             {/*//closed markers appear grey*/}
             <View
               style={styles.markerStyle}
@@ -191,8 +183,7 @@ export default function MapBackground({
           }}
           onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
           onPress={() => focusMarker()}
-          title={'You are here'}
-        >
+          title={'You are here'}>
           <Image
             source={require('../../assets/images/dot.png')}
             style={styles.userMarker}
