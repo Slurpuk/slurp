@@ -152,13 +152,12 @@ const styles = StyleSheet.create({
   ETA: {
     marginLeft: '5%',
     flex: 0,
-    paddingRight: '1.5%',
+    paddingRight: '1%',
+    paddingTop: '1.2%',
     paddingLeft: '4%',
-    paddingVertical: '0.3%',
     borderRadius: 20,
     borderWidth: 0,
     marginRight: '1%',
-    alignItems: 'baseline',
   }
 });
 export default OrderDetailsView;
