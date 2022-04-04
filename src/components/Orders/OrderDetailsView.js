@@ -1,7 +1,12 @@
-import {View, StyleSheet, Text, ImageBackground} from 'react-native';
-import React from 'react';
+import { View, StyleSheet, Text, ImageBackground, Pressable } from "react-native";
+import React, { useContext } from "react";
 import textStyles from '../../../stylesheets/textStyles';
 import {OrderStatus} from '../../data/OrderStatus';
+import ShopDetailIcons from "../Shops/ShopDetailIcons";
+import { GlobalContext } from "../../../App";
+import { ShopIntroStyles } from "../../../stylesheets/ShopStyles";
+import { LinearGradient } from "react-native-svg";
+import { menuItemStyles } from "../ShopMenu/shopStyles";
 
 /**
  * Corresponds to the closed version of the order
@@ -10,29 +15,35 @@ import {OrderStatus} from '../../data/OrderStatus';
  */
 const OrderDetailsView = ({order}) => {
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
+  const context = useContext(GlobalContext);
 
   return (
     <View style={styles.container}>
       <View style={styles.orderDetails}>
-        <View>
           <ImageBackground
             source={{uri: order.shop.image}}
             imageStyle={{borderRadius: 7, overflow: 'hidden'}}
             style={styles.picture}
-          />
-        </View>
-        <View>
-          <Text
-            style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
           >
-            {order.shop.name}
-          </Text>
-          <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
-            #{order.key}
-          </Text>
-          <Text style={[textStyles.greyPoppins, styles.textFlex]}>
-            {getItemsText(order)}
-          </Text>
+          </ImageBackground>
+        <View>
+            <Text
+              style={[textStyles.veryDarkGreyPoppinsSubHeading, styles.textFlex]}
+            >
+              {order.shop.name}
+            </Text>
+          {getStatusAndDateComponent(order)}
+          <View style={styles.orderInformation}>
+            <Text style={[textStyles.greyPoppins, styles.textFlex]}>
+              {getItemsText(order)}
+            </Text>
+            {(order.Status === OrderStatus.COLLECTED ||
+              order.Status === OrderStatus.REJECTED) ? null :
+              <View style={[styles.ETA, order.ETA < 800 ? {backgroundColor: '#C12E48'} : {backgroundColor: '#046D66'}]}>
+                <ShopDetailIcons distanceToShop={order.ETA} iconSize={17} iconColor={'#ffe'} fontSize={12} />
+              </View>
+            }
+        </View>
         </View>
       </View>
       <View style={styles.bottomComponent}>{currentOrderStatusComponent}</View>
@@ -57,6 +68,38 @@ function getItemsText(order) {
     itemsComponent = numberOfItems + ' Items';
   }
   return itemsComponent;
+}
+
+/**
+ * Returns a component that indicates the date of completion of an order.
+ * This can include the current date if the order has not been completed.
+ * @param order Order object
+ * @return Component
+ */
+function getStatusAndDateComponent(order) {
+  let dateAndTime = order.incoming_time.toDate().toDateString();
+  if (
+    order.Status === OrderStatus.COLLECTED ||
+    order.Status === OrderStatus.REJECTED
+  ) {
+    return (
+      <Text
+        style={[
+          textStyles.lightGreyPoppins,
+          styles.textFlex,
+          styles.finishedOrder,
+        ]}
+      >
+        {order.status} {dateAndTime}
+      </Text>
+    );
+  } else {
+    return (
+      <Text style={[textStyles.lightGreyPoppins, styles.textFlex]}>
+        {dateAndTime}
+      </Text>
+    );
+  }
 }
 
 /**
@@ -88,8 +131,8 @@ const styles = StyleSheet.create({
     height: 74,
     marginRight: 15,
   },
+
   textFlex: {
-    flex: 1,
     overflow: 'hidden',
   },
   bottomComponent: {
@@ -102,8 +145,19 @@ const styles = StyleSheet.create({
   cancelledOrder: {
     color: '#8C233C',
   },
-  orderId: {
-    marginVertical: '5%',
+  orderInformation: {
+    display: 'flex',
+    flexDirection: 'row',
   },
+  ETA: {
+    marginLeft: '5%',
+    flex: 0,
+    paddingRight: '1%',
+    paddingTop: '1.2%',
+    paddingLeft: '4%',
+    borderRadius: 20,
+    borderWidth: 0,
+    marginRight: '1%',
+  }
 });
 export default OrderDetailsView;
