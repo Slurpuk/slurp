@@ -18,7 +18,6 @@ async function getOptions() {
     .collection('options')
     .get()
     .then(querySnapShot => {
-      console.log(querySnapShot.docs.length);
       querySnapShot.forEach(documentSnapshot => {
         let option = {
           ...documentSnapshot.data(),

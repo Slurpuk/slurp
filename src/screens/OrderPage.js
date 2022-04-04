@@ -45,7 +45,6 @@ const OrderPage = ({navigation}) => {
         loading.current.past = true;
         let prevOrders = await formatPastOrders(newOrders.pastOrders);
         if (isActive) {
-          console.log('fqwdwq');
           setPastOrders(prevOrders);
           loading.current.past = false;
         }
