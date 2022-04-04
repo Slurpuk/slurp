@@ -18,6 +18,7 @@ async function getOptions() {
     .collection('options')
     .get()
     .then(querySnapShot => {
+      console.log(querySnapShot.docs.length);
       querySnapShot.forEach(documentSnapshot => {
         let option = {
           ...documentSnapshot.data(),
@@ -28,7 +29,7 @@ async function getOptions() {
         option.type === 'Syrup' ? (index = 1) : (index = 0);
         if (option.name === 'Dairy') {
           dairy = option;
-        } else {
+        } else if (!options[index].data.find(opt => opt.name === option.name)) {
           options[index].data.push(option);
         }
       });
@@ -257,6 +258,20 @@ async function getOptionRef(option) {
 }
 
 /**
+ * Logout the current user if there's one currently logged in.
+ */
+async function logout() {
+  const query = await auth().signOut();
+  try {
+    await asyncCallWithTimeout(query, 5000);
+  } catch (err) {
+    err.message === queryTimeOutMessage
+      ? Alerts.connectionErrorAlert()
+      : Alerts.databaseErrorAlert();
+  }
+}
+
+/**
  * Call an async function with a maximum time limit (in milliseconds) for the timeout
  * @param {Promise<any>} asyncPromise An asynchronous promise to resolve
  * @param {number} timeLimit Time limit to attempt function in milliseconds
@@ -288,4 +303,5 @@ export {
   createUserAuth,
   getItemRef,
   getOptionRef,
+  logout,
 };

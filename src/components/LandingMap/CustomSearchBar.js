@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import {GlobalContext} from '../../../App';
-import textStyles from "../../../stylesheets/textStyles";
+import textStyles from '../../../stylesheets/textStyles';
 const screenHeight = Dimensions.get('window').height;
 
 const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
@@ -84,57 +84,66 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
       {searchBarFocused ? (
         <View style={styles.activeElementsWrapper}>
           <View style={styles.cover} />
-          {shops.length > 0 ?
-          <FlatList
-            // Only display the filtered shops in the results
-            keyboardShouldPersistTaps="handled"
-            data={shops}
-            styles={styles.flatList}
-            renderItem={({item}) => {
-              return (
-                <View
-                  style={[
-                    styles.searchResultContainer,
-                    {display: searchBarFocused ? 'flex' : 'none'},
-                  ]}>
-                  <Pressable
-                    onPressIn={() => {
-                      if (item.is_open) {
-                        Keyboard.dismiss();
-                      }
-                    }}
-                    onPress={() => selectShop(item)}
-                    style={({pressed}) => [
-                      {
-                        backgroundColor:
-                          pressed && item.is_open
-                            ? '#087562'
-                            : item.is_open
-                            ? 'white'
-                            : '#C5C5C5',
-                      },
-                      styles.searchResult,
+          {shops.length > 0 ? (
+            <FlatList
+              // Only display the filtered shops in the results
+              keyboardShouldPersistTaps="handled"
+              data={shops}
+              styles={styles.flatList}
+              renderItem={({item}) => {
+                return (
+                  <View
+                    style={[
+                      styles.searchResultContainer,
+                      {display: searchBarFocused ? 'flex' : 'none'},
                     ]}
-                    testID={'search_item_' + item.name}>
-                    {({pressed}) => (
-                      <Text
-                        style={[
-                          {color: pressed && item.is_open ? 'white' : 'black'},
+                  >
+                    <Pressable
+                      onPressIn={() => {
+                        if (item.is_open) {
+                          Keyboard.dismiss();
+                        }
+                      }}
+                      onPress={() => selectShop(item)}
+                      style={({pressed}) => [
+                        {
+                          backgroundColor:
+                            pressed && item.is_open
+                              ? '#087562'
+                              : item.is_open
+                              ? 'white'
+                              : '#C5C5C5',
+                        },
+                        styles.searchResult,
+                      ]}
+                      testID={'search_item_' + item.name}
+                    >
+                      {({pressed}) => (
+                        <Text
+                          style={[
+                            {
+                              color:
+                                pressed && item.is_open ? 'white' : 'black',
+                            },
 
-                          styles.flatListItem,
-                        ]}>
-                        {item.name}
-                      </Text>
-                    )}
-                  </Pressable>
-                </View>
-              );
-            }}
-          /> : <Text style={[textStyles.greyPoppins, styles.noResultsText]}>
+                            styles.flatListItem,
+                          ]}
+                        >
+                          {item.name}
+                        </Text>
+                      )}
+                    </Pressable>
+                  </View>
+                );
+              }}
+            />
+          ) : (
+            <Text style={[textStyles.greyPoppins, styles.noResultsText]}>
               Sorry! {'\n\n'}
-              Nothing seems to match this phrase. {'\n'}
-              Please try a different query
-            </Text> }
+              No shop goes by this name. {'\n'}
+              Please try a different one.
+            </Text>
+          )}
         </View>
       ) : null}
     </View>
@@ -166,8 +175,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: 'whitesmoke',
   },
-  searchResultContainer: { width: screenWidth * 0.7,
-  },
+  searchResultContainer: {width: screenWidth * 0.7},
 
   container: {
     borderRadius: 20,

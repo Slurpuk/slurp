@@ -2,6 +2,10 @@ import {StyleSheet, Text} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import React from 'react';
 
+/**
+ * Customisable and reusable text component displayed in empty flat lists or section lists.
+ * @param text The text to display
+ */
 const EmptyListText = ({text}) => {
   return (
     <Text

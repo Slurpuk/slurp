@@ -2,7 +2,7 @@ import GreenHeader from '../sub-components/GreenHeader';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {CurrentOrders} from '../components/Orders/CurrentOrders';
 import {PastOrders} from '../components/Orders/PastOrders';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {GlobalContext} from '../../App';
 import firestore from '@react-native-firebase/firestore';
@@ -24,53 +24,74 @@ const OrderPage = ({navigation}) => {
   const [pastOrders, setPastOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
   const Tab = createMaterialTopTabNavigator(); // Stack navigator for the tab screens
-  const [loading, setLoading] = useState(true);
+  const loading = useRef({current: true, past: true});
 
   /**
    * Side effect which subscribes to the Orders model and retrieves the current user's orders and formats them.
    */
   useEffect(() => {
+    let isActive = true;
     const fetchData = firestore()
       .collection('orders')
       .where('user', '==', context.currentUser.ref)
       .onSnapshot(async querySnapshot => {
         let newOrders = await separateOrders(querySnapshot);
-        await formatCurrentOrders(newOrders.currentOrders, setCurrentOrders);
-        await formatPastOrders(newOrders.pastOrders, setPastOrders);
-        if (loading) {
-          setLoading(false);
+        loading.current.current = true;
+        let currOrders = await formatCurrentOrders(newOrders.currentOrders);
+        if (isActive) {
+          setCurrentOrders(currOrders);
+          loading.current.current = false;
+        }
+        loading.current.past = true;
+        let prevOrders = await formatPastOrders(newOrders.pastOrders);
+        if (isActive) {
+          console.log('fqwdwq');
+          setPastOrders(prevOrders);
+          loading.current.past = false;
         }
       });
-    return () => fetchData();
+    return () => {
+      isActive = false;
+      fetchData();
+    };
   }, [context.currentUser.ref, loading]);
 
   return (
-    <View style={styles.container} testID={'orders_page'}>
-      <GreenHeader headerText={'ORDERS'} navigation={navigation} />
-      {loading ? (
-        <LoadingPage />
-      ) : (
-        <Tab.Navigator
-          style={styles.navigatorContent}
-          screenOptions={ScreenOptionsStyles}>
-          <Tab.Screen name="Current">
-            {() => (
+    <View style={styles.container}>
+      <GreenHeader
+        headerText={'ORDERS'}
+        navigation={navigation}
+        testID={'orders_page'}
+      />
+      <Tab.Navigator
+        style={styles.navigatorContent}
+        screenOptions={ScreenOptionsStyles}
+      >
+        <Tab.Screen name="Current">
+          {() =>
+            !loading.current.current ? (
               <CurrentOrders
                 currentOrders={currentOrders}
                 emptyText={emptyCurrentOrdersText}
               />
-            )}
-          </Tab.Screen>
-          <Tab.Screen name="Past">
-            {() => (
+            ) : (
+              <LoadingPage />
+            )
+          }
+        </Tab.Screen>
+        <Tab.Screen name="Past">
+          {() =>
+            !loading.current.past ? (
               <PastOrders
                 pastOrders={pastOrders}
                 emptyText={emptyPastOrdersText}
               />
-            )}
-          </Tab.Screen>
-        </Tab.Navigator>
-      )}
+            ) : (
+              <LoadingPage />
+            )
+          }
+        </Tab.Screen>
+      </Tab.Navigator>
     </View>
   );
 };

@@ -103,24 +103,6 @@ export const Alerts = {
     );
   },
 
-  initPaymentAlert: (tryAgain = () => {}) => {
-    Alert.alert(
-      AlertMessage.INIT_PAYMENT.title,
-      AlertMessage.INIT_PAYMENT.message,
-      [
-        {
-          text: 'Yes',
-          onPress: () => tryAgain(),
-        },
-        {
-          text: 'No',
-          style: 'cancel',
-        },
-      ],
-      {cancelable: false},
-    );
-  },
-
   networkAlert: () => {
     Alert.alert(AlertMessage.NETWORK.title, AlertMessage.NETWORK.message);
   },
@@ -134,8 +116,8 @@ export const Alerts = {
 
   orderSentAlert: navigation => {
     Alert.alert(
-      'Order received.',
-      'Your order has been sent to the shop! Awaiting response.',
+      AlertMessage.ORDER_SENT.title,
+      AlertMessage.ORDER_SENT.message,
       [
         {
           text: 'OK',
@@ -143,5 +125,15 @@ export const Alerts = {
         },
       ],
     );
+  },
+
+  logoutAlert: logout => {
+    Alert.alert(AlertMessage.LOGOUT.title, AlertMessage.LOGOUT.message, [
+      {text: 'Yes', onPress: () => logout()},
+      {
+        text: 'No',
+        style: 'cancel',
+      },
+    ]);
   },
 };

@@ -2,6 +2,13 @@ import React from 'react';
 import {Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+/**
+ * Custom arrow button reused throughout the app for navigation.
+ * @param direction
+ * @param navigation
+ * @param onPressAction
+ * @param customStyle
+ */
 const WhiteArrowButton = ({
   direction = 'back',
   navigation,
@@ -34,6 +41,7 @@ const WhiteArrowButton = ({
 
   return (
     <Pressable
+      title={''}
       underlayColor={'transparent'}
       onPress={handleBackButtonClick}
       style={({pressed}) => [
@@ -43,7 +51,8 @@ const WhiteArrowButton = ({
         },
         customStyle,
       ]}
-      testID={'back_arrow'}>
+      testID={'back_arrow'}
+    >
       <Icon name={iconName} color={'white'} size={34} />
     </Pressable>
   );

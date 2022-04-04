@@ -8,6 +8,10 @@ import {
   Dimensions,
 } from 'react-native';
 
+/**
+ * Animated custom button reused throughout the app with customisable props.
+ * @param props The set of properties to give the button for customisable behaviour and display
+ */
 export default function CustomButton(props) {
   const {
     priority,
@@ -48,6 +52,9 @@ const inputRange = [0, 1];
 const outputRange = [1, 0.8];
 const scale = animation.interpolate({inputRange, outputRange});
 
+/**
+ * Animation to spring up when pressing the button
+ */
 const onPressIn = () => {
   Animated.spring(animation, {
     toValue: 0.095,
@@ -55,6 +62,10 @@ const onPressIn = () => {
     useNativeDriver: true,
   }).start();
 };
+
+/**
+ * Animation to spring back into place after pressing the button
+ */
 const onPressOut = () => {
   Animated.spring(animation, {
     toValue: 0,

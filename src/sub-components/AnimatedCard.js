@@ -1,13 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  Animated,
-  Text,
-  View,
-  StyleSheet,
-  Button,
-  SafeAreaView,
-  Pressable,
-} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {Animated, View, StyleSheet, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -42,7 +34,6 @@ const AnimatedCard = ({
 
   const shrinkHeight = () => {
     setExpanded(!isExpanded);
-    let isFlipped = '180deg';
 
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(adaptiveHeight, {
@@ -61,18 +52,13 @@ const AnimatedCard = ({
             // Bind opacity to animated value
             height: adaptiveHeight,
           },
-        ]}
-        onLayout={event => {
-          let {x, y, width, height} = event.nativeEvent.layout;
-        }}
-      >
+        ]}>
         <AnimatedPressable onPress={toggleheight}>
           <View
             onLayout={event => {
               setCollapsableHeight(event.nativeEvent.layout.height);
             }}
-            style={styles.collapsable}
-          >
+            style={styles.collapsable}>
             {collapsableContent}
           </View>
 
@@ -80,16 +66,14 @@ const AnimatedCard = ({
             onLayout={event => {
               setHidableHeight(event.nativeEvent.layout.height);
             }}
-            style={styles.hidable}
-          >
+            style={styles.hidable}>
             {hidableContent}
           </View>
           <View
             style={[
               styles.topRightIcon,
               {transform: [{rotateZ: isExpanded ? '180deg' : '0deg'}]},
-            ]}
-          >
+            ]}>
             <Icon size={30} color="black" name="chevron-down" />
           </View>
         </AnimatedPressable>
