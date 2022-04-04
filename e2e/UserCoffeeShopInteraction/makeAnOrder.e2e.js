@@ -67,6 +67,7 @@ describe('Menu & Basket', () => {
 
   afterAll(async () => {
     await element(by.id('back_arrow')).tap();
+    await element(by.id('back_arrow')).tap();
     await element(by.id('hamburger_menu_button')).tap();
     await element(by.text('Logout')).tap();
     await element(
@@ -79,8 +80,5 @@ describe('Menu & Basket', () => {
     await expect(
       element(by.text('Add your payment information')),
     ).toBeVisible();
-    await element(by.label('Card number'))
-      .atIndex(2)
-      .replaceText('4242424242424242');
   });
 });
