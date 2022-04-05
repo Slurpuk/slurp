@@ -53,7 +53,7 @@ const AnimatedCard = ({
             height: adaptiveHeight,
           },
         ]}>
-        <AnimatedPressable onPress={toggleheight}>
+        <AnimatedPressable onPress={toggleheight} testID="order-card">
           <View
             onLayout={event => {
               setCollapsableHeight(event.nativeEvent.layout.height);

@@ -129,7 +129,7 @@ export default function MapBackground({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="map-background">
       <MapView
         onRegionChangeComplete={region => {
           if (Platform.OS === 'ios') {
@@ -150,8 +150,7 @@ export default function MapBackground({
         onPanDrag={() => mapPressed()}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={mapCenter}
-      >
+        region={mapCenter}>
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -164,14 +163,12 @@ export default function MapBackground({
                 await locationPress(context, setMapCenter, marker.name);
               }
               mapPressed();
-            }}
-          >
+            }}>
             {/*//closed markers appear grey*/}
             <View
               style={styles.markerStyle}
-              testID={'shop_marker_' + marker.name}
-            >
-              <Text style={styles.closed}>
+              testID={'shop_marker_' + marker.name}>
+              <Text style={styles.closed} testID="marker-text">
                 {!marker.is_open ? 'Closed' : ''}
               </Text>
               <CustomMapIcon isOpen={marker.is_open} />
@@ -186,12 +183,13 @@ export default function MapBackground({
           }}
           onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
           onPress={() => focusMarker()}
-          title={'You are here'}
-        >
-          <Image
-            source={require('../../assets/images/dot.png')}
-            style={styles.userMarker}
-          />
+          title={'You are here'}>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Image
+              source={require('../../assets/images/CurrentLocationMarkerFull.png')}
+              style={styles.userMarker}
+            />
+          </View>
         </Marker>
       </MapView>
     </View>
@@ -204,5 +202,5 @@ const styles = StyleSheet.create({
   markerBg: mapStyles.markerBg,
   markerStyle: mapStyles.markerStyle,
   closed: {color: 'coral', fontWeight: 'bold', top: 0},
-  userMarker: {height: 45, width: 45},
+  userMarker: {height: 70, width: 70},
 });

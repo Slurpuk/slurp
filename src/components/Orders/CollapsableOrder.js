@@ -20,7 +20,7 @@ const CollapsableOrder = ({order}) => {
   const initialHeight = isOrderCurrent ? 126 : 100; //Sets the initial height for the Animated Card
 
   return (
-    <View style={styles.order}>
+    <View style={styles.order} testID="item-wrapper">
       <AnimatedCard
         initialHeight={initialHeight}
         collapsableContent={<OrderDetailsView order={order} />}

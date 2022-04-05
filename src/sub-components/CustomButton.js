@@ -22,7 +22,7 @@ export default function CustomButton(props) {
   } = props;
 
   return (
-    <View>
+    <View testID="custom-button">
       <Animated.View style={{transform: [{scale}]}}>
         <TouchableOpacity
           style={[buttonStyles.outer, buttonStyles[priority], {width: width}]}

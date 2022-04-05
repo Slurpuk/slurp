@@ -27,10 +27,12 @@ const ShopCard = ({shop, navigation}) => {
       blurRadius={4}
     >
       <Text style={[textStyles.headingOne, styles.shopName]}>{shop.name}</Text>
-      <Text style={[textStyles.bodyText]}> CLOSED </Text>
+      <Text style={[textStyles.bodyText]} testID="shop-card-closed">
+        CLOSED
+      </Text>
     </ImageBackground>
   ) : (
-    <Pressable onPress={shopPageDetails}>
+    <Pressable onPress={shopPageDetails} testID="shop-card-open">
       <ImageBackground
         style={styles.item}
         imageStyle={styles.image}
