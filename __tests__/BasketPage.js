@@ -4,22 +4,6 @@ import {GlobalContext} from '../App';
 import BasketPage from '../src/screens/BasketPage';
 import {Alert, Text, View} from 'react-native';
 import BasketContents from '../src/components/Basket/BasketContents';
-import {
-  findAllByText,
-  getByText,
-  queryAllByText,
-  queryByTestId,
-  queryByText,
-} from '@testing-library/react';
-import '@testing-library/jest-native/extend-expect';
-import {
-  toBeEmpty,
-  toHaveTextContent,
-} from '@testing-library/jest-dom/dist/matchers';
-import BasketItem from '../src/components/Basket/BasketItem';
-
-expect.extend({toBeEmpty, toHaveTextContent});
-
 const globalContextMock = {
   basketContent: null,
   currShop: {name: 'Eten & Driken', key: 1},
