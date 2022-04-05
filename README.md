@@ -33,3 +33,7 @@ All passwords are "Password123!", the following users are seeded with orders. Al
 - jeb@example.org <br>
 - val@example.org <br>
 - billie@example.org <br>
+
+#### Current unsolved issues:
+
+- With the current implementation using firestore, tracking the conection state of logged-in user is impossible. As a workaround, we set a timeout on critical queries that would return a connection alert after expiring.
