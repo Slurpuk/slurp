@@ -39,7 +39,10 @@ const OrderPage = ({navigation}) => {
         loading.current.current = true;
         let currOrders = await formatCurrentOrders(newOrders.currentOrders);
         if (isActive) {
-          setCurrentOrders(currOrders);
+          const final = currOrders.filter(
+            order => !order.hasOwnProperty('finished_time'),
+          );
+          setCurrentOrders(final);
           loading.current.current = false;
         }
         loading.current.past = true;
@@ -53,7 +56,7 @@ const OrderPage = ({navigation}) => {
       isActive = false;
       fetchData();
     };
-  }, [context.currentUser.ref, loading]);
+  }, [context.currentUser.ref]);
 
   return (
     <View style={styles.container} testID={'orders_page'}>

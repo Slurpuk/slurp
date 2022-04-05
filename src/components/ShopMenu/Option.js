@@ -36,14 +36,14 @@ export default function Option({option, updateOptions}) {
           toggleCheckBox
             ? OptionStyles.checkedCheckBoxView
             : OptionStyles.checkBoxView,
-        ]}
-      >
+        ]}>
         <CheckBox
           hideBox
           style={OptionStyles.checkBox}
           disabled={isDisabled}
           value={toggleCheckBox}
           onValueChange={newValue => update(newValue)}
+          tintColors={{true: '#EAEAEAE', false: '#EAEAEA'}}
           boxType="circle"
           onCheckColor="white"
           animationDuration={0.2}
@@ -53,16 +53,14 @@ export default function Option({option, updateOptions}) {
         onPress={() => {
           setToggleCheckBox(!toggleCheckBox);
           updateOptions(option, !toggleCheckBox);
-        }}
-      >
+        }}>
         <View style={[OptionStyles.container]}>
           <Text
             style={
               toggleCheckBox
                 ? textStyles.optionsTextBold
                 : textStyles.optionsText
-            }
-          >
+            }>
             {option.name}
           </Text>
           {option.price !== 0 && (
@@ -71,8 +69,7 @@ export default function Option({option, updateOptions}) {
                 toggleCheckBox
                   ? textStyles.optionsTextBold
                   : textStyles.optionsText
-              }
-            >
+              }>
               {' '}
               +{option.price < 1 ? option.price * 100 : option.price}p
             </Text>

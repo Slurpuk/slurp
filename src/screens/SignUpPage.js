@@ -30,7 +30,7 @@ const SignUpPage = ({navigation, setLoading}) => {
     if (first_name === '') {
       validity = false;
       Alert.alert('Empty Name', 'Please enter a first name.');
-    } else if (last_name == '') {
+    } else if (last_name === '') {
       validity = false;
       Alert.alert('Empty Name', 'Please enter your surname.');
     } else if (email === '') {

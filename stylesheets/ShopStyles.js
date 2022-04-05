@@ -122,6 +122,7 @@ const OptionPopUpStyles = StyleSheet.create({
     right: '4%',
     elevation: 200,
     zIndex: 100,
+    borderRadius: 5,
   },
 
   header: {

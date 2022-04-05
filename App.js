@@ -88,20 +88,14 @@ export default function App() {
       const subscriber = firestore()
         .collection('users')
         .where('email', '==', auth().currentUser.email)
-        .onSnapshot(query => {
+        .onSnapshot(async query => {
           let newUserDoc = query.docs[0];
           let newUser = newUserDoc.data();
           setCurrentUser({...newUser, key: newUserDoc.id, ref: newUserDoc.ref});
-          shopsData.allShops.forEach(shop => {
-            shop.distanceTo = calculateDistance(shop.location, {
-              latitude: newUser.location._latitude,
-              longitude: newUser.location._longitude,
-            });
-          });
         });
       return () => subscriber();
     }
-  }, [loading.shops, shopsData.allShops]);
+  }, [loading.shops, loading.user]);
 
   /**
    * Side effect that tracks any change in the coffee shop model.
@@ -122,10 +116,22 @@ export default function App() {
           await refreshCurrentBasket(setCurrBasket);
           setLoading(prevState => ({...prevState, shops: false}));
         }
+        if (currentUser) {
+          setShopsData(prevState => ({
+            ...prevState,
+            allShops: prevState.allShops.map(shop => ({
+              ...shop,
+              distanceTo: calculateDistance(shop.location, {
+                latitude: currentUser.location._latitude,
+                longitude: currentUser.location._longitude,
+              }),
+            })),
+          }));
+        }
       });
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, [loading.shops]);
+  }, [currentUser, loading.shops, loading.user]);
 
   /**
    * Set the current shop state and the storage instance to the given shop.
