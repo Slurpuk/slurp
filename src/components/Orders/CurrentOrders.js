@@ -1,9 +1,9 @@
 import {FlatList} from 'react-native';
 import CollapsableOrder from './CollapsableOrder';
 import EmptyListText from '../../sub-components/EmptyListText';
-import React, { useContext } from "react";
-import { calculateDistance } from "../../helpers/screenHelpers";
-import { GlobalContext } from "../../../App";
+import React, {useContext} from 'react';
+import {calculateDistance} from '../../helpers/screenHelpers';
+import {GlobalContext} from '../../../App';
 
 export const CurrentOrders = props => {
   const context = useContext(GlobalContext);
@@ -13,7 +13,9 @@ export const CurrentOrders = props => {
       longitude: context.currentUser.location._longitude,
     });
   });
-  props.currentOrders.sort((a, b) => (a.ETA < b.ETA ? - 1 : Number(a.ETA > b.ETA)))
+  props.currentOrders.sort((a, b) =>
+    a.ETA < b.ETA ? -1 : Number(a.ETA > b.ETA),
+  );
   return (
     <>
       <FlatList

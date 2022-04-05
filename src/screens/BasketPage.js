@@ -71,11 +71,8 @@ const BasketPage = ({navigation}) => {
     const successful = await openPaymentSheet(presentPaymentSheet);
     if (successful) {
       await confirmOrder();
-    } else {
-      Alerts.initPaymentAlert(() => checkout());
     }
   }
-
   /**
    * Create and send a new order based on the current basket. Clear the basket and inform the user.
    */
@@ -130,9 +127,7 @@ const BasketPage = ({navigation}) => {
           addToBasket: addToCurrentBasket,
           removeFromBasket: removeFromCurrentBasket,
         }}>
-
         <View style={styles.basket} testID={'basket_page'}>
-
           <GreenHeader
             headerText={'My Basket - ' + context.currShop.name}
             navigation={navigation}

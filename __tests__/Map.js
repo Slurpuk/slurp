@@ -41,7 +41,10 @@ const globalContextMock = {
 };
 
 describe('Map page', function () {
-  jest.mock('../../assets/images/dot.png', () => 'dot.png');
+  jest.mock(
+    '../../assets/images/CurrentLocationMarkerFull.png',
+    () => 'CurrentLocationMarkerFull.png',
+  );
 
   const spyAlert = jest
     .spyOn(Alert, 'alert')
@@ -52,7 +55,7 @@ describe('Map page', function () {
 
   afterEach(() => spyAlert.mockClear());
 
-  jest.mock('../../assets/images/dot.png', () => 1);
+  jest.mock('../../assets/images/CustomLocationMarkerFull.png', () => 1);
 
   test('Should render correctly and not give an alert if location permission is given', async () => {
     const {getByTestId} = render(

@@ -29,7 +29,9 @@ const globalContextMock = {
   addToBasket: jest.fn(),
   removeFromBasket: jest.fn(),
   currBasket: {
-    data: [{key: 1, name: 'Latte', price: 2.5, quantity: 1, has_options: false}],
+    data: [
+      {key: 1, name: 'Latte', price: 2.5, quantity: 1, has_options: false},
+    ],
   },
 };
 

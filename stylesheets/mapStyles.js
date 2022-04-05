@@ -58,7 +58,7 @@ const mapStyles = {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
-    maxWidth: 220,
+    maxWidth: 300,
   },
 };
 
