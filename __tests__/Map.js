@@ -1,13 +1,8 @@
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
 import React from 'react';
 import {GlobalContext} from '../App';
-
-import '@testing-library/jest-native/extend-expect';
-
 import MapBackground from '../src/components/LandingMap/MapBackground';
-
 import {Alert} from 'react-native';
-import dot from '../src/assets/images/dot.png';
 
 const globalContextMock = {
   basketContent: null,
