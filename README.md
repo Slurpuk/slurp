@@ -1,31 +1,35 @@
-Project Name: Jumping Potatoes
+## Project Name: Jumping Potatoes
 
-Software Name: Slurp
+# Software Name: Slurp
 
-Members:
-Ardan Kavuklu
-Jad Sbaï
-Liam Clark Gutiérrez
-Meyad Golmakani
-Sara Latif
-Sean Stanfield
-Sonia Koszut
-Pascual Merita Torres
-Vicente Sebastião
+**Members:**
+- Ardan Kavuklu
+- Jad Sbaï
+- Liam Clark Gutiérrez
+- Meyad Golmakani
+- Sara Latif
+- Sean Stanfield
+- Sonia Koszut
+- Pascual Merita Torres
+- Vicente Sebastião
 
-Significant source code dependencies:
+### Significant source code dependencies:
 
-- Stripe: https://www.npmjs.com/package/@stripe/stripe-react-native
-- MapView: https://www.npmjs.com/package/react-native-maps
-- ReactNative Firebase: https://rnfirebase.io/
-- ScrollBottomSheet: https://www.npmjs.com/package/react-native-scroll-bottom-sheet
+- Stripe: *https://www.npmjs.com/package/@stripe/stripe-react-native*
+- MapView: *https://www.npmjs.com/package/react-native-maps*
+- ReactNative Firebase: *https://rnfirebase.io/*
+- ScrollBottomSheet: *https://www.npmjs.com/package/react-native-scroll-bottom-sheet*
 
-Deployment: Will be deployed to Appetizer by the 15th of April.
+### Deployment:
 
-Users:
+Will be deployed to Appetizer by the 15th of April.
+
+### Users:
 
 All passwords are "Password123!", the following users are seeded with orders. All coffee shops are seeded with orders and items.
 
-jeb@example.org <br>
-val@example.org <br>
-billie@example.org <br>
+#### Default Users
+
+- jeb@example.org <br>
+- val@example.org <br>
+- billie@example.org <br>
