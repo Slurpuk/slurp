@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
-import serviceAccount from './independentcoffeeshops-firebase-adminsdk-xudgy-4d88ba3c6a.json';
+import serviceAccount from './slurp-59784-firebase-adminsdk-if35x-7cadeb6bf2.json'assert {type: 'json'};
 const databaseURL =
-  'https://independentcoffeeshops-default-rtdb.europe-west1.firebasedatabase.app';
+  'https://slurp-59784-default-rtdb.europe-west1.firebasedatabase.app';
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
