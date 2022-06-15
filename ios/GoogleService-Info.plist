@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>185382636935-cc16ou3bqad4mqgv9ef7hktmf4qvuaks.apps.googleusercontent.com</string>
+	<string>52965083794-vm19sdsa5jgfomlouf5prrf3bujjd2ni.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.185382636935-cc16ou3bqad4mqgv9ef7hktmf4qvuaks</string>
+	<string>com.googleusercontent.apps.52965083794-vm19sdsa5jgfomlouf5prrf3bujjd2ni</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBVwWU3vW3pmlyPC212a2AHZPLzapPOpL4</string>
+	<string>AIzaSyDyCLZrQ-QiTCswzfEEz0JU9KqZON2qBGs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>185382636935</string>
+	<string>52965083794</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.Slurp</string>
+	<string>org.slurp.Slurp</string>
 	<key>PROJECT_ID</key>
-	<string>independentcoffeeshops</string>
+	<string>slurp-59784</string>
 	<key>STORAGE_BUCKET</key>
-	<string>independentcoffeeshops.appspot.com</string>
+	<string>slurp-59784.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:185382636935:ios:668781fc9f89e7ecf75722</string>
-	<key>DATABASE_URL</key>
-	<string>https://independentcoffeeshops-default-rtdb.europe-west1.firebasedatabase.app</string>
+	<string>1:52965083794:ios:cbfa03057e1e2eb88eb44b</string>
 </dict>
 </plist>

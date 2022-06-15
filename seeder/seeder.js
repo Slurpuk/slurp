@@ -22,15 +22,15 @@ import {getRandomOptions, getRandomSubarray} from './helpers.js';
 const EMULATOR_MODE_ON = true;
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAr1toS2gSr-_6cMS4Jh0R2NhzI70g5nWk',
-  authDomain: 'independentcoffeeshops.firebaseapp.com',
+  apiKey: 'AIzaSyBSFWYHM7wzS-HqAc1GipcZjukdCIQqzN0',
+  authDomain: 'slurp-59784.firebaseapp.com',
   databaseURL:
-    'https://independentcoffeeshops-default-rtdb.europe-west1.firebasedatabase.app',
-  projectId: 'independentcoffeeshops',
-  storageBucket: 'independentcoffeeshops.appspot.com',
-  messagingSenderId: '185382636935',
-  appId: '1:185382636935:web:e905902ac500f230f75722',
-  measurementId: 'G-5WK60CC02P',
+    'https://slurp-59784-default-rtdb.europe-west1.firebasedatabase.app',
+  projectId: 'slurp-59784',
+  storageBucket: 'slurp-59784.appspot.com',
+  messagingSenderId: '52965083794',
+  appId: '1:52965083794:web:8e1fe380b93fe2548eb44b',
+  measurementId: 'G-V98PEHEQFP',
 };
 
 // Initialize Firebase
