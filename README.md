@@ -10,7 +10,6 @@
 - Sean Stanfield
 - Sonia Koszut
 - Pascual Merita Torres
-- Vicente Sebastião
 
 ### Significant source code dependencies:
 
