@@ -8,7 +8,6 @@
 - Meyad Golmakani
 - Sara Latif
 - Sean Stanfield
-- Sonia Koszut
 - Pascual Merita Torres
 
 ### Significant source code dependencies:
@@ -20,7 +19,7 @@
 
 ### Deployment:
 
-Will be deployed to Appetizer by the 15th of April.
+Deployed to Appetizer by the 15th of April.
 
 ### Users:
 
