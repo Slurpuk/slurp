@@ -249,9 +249,6 @@ output.json
 # Keystore files
 *.jks
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
-
 # Android Profiling
 
 ### ReactNative.Buck Stack ###

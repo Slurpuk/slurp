@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "52965083794",
+    "project_id": "slurp-59784",
+    "storage_bucket": "slurp-59784.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52965083794:android:96d349e5a79ded918eb44b",
+        "android_client_info": {
+          "package_name": "com.slurp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52965083794-brfalh0qusbm38tnca8kj0oud90sd5on.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhKp15EdAzoCNW_yE_mNDgzjkd32NmFMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52965083794-brfalh0qusbm38tnca8kj0oud90sd5on.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "52965083794-pl9j8jieisv7m95gd5verp9r85bg1dde.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.slurp.SlurpCafe"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52965083794:android:aaa1dc8509a7e3828eb44b",
+        "android_client_info": {
+          "package_name": "com.slurpcafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52965083794-brfalh0qusbm38tnca8kj0oud90sd5on.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhKp15EdAzoCNW_yE_mNDgzjkd32NmFMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52965083794-brfalh0qusbm38tnca8kj0oud90sd5on.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "52965083794-pl9j8jieisv7m95gd5verp9r85bg1dde.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.slurp.SlurpCafe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
