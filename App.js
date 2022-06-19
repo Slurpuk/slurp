@@ -23,6 +23,7 @@ import {
   refreshCurrentBasket,
   setCurrentShopKey,
 } from './src/helpers/storageHelpers';
+import {firebase} from '@react-native-firebase/database';
 
 export const GlobalContext = React.createContext();
 /**
@@ -42,6 +43,7 @@ export default function App() {
   const adaptiveOpacity = useRef(new Animated.Value(0)).current; // Animation fading value.
   const LoggedOutStack = createNativeStackNavigator(); // Stack navigator for logged out users.
   const [locationIsEnabled, setLocationIsEnabled] = useState(false); // Checks if the user enabled location tracking
+  const [isConnected, setIsConnected] = useState(false);
 
   /**
    * Side effect that fires when App first renders to determine whether it is the first time the app is used since download
@@ -126,6 +128,36 @@ export default function App() {
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, [loading.shops]);
+
+  /**
+   * Side effect that tracks the connection state of the app.
+   */
+  useEffect(() => {
+    if (auth().currentUser) {
+      const userId = auth().currentUser.uid;
+      firebase
+        .app()
+        .database(
+          'https://slurp-59784-default-rtdb.europe-west1.firebasedatabase.app/',
+        )
+        .ref('/online')
+        .push();
+      const reference = firebase
+        .app()
+        .database(
+          'https://slurp-59784-default-rtdb.europe-west1.firebasedatabase.app/',
+        )
+        .ref(`/online/${userId}`);
+      // Set the /users/:userId value to true
+      reference.set(true).then(() => setIsConnected(true));
+
+      // Remove the node whenever the client disconnects
+      reference
+        .onDisconnect()
+        .remove()
+        .then(() => setIsConnected(false));
+    }
+  }, []);
 
   /**
    * Set the current shop state and the storage instance to the given shop.
@@ -231,6 +263,7 @@ export default function App() {
     <GlobalContext.Provider
       value={{
         locationIsEnabled: locationIsEnabled,
+        isConnected: isConnected,
         setLocationIsEnabled: setLocationIsEnabled,
         currentUser: currentUser,
         shopsData: shopsData.allShops,
