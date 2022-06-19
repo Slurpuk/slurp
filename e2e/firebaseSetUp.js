@@ -3,7 +3,7 @@ import {connectAuthEmulator, getAuth} from 'firebase/auth';
 import {connectFirestoreEmulator, getFirestore} from 'firebase/firestore';
 
 // Always use the emulator for testing. Using the cloud database could yield unexpected results.
-const EMULATOR_MODE_ON = true;
+const EMULATOR_MODE_ON = false;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAr1toS2gSr-_6cMS4Jh0R2NhzI70g5nWk',
