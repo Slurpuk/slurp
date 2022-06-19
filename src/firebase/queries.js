@@ -148,23 +148,17 @@ async function getOrderShop(order) {
  * @param total The total amount of the order
  */
 async function sendOrder(items, shopRef, userRef, total) {
-  const query = firestore().collection('orders').add({
-    incoming_time: new firestore.Timestamp.now(),
-    items: items,
-    status: 'incoming',
-    shop: shopRef,
-    user: userRef,
-    is_displayed: true,
-  });
-  try {
-    await asyncCallWithTimeout(query, 5000);
-    return true;
-  } catch (err) {
-    err.message === queryTimeOutMessage
-      ? Alerts.connectionErrorAlert()
-      : Alerts.databaseErrorAlert();
-    return false;
-  }
+  await firestore()
+    .collection('orders')
+    .add({
+      incoming_time: new firestore.Timestamp.now(),
+      items: items,
+      status: 'incoming',
+      shop: shopRef,
+      user: userRef,
+      is_displayed: true,
+    })
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
@@ -191,16 +185,9 @@ async function createUserModel(email, first_name, last_name) {
  * @param password The password
  */
 async function createUserAuth(email, password) {
-  const query = auth()
+  await auth()
     .createUserWithEmailAndPassword(email, password)
     .catch(error => handleSignUpErrorsBackEnd(error.code));
-  try {
-    await asyncCallWithTimeout(query, 5000);
-  } catch (err) {
-    err.message === queryTimeOutMessage
-      ? Alerts.connectionErrorAlert()
-      : Alerts.databaseErrorAlert();
-  }
 }
 
 /**
@@ -260,14 +247,9 @@ async function getOptionRef(option) {
  * Logout the current user if there's one currently logged in.
  */
 async function logout() {
-  const query = await auth().signOut();
-  try {
-    await asyncCallWithTimeout(query, 5000);
-  } catch (err) {
-    err.message === queryTimeOutMessage
-      ? Alerts.connectionErrorAlert()
-      : Alerts.databaseErrorAlert();
-  }
+  await auth()
+    .signOut()
+    .catch(() => Alerts.databaseErrorAlert());
 }
 
 /**
