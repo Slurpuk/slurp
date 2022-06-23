@@ -3,7 +3,6 @@ import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import GreenHeader from '../sub-components/GreenHeader';
 import BasketContents from '../components/Basket/BasketContents';
 import CustomButton from '../sub-components/CustomButton';
-import {GlobalContext} from '../../App';
 import {useStripe} from '@stripe/stripe-react-native';
 import {StripeProvider} from '@stripe/stripe-react-native/src/components/StripeProvider';
 import {
@@ -19,6 +18,9 @@ import {
 import {Alerts} from '../data/Alerts';
 import {sendOrder} from '../firebase/queries';
 import {BlurView} from '@react-native-community/blur';
+import {GlobalContext} from '../contexts';
+import {GlobalAction} from '../data/actionEnum';
+import {clearStorageBasket} from '../helpers/storageHelpers';
 
 export const BasketContext = React.createContext();
 
@@ -26,8 +28,8 @@ export const BasketContext = React.createContext();
  * Screen to display the basket contents.
  */
 const BasketPage = ({navigation}) => {
-  const context = useContext(GlobalContext);
-  const [contents, setContents] = useState(context.currBasket.data);
+  const {globalState, globalDispatch} = useContext(GlobalContext);
+  const [contents, setContents] = useState(globalState.currentBasket);
   const [total, setTotal] = useState(getTotal());
   const [loading, setLoading] = useState(false);
   const {initPaymentSheet, presentPaymentSheet} = useStripe(); // Stripe hook payment methods
@@ -39,7 +41,7 @@ const BasketPage = ({navigation}) => {
    * @param newBasket An optional newBasket possibly different from the current one.
    */
   function getTotal(newBasket = null) {
-    let basket = newBasket ? newBasket : context.currBasket.data;
+    let basket = newBasket ? newBasket : globalState.currentBasket;
     return basket.reduce(function (acc, item) {
       return acc + getItemFullPrice(item);
     }, 0);
@@ -52,7 +54,7 @@ const BasketPage = ({navigation}) => {
     setLoading(true);
     if (contents.length === 0) {
       Alerts.emptyBasketAlert();
-    } else if (!context.locationIsEnabled) {
+    } else if (!globalState.locationIsEnabled) {
       Alerts.LocationAlert();
     } else {
       const ready = await initializePaymentSheet(initPaymentSheet, total);
@@ -78,18 +80,23 @@ const BasketPage = ({navigation}) => {
    * Create and send a new order based on the current basket. Clear the basket and inform the user.
    */
   async function confirmOrder() {
-    setLoading(true);
-    const sent = await sendOrder(
-      formatBasket(contents),
-      context.currShop.ref,
-      context.currentUser.ref,
-      getTotal(),
-    );
-    if (sent) {
-      await context.currBasket.clear();
-      Alerts.orderSentAlert(navigation);
+    if (!globalState.isConnected) {
+      Alerts.connectionErrorAlert();
+    } else {
+      setLoading(true);
+      const sent = await sendOrder(
+        formatBasket(contents),
+        globalState.currentShop.ref,
+        globalState.currentUser.ref,
+        getTotal(),
+      );
+      if (sent) {
+        await clearStorageBasket();
+        globalDispatch({type: GlobalAction.CLEAR_BASKET});
+        Alerts.orderSentAlert(navigation);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   /**
@@ -99,9 +106,8 @@ const BasketPage = ({navigation}) => {
   async function addToCurrentBasket(item) {
     let newBasket = await addToBasket(
       item,
-      context.currShop,
-      context.currBasket.data,
-      context.currBasket.setContent,
+      globalState.currentBasket,
+      globalDispatch,
     );
     setContents(newBasket);
     setTotal(getTotal(newBasket));
@@ -114,8 +120,8 @@ const BasketPage = ({navigation}) => {
   async function removeFromCurrentBasket(item) {
     let newBasket = await removeFromBasket(
       item,
-      context.currBasket.data,
-      context.currBasket.setContent,
+      globalState.currentBasket,
+      globalDispatch,
     );
     setContents(newBasket);
     setTotal(getTotal(newBasket));
@@ -130,7 +136,7 @@ const BasketPage = ({navigation}) => {
         }}>
         <View style={styles.basket} testID={'basket_page'}>
           <GreenHeader
-            headerText={'My Basket - ' + context.currShop.name}
+            headerText={'My Basket - ' + globalState.currentShop.name}
             navigation={navigation}
           />
           <View style={styles.main_container}>
