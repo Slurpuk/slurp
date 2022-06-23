@@ -5,7 +5,7 @@ import {BlurView} from '@react-native-community/blur';
 import OptionsPopUp from '../components/ShopMenu/OptionsPopUp';
 import DraggableShopPage from '../components/Shops/DraggableShopPage';
 import NonDraggableShopPage from '../components/Shops/NonDraggableShopPage';
-import {GlobalContext} from '../../App';
+import {GlobalContext} from '../contexts';
 
 export const ShopContext = React.createContext();
 
@@ -14,15 +14,14 @@ export const ShopContext = React.createContext();
  * @param navigation The navigation object.
  */
 const ShopPage = ({navigation}) => {
-  const context = useContext(GlobalContext);
-  const shop = context.currShop;
+  const {globalState} = useContext(GlobalContext);
   const [optionsVisible, setOptionsVisible] = useState(false); // Is the options popup visible
   const [currItem, setCurrItem] = useState(null); // Current item displayed in the shop.
 
   /**
    * Hook that divides the items offered by the shop into 3 sections: coffees, drinks and snacks and memoizes it.
    * Formats the data before passing it to the flatlists.
-   * @return The formatted menu data
+   * @return Array The formatted menu data
    */
   const menuData = useMemo(() => {
     let data = [
@@ -30,19 +29,21 @@ const ShopPage = ({navigation}) => {
       {title: 'Drinks', list: [], key: 2},
       {title: 'Snacks', list: [], key: 3},
     ];
-    const items = shop.items;
+    const items = globalState.currentShop.items;
     data[0].list = items.coffees;
     data[1].list = items.drinks;
     data[2].list = items.snacks;
     return data;
-  }, [shop.items]);
+  }, [globalState.currentShop.items]);
 
   /**
    * Get the default milk
    * @return Object The default milk
    */
   function getDefaultMilk() {
-    return shop.options[0].data.find(el => el.name === 'Dairy');
+    return globalState.currentShop.options[0].data.find(
+      el => el.name === 'Dairy',
+    );
   }
 
   return (
@@ -56,14 +57,19 @@ const ShopPage = ({navigation}) => {
           snacks: menuData[2].list,
           defaultMilk: getDefaultMilk(),
         },
-      }}
-    >
+      }}>
       <TouchableWithoutFeedback onPressIn={() => setOptionsVisible(false)}>
         <>
-          {context.bottomSheet.isOpen ? (
-            <DraggableShopPage shop={shop} navigation={navigation} />
+          {globalState.isShopIntro ? (
+            <DraggableShopPage
+              shop={globalState.currentShop}
+              navigation={navigation}
+            />
           ) : (
-            <NonDraggableShopPage shop={shop} navigation={navigation} />
+            <NonDraggableShopPage
+              shop={globalState.currentShop}
+              navigation={navigation}
+            />
           )}
           {optionsVisible ? (
             <BlurView
@@ -77,7 +83,7 @@ const ShopPage = ({navigation}) => {
       </TouchableWithoutFeedback>
       {optionsVisible ? (
         <OptionsPopUp
-          data={shop.options}
+          data={globalState.currentShop.options}
           item={currItem}
           renderer={renderers.renderOption}
         />
