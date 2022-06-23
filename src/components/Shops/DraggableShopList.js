@@ -2,25 +2,34 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Platform, Text, View, StyleSheet} from 'react-native';
 import ShopList from './ShopList';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
-import {GlobalContext} from '../../../App';
+import {GlobalContext} from '../../contexts';
+import {calculateDistance} from '../../helpers/screenHelpers';
 
 export default function DraggableShopList({navigation}) {
   // Height to render the ScrollBottomSheet in its retracted position.
   // Different on android due to bottom icon bar being considered part of the screen
   const RAISED_MAP_POSITION_IOS = '90.5%';
   const RAISED_MAP_POSITION_ANDROID = '98%';
-  const context = useContext(GlobalContext);
-  const [orderedShops, setOrderedShops] = useState(context.shopsData);
+  const {globalState} = useContext(GlobalContext);
+  const [orderedShops, setOrderedShops] = useState(globalState.listOfShops);
 
+  /**
+   * Side effect that orders the list of shops according to their distance to the current user
+   */
   useEffect(() => {
+    const shops = globalState.listOfShops.map(shop => {
+      const distance = calculateDistance(shop.location, {
+        latitude: globalState.currentUser.location._latitude,
+        longitude: globalState.currentUser.location._longitude,
+      });
+      return {...shop, distanceTo: distance};
+    });
     //ordering the shops based on distance from user location
-    const sortedShops = context.shopsData.sort(
-      (a, b) => a.distanceTo > b.distanceTo,
-    );
+    const sortedShops = shops.sort((a, b) => a.distanceTo > b.distanceTo);
     const filteredShops = sortedShops.filter(shop => shop.distanceTo < 10000);
     //filtering the shops based on radius limitation
     setOrderedShops(filteredShops);
-  }, [context.shopsData, context.currentUser.location]);
+  }, [globalState.listOfShops, globalState.currentUser.location]);
 
   return (
     <ScrollBottomSheet
