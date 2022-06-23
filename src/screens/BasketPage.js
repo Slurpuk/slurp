@@ -87,7 +87,7 @@ const BasketPage = ({navigation}) => {
       const sent = await sendOrder(
         formatBasket(contents),
         globalState.currentShop.ref,
-        globalState.currentUser.ref,
+        globalState.currentUserRef,
         getTotal(),
       );
       if (sent) {
