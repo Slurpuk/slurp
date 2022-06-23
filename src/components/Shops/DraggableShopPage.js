@@ -3,11 +3,12 @@ import {View, StyleSheet} from 'react-native';
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
 import ShopIntro from './ShopIntro';
 import Menu from '../ShopMenu/Menu';
-import {GlobalContext} from '../../../App';
 import {VisibleContext} from '../../navigation/HamburgerSlideBarNavigator';
+import {GlobalContext} from '../../contexts';
+import {GlobalAction} from '../../data/actionEnum';
 
 const DraggableShopPage = ({shop, navigation}) => {
-  const context = useContext(GlobalContext);
+  const {globalDispatch} = useContext(GlobalContext);
   const hamburgerVisible = useContext(VisibleContext);
   const sheetRef = useRef();
   const [isFullScreen, setFullScreen] = useState(false);
@@ -17,7 +18,7 @@ const DraggableShopPage = ({shop, navigation}) => {
       setFullScreen(true);
       hamburgerVisible(false);
     } else if (index === 2) {
-      context.bottomSheet.setOpen(false);
+      globalDispatch({type: GlobalAction.BOTTOM_SHEET_DOWN});
       hamburgerVisible(true);
     } else {
       setFullScreen(false);
@@ -37,7 +38,7 @@ const DraggableShopPage = ({shop, navigation}) => {
           <View
             style={[
               styles.panelHandle,
-              context.isFullScreen ? {opacity: 0} : {opacity: 1},
+              isFullScreen ? {opacity: 0} : {opacity: 1},
             ]}
           />
           <ShopIntro
