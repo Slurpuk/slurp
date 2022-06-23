@@ -1,12 +1,20 @@
 import firestore from '@react-native-firebase/firestore';
-import {getOptions, getOrderItem, getOrderShop} from '../firebase/queries';
+import {
+  getOptions,
+  getOrderItem,
+  getOrderShop,
+  getUserObject,
+  getUserOrders,
+} from '../firebase/queries';
 import {months} from '../data/Months';
 import {OrderStatus} from '../data/OrderStatus';
 import {
+  clearStorageBasket,
   getCurrentShopKey,
   setBasket,
   setCurrentShopKey,
 } from './storageHelpers';
+import {GlobalAction} from '../data/actionEnum';
 
 /**
  * Format the orders to be displayed as current orders.
@@ -146,12 +154,11 @@ function isSameItem(item1, item2) {
 /**
  * Add an item to both the current basket and the storage basket
  * @param item The item to add
- * @param currShop The currently selected shop
  * @param currBasket
- * @param setCurrBasket The setState method for the current basket
+ * @param globalDispatch
  * @return Object The resulting basket
  */
-async function addToBasket(item, currShop, currBasket, setCurrBasket) {
+async function addToBasket(item, currBasket, globalDispatch) {
   let basket = currBasket ? currBasket : [];
   const exist = basket.find(x => isSameItem(x, item));
   let newBasket;
@@ -162,31 +169,8 @@ async function addToBasket(item, currShop, currBasket, setCurrBasket) {
   } else {
     newBasket = [...basket, {...item, count: 1}];
   }
-  setCurrBasket(newBasket);
   await setBasket(getStorageBasket(newBasket));
-  return newBasket;
-}
-
-/**
- * Remove an item from both the current basket and the storage basket
- * @param item The item to add
- * @param currBasket
- * @param setCurrBasket The setState method for the current basket
- * @return Object The resulting basket
- */
-async function removeFromBasket(item, currBasket, setCurrBasket) {
-  let basket = currBasket ? currBasket : [];
-  const exist = basket.find(x => isSameItem(x, item));
-  let newBasket;
-  if (exist.count === 1) {
-    newBasket = basket.filter(x => x.key !== item.key);
-  } else {
-    newBasket = basket.map(x =>
-      isSameItem(x, item) ? {...exist, count: exist.count - 1} : x,
-    );
-  }
-  setCurrBasket(newBasket);
-  await setBasket(getStorageBasket(newBasket));
+  globalDispatch({type: GlobalAction.SET_CURRENT_BASKET, basket: newBasket});
   return newBasket;
 }
 
@@ -208,29 +192,52 @@ function getStorageBasket(newBasket) {
 }
 
 /**
+ * Remove an item from both the current basket and the storage basket
+ * @param item The item to add
+ * @param currBasket
+ * @param globalDispatch
+ * @return Object The resulting basket
+ */
+async function removeFromBasket(item, currBasket, globalDispatch) {
+  let basket = currBasket ? currBasket : [];
+  const exist = basket.find(x => isSameItem(x, item));
+  let newBasket;
+  if (exist.count === 1) {
+    newBasket = basket.filter(x => x.key !== item.key);
+  } else {
+    newBasket = basket.map(x =>
+      isSameItem(x, item) ? {...exist, count: exist.count - 1} : x,
+    );
+  }
+  await setBasket(getStorageBasket(newBasket));
+  globalDispatch({type: GlobalAction.SET_CURRENT_BASKET, basket: newBasket});
+  return newBasket;
+}
+
+/**
  * Refresh the current shop state depending on the updated list of shops and the storage shop.
  * @param formattedShops The new list of shops
- * @param staticShopsData The previous shops data
- * @param clearBasket Clear basket method
- * @param setShopsData setState method for the dynamic shops data
+ * @param currentShopKey The key of the current shop
+ * @param globalDispatch The global dispatch method
  */
-async function refreshShops(
+async function refreshCurrentShop(
   formattedShops,
-  staticShopsData,
-  clearBasket,
-  setShopsData,
+  currentShopKey,
+  globalDispatch,
 ) {
-  if (staticShopsData.currShopKey !== '') {
+  if (currentShopKey !== '') {
     let newCurrShop =
-      formattedShops.findIndex(
-        shop => shop.key === staticShopsData.currShopKey,
-      ) === -1
+      formattedShops.findIndex(shop => shop.key === currentShopKey) === -1
         ? ''
-        : staticShopsData.currShopKey;
-    setShopsData({allShops: formattedShops, currShopKey: newCurrShop});
+        : currentShopKey;
+    globalDispatch({
+      type: GlobalAction.SET_CURRENT_SHOP,
+      key: newCurrShop,
+    });
     if (newCurrShop === -1) {
       await setCurrentShopKey('');
-      await clearBasket;
+      await clearStorageBasket();
+      globalDispatch({type: GlobalAction.CLEAR_BASKET});
     }
   } else {
     let storageKey = await getCurrentShopKey();
@@ -239,16 +246,18 @@ async function refreshShops(
         formattedShops.findIndex(shop => shop.key === storageKey) === -1
           ? ''
           : storageKey;
-      setShopsData({
-        allShops: formattedShops,
-        currShopKey: storageKey,
+      globalDispatch({
+        type: GlobalAction.SET_CURRENT_SHOP,
+        key: storageKey,
       });
       if (storageShop === -1) {
-        await clearBasket();
+        await clearStorageBasket();
+        globalDispatch({type: GlobalAction.CLEAR_BASKET});
         await setCurrentShopKey('');
       }
     }
   }
+  globalDispatch({type: GlobalAction.STOP_SHOPS_LOADING});
 }
 
 /**
@@ -310,16 +319,15 @@ async function getFormattedShops(shopsData) {
 }
 
 /**
- * Separate the orders between current and past orders based on their current status.
- * @return Object The object containing the current and past orders
+ * Format the firebase orders to contain their period, data and ID.
+ * @param orders The query snapshot of orders from firestore.
+ * @return Array The list of formatted orders
  */
-async function separateOrders(orders) {
-  let currentOrdersLocal = [];
-  let pastOrdersLocal = [];
-  orders.forEach(documentSnapshot => {
+function formatOrders(orders) {
+  return orders.map(order => {
     let firebaseOrder = {
-      ...documentSnapshot.data(),
-      key: documentSnapshot.id,
+      ...order.data(),
+      key: order.id,
     };
 
     firebaseOrder.period =
@@ -327,13 +335,26 @@ async function separateOrders(orders) {
       ' ' +
       firebaseOrder.incoming_time.toDate().getFullYear();
 
+    return firebaseOrder;
+  });
+}
+
+/**
+ * Separate the orders between current and past orders based on their current status.
+ * @return Object The object containing the current and past orders
+ */
+function separateOrders(orders) {
+  let currentOrdersLocal = [];
+  let pastOrdersLocal = [];
+  let formattedOrders = formatOrders(orders);
+  formattedOrders.forEach(order => {
     if (
-      firebaseOrder.status === OrderStatus.REJECTED ||
-      firebaseOrder.status === OrderStatus.COLLECTED
+      order.status === OrderStatus.REJECTED ||
+      order.status === OrderStatus.COLLECTED
     ) {
-      pastOrdersLocal.push(firebaseOrder);
+      pastOrdersLocal.push(order);
     } else {
-      currentOrdersLocal.push(firebaseOrder);
+      currentOrdersLocal.push(order);
     }
   });
 
@@ -392,17 +413,64 @@ function getItemFullPrice(item) {
   return count * (item.price + getOptionsPrice(item));
 }
 
+async function loginUser(user, globalDispatch) {
+  const userObject = await getUserObject(user);
+  globalDispatch({
+    type: GlobalAction.SET_CURRENT_USER,
+    user: userObject,
+  });
+  globalDispatch({type: GlobalAction.SET_USER_REF, ref: userObject.ref});
+  await refreshOrders(userObject, globalDispatch);
+  globalDispatch({type: GlobalAction.STOP_USER_LOADING});
+}
+
+async function logoutUser(globalDispatch) {
+  globalDispatch({
+    type: GlobalAction.SET_CURRENT_USER,
+    user: null,
+  });
+  await clearStorageBasket();
+  globalDispatch({type: GlobalAction.CLEAR_BASKET});
+  globalDispatch({
+    type: GlobalAction.SET_CURRENT_ORDERS,
+    orders: [],
+  });
+  globalDispatch({
+    type: GlobalAction.SET_PAST_ORDERS,
+    orders: [],
+  });
+}
+
+async function refreshOrders(userRef, globalDispatch) {
+  const orders = await getUserOrders(userRef);
+  const userOrders = separateOrders(orders);
+  const currentOrders = await formatCurrentOrders(userOrders.currentOrders);
+  const pastOrders = await formatPastOrders(userOrders.pastOrders);
+  globalDispatch({
+    type: GlobalAction.SET_CURRENT_ORDERS,
+    orders: currentOrders,
+  });
+  globalDispatch({
+    type: GlobalAction.SET_PAST_ORDERS,
+    orders: pastOrders,
+  });
+}
+
 export {
   calculateDistance,
   formatPastOrders,
   formatCurrentOrders,
   addToBasket,
   removeFromBasket,
-  refreshShops,
+  refreshCurrentShop,
   separateOrders,
   getFormattedShops,
   formatBasket,
   calculateOrderTotal,
   getItemFullPrice,
   getOptionsPrice,
+  loginUser,
+  logoutUser,
+  formatOrders,
+  refreshOrders,
 };
