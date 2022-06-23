@@ -11,13 +11,15 @@ import {
   Keyboard,
 } from 'react-native';
 
-import {GlobalContext} from '../../../App';
 import textStyles from '../../../stylesheets/textStyles';
+import {GlobalContext, MapContext} from '../../contexts';
+import {MapAction} from '../../data/actionEnum';
+import {changeShopFromMarker} from '../../helpers/changeShopHelpers';
 const screenHeight = Dimensions.get('window').height;
 
-const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
-  const context = useContext(GlobalContext);
-
+const CustomSearchBar = () => {
+  const {globalState, globalDispatch} = useContext(GlobalContext);
+  const {mapState, mapDispatch} = useContext(MapContext);
   //Used to store current text in search bar
   const [query, setQuery] = useState('');
 
@@ -26,10 +28,10 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
 
   //focus the search bar when a letter is typed and update the filtered shops
   const updateQuery = input => {
-    if (!searchBarFocused && input !== '') {
-      setSearchBarFocussed(true);
-    } else if (searchBarFocused && input === '') {
-      setSearchBarFocussed(false);
+    if (!mapState.isSearchBarFocused && input !== '') {
+      mapDispatch({type: MapAction.FOCUS_SEARCH_BAR});
+    } else if (mapState.isSearchBarFocused && input === '') {
+      mapDispatch({type: MapAction.UNFOCUS_SEARCH_BAR});
     }
     setQuery(input);
     filterShops();
@@ -38,11 +40,11 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
   //set the shops to be displayed to those which match the search query
   const filterShops = useCallback(() => {
     setShops(
-      context.shopsData.filter(shop =>
+      globalState.listOfShops.filter(shop =>
         shop.name.toLowerCase().includes(query.toLowerCase()),
       ),
     );
-  }, [context.shopsData, query]);
+  }, [globalState.listOfShops, query]);
 
   //required to force update of search results to match current state, not previous state.
   useEffect(() => {
@@ -51,14 +53,21 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
 
   //unfocus the search bar (remove search results)
   const clear = () => {
-    setSearchBarFocussed(false);
+    mapDispatch({type: MapAction.UNFOCUS_SEARCH_BAR});
   };
 
   //set the bottom sheet to the selected shop
   const selectShop = async shop => {
+    mapDispatch({
+      type: MapAction.SET_MAP_CENTER,
+      location: {
+        latitude: shop.location.latitude,
+        longitude: shop.location.longitude,
+      },
+    });
     if (shop.is_open) {
-      await context.changeShop(shop);
-      setSearchBarFocussed(false);
+      await changeShopFromMarker(globalState, shop.key, globalDispatch);
+      mapDispatch({type: MapAction.UNFOCUS_SEARCH_BAR});
     }
   };
 
@@ -81,7 +90,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
         testID={'search_bar'}
       />
       {/*Only display search results when the search bar is focused*/}
-      {searchBarFocused ? (
+      {mapState.isSearchBarFocused ? (
         <View style={styles.activeElementsWrapper}>
           <View style={styles.cover} />
           {shops.length > 0 ? (
@@ -95,9 +104,8 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                   <View
                     style={[
                       styles.searchResultContainer,
-                      {display: searchBarFocused ? 'flex' : 'none'},
-                    ]}
-                  >
+                      {display: mapState.isSearchBarFocused ? 'flex' : 'none'},
+                    ]}>
                     <Pressable
                       onPressIn={() => {
                         if (item.is_open) {
@@ -116,8 +124,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                         },
                         styles.searchResult,
                       ]}
-                      testID={'search_item_' + item.name}
-                    >
+                      testID={'search_item_' + item.name}>
                       {({pressed}) => (
                         <Text
                           style={[
@@ -127,8 +134,7 @@ const CustomSearchBar = ({searchBarFocused, setSearchBarFocussed}) => {
                             },
 
                             styles.flatListItem,
-                          ]}
-                        >
+                          ]}>
                           {item.name}
                         </Text>
                       )}
