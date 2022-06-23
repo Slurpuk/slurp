@@ -5,3 +5,11 @@ export const OrderStatus = {
   READY: 'ready',
   COLLECTED: 'collected',
 };
+
+export const CurrentOrderStatuses = [
+  OrderStatus.READY,
+  OrderStatus.ACCEPTED,
+  OrderStatus.INCOMING,
+];
+
+export const PastOrderStatuses = [OrderStatus.COLLECTED, OrderStatus.REJECTED];
