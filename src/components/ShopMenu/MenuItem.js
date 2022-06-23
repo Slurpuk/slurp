@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ShopContext} from '../../screens/ShopPage';
 import {menuItemStyles} from './shopStyles';
 import {addToBasket} from '../../helpers/screenHelpers';
-import {GlobalContext} from '../../../App';
+import {GlobalContext} from '../../contexts';
 
 /**
  * Menu item component displayed in a shop's menu.
@@ -19,13 +19,13 @@ import {GlobalContext} from '../../../App';
 const MenuItem = ({item}) => {
   const [count, setCount] = useState(0);
   const shopContext = useContext(ShopContext);
-  const globalContext = useContext(GlobalContext);
+  const {globalState, globalDispatch} = useContext(GlobalContext);
 
   /**
    * Side effect to dynamically update the menuItem counter based on the current basket content.
    */
   useEffect(() => {
-    const basket = globalContext.currBasket.data;
+    const basket = globalState.currentBasket;
     let newCount = 0;
     if (item.has_options) {
       for (let it of basket) {
@@ -42,7 +42,7 @@ const MenuItem = ({item}) => {
       }
     }
     setCount(newCount);
-  }, [globalContext.currBasket.data, item]);
+  }, [globalState.currentBasket, item]);
 
   /**
    * Show current item options on a popup.
@@ -60,12 +60,7 @@ const MenuItem = ({item}) => {
     if (newItem.has_options) {
       showOptions();
     } else {
-      await addToBasket(
-        newItem,
-        globalContext.currShop,
-        globalContext.currBasket.data,
-        globalContext.currBasket.setContent,
-      );
+      await addToBasket(newItem, globalState.currentBasket, globalDispatch);
     }
   }
 
