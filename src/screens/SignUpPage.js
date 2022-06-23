@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View, Text, Alert, StatusBar} from 'react-native';
 import textStyles from '../../stylesheets/textStyles';
 import FormField from '../sub-components/FormField';
@@ -8,8 +8,10 @@ import CustomButton from '../sub-components/CustomButton';
 import {Alerts} from '../data/Alerts';
 import {enterApp} from '../helpers/storageHelpers';
 import {createUserAuth, createUserModel} from '../firebase/queries';
+import {GlobalContext} from '../contexts';
 
-const SignUpPage = ({navigation, setLoading}) => {
+const SignUpPage = ({navigation}) => {
+  const {globalState} = useContext(GlobalContext);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -65,11 +67,11 @@ const SignUpPage = ({navigation, setLoading}) => {
    *  Create a new user for authentication and firestore model.
    */
   async function registerUser() {
-    if (handleSignUpErrorsFrontEnd()) {
-      setLoading(prevState => ({...prevState, user: true}));
+    if (!globalState.isConnected) {
+      Alerts.connectionErrorAlert();
+    } else if (handleSignUpErrorsFrontEnd()) {
       await createUserAuth(email, password);
       await createUserModel(email, first_name, last_name);
-      setLoading(prevState => ({...prevState, user: false}));
       await enterApp();
     }
   }
