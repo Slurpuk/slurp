@@ -1,12 +1,8 @@
-import {View, StyleSheet, Text, ImageBackground, Pressable} from 'react-native';
-import React, {useContext} from 'react';
+import {View, StyleSheet, Text, ImageBackground} from 'react-native';
+import React from 'react';
 import textStyles from '../../../stylesheets/textStyles';
 import {OrderStatus} from '../../data/OrderStatus';
 import ShopDetailIcons from '../Shops/ShopDetailIcons';
-import {GlobalContext} from '../../../App';
-import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
-import {LinearGradient} from 'react-native-svg';
-import {menuItemStyles} from '../ShopMenu/shopStyles';
 
 /**
  * Corresponds to the closed version of the order
@@ -15,7 +11,6 @@ import {menuItemStyles} from '../ShopMenu/shopStyles';
  */
 const OrderDetailsView = ({order}) => {
   let currentOrderStatusComponent = getCurrentOrderStatusComponent(order);
-  const context = useContext(GlobalContext);
 
   return (
     <View style={styles.container}>
