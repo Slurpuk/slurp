@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alerts} from '../data/Alerts';
 import {getItemRef, getOptionRef} from '../firebase/queries';
+import {GlobalAction} from '../data/actionEnum';
 
 /**
  * Returns the storage shop key
@@ -8,7 +9,8 @@ import {getItemRef, getOptionRef} from '../firebase/queries';
  */
 async function getCurrentShopKey() {
   try {
-    return await AsyncStorage.getItem('@CurrentShopKey');
+    const jsonValue = await AsyncStorage.getItem('@CurrentShopKey');
+    return jsonValue ? jsonValue : '';
   } catch (err) {
     Alerts.StorageAlert();
   }
@@ -35,6 +37,8 @@ async function initiateStorage() {
     await AsyncStorage.setItem('@isFirstTime', 'false');
     await AsyncStorage.setItem('@Basket', emptyBasket);
     await AsyncStorage.setItem('@CurrentShopKey', '');
+    await AsyncStorage.setItem('@CurrentOrders', '');
+    await AsyncStorage.setItem('@PastOrders', '');
   } catch (err) {
     Alerts.StorageAlert();
   }
@@ -75,9 +79,8 @@ async function clearStorageBasket() {
 
 /**
  * Set the current basket state to the storage instance after retrieving the necessary references.
- * @param setCurrBasket The setState method for the current basket state
  */
-async function refreshCurrentBasket(setCurrBasket) {
+async function refreshCurrentBasket(globalDispatch) {
   let storageBasket = await getBasket();
   let currBasket = [];
   await Promise.all(
@@ -104,7 +107,10 @@ async function refreshCurrentBasket(setCurrBasket) {
       }
     }),
   );
-  setCurrBasket(currBasket);
+  globalDispatch({
+    type: GlobalAction.SET_CURRENT_BASKET,
+    basket: currBasket,
+  });
 }
 
 /**
