@@ -8,7 +8,7 @@ import textStyles from '../../stylesheets/textStyles';
 import {Alerts} from '../data/Alerts';
 import {enterApp} from '../helpers/storageHelpers';
 
-const LogInPage = ({navigation, setLoading}) => {
+const LogInPage = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRegex = new RegExp(
@@ -96,7 +96,6 @@ const LogInPage = ({navigation, setLoading}) => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .catch(error => handleLogInErrorsBackEnd(error.code));
-      setLoading(prevState => ({...prevState, user: false}));
       await enterApp();
     }
   }
@@ -123,14 +122,12 @@ const LogInPage = ({navigation, setLoading}) => {
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={forgotPassword}
-        >
+          onPress={forgotPassword}>
           Forgot your password?
         </Text>
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('SignUp')}
-        >
+          onPress={() => navigation.navigate('SignUp')}>
           New? Create an account
         </Text>
       </View>
