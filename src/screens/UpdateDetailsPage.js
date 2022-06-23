@@ -3,17 +3,19 @@ import {StyleSheet, View, Alert} from 'react-native';
 import FormField from '../sub-components/FormField';
 import GreenHeader from '../sub-components/GreenHeader';
 import CustomButton from '../sub-components/CustomButton';
-import {GlobalContext} from '../../App';
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 
 import firestore from '@react-native-firebase/firestore';
 import {Alerts} from '../data/Alerts';
+import {GlobalContext} from '../contexts';
 
 const UpdateDetailsPage = ({navigation}) => {
-  const context = useContext(GlobalContext);
-  const [first_name, setFirstName] = useState(context.currentUser.first_name);
-  const [last_name, setLastName] = useState(context.currentUser.last_name);
+  const {globalState} = useContext(GlobalContext);
+  const [first_name, setFirstName] = useState(
+    globalState.currentUser.first_name,
+  );
+  const [last_name, setLastName] = useState(globalState.currentUser.last_name);
   const [password, setPassword] = useState('');
 
   /**
@@ -69,7 +71,7 @@ const UpdateDetailsPage = ({navigation}) => {
         .then(() => {
           firestore()
             .collection('users')
-            .doc(context.currentUser.key)
+            .doc(globalState.currentUser.key)
             .update({
               first_name: first_name,
               last_name: last_name,
