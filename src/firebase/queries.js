@@ -1,7 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import {Alerts} from '../data/Alerts';
 import auth from '@react-native-firebase/auth';
-const queryTimeOutMessage = 'firestore query call timeout limit reached';
 
 /**
  * Separates the items offered by the shop into 3 sections: coffees, drinks and snacks.
@@ -54,25 +53,25 @@ async function updateUserLocation(userRef, latitude, longitude) {
 }
 
 /**
- * Set the current user's state to its corresponding backend instance.
+ * Get the corresponding backend instance for the current logged in user.
  * @param user The firebase authentication instance of the current user
- * @param setUser The setState method of the user.
  */
-async function setUserObject(user, setUser) {
+async function getUserObject(user) {
+  let newUser;
   await firestore()
     .collection('users')
     .where('email', '==', user.email)
     .get()
     .then(async querySnapshot => {
       let userModel = querySnapshot.docs[0];
-      let newUser = {
+      newUser = {
         ...userModel.data(),
         key: userModel.id,
         ref: userModel.ref,
       };
-      setUser(newUser);
     })
     .catch(() => Alerts.databaseErrorAlert());
+  return newUser;
 }
 
 /**
@@ -253,30 +252,27 @@ async function logout() {
 }
 
 /**
- * Call an async function with a maximum time limit (in milliseconds) for the timeout
- * @param {Promise<any>} asyncPromise An asynchronous promise to resolve
- * @param {number} timeLimit Time limit to attempt function in milliseconds
- * @returns {Promise<any> | undefined} Resolved promise for async function call, or an error if time limit reached
+ * Return the given user's orders to be displayed (i.e., that haven't ben removed)
+ * @param userRef The firestore reference of the user
  */
-const asyncCallWithTimeout = async (asyncPromise, timeLimit) => {
-  let timeoutHandle;
+async function getUserOrders(userRef) {
+  let orders;
+  await firestore()
+    .collection('orders')
+    .where('user', '==', userRef)
+    .where('is_displayed', '==', true)
+    .get()
+    .then(async querySnapshot => {
+      orders = querySnapshot.docs;
+    })
+    .catch(() => Alerts.databaseErrorAlert());
+  return orders;
+}
 
-  const timeoutPromise = new Promise((_resolve, reject) => {
-    timeoutHandle = setTimeout(
-      () => reject(new Error(queryTimeOutMessage)),
-      timeLimit,
-    );
-  });
-
-  return Promise.race([asyncPromise, timeoutPromise]).then(result => {
-    clearTimeout(timeoutHandle);
-    return result;
-  });
-};
 export {
   getOptions,
   updateUserLocation,
-  setUserObject,
+  getUserObject,
   getOrderItem,
   getOrderShop,
   sendOrder,
@@ -285,4 +281,5 @@ export {
   getItemRef,
   getOptionRef,
   logout,
+  getUserOrders,
 };
