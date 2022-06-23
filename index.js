@@ -4,11 +4,11 @@
 import 'react-native-gesture-handler';
 import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
-import App from './App';
 
 import '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import App from './src/App';
 
 const EMULATOR_MODE_ON = false;
 
@@ -20,4 +20,5 @@ if (__DEV__ && EMULATOR_MODE_ON) {
     console.log(e);
   }
 }
+
 AppRegistry.registerComponent(appName, () => App);
