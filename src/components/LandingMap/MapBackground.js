@@ -1,16 +1,8 @@
-import React, {
-  useEffect,
-  useContext,
-  useRef,
-  useMemo,
-  useState,
-  useCallback,
-} from 'react';
-import {Platform, StyleSheet, Text, View, Keyboard, Image} from 'react-native';
+import React, {useEffect, useContext, useRef, useMemo} from 'react';
+import {StyleSheet, Text, View, Keyboard, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {GlobalContext} from '../../../App';
 import CustomMapIcon from '../../assets/svgs/CustomMapIcon';
 import {
   locationPress,
@@ -18,33 +10,16 @@ import {
 } from '../../helpers/locationHelpers';
 import mapStyles from '../../../stylesheets/mapStyles';
 import {Alerts} from '../../data/Alerts';
+import {GlobalContext, MapContext} from '../../contexts';
+import {MapAction} from '../../data/actionEnum';
 
-export default function MapBackground({
-  setSearchBarFocussed,
-  setFocusMarker,
-  setRecenterVisible,
-}) {
-  const context = useContext(GlobalContext);
+export default function MapBackground() {
+  const {globalState, globalDispatch} = useContext(GlobalContext);
+  const {mapState, mapDispatch} = useContext(MapContext);
   const watchID = useRef(); //used to watch the users location
-  const [userLocation, setUserLocation] = useState(
-    context.currentUser.location,
-  );
-  const isUserCentered = useRef(true);
-  const [mapCenter, setMapCenter] = useState({
-    latitude: userLocation.latitude,
-    longitude: userLocation.longitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  });
-  const focusMarker = useCallback(() => {
-    setMapCenter(prevState => ({
-      ...prevState,
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-    }));
-  }, [userLocation.latitude, userLocation.longitude]);
+
   const markers = useMemo(() => {
-    return context.shopsData.map(shop => ({
+    return globalState.listOfShops.map(shop => ({
       name: shop.name,
       description: shop.intro,
       coords: {
@@ -54,103 +29,65 @@ export default function MapBackground({
       image: shop.image,
       is_open: shop.is_open,
     }));
-  }, [context.shopsData]); // Load the shop markers on the map every time the shops data changes
-
-  /**
-   * Update the map center according to the current states.
-   */
-  const updateMapCenter = useCallback((latitude, longitude) => {
-    if (isUserCentered.current) {
-      setMapCenter(prevState => {
-        return {
-          ...prevState,
-          latitude: latitude,
-          longitude: longitude,
-        };
-      });
-    }
-  }, []);
-
-  /**
-   * Side effect for passing the focusMarker function to the parent component
-   */
-  useEffect(() => {
-    setFocusMarker.current = focusMarker;
-  }, [focusMarker, setFocusMarker]);
-
-  /**
-   * Side effect for tracking whether the map is centered around the user and updating the states accordingly.
-   */
-  useEffect(() => {
-    if (
-      userLocation.latitude.toPrecision(6) ===
-        mapCenter.latitude.toPrecision(6) &&
-      userLocation.longitude.toPrecision(6) ===
-        mapCenter.longitude.toPrecision(6)
-    ) {
-      isUserCentered.current = true;
-      setRecenterVisible(false);
-    } else {
-      isUserCentered.current = false;
-      setRecenterVisible(true);
-    }
-  }, [mapCenter, setRecenterVisible, userLocation]);
+  }, [globalState.listOfShops]); // Load the shop markers on the map every time the shops data changes
 
   /**
    * Setup location access on map load. Remove the location access when this component is unmounted
    */
   useEffect(() => {
-    if (!context.locationIsEnabled) {
+    if (!globalState.locationIsEnabled) {
       let currWatch = watchID.current;
       requestLocationPermission(
-        setUserLocation,
-        context.currentUser.ref,
+        globalState.currentUserRef,
         watchID,
-        context.setLocationIsEnabled,
-        updateMapCenter,
+        globalDispatch,
+        mapDispatch,
+        mapState,
       ).catch(() => Alerts.elseAlert());
       return () => {
         Geolocation.clearWatch(currWatch);
       };
     }
   }, [
-    context.currentUser.ref,
-    context.setLocationIsEnabled,
-    context.locationIsEnabled,
-    updateMapCenter,
+    globalDispatch,
+    globalState.currentUserRef,
+    globalState.locationIsEnabled,
+    mapDispatch,
+    mapState,
   ]);
 
   /**
    * Dismiss the keyboard and search results when the map is clicked
    */
   const mapPressed = () => {
-    setSearchBarFocussed(false);
+    mapDispatch({type: MapAction.CENTER_AUTOMATICALLY});
+    mapDispatch({type: MapAction.UNFOCUS_SEARCH_BAR});
     Keyboard.dismiss();
+  };
+
+  const mapDragged = () => {
+    mapPressed();
+    mapDispatch({type: MapAction.DECENTER_USER});
   };
 
   return (
     <View style={styles.container} testID="map-background">
       <MapView
         onRegionChangeComplete={region => {
-          if (Platform.OS === 'ios') {
-            if (
-              region.latitude.toPrecision(6) !==
-                mapCenter.latitude.toPrecision(6) &&
-              region.longitude.toPrecision(6) !==
-                mapCenter.longitude.toPrecision(6)
-            ) {
-              setMapCenter(region);
-            }
-          } else {
-            setMapCenter(region);
-          }
+          mapDispatch({
+            type: MapAction.SET_REGION,
+            location: {
+              latitude: parseFloat(region.latitude.toPrecision(6)),
+              longitude: parseFloat(region.longitude.toPrecision(6)),
+            },
+          });
         }}
+        region={mapState.isManuallyCentered ? mapState.mapCenter : undefined}
         //focus only on map when map pressed
         onPress={() => mapPressed()}
-        onPanDrag={() => mapPressed()}
+        onPanDrag={() => mapDragged()}
         provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        region={mapCenter}>
+        style={styles.map}>
         {/*//map each of the shops to a marker on the map*/}
         {markers.map((marker, index) => (
           <Marker
@@ -160,7 +97,12 @@ export default function MapBackground({
             title={marker.name}
             onPress={async () => {
               if (marker.is_open) {
-                await locationPress(context, setMapCenter, marker.name);
+                await locationPress(
+                  globalState,
+                  globalDispatch,
+                  mapDispatch,
+                  marker.name,
+                );
               }
               mapPressed();
             }}>
@@ -178,11 +120,10 @@ export default function MapBackground({
         <Marker
           draggable
           coordinate={{
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
+            latitude: globalState.currentUser.location.latitude,
+            longitude: globalState.currentUser.location.longitude,
           }}
-          onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
-          onPress={() => focusMarker()}
+          onDragEnd={e => console.log(e)}
           title={'You are here'}>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Image
