@@ -65,18 +65,17 @@ export const Alerts = {
     ]);
   },
 
-  changeShopAlertV1: (switchShop, newShop, openBotttomSheet) => {
+  changeShopAlertV1: (newShopKey, switchShop, globalDispatch) => {
     Alert.alert(
       AlertMessage.CHANGE_SHOP.title,
       AlertMessage.CHANGE_SHOP.message,
       [
         {
           text: 'Yes',
-          onPress: () => switchShop(newShop),
+          onPress: () => switchShop(newShopKey, globalDispatch),
         },
         {
           text: 'No',
-          onPress: () => openBotttomSheet,
           style: 'cancel',
         },
       ],
@@ -84,18 +83,17 @@ export const Alerts = {
     );
   },
 
-  changeShopAlertV2: (switchShop, newShop, navigation) => {
+  changeShopAlertV2: (newShopKey, changeShop, globalDispatch, navigation) => {
     Alert.alert(
       AlertMessage.CHANGE_SHOP.title,
       AlertMessage.CHANGE_SHOP.message,
       [
         {
           text: 'Yes',
-          onPress: () => switchShop(newShop, navigation),
+          onPress: () => changeShop(newShopKey, globalDispatch, navigation),
         },
         {
           text: 'No',
-          onPress: () => navigation.navigate('Shop page'),
           style: 'cancel',
         },
       ],
