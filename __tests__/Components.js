@@ -4,7 +4,7 @@ import GreenHeader from '../src/sub-components/GreenHeader';
 import {fireEvent, render} from '@testing-library/react-native';
 import WhiteArrowButton from '../src/sub-components/WhiteArrowButton';
 import ShopList from '../src/components/Shops/ShopList';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/App';
 import {Alert} from 'react-native';
 
 describe('Components', function () {

@@ -1,6 +1,6 @@
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
 import React from 'react';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/App';
 import MapBackground from '../src/components/LandingMap/MapBackground';
 import {Alert} from 'react-native';
 
@@ -93,8 +93,6 @@ describe('Map page', function () {
   });
 
   it('Should display that a marker is closed, if the shop is not open', async () => {
-
-
     const {getAllByTestId, getAllByText, queryByTestId, toJSON} = render(
       <GlobalContext.Provider value={globalContextMock}>
         <MapBackground

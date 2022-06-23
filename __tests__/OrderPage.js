@@ -4,7 +4,7 @@ import {CurrentOrders} from '../src/components/Orders/CurrentOrders';
 import {OrderStatus} from '../src/data/OrderStatus';
 import CollapsableOrder from '../src/components/Orders/CollapsableOrder';
 import {PastOrders} from '../src/components/Orders/PastOrders';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/App';
 
 describe('Order Page', function () {
   const globalContextMock = {

@@ -2,7 +2,7 @@ import {fireEvent, render} from '@testing-library/react-native';
 import React from 'react';
 import UpdateDetailsPage from '../src/screens/UpdateDetailsPage';
 import {Alert} from 'react-native';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/App';
 
 const globalContextMock = {
   currentUser: {

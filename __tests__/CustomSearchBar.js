@@ -1,6 +1,6 @@
 import {render, fireEvent} from '@testing-library/react-native';
 import React from 'react';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/App';
 import CustomSearchBar from '../src/components/LandingMap/CustomSearchBar';
 import {
   getByPlaceholderText,

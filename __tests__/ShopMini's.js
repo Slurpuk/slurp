@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react-native';
 import React from 'react';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/App';
 import ShopCard from '../src/components/Shops/ShopCard';
 
 describe('Shop card', function () {

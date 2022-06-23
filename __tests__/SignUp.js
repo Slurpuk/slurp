@@ -1,9 +1,9 @@
 import {fireEvent, render} from '@testing-library/react-native';
 import React from 'react';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/App';
 import SignUpPage from '../src/screens/SignUpPage';
 import {Alert} from 'react-native';
-import {getByTestId} from "@testing-library/react";
+import {getByTestId} from '@testing-library/react';
 
 describe('Signup page', function () {
   const spyAlert = jest
@@ -89,13 +89,14 @@ describe('Signup page', function () {
     });
 
     it('should raise alert on empty password', async function () {
-      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(<SignUpPage />);
+      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(
+        <SignUpPage />,
+      );
 
       const name = getByPlaceholderText('Jane');
       const last_name = getByPlaceholderText('Doe');
       const email = getByPlaceholderText('janedoe@gmail.com');
       const password = getAllByPlaceholderText('');
-
 
       expect(name).toBeTruthy();
       expect(last_name).toBeTruthy();
@@ -107,23 +108,21 @@ describe('Signup page', function () {
       fireEvent.changeText(password[0], '');
       fireEvent.changeText(password[1], '');
 
-
-
       fireEvent(getByText('Create Account'), 'press');
 
       expect(spyAlert).toHaveBeenCalled();
       expect(spyAlert.mock.calls[0][0]).toBe('Empty Password');
-
     });
 
     it('should raise alert on empty password', async function () {
-      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(<SignUpPage />);
+      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(
+        <SignUpPage />,
+      );
 
       const name = getByPlaceholderText('Jane');
       const last_name = getByPlaceholderText('Doe');
       const email = getByPlaceholderText('janedoe@gmail.com');
       const password = getAllByPlaceholderText('');
-
 
       expect(name).toBeTruthy();
       expect(last_name).toBeTruthy();
@@ -135,23 +134,21 @@ describe('Signup page', function () {
       fireEvent.changeText(password[0], 'Password123');
       fireEvent.changeText(password[1], '');
 
-
-
       fireEvent(getByText('Create Account'), 'press');
 
       expect(spyAlert).toHaveBeenCalled();
       expect(spyAlert.mock.calls[0][0]).toBe('Empty Password');
-
     });
 
     it('should raise alert on weak password', async function () {
-      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(<SignUpPage />);
+      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(
+        <SignUpPage />,
+      );
 
       const name = getByPlaceholderText('Jane');
       const last_name = getByPlaceholderText('Doe');
       const email = getByPlaceholderText('janedoe@gmail.com');
       const password = getAllByPlaceholderText('');
-
 
       expect(name).toBeTruthy();
       expect(last_name).toBeTruthy();
@@ -170,13 +167,14 @@ describe('Signup page', function () {
     });
 
     it('should raise alert on password confirmation not matching', async function () {
-      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(<SignUpPage />);
+      const {getByText, getByPlaceholderText, getAllByPlaceholderText} = render(
+        <SignUpPage />,
+      );
 
       const name = getByPlaceholderText('Jane');
       const last_name = getByPlaceholderText('Doe');
       const email = getByPlaceholderText('janedoe@gmail.com');
       const password = getAllByPlaceholderText('');
-
 
       expect(name).toBeTruthy();
       expect(last_name).toBeTruthy();
@@ -214,7 +212,6 @@ describe('Signup page', function () {
       fireEvent.changeText(email, 'janedoe@gmail.com');
       fireEvent.changeText(password[0], 'Password123');
       fireEvent.changeText(password[1], 'Password123');
-
 
       fireEvent(getByText('Create Account'), 'press');
 

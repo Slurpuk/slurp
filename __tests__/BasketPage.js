@@ -1,8 +1,8 @@
-import {fireEvent, render, waitFor} from '@testing-library/react-native';
+import {fireEvent, render} from '@testing-library/react-native';
 import React from 'react';
-import {GlobalContext} from '../App';
 import BasketPage from '../src/screens/BasketPage';
-import {Alert, Text, View} from 'react-native';
+import {Alert} from 'react-native';
+import {GlobalContext} from '../src/contexts';
 import BasketContents from '../src/components/Basket/BasketContents';
 const globalContextMock = {
   basketContent: null,

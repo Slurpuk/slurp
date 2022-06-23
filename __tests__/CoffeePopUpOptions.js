@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react-native';
 import React from 'react';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../src/contexts';
 import {Alert} from 'react-native';
 import OptionsPopUp from '../src/components/ShopMenu/OptionsPopUp';
 import renderers from '../src/components/ShopMenu/renderers';
