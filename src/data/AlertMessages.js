@@ -71,7 +71,8 @@ export const AlertMessage = {
   },
   LOGOUT: {
     title: 'Logout',
-    message: 'You are about to logout, are you sure?',
+    message:
+      'You are about to logout, you will lose your current basket, are you sure?',
   },
 };
 
