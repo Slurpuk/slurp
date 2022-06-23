@@ -9,13 +9,14 @@ import {
   ImageBackground,
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
-import {GlobalContext} from '../../../App';
+import {GlobalContext} from '../../contexts';
+import {changeShopFromList} from '../../helpers/changeShopHelpers';
 
 const ShopCard = ({shop, navigation}) => {
-  const context = useContext(GlobalContext);
+  const {globalState, globalDispatch} = useContext(GlobalContext);
 
   const shopPageDetails = async () => {
-    await context.changeShop(shop, navigation);
+    await changeShopFromList(globalState, shop.key, globalDispatch, navigation);
   };
 
   return !shop.is_open ? (
@@ -24,8 +25,7 @@ const ShopCard = ({shop, navigation}) => {
       imageStyle={styles.image}
       source={{uri: shop.image}}
       resizeMode="cover"
-      blurRadius={4}
-    >
+      blurRadius={4}>
       <Text style={[textStyles.headingOne, styles.shopName]}>{shop.name}</Text>
       <Text style={[textStyles.bodyText]} testID="shop-card-closed">
         CLOSED
@@ -37,13 +37,16 @@ const ShopCard = ({shop, navigation}) => {
         style={styles.item}
         imageStyle={styles.image}
         source={{uri: shop.image}}
-        resizeMode="cover"
-      >
+        resizeMode="cover">
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.name}
         </Text>
-        {context.locationIsEnabled ? (
-          <ShopDetailIcons distanceToShop={shop.distanceTo} iconColor={'#FFE'} iconSize={24}/>
+        {globalState.locationIsEnabled ? (
+          <ShopDetailIcons
+            distanceToShop={shop.distanceTo}
+            iconColor={'#FFE'}
+            iconSize={24}
+          />
         ) : null}
       </ImageBackground>
     </Pressable>
