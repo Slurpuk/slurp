@@ -7,13 +7,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ShopContext} from '../../screens/ShopPage';
 import {OptionPopUpStyles, screenWidth} from '../../../stylesheets/ShopStyles';
 import {addToBasket} from '../../helpers/screenHelpers';
-import {GlobalContext} from '../../../App';
+import {GlobalContext} from '../../contexts';
 
 export const OptionsContext = React.createContext();
 
 export default function OptionsPopUp({data, renderer, item}) {
   const shopContext = useContext(ShopContext);
-  const globalContext = useContext(GlobalContext);
+  const {globalState, globalDispatch} = useContext(GlobalContext);
   const [totalPrice, setTotalPrice] = useState(item.price);
   const [milk, setMilk] = useState(shopContext.menuData.defaultMilk);
   const [syrups, setSyrups] = useState([]);
@@ -76,12 +76,7 @@ export default function OptionsPopUp({data, renderer, item}) {
       };
       shopContext.setOptionsVisible(false);
       shopContext.setCurrItem(null);
-      await addToBasket(
-        newItem,
-        globalContext.currShop,
-        globalContext.currBasket.data,
-        globalContext.currBasket.setContent,
-      );
+      await addToBasket(newItem, globalState.currentBasket, globalDispatch);
     }
   }
 
