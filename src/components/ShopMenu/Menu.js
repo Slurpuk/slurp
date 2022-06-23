@@ -6,10 +6,10 @@ import {FlatList} from 'react-native-gesture-handler';
 import renderers from './renderers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ShopContext} from '../../screens/ShopPage';
-import {GlobalContext} from '../../../App';
 import EmptyListText from '../../sub-components/EmptyListText';
 import {menuStyles} from './shopStyles';
 import {LogBox} from 'react-native';
+import {GlobalContext} from '../../contexts';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
@@ -18,7 +18,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const Menu = ({navigation}) => {
   const shopContext = useContext(ShopContext);
-  const globalContext = useContext(GlobalContext);
+  const {globalState} = useContext(GlobalContext);
   const emptyText =
     'There are currently no items in this section, check again later.';
   return (
@@ -100,7 +100,7 @@ const Menu = ({navigation}) => {
           <CustomButton
             text="View Basket"
             priority="primary"
-            optionalNumber={globalContext.currBasket.data.reduce(function (
+            optionalNumber={globalState.currentBasket.reduce(function (
               acc,
               item,
             ) {
