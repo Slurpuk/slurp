@@ -11,6 +11,7 @@ import auth from '@react-native-firebase/auth';
 import {Animated} from 'react-native';
 import LoadingPage from './src/screens/LoadingPage';
 import {setUserObject} from './src/firebase/queries';
+import messaging from '@react-native-firebase/messaging';
 import {Alerts} from './src/data/Alerts';
 import {
   calculateDistance,
@@ -55,6 +56,28 @@ export default function App() {
 
     setIsFirstTime().catch(() => Alerts.elseAlert());
   }, [currentUser]);
+
+  useEffect(() => {
+    const foregroundSubscriber = messaging().onMessage(async remoteMessage => {
+      console.log('Push notification recieved', remoteMessage);
+    });
+
+    const topicSubscriber = messaging()
+      .subscribeToTopic('pascu')
+      .then(() => console.log('Subscribed to pascu topic'));
+
+    const backgroundSubscriber = messaging().setBackgroundMessageHandler(
+      async remoteMessage => {
+        console.log('Push notification on background recieved', remoteMessage);
+      },
+    );
+
+    return () => {
+      foregroundSubscriber();
+      topicSubscriber();
+      backgroundSubscriber();
+    };
+  }, []);
 
   /**
    * Side effect that updates the static shops data on every render.
