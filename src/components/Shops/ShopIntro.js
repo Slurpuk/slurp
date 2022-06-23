@@ -4,46 +4,43 @@ import textStyles from '../../../stylesheets/textStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import ShopDetailIcons from './ShopDetailIcons';
 import WhiteArrowButton from '../../sub-components/WhiteArrowButton';
-import {GlobalContext} from '../../../App';
 import {fadeOpacityIn} from '../../sub-components/Animations';
 import {ShopIntroStyles} from '../../../stylesheets/ShopStyles';
+import {GlobalContext} from '../../contexts';
+import {calculateDistance} from '../../helpers/screenHelpers';
 
 export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
-  const globalContext = useContext(GlobalContext);
+  const {globalState} = useContext(GlobalContext);
   return (
     <Animated.View
       style={{
-        opacity: globalContext.adaptiveOpacity,
+        opacity: globalState.adaptiveOpacity,
       }}
       onLayout={() => {
-        fadeOpacityIn(globalContext.adaptiveOpacity, 140);
-      }}
-    >
+        fadeOpacityIn(globalState.adaptiveOpacity, 140);
+      }}>
       <ImageBackground
         imageStyle={!isFullScreen ? ShopIntroStyles.cardImg : null}
         style={ShopIntroStyles.container}
-        source={{uri: shop.image}}
-      >
+        source={{uri: shop.image}}>
         <LinearGradient
           colors={['transparent', 'black']}
-          style={ShopIntroStyles.linearGradient}
-        >
+          style={ShopIntroStyles.linearGradient}>
           <View
             style={[
               ShopIntroStyles.back_button,
               isFullScreen
                 ? {opacity: 1}
-                : globalContext.bottomSheet.isOpen
+                : globalState.isShopIntro
                 ? {opacity: 0}
                 : {opacity: 1},
             ]}
-            testID={'shop_intro'}
-          >
+            testID={'shop_intro'}>
             <WhiteArrowButton
-              direction={globalContext.bottomSheet.isOpen ? 'down' : 'left'}
+              direction={globalState.isShopIntro ? 'down' : 'left'}
               navigation={navigation}
               onPressAction={
-                globalContext.bottomSheet.isOpen
+                globalState.isShopIntro
                   ? () => sheetRef.current.snapTo(1)
                   : null
               }
@@ -53,8 +50,15 @@ export default function ShopIntro({shop, sheetRef, navigation, isFullScreen}) {
             <Text style={[textStyles.headingOne, ShopIntroStyles.heading]}>
               {shop.name}
             </Text>
-            {globalContext.locationIsEnabled ? (
-              <ShopDetailIcons distanceToShop={shop.distanceTo} iconColor={'#FFE'} iconSize={24}/>
+            {globalState.locationIsEnabled ? (
+              <ShopDetailIcons
+                distanceToShop={calculateDistance(
+                  shop.location,
+                  globalState.currentUser.location,
+                )}
+                iconColor={'#FFE'}
+                iconSize={24}
+              />
             ) : null}
             <Text style={[textStyles.bodyText, ShopIntroStyles.body]}>
               {shop.intro}
