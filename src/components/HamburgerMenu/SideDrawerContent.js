@@ -2,21 +2,24 @@ import React, {useContext} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Close from 'react-native-vector-icons/AntDesign';
 import {StyleSheet, Text} from 'react-native';
-import {GlobalContext} from '../../../App';
 import {Alerts} from '../../data/Alerts';
 import {logout} from '../../firebase/queries';
+import {GlobalContext} from '../../contexts';
 
 /**
  * Sidebar drawer and its contents
  */
 function SideDrawerContent(props) {
-  const context = useContext(GlobalContext);
-
+  const {globalState} = useContext(GlobalContext);
   /**
    * Prompt the user before logging out
    */
   function logoutPrompt() {
-    Alerts.logoutAlert(logout);
+    if (!globalState.isConnected) {
+      Alerts.connectionErrorAlert();
+    } else {
+      Alerts.logoutAlert(logout);
+    }
   }
 
   return (
@@ -31,7 +34,7 @@ function SideDrawerContent(props) {
         style={styles.close_button}
       />
       <Text style={styles.welcome_text}>
-        Hi {context.currentUser.first_name}!
+        Hi {globalState.currentUser.first_name}!
       </Text>
       <DrawerItem
         label="My orders"
@@ -46,7 +49,7 @@ function SideDrawerContent(props) {
         style={styles.drawer_item}
         labelStyle={styles.drawer_item_label}
       />
-      {context.currBasket.data.length !== 0 ? (
+      {globalState.currentBasket.length !== 0 ? (
         <DrawerItem
           label="My basket"
           onPress={() => {
