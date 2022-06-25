@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import textStyles from '../../../stylesheets/textStyles';
 import {GlobalContext} from '../../../App';
+import FastImage from 'react-native-fast-image';
 
 const ShopCard = ({shop, navigation}) => {
   const context = useContext(GlobalContext);
@@ -19,33 +20,35 @@ const ShopCard = ({shop, navigation}) => {
   };
 
   return !shop.is_open ? (
-    <ImageBackground
+    <FastImage
       style={styles.item}
       imageStyle={styles.image}
-      source={{uri: shop.image}}
+      source={{uri: shop.image, cache: FastImage.cacheControl.cacheOnly}}
       resizeMode="cover"
-      blurRadius={4}
-    >
+      blurRadius={4}>
       <Text style={[textStyles.headingOne, styles.shopName]}>{shop.name}</Text>
       <Text style={[textStyles.bodyText]} testID="shop-card-closed">
         CLOSED
       </Text>
-    </ImageBackground>
+    </FastImage>
   ) : (
     <Pressable onPress={shopPageDetails} testID="shop-card-open">
-      <ImageBackground
+      <FastImage
         style={styles.item}
         imageStyle={styles.image}
-        source={{uri: shop.image}}
-        resizeMode="cover"
-      >
+        source={{uri: shop.image, cache: FastImage.cacheControl.cacheOnly}}
+        resizeMode="cover">
         <Text style={[textStyles.headingOne, styles.shopName]}>
           {shop.name}
         </Text>
         {context.locationIsEnabled ? (
-          <ShopDetailIcons distanceToShop={shop.distanceTo} iconColor={'#FFE'} iconSize={24}/>
+          <ShopDetailIcons
+            distanceToShop={shop.distanceTo}
+            iconColor={'#FFE'}
+            iconSize={24}
+          />
         ) : null}
-      </ImageBackground>
+      </FastImage>
     </Pressable>
   );
 };

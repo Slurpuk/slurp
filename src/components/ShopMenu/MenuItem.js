@@ -12,6 +12,7 @@ import {ShopContext} from '../../screens/ShopPage';
 import {menuItemStyles} from './shopStyles';
 import {addToBasket} from '../../helpers/screenHelpers';
 import {GlobalContext} from '../../../App';
+import FastImage from 'react-native-fast-image';
 
 /**
  * Menu item component displayed in a shop's menu.
@@ -74,9 +75,9 @@ const MenuItem = ({item}) => {
       testID={'menu_item_' + item.name}
       style={menuItemStyles.item}
       onPress={() => add(item)}>
-      <ImageBackground
+      <FastImage
         testID={'menuItemImage'}
-        source={{uri: item.image}}
+        source={{uri: item.image, cache: FastImage.cacheControl.cacheOnly}}
         imageStyle={menuItemStyles.image}
         style={menuItemStyles.imageContainer}>
         <LinearGradient
@@ -104,7 +105,7 @@ const MenuItem = ({item}) => {
             </Text>
           </Pressable>
         </LinearGradient>
-      </ImageBackground>
+      </FastImage>
     </TouchableOpacity>
   );
 };
