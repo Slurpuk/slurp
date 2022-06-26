@@ -68,11 +68,10 @@ All passwords are "Password123!", the following users are seeded with orders. Al
 - Branch naming convention: ReleaseVersionTrelloID/branchname
 
 
+### Stripe payment Firebase extension docs:
+https://github.com/stripe/stripe-firebase-extensions/blob/master/firestore-stripe-payments/POSTINSTALL.md
+
+
 ## Testing
 
   ```npm run test```
-
-
-#### Current unsolved issues:
-
-- With the current implementation using firestore, tracking the conection state of logged-in user is impossible. As a workaround, we set a timeout on critical queries that would return a connection alert after expiring.
