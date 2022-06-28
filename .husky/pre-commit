@@ -3,7 +3,9 @@
 
 branch_error_exit()
 {
-    echo "There is something wrong with your branch name brotha. Good syntax eg: A297/learn-how-to-write"
+    echo "There is something wrong with your branch name brotha."
+    echo "Good syntax eg: A297/learn-how-to-write"
+    echo "If you are good with regex here you go: ^[A-Z][0-9]+\/(.)+-[a-z0-9._-]+$ "
     exit 2
 }
 
@@ -12,14 +14,7 @@ valid_branch_regex="^[A-Z][0-9]+\/(.)+-[a-z0-9._-]+$"
 
 if [[ ! $local_branch =~ $valid_branch_regex ]]
 then
-  echo $local_branch
-  echo $valid_branch_regex
   branch_error_exit
 fi
 exit 0
 
-npm test
-npm test
-npm test
-npm test
-npm test
