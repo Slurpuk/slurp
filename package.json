@@ -18,13 +18,7 @@
     "pod": "cd ios && pod install && cd ..",
     "refresh": "git pull && npm ci && cd android && ./gradlew clean && cd .. && react-native link && cd ios && pod install && cd ..",
     "softRefresh": "npm ci && npm audit fix && cd android && ./gradlew clean && cd .. && cd ios && pod install && cd ..",
-    "prepare": "husky install",
-    "check-branch-name": "chmod 755 ./.husky/check_branch_naming.sh && sh ./.husky/check_branch_naming.sh"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "run-p lint check-branch-name"
-    }
+    "prepare": "husky install"
   },
   "dependencies": {
     "@mdi/font": "^6.5.95",
