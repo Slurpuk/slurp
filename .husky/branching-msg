@@ -8,7 +8,7 @@ branch_error_exit()
 }
 
 local_branch="$(git rev-parse --abbrev-ref HEAD)"
-valid_branch_regex="^[a-z]\/[0-9]+-[a-z0-9._-]+$"
+valid_branch_regex="^[A-Z]+\d\d\d/+$"
 valid_branch_regex2="^(master)$"
 
 if [[ ! $local_branch =~ $valid_branch_regex ]] && [[ ! $local_branch =~ $valid_branch_regex2 ]]
@@ -18,4 +18,5 @@ fi
 exit 0
 
 
+npm test
 npm test
