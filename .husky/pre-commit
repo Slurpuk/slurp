@@ -18,3 +18,5 @@ then
 fi
 exit 0
 
+npm test
+npm test

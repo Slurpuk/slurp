@@ -16,7 +16,7 @@ export const locationPress = async (context, setMapCenter, clickedMarker) => {
   let selectedShop = context.shopsData.find(
     shop => shop.name === clickedMarker,
   );
-  // HEllo
+  // HEl
   //update the map center to preserve the map position after rerender
   setMapCenter(prevState => ({
     ...prevState,
