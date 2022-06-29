@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+branch_error_exit()
+{
+    echo "There is something wrong with your branch name brotha."
+    echo "Good syntax eg: A297/learn-how-to-write"
+    echo "If you are good with regex here you go: ^[A-Z][0-9]+\/(.)+-[a-z0-9._-]+$ "
+    exit 2
+}
+
+local_branch="$(git rev-parse --abbrev-ref HEAD)"
+valid_branch_regex="^[A-Z][0-9]+\/(.)+-[a-z0-9._-]+$"
+valid_branch_regex_2="^(master)$"
+
+if [[ ! $local_branch =~ $valid_branch_regex ]] || [[ ! $local_branch =~ $valid_branch_regex2 ]];
+then
+  branch_error_exit
+fi
+exit 0
+
+npm test
+
+npm test
