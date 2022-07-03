@@ -70,15 +70,12 @@ export default function App() {
   useEffect(() => {
     if (!loading.user) {
       const subscriber = auth().onAuthStateChanged(async user => {
-        console.log(user);
-        console.log(user.providerData);
         user
           ? setUserObject(user, setCurrentUser).catch(() => {
               Alerts.elseAlert();
             })
           : setCurrentUser(null);
       });
-      console.log('Hello');
       // Unsubscribe from events when no longer in use
       return () => subscriber();
     }
