@@ -59,20 +59,46 @@ async function updateUserLocation(userRef, latitude, longitude) {
  * @param setUser The setState method of the user.
  */
 async function setUserObject(user, setUser) {
+  if (await checkUserInDatabase(user)) {
+    await firestore()
+      .collection('users')
+      .where('email', '==', user.email)
+      .get()
+      .then(async querySnapshot => {
+        let userModel = querySnapshot.docs[0];
+        let newUser = {
+          ...userModel.data(),
+          key: userModel.id,
+          ref: userModel.ref,
+        };
+        setUser(newUser);
+      })
+      .catch(() => Alerts.databaseErrorAlert());
+  } else {
+    await createUserObject(user);
+  }
+}
+
+/**
+ * Check if there is a user object , for the auth object
+ * @param user The firebase authentication instance of the current user
+ */
+async function checkUserInDatabase(user) {
+  let found = true;
   await firestore()
     .collection('users')
     .where('email', '==', user.email)
     .get()
-    .then(async querySnapshot => {
-      let userModel = querySnapshot.docs[0];
-      let newUser = {
-        ...userModel.data(),
-        key: userModel.id,
-        ref: userModel.ref,
-      };
-      setUser(newUser);
-    })
-    .catch(() => Alerts.databaseErrorAlert());
+    .catch(() => (found = false));
+  return found;
+}
+
+/**
+ * Create the user object from the auth data user
+ * @param user The firebase authentication instance of the current user
+ */
+async function createUserObject(user) {
+  await createUserModel(user.email, '', '');
 }
 
 /**

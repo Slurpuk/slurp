@@ -71,7 +71,9 @@ export default function App() {
     if (!loading.user) {
       const subscriber = auth().onAuthStateChanged(async user => {
         user
-          ? setUserObject(user, setCurrentUser).catch(() => Alerts.elseAlert())
+          ? setUserObject(user, setCurrentUser).catch(() => {
+              Alerts.elseAlert();
+            })
           : setCurrentUser(null);
       });
       // Unsubscribe from events when no longer in use

@@ -67,10 +67,14 @@ const SignUpPage = ({navigation, setLoading}) => {
   async function registerUser() {
     if (handleSignUpErrorsFrontEnd()) {
       setLoading(prevState => ({...prevState, user: true}));
-      await createUserAuth(email, password);
-      await createUserModel(email, first_name, last_name);
-      setLoading(prevState => ({...prevState, user: false}));
-      await enterApp();
+      const result = await createUserAuth(email, password);
+      if (result) {
+        await createUserModel(email, first_name, last_name);
+        setLoading(prevState => ({...prevState, user: false}));
+        await enterApp();
+      } else {
+        Alerts.databaseErrorAlert();
+      }
     }
   }
 
@@ -128,8 +132,7 @@ const SignUpPage = ({navigation, setLoading}) => {
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('LogIn')}
-        >
+          onPress={() => navigation.navigate('LogIn')}>
           Already have an account? Log in
         </Text>
       </View>
