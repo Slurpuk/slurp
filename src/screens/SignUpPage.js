@@ -70,9 +70,11 @@ const SignUpPage = ({navigation, setLoading}) => {
       const result = await createUserAuth(email, password);
       if (result) {
         await createUserModel(email, first_name, last_name);
+        setLoading(prevState => ({...prevState, user: false}));
+        await enterApp();
+      } else {
+        Alerts.databaseErrorAlert();
       }
-      setLoading(prevState => ({...prevState, user: false}));
-      await enterApp();
     }
   }
 
