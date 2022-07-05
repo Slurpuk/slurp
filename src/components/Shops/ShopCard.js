@@ -23,7 +23,7 @@ const ShopCard = ({shop, navigation}) => {
     <FastImage
       style={styles.item}
       imageStyle={styles.image}
-      source={{uri: shop.image, cache: FastImage.cacheControl.cacheOnly}}
+      source={{uri: shop.image}}
       resizeMode="cover"
       blurRadius={4}>
       <Text style={[textStyles.headingOne, styles.shopName]}>{shop.name}</Text>

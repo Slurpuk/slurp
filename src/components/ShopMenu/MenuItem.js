@@ -77,7 +77,7 @@ const MenuItem = ({item}) => {
       onPress={() => add(item)}>
       <FastImage
         testID={'menuItemImage'}
-        source={{uri: item.image, cache: FastImage.cacheControl.cacheOnly}}
+        source={{uri: item.image}}
         imageStyle={menuItemStyles.image}
         style={menuItemStyles.imageContainer}>
         <LinearGradient
