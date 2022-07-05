@@ -128,8 +128,7 @@ const SignUpPage = ({navigation, setLoading}) => {
         />
         <Text
           style={[textStyles.bluePoppinsBody, styles.hyperlink]}
-          onPress={() => navigation.navigate('LogIn')}
-        >
+          onPress={() => navigation.navigate('LogIn')}>
           Already have an account? Log in
         </Text>
       </View>

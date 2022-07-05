@@ -193,6 +193,11 @@ async function createUserModel(email, first_name, last_name) {
 async function createUserAuth(email, password) {
   const query = auth()
     .createUserWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      // send verification mail.
+      userCredential.user.sendEmailVerification();
+      alert('Please verify your email.');
+    })
     .catch(error => handleSignUpErrorsBackEnd(error.code));
   try {
     await asyncCallWithTimeout(query, 5000);
