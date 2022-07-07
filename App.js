@@ -8,7 +8,7 @@ import WelcomePages from './src/screens/WelcomePages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {Animated} from 'react-native';
+import {Animated, AppState} from 'react-native';
 import LoadingPage from './src/screens/LoadingPage';
 import {setUserObject} from './src/firebase/queries';
 import {Alerts} from './src/data/Alerts';
@@ -23,6 +23,8 @@ import {
   refreshCurrentBasket,
   setCurrentShopKey,
 } from './src/helpers/storageHelpers';
+import {useAppState} from '@react-native-community/hooks';
+import firebase from "@react-native-firebase/app";
 
 export const GlobalContext = React.createContext();
 /**
@@ -33,6 +35,7 @@ export default function App() {
     shops: true,
     user: false,
   }); // Is the app still fetching backend data.
+  const [appState, setAppState] = useState(AppState.currentState);
   const [currentUser, setCurrentUser] = useState(null);
   const [shopsData, setShopsData] = useState({allShops: [], currShopKey: ''});
   const staticShopsData = useRef(shopsData);
@@ -62,6 +65,27 @@ export default function App() {
   useEffect(() => {
     staticShopsData.current = shopsData;
   }, [shopsData]);
+
+  /**
+   * Side effect that updates the active state of a user in firebase
+   */
+  useEffect(() => {
+    const appStateListener = AppState.addEventListener(
+      'change',
+      async nextAppState => {
+        console.log('Next AppState is: ', nextAppState);
+        setAppState(nextAppState);
+              await firestore()
+                  .collection('users')
+                  .doc(currentUser.key)
+                  .update({
+                        app_state: nextAppState,
+                      },
+                  );
+    return () => {
+      appStateListener?.remove();
+    };
+  }, [appState]);
 
   /**
    * Side effect that tracks the authentication state of the current user.
